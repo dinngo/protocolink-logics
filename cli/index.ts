@@ -1,20 +1,10 @@
-import handlerTypechain from './handler.typechain';
-import yargs from 'yargs';
+import { typechainCommand } from './commands';
+import yargs from 'yargs/yargs';
 
-yargs
+yargs(process.argv.slice(2))
   .scriptName('yarn cli')
   .usage('$0 <cmd> [args]')
-  .command(
-    'typechain <name>',
-    "generate core or protocol's abi TypeScript classes",
-    (yargs) => {
-      yargs.positional('name', {
-        type: 'string',
-        describe: 'Name of the protocol',
-      });
-    },
-    handlerTypechain
-  )
+  .command(typechainCommand)
   .demandCommand()
   .help()
   .alias('help', 'h').argv;
