@@ -11,7 +11,7 @@ export interface NetworkConfig {
   multicall2Address: string;
 }
 
-export const networks: NetworkConfig[] = [
+export const networkConfigs: NetworkConfig[] = [
   {
     id: 'mainnet',
     chainId: 1,
@@ -24,11 +24,11 @@ export const networks: NetworkConfig[] = [
   },
 ];
 
-export const networkMap = networks.reduce((accumulator, network) => {
+export const networkConfigMap = networkConfigs.reduce((accumulator, network) => {
   accumulator[network.chainId] = network;
   return accumulator;
 }, {} as Record<number, NetworkConfig>);
 
-export function getNetwork(chainId: number) {
-  return networkMap[chainId];
+export function getNetworkConfig(chainId: number) {
+  return networkConfigMap[chainId];
 }

@@ -1,6 +1,6 @@
 import {
   LogicBase,
-  LogicEncodeOptions,
+  LogicGlobalOptions,
   TokenAmount,
   TokenToTokenData,
   TokenToTokenExactInData,
@@ -12,7 +12,7 @@ import { constants } from 'ethers';
 
 export type WrappedNativeTokenLogicGetPriceOptions = TokenToTokenExactInData;
 
-export type WrappedNativeTokenLogicGetLogicOptions = LogicEncodeOptions<TokenToTokenData>;
+export type WrappedNativeTokenLogicGetLogicOptions = TokenToTokenData & Pick<LogicGlobalOptions, 'funds'>;
 
 export class WrappedNativeTokenLogic extends LogicBase implements TokenToTokenLogicInterface {
   async getPrice(options: WrappedNativeTokenLogicGetPriceOptions) {
@@ -30,7 +30,7 @@ export class WrappedNativeTokenLogic extends LogicBase implements TokenToTokenLo
       : iface.encodeFunctionData('withdraw', [input.amountWei]);
 
     return {
-      to: this.network.wrappedNativeToken.address,
+      to: this.networkConfig.wrappedNativeToken.address,
       data,
       inputs: [newLogicInput({ funds, input })],
       outputs: [],

@@ -1,5 +1,5 @@
 import { BigNumberish, constants } from 'ethers';
-import { IRouter } from '@composable-router/contracts/typechain';
+import { IRouter } from '../contracts/Router';
 import { TokenAmount, TokenAmounts } from '../tokens';
 import { calcAmountBps, calcAmountMin } from './utils';
 

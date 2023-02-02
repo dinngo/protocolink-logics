@@ -1,5 +1,6 @@
 import { BPS_BASE, ELASTIC_ADDRESS, ETH_MAINNET, TokenAmount, TokenAmounts, WETH_MAINNET } from 'src/core';
 import { BigNumber, constants, utils } from 'ethers';
+import { WETH__factory } from './contracts';
 import { WrappedNativeTokenLogic } from './logic.wrapped-native-token';
 import { expect } from 'chai';
 
@@ -24,19 +25,16 @@ describe('WrappedNativeTokenLogic', () => {
   describe('Test getLogic', () => {
     const chainId = 1;
     const logic = new WrappedNativeTokenLogic({ chainId });
+    const iface = WETH__factory.createInterface();
 
     const cases = [
       {
-        account: '0xa3C1C91403F0026b9dd086882aDbC8Cdbc3b3cfB',
         funds: new TokenAmounts([new TokenAmount(ETH_MAINNET, '1')]),
-        slippage: 0,
         input: new TokenAmount(ETH_MAINNET, '1'),
         output: new TokenAmount(WETH_MAINNET, '1'),
       },
       {
-        account: '0xa3C1C91403F0026b9dd086882aDbC8Cdbc3b3cfB',
         funds: new TokenAmounts([new TokenAmount(WETH_MAINNET, '1')]),
-        slippage: 0,
         input: new TokenAmount(WETH_MAINNET, '1'),
         output: new TokenAmount(ETH_MAINNET, '1'),
       },
@@ -50,11 +48,11 @@ describe('WrappedNativeTokenLogic', () => {
         expect(routerLogic.to).to.eq(WETH_MAINNET.address);
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         if (input.token.isNative()) {
-          expect(sig).to.eq('0xd0e30db0');
+          expect(sig).to.eq(iface.getSighash('deposit'));
           expect(routerLogic.inputs[0].token).to.eq(ELASTIC_ADDRESS);
           expect(routerLogic.inputs[0].doApprove).to.be.false;
         } else {
-          expect(sig).to.eq('0x2e1a7d4d');
+          expect(sig).to.eq(iface.getSighash('withdraw'));
           expect(routerLogic.inputs[0].doApprove).to.be.true;
         }
         expect(BigNumber.from(routerLogic.inputs[0].amountBps).eq(BPS_BASE)).to.be.true;

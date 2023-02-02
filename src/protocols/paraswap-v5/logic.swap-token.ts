@@ -2,7 +2,7 @@ import { BuildSwapTxInput, SimpleFetchSDK, constructSimpleSDK } from '@paraswap/
 import {
   LogicBase,
   LogicBaseOptions,
-  LogicEncodeOptions,
+  LogicGlobalOptions,
   TokenAmount,
   TokenToTokenData,
   TokenToTokenExactInData,
@@ -15,9 +15,9 @@ import { constants } from 'ethers';
 
 export type ParaswapV5SwapTokenLogicGetPriceOptions = TokenToTokenExactInData;
 
-export type ParaswapV5SwapTokenLogicGetLogicOptions = LogicEncodeOptions<
-  TokenToTokenData<Pick<BuildSwapTxInput, 'partner' | 'partnerAddress'>>
->;
+export type ParaswapV5SwapTokenLogicGetLogicOptions = TokenToTokenData &
+  Pick<BuildSwapTxInput, 'partner' | 'partnerAddress'> &
+  Pick<LogicGlobalOptions, 'account' | 'funds' | 'slippage'>;
 
 export class ParaswapV5SwapTokenLogic extends LogicBase implements TokenToTokenLogicInterface {
   private sdk: SimpleFetchSDK;
@@ -60,10 +60,10 @@ export class ParaswapV5SwapTokenLogic extends LogicBase implements TokenToTokenL
         destToken,
         destDecimals,
         srcAmount,
-        destAmount: '1',
         userAddress: account,
         partner,
         partnerAddress,
+        slippage,
         deadline: (Math.floor(Date.now() / 1000) + 1200).toString(),
         priceRoute,
       },

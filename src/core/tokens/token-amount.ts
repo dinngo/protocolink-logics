@@ -60,6 +60,10 @@ export class TokenAmounts {
     }
   }
 
+  get length() {
+    return Object.keys(this.tokenAmountMap).length;
+  }
+
   get(token: Token) {
     return this.tokenAmountMap[token.address];
   }
@@ -87,6 +91,10 @@ export class TokenAmounts {
       this.tokenAmountMap[tokenAmount.token.address].sub(tokenAmount.amount);
     }
     return this;
+  }
+
+  filter(predicate: (value: TokenAmount, index: number) => unknown) {
+    return this.toArray().filter(predicate);
   }
 
   toArray() {

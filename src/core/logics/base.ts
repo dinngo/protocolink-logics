@@ -1,24 +1,19 @@
 import { ERC20__factory, Multicall2, Multicall2__factory } from '../contracts';
-import { IRouter } from '@composable-router/contracts/typechain';
-import { NetworkConfig, getNetwork } from '../network';
+import { IRouter } from '../contracts/Router';
+import { NetworkConfig, getNetworkConfig } from '../network';
 import { PromiseOrValue } from '../types';
-import { TokenAmounts } from 'src/core';
+import { RouterConfig, getRouterConfig } from '../router';
 import { providers } from 'ethers';
 
-export interface LogicBaseOptions {
+export type LogicBaseOptions<T extends object = object> = {
   chainId: number;
   provider?: providers.Provider;
-}
-
-export type LogicEncodeOptions<T extends object = object> = {
-  account: string;
-  funds: TokenAmounts;
-  slippage: number;
 } & T;
 
 export abstract class LogicBase {
   public readonly chainId: number;
-  public readonly network: NetworkConfig;
+  public readonly networkConfig: NetworkConfig;
+  public readonly routerConfig: RouterConfig;
   public readonly provider: providers.Provider;
   public readonly multicall2: Multicall2;
 
@@ -26,9 +21,10 @@ export abstract class LogicBase {
     const { chainId, provider } = options;
 
     this.chainId = chainId;
-    this.network = getNetwork(chainId);
-    this.provider = provider ? provider : new providers.JsonRpcProvider(this.network.rpcUrl);
-    this.multicall2 = Multicall2__factory.connect(this.network.multicall2Address, this.provider);
+    this.networkConfig = getNetworkConfig(chainId);
+    this.routerConfig = getRouterConfig(chainId);
+    this.provider = provider ? provider : new providers.JsonRpcProvider(this.networkConfig.rpcUrl);
+    this.multicall2 = Multicall2__factory.connect(this.networkConfig.multicall2Address, this.provider);
   }
 
   newERC20Contract(address: string) {

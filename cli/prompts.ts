@@ -14,19 +14,20 @@ export async function categoryPrompt(message: string) {
 }
 
 export async function protocolPrompt() {
+  const cwd = process.cwd();
+  const protocols = fs
+    .readdirSync(path.join(cwd, 'src', 'protocols'), { withFileTypes: true })
+    .reduce((accumulator, dir) => {
+      if (dir.isDirectory()) accumulator.push(dir.name);
+      return accumulator;
+    }, [] as string[]);
+
   return inquirer.prompt<{ protocol: string }>([
     {
       name: 'protocol',
-      type: 'input',
+      type: 'autocomplete',
       message: 'Please enter the protocol name:',
-      validate: function (v) {
-        // 1. required
-        if (v.length === 0) return 'protocol name is required';
-        // 2. check exist or not
-        if (!fs.existsSync(path.join('src', 'protocols', v))) return 'protocol not found';
-
-        return true;
-      },
+      source: (_: never, input: string) => protocols.filter((protocol) => protocol.startsWith(input)),
     },
   ]);
 }
