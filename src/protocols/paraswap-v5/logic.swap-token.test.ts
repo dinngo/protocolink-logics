@@ -1,104 +1,74 @@
 import { BPS_BASE, DAI_MAINNET, ELASTIC_ADDRESS, ETH_MAINNET, TokenAmount, TokenAmounts, USDC_MAINNET } from 'src/core';
 import { BigNumber, constants, utils } from 'ethers';
-import {
-  ParaswapV5SwapTokenLogic,
-  ParaswapV5SwapTokenLogicGetLogicOptions,
-  ParaswapV5SwapTokenLogicGetPriceOptions,
-} from './logic.swap-token';
+import { ParaswapV5SwapTokenLogic } from './logic.swap-token';
+import { expect } from 'chai';
 
-describe('ParaswapV5SwapTokenLogic', () => {
-  describe('Test getPrice', () => {
+describe('ParaswapV5SwapTokenLogic', function () {
+  describe('Test getPrice', function () {
     const chainId = 1;
     const logic = new ParaswapV5SwapTokenLogic({ chainId });
 
-    test.each<{ name: string; options: ParaswapV5SwapTokenLogicGetPriceOptions }>([
-      {
-        name: 'ETH to USDC',
-        options: {
-          input: new TokenAmount(ETH_MAINNET, '1'),
-          tokenOut: USDC_MAINNET,
-        },
-      },
-      {
-        name: 'USDC to ETH',
-        options: {
-          input: new TokenAmount(USDC_MAINNET, '1'),
-          tokenOut: ETH_MAINNET,
-        },
-      },
-      {
-        name: 'USDC to DAI',
-        options: {
-          input: new TokenAmount(USDC_MAINNET, '1'),
-          tokenOut: DAI_MAINNET,
-        },
-      },
-    ])(
-      'case $#: $name',
-      async ({ options }) => {
-        const output = await logic.getPrice(options);
-        expect(output.amountWei.gt(0)).toBeTruthy();
-      },
-      30000
-    );
+    const cases = [
+      { input: new TokenAmount(ETH_MAINNET, '1'), tokenOut: USDC_MAINNET },
+      { input: new TokenAmount(USDC_MAINNET, '1'), tokenOut: ETH_MAINNET },
+      { input: new TokenAmount(USDC_MAINNET, '1'), tokenOut: DAI_MAINNET },
+    ];
+
+    cases.forEach(({ input, tokenOut }) => {
+      it(`${input.token.symbol} to ${tokenOut.symbol}`, async function () {
+        const output = await logic.getPrice({ input, tokenOut });
+        expect(output.amountWei.gt(0)).to.be.true;
+      });
+    });
   });
 
   describe('Test getLogic', () => {
     const chainId = 1;
     const logic = new ParaswapV5SwapTokenLogic({ chainId });
 
-    test.each<{ name: string; options: ParaswapV5SwapTokenLogicGetLogicOptions }>([
+    const cases = [
       {
-        name: 'ETH to USDC',
-        options: {
-          account: '0xa3C1C91403F0026b9dd086882aDbC8Cdbc3b3cfB',
-          funds: new TokenAmounts([new TokenAmount(ETH_MAINNET, '1')]),
-          slippage: 500,
-          input: new TokenAmount(ETH_MAINNET, '1'),
-          output: new TokenAmount(USDC_MAINNET),
-        },
+        account: '0xa3C1C91403F0026b9dd086882aDbC8Cdbc3b3cfB',
+        funds: new TokenAmounts([new TokenAmount(ETH_MAINNET, '1')]),
+        slippage: 500,
+        input: new TokenAmount(ETH_MAINNET, '1'),
+        output: new TokenAmount(USDC_MAINNET),
       },
       {
-        name: 'USDC to ETH',
-        options: {
-          account: '0xa3C1C91403F0026b9dd086882aDbC8Cdbc3b3cfB',
-          funds: new TokenAmounts([new TokenAmount(USDC_MAINNET, '1')]),
-          slippage: 500,
-          input: new TokenAmount(USDC_MAINNET, '1'),
-          output: new TokenAmount(ETH_MAINNET),
-        },
+        account: '0xa3C1C91403F0026b9dd086882aDbC8Cdbc3b3cfB',
+        funds: new TokenAmounts([new TokenAmount(USDC_MAINNET, '1')]),
+        slippage: 500,
+        input: new TokenAmount(USDC_MAINNET, '1'),
+        output: new TokenAmount(ETH_MAINNET),
       },
       {
-        name: 'USDC to DAI',
-        options: {
-          account: '0xa3C1C91403F0026b9dd086882aDbC8Cdbc3b3cfB',
-          funds: new TokenAmounts([new TokenAmount(USDC_MAINNET, '1')]),
-          slippage: 500,
-          input: new TokenAmount(USDC_MAINNET, '1'),
-          output: new TokenAmount(DAI_MAINNET),
-        },
+        account: '0xa3C1C91403F0026b9dd086882aDbC8Cdbc3b3cfB',
+        funds: new TokenAmounts([new TokenAmount(USDC_MAINNET, '1')]),
+        slippage: 500,
+        input: new TokenAmount(USDC_MAINNET, '1'),
+        output: new TokenAmount(DAI_MAINNET),
       },
-    ])(
-      'case $#: $name',
-      async ({ options }) => {
-        const routerLogic = await logic.getLogic(options);
+    ];
 
-        expect(routerLogic.to).toBe('0xDEF171Fe48CF0115B1d80b88dc8eAB59176FEe57');
-        expect(utils.isBytesLike(routerLogic.data)).toBeTruthy();
-        if (options.input.token.isNative()) {
-          expect(routerLogic.inputs[0].token).toBe(ELASTIC_ADDRESS);
-          expect(routerLogic.inputs[0].doApprove).toBeFalsy();
+    cases.forEach(({ input, output, ...others }) => {
+      it(`${input.token.symbol} to ${output.token.symbol}`, async function () {
+        const routerLogic = await logic.getLogic({ input, output, ...others });
+
+        expect(routerLogic.to).to.eq('0xDEF171Fe48CF0115B1d80b88dc8eAB59176FEe57');
+        expect(utils.isBytesLike(routerLogic.data)).to.be.true;
+        if (input.token.isNative()) {
+          expect(routerLogic.inputs[0].token).to.eq(ELASTIC_ADDRESS);
+          expect(routerLogic.inputs[0].doApprove).to.be.false;
         } else {
-          expect(routerLogic.inputs[0].doApprove).toBeTruthy();
+          expect(routerLogic.inputs[0].doApprove).to.be.true;
         }
-        expect(BigNumber.from(routerLogic.inputs[0].amountBps).eq(BPS_BASE)).toBeTruthy();
-        expect(BigNumber.from(routerLogic.inputs[0].amountOffset).eq(constants.MaxUint256)).toBeTruthy();
-        if (options.output.token.isNative()) {
-          expect(routerLogic.outputs[0].token).toBe(ELASTIC_ADDRESS);
+        expect(BigNumber.from(routerLogic.inputs[0].amountBps).eq(BPS_BASE)).to.be.true;
+        expect(BigNumber.from(routerLogic.inputs[0].amountOffset).eq(constants.MaxUint256)).to.be.true;
+        if (output.token.isNative()) {
+          expect(routerLogic.outputs[0].token).to.eq(ELASTIC_ADDRESS);
         }
-        expect(routerLogic.callback).toBe(constants.AddressZero);
-      },
-      30000
-    );
+        expect(routerLogic.callback).to.eq(constants.AddressZero);
+      });
+    });
   });
 });

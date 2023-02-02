@@ -15,3 +15,9 @@ An SDK that build protocol logics for Composable Router
   # - contracts dir: src/protocols/{protocol}/contracts
   yarn cli typechain
   ```
+
+- Run core or protocol's tests
+
+  ```sh
+  yarn cli test
+  ```
