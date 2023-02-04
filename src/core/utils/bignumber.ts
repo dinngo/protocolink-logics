@@ -9,7 +9,7 @@ export function toSmallUnit(amount: string, decimals: number) {
 
 export interface ToBigUnitOptions {
   displayDecimals?: number;
-  mode?: 'ceil' | 'round' | 'floor';
+  mode?: string | 'ceil' | 'round' | 'floor';
 }
 
 export function toBigUnit(amountWei: BigNumberish, decimals: number, options: ToBigUnitOptions = {}) {

@@ -1,16 +1,17 @@
 import { DAI_MAINNET, ETH_MAINNET, USDC_MAINNET, WBTC_MAINNET, WETH_MAINNET } from './data.mainnet';
-import { TokenAmount, TokenAmountField, TokenAmounts } from './token-amount';
+import { TokenAmount, TokenAmounts } from './token-amount';
+import { expect } from 'chai';
 
 describe('TokenAmounts', () => {
   describe('Test new instance', () => {
-    test.each<{ name: string; tokenAmounts: TokenAmount[]; expected: TokenAmountField[] }>([
+    const cases = [
       {
-        name: 'without initial token amounts',
+        title: 'without initial token amounts',
         tokenAmounts: [],
         expected: [],
       },
       {
-        name: 'with initial token amounts',
+        title: 'with initial token amounts',
         tokenAmounts: [
           new TokenAmount(WBTC_MAINNET, '2'),
           new TokenAmount(DAI_MAINNET, '1'),
@@ -24,13 +25,17 @@ describe('TokenAmounts', () => {
           { token: WBTC_MAINNET, amount: '2' },
         ],
       },
-    ])('case $#: $name', async ({ tokenAmounts, expected }) => {
-      expect(new TokenAmounts(tokenAmounts).toFields()).toStrictEqual(expected);
+    ];
+
+    cases.forEach(({ title, tokenAmounts, expected }) => {
+      it(title, function () {
+        expect(new TokenAmounts(tokenAmounts).toFields()).to.deep.eq(expected);
+      });
     });
   });
 
   describe('Test add', () => {
-    test.each<{ tokenAmounts: TokenAmount[]; expected: TokenAmountField[] }>([
+    const cases = [
       {
         tokenAmounts: [
           new TokenAmount(WBTC_MAINNET, '2'),
@@ -61,24 +66,29 @@ describe('TokenAmounts', () => {
           { token: WETH_MAINNET, amount: '4' },
         ],
       },
-    ])('case $#', async ({ tokenAmounts, expected }) => {
-      const _tokenAmounts = new TokenAmounts();
-      for (const tokenAmount of tokenAmounts) {
-        _tokenAmounts.add(tokenAmount);
-      }
-      expect(_tokenAmounts.toFields()).toStrictEqual(expected);
+    ];
+
+    cases.forEach(({ tokenAmounts, expected }, i) => {
+      it(`case ${i + 1}`, function () {
+        const _tokenAmounts = new TokenAmounts();
+        for (const tokenAmount of tokenAmounts) {
+          _tokenAmounts.add(tokenAmount);
+        }
+
+        expect(_tokenAmounts.toFields()).to.deep.eq(expected);
+      });
     });
   });
 
   describe('Test compact', () => {
-    test('case 0', () => {
+    it('case 1', () => {
       const tokenAmounts = new TokenAmounts();
       tokenAmounts.add(new TokenAmount(ETH_MAINNET, '3'));
       tokenAmounts.add(new TokenAmount(DAI_MAINNET, '4'));
       tokenAmounts.add(new TokenAmount(USDC_MAINNET, '3'));
       tokenAmounts.sub(new TokenAmount(ETH_MAINNET, '3'));
 
-      expect(tokenAmounts.compact().toFields()).toStrictEqual([
+      expect(tokenAmounts.compact().toFields()).to.deep.eq([
         { token: DAI_MAINNET, amount: '4' },
         { token: USDC_MAINNET, amount: '3' },
       ]);
