@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'fs-extra';
 import inquirer from 'inquirer';
 import path from 'path';
 
@@ -8,7 +8,7 @@ export async function categoryPrompt(message: string) {
       name: 'category',
       type: 'list',
       message,
-      choices: ['core', 'protocol'],
+      choices: ['core', 'router', 'protocols'],
     },
   ]);
 }

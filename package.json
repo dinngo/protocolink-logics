@@ -23,17 +23,23 @@
     "cli": "ts-node -r tsconfig-paths/register cli/index.ts"
   },
   "dependencies": {
-    "@composable-router/contracts": "file:../router-contract",
     "@paraswap/sdk": "^6.1.2",
     "@types/lodash": "^4.14.191",
     "axios": "^1.2.6",
+    "axios-retry": "^3.4.0",
     "bignumber.js": "^9.1.1",
     "ethers": "^5.7.2",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
+    "@composable-router/contracts": "file:../router-contract",
+    "@nomicfoundation/hardhat-chai-matchers": "^1.0.5",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.7",
+    "@nomiclabs/hardhat-ethers": "^2.2.2",
     "@typechain/ethers-v5": "^10.2.0",
+    "@typechain/hardhat": "^6.1.5",
     "@types/chai": "^4.3.4",
+    "@types/fs-extra": "^11.0.1",
     "@types/inquirer": "^8.2.5",
     "@types/inquirer-autocomplete-prompt": "^2.0.0",
     "@types/mocha": "^10.0.1",
@@ -46,6 +52,8 @@
     "eslint": "^8.33.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "fs-extra": "^11.1.0",
+    "hardhat": "^2.12.6",
     "husky": "^8.0.3",
     "inquirer": "^8.2.5",
     "inquirer-autocomplete-prompt": "^2.0.0",

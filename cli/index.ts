@@ -1,3 +1,6 @@
+import 'hardhat';
+import '@typechain/hardhat';
+
 import inquirer from 'inquirer';
 import inquirerAutocomplete from 'inquirer-autocomplete-prompt';
 import yargs from 'yargs/yargs';

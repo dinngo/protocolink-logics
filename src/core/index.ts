@@ -1,6 +1,5 @@
-export * from './logics';
-export * from './network';
-export * from './router';
-export * from './tokens';
-export * from './types';
-export * from './utils';
+export * as contracts from './contracts';
+export * as network from './network';
+export * as tokens from './tokens';
+export * as utils from './utils';
+export * from './web3-toolkit';

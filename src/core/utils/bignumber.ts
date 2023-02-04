@@ -3,7 +3,7 @@ import BigNumberJS from 'bignumber.js';
 
 export function toSmallUnit(amount: string, decimals: number) {
   return Number(amount) > 0
-    ? utils.parseUnits(new BigNumberJS(amount).decimalPlaces(decimals, BigNumberJS.ROUND_DOWN).toString(), decimals)
+    ? utils.parseUnits(BigNumberJS(amount).decimalPlaces(decimals, BigNumberJS.ROUND_DOWN).toString(), decimals)
     : BigNumber.from(0);
 }
 
@@ -15,7 +15,7 @@ export interface ToBigUnitOptions {
 export function toBigUnit(amountWei: BigNumberish, decimals: number, options: ToBigUnitOptions = {}) {
   const { displayDecimals, mode } = options;
 
-  return new BigNumberJS(amountWei.toString())
+  return BigNumberJS(amountWei.toString())
     .shiftedBy(-decimals)
     .decimalPlaces(
       displayDecimals ? displayDecimals : decimals,
