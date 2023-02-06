@@ -1,6 +1,8 @@
+/* eslint-disable max-len */
+
 import { TokenAmount, TokenAmountField, TokenAmountPair, TokenAmounts } from './token-amount';
 import { expect } from 'chai';
-import * as mainnet from './data.mainnet';
+import { mainnet } from './data';
 
 describe('TokenAmount', function () {
   context('Test new instance', function () {
@@ -77,6 +79,25 @@ describe('TokenAmount', function () {
         const _tokenAmount = new TokenAmount(tokenAmount[0]);
         _tokenAmount.set(tokenAmount[1]);
         expect(_tokenAmount.amount).to.eq(expected);
+      });
+    });
+  });
+
+  context('Test toJSON', function () {
+    const cases = [
+      {
+        tokenAmount: new TokenAmount(mainnet.ETH, '1.1234567890123456789'),
+        expected: `{"token":{"chainId":1,"address":"0x0000000000000000000000000000000000000000","decimals":18,"symbol":"ETH","name":"Ethereum"},"amount":"1.123456789012345678"}`,
+      },
+      {
+        tokenAmount: new TokenAmount(mainnet.USDC, '1.1234567890123456789'),
+        expected: `{"token":{"chainId":1,"address":"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48","decimals":6,"symbol":"USDC","name":"USD Coin"},"amount":"1.123456"}`,
+      },
+    ];
+
+    cases.forEach(({ tokenAmount, expected }, i) => {
+      it(`case ${i + 1}`, function () {
+        expect(JSON.stringify(tokenAmount)).to.eq(expected);
       });
     });
   });

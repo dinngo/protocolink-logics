@@ -4,12 +4,12 @@ import * as rt from 'src/router';
 export type RouterDepositLogicGetLogicOptions = Pick<rt.RouterGlobalOptions, 'funds'>;
 
 export class RouterDepositLogic extends rt.logics.LogicBase {
-  spender: string;
+  spenderAddress: string;
 
-  constructor(options: rt.logics.LogicBaseOptions<{ spender?: string }>) {
-    const { spender, ...others } = options;
+  constructor(options: rt.logics.LogicBaseOptions<{ spenderAddress?: string }>) {
+    const { spenderAddress: spenderAddress, ...others } = options;
     super(others);
-    this.spender = spender ? spender : this.routerConfig.erc20Spender;
+    this.spenderAddress = spenderAddress ? spenderAddress : this.routerConfig.erc20SpenderAddress;
   }
 
   async getLogic({ funds }: RouterDepositLogicGetLogicOptions) {
@@ -20,7 +20,7 @@ export class RouterDepositLogic extends rt.logics.LogicBase {
         : iface.encodeFunctionData('pullTokens', funds.toValues());
 
     return {
-      to: this.spender,
+      to: this.spenderAddress,
       data,
       inputs: [],
       outputs: [],

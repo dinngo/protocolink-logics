@@ -4,7 +4,7 @@ import * as core from 'src/core';
 import { expect } from 'chai';
 
 describe('WrappedNativeTokenLogic', function () {
-  const chainId = 1;
+  const chainId = core.network.ChainId.mainnet;
   const wrappedNativeToken = new WrappedNativeTokenLogic({ chainId });
 
   context('Test getPrice', function () {

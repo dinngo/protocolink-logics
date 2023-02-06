@@ -1,0 +1,310 @@
+{
+  "USDT": {
+    "chainId": 1,
+    "address": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+    "decimals": 6,
+    "symbol": "USDT",
+    "name": "Tether USD"
+  },
+  "aUSDT": {
+    "chainId": 1,
+    "address": "0x3Ed3B47Dd13EC9a98b44e6204A523E766B225811",
+    "decimals": 6,
+    "symbol": "aUSDT",
+    "name": "Aave interest bearing USDT"
+  },
+  "WBTC": {
+    "chainId": 1,
+    "address": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+    "decimals": 8,
+    "symbol": "WBTC",
+    "name": "Wrapped BTC"
+  },
+  "aWBTC": {
+    "chainId": 1,
+    "address": "0x9ff58f4fFB29fA2266Ab25e75e2A8b3503311656",
+    "decimals": 8,
+    "symbol": "aWBTC",
+    "name": "Aave interest bearing WBTC"
+  },
+  "WETH": {
+    "chainId": 1,
+    "address": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+    "decimals": 18,
+    "symbol": "WETH",
+    "name": "Wrapped Ether"
+  },
+  "aWETH": {
+    "chainId": 1,
+    "address": "0x030bA81f1c18d280636F32af80b9AAd02Cf0854e",
+    "decimals": 18,
+    "symbol": "aWETH",
+    "name": "Aave interest bearing WETH"
+  },
+  "UNI": {
+    "chainId": 1,
+    "address": "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
+    "decimals": 18,
+    "symbol": "UNI",
+    "name": "Uniswap"
+  },
+  "aUNI": {
+    "chainId": 1,
+    "address": "0xB9D7CB55f463405CDfBe4E90a6D2Df01C2B92BF1",
+    "decimals": 18,
+    "symbol": "aUNI",
+    "name": "Aave interest bearing UNI"
+  },
+  "AAVE": {
+    "chainId": 1,
+    "address": "0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9",
+    "decimals": 18,
+    "symbol": "AAVE",
+    "name": "Aave Token"
+  },
+  "aAAVE": {
+    "chainId": 1,
+    "address": "0xFFC97d72E13E01096502Cb8Eb52dEe56f74DAD7B",
+    "decimals": 18,
+    "symbol": "aAAVE",
+    "name": "Aave interest bearing AAVE"
+  },
+  "BUSD": {
+    "chainId": 1,
+    "address": "0x4Fabb145d64652a948d72533023f6E7A623C7C53",
+    "decimals": 18,
+    "symbol": "BUSD",
+    "name": "Binance USD"
+  },
+  "aBUSD": {
+    "chainId": 1,
+    "address": "0xA361718326c15715591c299427c62086F69923D9",
+    "decimals": 18,
+    "symbol": "aBUSD",
+    "name": "Aave interest bearing BUSD"
+  },
+  "DAI": {
+    "chainId": 1,
+    "address": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+    "decimals": 18,
+    "symbol": "DAI",
+    "name": "Dai Stablecoin"
+  },
+  "aDAI": {
+    "chainId": 1,
+    "address": "0x028171bCA77440897B824Ca71D1c56caC55b68A3",
+    "decimals": 18,
+    "symbol": "aDAI",
+    "name": "Aave interest bearing DAI"
+  },
+  "LINK": {
+    "chainId": 1,
+    "address": "0x514910771AF9Ca656af840dff83E8264EcF986CA",
+    "decimals": 18,
+    "symbol": "LINK",
+    "name": "ChainLink Token"
+  },
+  "aLINK": {
+    "chainId": 1,
+    "address": "0xa06bC25B5805d5F8d82847D191Cb4Af5A3e873E0",
+    "decimals": 18,
+    "symbol": "aLINK",
+    "name": "Aave interest bearing LINK"
+  },
+  "MKR": {
+    "chainId": 1,
+    "address": "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2",
+    "decimals": 18,
+    "symbol": "MKR",
+    "name": "Maker"
+  },
+  "aMKR": {
+    "chainId": 1,
+    "address": "0xc713e5E149D5D0715DcD1c156a020976e7E56B88",
+    "decimals": 18,
+    "symbol": "aMKR",
+    "name": "Aave interest bearing MKR"
+  },
+  "SNX": {
+    "chainId": 1,
+    "address": "0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F",
+    "decimals": 18,
+    "symbol": "SNX",
+    "name": "Synthetix Network Token"
+  },
+  "aSNX": {
+    "chainId": 1,
+    "address": "0x35f6B052C598d933D69A4EEC4D04c73A191fE6c2",
+    "decimals": 18,
+    "symbol": "aSNX",
+    "name": "Aave interest bearing SNX"
+  },
+  "sUSD": {
+    "chainId": 1,
+    "address": "0x57Ab1ec28D129707052df4dF418D58a2D46d5f51",
+    "decimals": 18,
+    "symbol": "sUSD",
+    "name": "Synth sUSD"
+  },
+  "aSUSD": {
+    "chainId": 1,
+    "address": "0x6C5024Cd4F8A59110119C56f8933403A539555EB",
+    "decimals": 18,
+    "symbol": "aSUSD",
+    "name": "Aave interest bearing SUSD"
+  },
+  "TUSD": {
+    "chainId": 1,
+    "address": "0x0000000000085d4780B73119b644AE5ecd22b376",
+    "decimals": 18,
+    "symbol": "TUSD",
+    "name": "TrueUSD"
+  },
+  "aTUSD": {
+    "chainId": 1,
+    "address": "0x101cc05f4A51C0319f570d5E146a8C625198e636",
+    "decimals": 18,
+    "symbol": "aTUSD",
+    "name": "Aave interest bearing TUSD"
+  },
+  "USDC": {
+    "chainId": 1,
+    "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+    "decimals": 6,
+    "symbol": "USDC",
+    "name": "USD Coin"
+  },
+  "aUSDC": {
+    "chainId": 1,
+    "address": "0xBcca60bB61934080951369a648Fb03DF4F96263C",
+    "decimals": 6,
+    "symbol": "aUSDC",
+    "name": "Aave interest bearing USDC"
+  },
+  "CRV": {
+    "chainId": 1,
+    "address": "0xD533a949740bb3306d119CC777fa900bA034cd52",
+    "decimals": 18,
+    "symbol": "CRV",
+    "name": "Curve DAO Token"
+  },
+  "aCRV": {
+    "chainId": 1,
+    "address": "0x8dAE6Cb04688C62d939ed9B68d32Bc62e49970b1",
+    "decimals": 18,
+    "symbol": "aCRV",
+    "name": "Aave interest bearing CRV"
+  },
+  "GUSD": {
+    "chainId": 1,
+    "address": "0x056Fd409E1d7A124BD7017459dFEa2F387b6d5Cd",
+    "decimals": 2,
+    "symbol": "GUSD",
+    "name": "Gemini dollar"
+  },
+  "aGUSD": {
+    "chainId": 1,
+    "address": "0xD37EE7e4f452C6638c96536e68090De8cBcdb583",
+    "decimals": 2,
+    "symbol": "aGUSD",
+    "name": "Aave interest bearing GUSD"
+  },
+  "USDP": {
+    "chainId": 1,
+    "address": "0x8E870D67F660D95d5be530380D0eC0bd388289E1",
+    "decimals": 18,
+    "symbol": "USDP",
+    "name": "Pax Dollar"
+  },
+  "aUSDP": {
+    "chainId": 1,
+    "address": "0x2e8F4bdbE3d47d7d7DE490437AeA9915D930F1A3",
+    "decimals": 18,
+    "symbol": "aUSDP",
+    "name": "Aave interest bearing USDP"
+  },
+  "DPI": {
+    "chainId": 1,
+    "address": "0x1494CA1F11D487c2bBe4543E90080AeBa4BA3C2b",
+    "decimals": 18,
+    "symbol": "DPI",
+    "name": "DefiPulse Index"
+  },
+  "aDPI": {
+    "chainId": 1,
+    "address": "0x6F634c6135D2EBD550000ac92F494F9CB8183dAe",
+    "decimals": 18,
+    "symbol": "aDPI",
+    "name": "Aave interest bearing DPI"
+  },
+  "FRAX": {
+    "chainId": 1,
+    "address": "0x853d955aCEf822Db058eb8505911ED77F175b99e",
+    "decimals": 18,
+    "symbol": "FRAX",
+    "name": "Frax"
+  },
+  "aFRAX": {
+    "chainId": 1,
+    "address": "0xd4937682df3C8aEF4FE912A96A74121C0829E664",
+    "decimals": 18,
+    "symbol": "aFRAX",
+    "name": "Aave interest bearing FRAX"
+  },
+  "stETH": {
+    "chainId": 1,
+    "address": "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84",
+    "decimals": 18,
+    "symbol": "stETH",
+    "name": "Liquid staked Ether 2.0"
+  },
+  "aSTETH": {
+    "chainId": 1,
+    "address": "0x1982b2F5814301d4e9a8b0201555376e62F82428",
+    "decimals": 18,
+    "symbol": "aSTETH",
+    "name": "Aave interest bearing STETH"
+  },
+  "ENS": {
+    "chainId": 1,
+    "address": "0xC18360217D8F7Ab5e7c516566761Ea12Ce7F9D72",
+    "decimals": 18,
+    "symbol": "ENS",
+    "name": "Ethereum Name Service"
+  },
+  "aENS": {
+    "chainId": 1,
+    "address": "0x9a14e23A58edf4EFDcB360f68cd1b95ce2081a2F",
+    "decimals": 18,
+    "symbol": "aENS",
+    "name": "Aave interest bearing ENS"
+  },
+  "1INCH": {
+    "chainId": 1,
+    "address": "0x111111111117dC0aa78b770fA6A738034120C302",
+    "decimals": 18,
+    "symbol": "1INCH",
+    "name": "1INCH Token"
+  },
+  "a1INCH": {
+    "chainId": 1,
+    "address": "0xB29130CBcC3F791f077eAdE0266168E808E5151e",
+    "decimals": 18,
+    "symbol": "a1INCH",
+    "name": "Aave interest bearing 1INCH"
+  },
+  "LUSD": {
+    "chainId": 1,
+    "address": "0x5f98805A4E8be255a32880FDeC7F6728C6568bA0",
+    "decimals": 18,
+    "symbol": "LUSD",
+    "name": "LUSD Stablecoin"
+  },
+  "aLUSD": {
+    "chainId": 1,
+    "address": "0xce1871f791548600cb59efbefFC9c38719142079",
+    "decimals": 18,
+    "symbol": "aLUSD",
+    "name": "Aave interest bearing LUSD"
+  }
+}

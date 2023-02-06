@@ -4,7 +4,7 @@ import * as core from 'src/core';
 import { expect } from 'chai';
 
 describe('SendTokenLogic', function () {
-  const chainId = 1;
+  const chainId = core.network.ChainId.mainnet;
   const sendToken = new SendTokenLogic({ chainId });
 
   context('Test getLogic', function () {

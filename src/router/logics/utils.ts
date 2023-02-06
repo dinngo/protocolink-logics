@@ -14,7 +14,7 @@ export function newLogicInput(options: NewLogicInputOptions): IRouter.InputStruc
 
   let amountBps: BigNumberish;
   let amountOrOffset: BigNumberish;
-  if (options.amountBps && options.amountOffset) {
+  if (options.amountBps !== undefined && options.amountOffset !== undefined) {
     amountBps = options.amountBps;
     amountOrOffset = options.amountOffset;
   } else {

@@ -11,12 +11,6 @@ export class SendTokenLogic extends rt.logics.LogicBase {
     const iface = core.contracts.ERC20__factory.createInterface();
     const data = iface.encodeFunctionData('transfer', [recipient, input.amountWei]);
 
-    return {
-      to: input.token.address,
-      data,
-      inputs: [],
-      outputs: [],
-      callback: constants.AddressZero,
-    };
+    return { to: input.token.address, data, inputs: [], outputs: [], callback: constants.AddressZero };
   }
 }

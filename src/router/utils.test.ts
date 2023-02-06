@@ -1,6 +1,6 @@
+import { calcAmountBps, calcAmountMin, toTokensReturn } from './utils';
 import * as core from 'src/core';
 import { expect } from 'chai';
-import * as utils from './utils';
 
 describe('Test calcAmountBps', function () {
   const cases = [
@@ -14,7 +14,7 @@ describe('Test calcAmountBps', function () {
 
   cases.forEach(({ amountWei, balanceWei, expected }, i) => {
     it(`case ${i + 1}`, function () {
-      expect(utils.calcAmountBps(amountWei, balanceWei)).to.eq(expected);
+      expect(calcAmountBps(amountWei, balanceWei)).to.eq(expected);
     });
   });
 });
@@ -29,7 +29,7 @@ describe('Test calcAmountMin', function () {
 
   cases.forEach(({ amountWei, slippage, expected }, i) => {
     it(`case ${i + 1}`, function () {
-      expect(utils.calcAmountMin(amountWei, slippage)).to.eq(expected);
+      expect(calcAmountMin(amountWei, slippage)).to.eq(expected);
     });
   });
 });
@@ -48,7 +48,7 @@ describe('Test calcAmountMin', function () {
 
   cases.forEach(({ balances, expected }, i) => {
     it(`case ${i + 1}`, function () {
-      expect(utils.toTokensReturn(balances)).to.deep.eq(expected);
+      expect(toTokensReturn(balances)).to.deep.eq(expected);
     });
   });
 });
