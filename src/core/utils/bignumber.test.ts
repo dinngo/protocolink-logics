@@ -31,7 +31,7 @@ describe('Test toSmallUnit', function () {
   });
 });
 
-describe('Test toBigUnit', () => {
+describe('Test toBigUnit', function () {
   const cases: {
     title: string;
     amountWei: BigNumberish;

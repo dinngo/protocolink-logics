@@ -1,28 +1,22 @@
 import { BuildSwapTxInput, SimpleFetchSDK, constructSimpleSDK } from '@paraswap/sdk';
-import {
-  LogicBase,
-  LogicBaseOptions,
-  LogicEncodeOptions,
-  TokenAmount,
-  TokenToTokenData,
-  TokenToTokenExactInData,
-  TokenToTokenLogicInterface,
-  newLogicInput,
-  newLogicOutput,
-} from 'src/core';
 import axios from 'axios';
+import axiosRetry from 'axios-retry';
 import { constants } from 'ethers';
+import * as core from 'src/core';
+import * as rt from 'src/router';
 
-export type ParaswapV5SwapTokenLogicGetPriceOptions = TokenToTokenExactInData;
+axiosRetry(axios, { retries: 5, retryDelay: axiosRetry.exponentialDelay });
 
-export type ParaswapV5SwapTokenLogicGetLogicOptions = LogicEncodeOptions<
-  TokenToTokenData<Pick<BuildSwapTxInput, 'partner' | 'partnerAddress'>>
->;
+export type ParaswapV5SwapTokenLogicGetPriceOptions = rt.logics.TokenToTokenExactInData;
 
-export class ParaswapV5SwapTokenLogic extends LogicBase implements TokenToTokenLogicInterface {
+export type ParaswapV5SwapTokenLogicGetLogicOptions = rt.logics.TokenToTokenData &
+  Pick<BuildSwapTxInput, 'partner' | 'partnerAddress'> &
+  Pick<rt.RouterGlobalOptions, 'account' | 'slippage'>;
+
+export class ParaswapV5SwapTokenLogic extends rt.logics.LogicBase implements rt.logics.TokenToTokenLogicInterface {
   private sdk: SimpleFetchSDK;
 
-  constructor(options: LogicBaseOptions) {
+  constructor(options: rt.logics.LogicBaseOptions) {
     super(options);
     this.sdk = constructSimpleSDK({ chainId: this.chainId, axios });
   }
@@ -37,13 +31,13 @@ export class ParaswapV5SwapTokenLogic extends LogicBase implements TokenToTokenL
       destToken: tokenOut.elasticAddress,
       destDecimals: tokenOut.decimals,
     });
-    const output = new TokenAmount(tokenOut, destAmount);
+    const output = new core.tokens.TokenAmount(tokenOut, destAmount);
 
     return output;
   }
 
   async getLogic(options: ParaswapV5SwapTokenLogicGetLogicOptions) {
-    const { funds, account, slippage, input, output, partner, partnerAddress } = options;
+    const { account, slippage, input, output, partner, partnerAddress } = options;
 
     const priceRoute = await this.sdk.swap.getRate({
       srcToken: input.token.elasticAddress,
@@ -60,10 +54,10 @@ export class ParaswapV5SwapTokenLogic extends LogicBase implements TokenToTokenL
         destToken,
         destDecimals,
         srcAmount,
-        destAmount: '1',
         userAddress: account,
         partner,
         partnerAddress,
+        slippage,
         deadline: (Math.floor(Date.now() / 1000) + 1200).toString(),
         priceRoute,
       },
@@ -73,8 +67,8 @@ export class ParaswapV5SwapTokenLogic extends LogicBase implements TokenToTokenL
     return {
       to,
       data,
-      inputs: [newLogicInput({ funds, input })],
-      outputs: [newLogicOutput({ output, slippage })],
+      inputs: [rt.logics.newLogicInput({ input })],
+      outputs: [rt.logics.newLogicOutput({ output, slippage })],
       callback: constants.AddressZero,
     };
   }

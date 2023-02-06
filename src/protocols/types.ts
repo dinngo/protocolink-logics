@@ -1,8 +1,8 @@
-import { NetworkConfig } from '../core/network';
+import * as core from 'src/core';
 
 export interface ProtocolLogic {
   id: string;
-  supportedNetworks: NetworkConfig[];
+  supportedNetworks: core.network.NetworkConfig[];
 }
 
 export interface ProtocolDefinition {

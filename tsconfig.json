@@ -6,6 +6,7 @@
     "alwaysStrict": true,
     "declaration": true,
     "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
@@ -15,11 +16,14 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "resolveJsonModule": true,
+    "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
     "strictFunctionTypes": true,
     "strictNullChecks": true,
     "strictPropertyInitialization": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "test/**/*", "contracts/**/*"],
+  "files": ["hardhat.config.ts"],
+  "exclude": ["node_modules/**/*"]
 }
