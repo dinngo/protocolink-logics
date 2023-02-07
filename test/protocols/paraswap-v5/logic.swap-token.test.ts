@@ -49,7 +49,10 @@ describe('Test ParaswapV5 Wrapped Logic', function () {
       const erc20Funds = funds.erc20;
       if (!erc20Funds.isEmpty()) {
         await utils.web3.approves(user, erc20Spender.address, erc20Funds);
-        const routerDeposit = new protocols.router.RouterDepositLogic({ chainId, spender: erc20Spender.address });
+        const routerDeposit = new protocols.router.RouterDepositLogic({
+          chainId,
+          spenderAddress: erc20Spender.address,
+        });
         logics.push(await routerDeposit.getLogic({ funds: erc20Funds }));
       }
 

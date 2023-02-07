@@ -1,12 +1,14 @@
+import * as core from 'src/core';
+
 export interface RouterConfig {
-  router: string;
-  erc20Spender: string;
+  routerAddress: string;
+  erc20SpenderAddress: string;
 }
 
 export const configMap: Record<number, RouterConfig> = {
-  1: {
-    router: '0x6181667418c8FA0d4ae3Aa90532D55D3994121F3',
-    erc20Spender: '0xaffD5c325d13FfbC714B10aEa27C1FBaCcf21a6a',
+  [core.network.ChainId.mainnet]: {
+    routerAddress: '0x6181667418c8FA0d4ae3Aa90532D55D3994121F3',
+    erc20SpenderAddress: '0xaffD5c325d13FfbC714B10aEa27C1FBaCcf21a6a',
   },
 };
 

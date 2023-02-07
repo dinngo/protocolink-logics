@@ -4,7 +4,7 @@ import * as core from 'src/core';
 import { expect } from 'chai';
 
 describe('ParaswapV5SwapTokenLogic', function () {
-  const chainId = 1;
+  const chainId = core.network.ChainId.mainnet;
   const paraswapV5SwapToken = new ParaswapV5SwapTokenLogic({ chainId });
 
   context('Test getPrice', function () {

@@ -23,6 +23,7 @@ describe('Test SendToken Logic', function () {
   });
 
   const cases = [
+    { input: new core.tokens.TokenAmount(core.tokens.mainnet.ETH, '1') },
     { input: new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '1') },
     { input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1') },
   ];
@@ -34,17 +35,24 @@ describe('Test SendToken Logic', function () {
       const logics: rt.IRouter.LogicStruct[] = [];
 
       const erc20Funds = funds.erc20;
-      await utils.web3.approves(user1, erc20Spender.address, erc20Funds);
-      const routerDeposit = new protocols.router.RouterDepositLogic({ chainId, spender: erc20Spender.address });
-      logics.push(await routerDeposit.getLogic({ funds: erc20Funds }));
+      if (!erc20Funds.isEmpty()) {
+        await utils.web3.approves(user1, erc20Spender.address, erc20Funds);
+        const routerDeposit = new protocols.router.RouterDepositLogic({
+          chainId,
+          spenderAddress: erc20Spender.address,
+        });
+        logics.push(await routerDeposit.getLogic({ funds: erc20Funds }));
+      }
 
       const sendToken = new protocols.tokens.SendTokenLogic({ chainId });
       logics.push(await sendToken.getLogic({ input, recipient: user2.address }));
 
+      const value = funds.native?.amountWei ?? 0;
+
       const user1BalanceBefore = await utils.web3.getBalance(user1.address, input.token);
       const user2BalanceBefore = await utils.web3.getBalance(user2.address, input.token);
 
-      await expect(router.connect(user1).execute(logics, [])).not.to.be.reverted;
+      await expect(router.connect(user1).execute(logics, [], { value })).not.to.be.reverted;
 
       const user1BalanceAfter = await utils.web3.getBalance(user1.address, input.token);
       const user2BalanceAfter = await utils.web3.getBalance(user2.address, input.token);

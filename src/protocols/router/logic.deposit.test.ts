@@ -5,7 +5,7 @@ import { expect } from 'chai';
 import * as rt from 'src/router';
 
 describe('RouterDepositLogic', function () {
-  const chainId = 1;
+  const chainId = core.network.ChainId.mainnet;
   const routerDeposit = new RouterDepositLogic({ chainId });
 
   context('Test getLogic', function () {
@@ -27,7 +27,7 @@ describe('RouterDepositLogic', function () {
         } else {
           expect(sig).to.eq(iface.getSighash('pullTokens'));
         }
-        expect(logic.to).to.eq(routerDeposit.routerConfig.erc20Spender);
+        expect(logic.to).to.eq(routerDeposit.routerConfig.erc20SpenderAddress);
         expect(utils.isBytesLike(logic.data)).to.be.true;
         expect(logic.inputs).to.deep.eq([]);
         expect(logic.outputs).to.deep.eq([]);

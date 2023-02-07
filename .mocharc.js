@@ -2,7 +2,10 @@
 
 module.exports = {
   extension: 'ts',
-  spec: 'src/**/*.ts',
-  require: ['ts-node/register', 'tsconfig-paths/register'],
+  require: [
+    'ts-node/register',
+    'tsconfig-paths/register',
+    '@nomicfoundation/hardhat-chai-matchers/internal/add-chai-matchers',
+  ],
   timeout: 30000,
 };

@@ -25,6 +25,12 @@ An SDK that build protocol logics for Composable Router
   yarn cli test
   ```
 
+- Run core, router or protocol's script
+
+  ```sh
+  yarn cli script
+  ```
+
 ## Hardhat e2e testing
 
 ```sh
