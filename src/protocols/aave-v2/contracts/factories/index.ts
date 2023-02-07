@@ -2,5 +2,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export { LendingPool__factory } from './LendingPool__factory';
+export { LendingPoolAddressesProvider__factory } from './LendingPoolAddressesProvider__factory';
 export { ProtocolDataProvider__factory } from './ProtocolDataProvider__factory';
 export { WETHGateway__factory } from './WETHGateway__factory';

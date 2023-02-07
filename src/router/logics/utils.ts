@@ -1,7 +1,8 @@
 import { BigNumberish, constants } from 'ethers';
 import { IRouter } from '../contracts/Router';
+import { calcAmountMin, validateAmountBps } from '../utils';
 import * as core from 'src/core';
-import * as utils from '../utils';
+import invariant from 'tiny-invariant';
 
 export interface NewLogicInputOptions {
   input: core.tokens.TokenAmount;
@@ -14,7 +15,8 @@ export function newLogicInput(options: NewLogicInputOptions): IRouter.InputStruc
 
   let amountBps: BigNumberish;
   let amountOrOffset: BigNumberish;
-  if (options.amountBps !== undefined && options.amountOffset !== undefined) {
+  if (options.amountBps && options.amountOffset !== undefined) {
+    invariant(validateAmountBps(options.amountBps), 'amountBps is invalid');
     amountBps = options.amountBps;
     amountOrOffset = options.amountOffset;
   } else {
@@ -35,6 +37,6 @@ export function newLogicOutput(options: NewLogicOutputOptions): IRouter.OutputSt
 
   return {
     token: output.token.elasticAddress,
-    amountMin: utils.calcAmountMin(output.amountWei, slippage),
+    amountMin: calcAmountMin(output.amountWei, slippage),
   };
 }

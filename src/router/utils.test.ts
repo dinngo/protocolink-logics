@@ -1,4 +1,5 @@
-import { calcAmountBps, calcAmountMin, toTokensReturn } from './utils';
+import { calcAmountBps, calcAmountMin, toTokensReturn, validateAmountBps } from './utils';
+import { constants } from 'ethers';
 import * as core from 'src/core';
 import { expect } from 'chai';
 
@@ -15,6 +16,23 @@ describe('Test calcAmountBps', function () {
   cases.forEach(({ amountWei, balanceWei, expected }, i) => {
     it(`case ${i + 1}`, function () {
       expect(calcAmountBps(amountWei, balanceWei)).to.eq(expected);
+    });
+  });
+});
+
+describe('Test validateAmountBps', function () {
+  const cases = [
+    { amountBps: -1, expected: false },
+    { amountBps: 0, expected: false },
+    { amountBps: 1000, expected: true },
+    { amountBps: 10000, expected: true },
+    { amountBps: 100000, expected: false },
+    { amountBps: constants.MaxUint256, expected: true },
+  ];
+
+  cases.forEach(({ amountBps, expected }, i) => {
+    it(`case ${i + 1}`, function () {
+      expect(validateAmountBps(amountBps)).to.eq(expected);
     });
   });
 });

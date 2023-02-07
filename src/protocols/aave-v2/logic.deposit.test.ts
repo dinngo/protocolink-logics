@@ -3,7 +3,6 @@ import { LendingPool__factory, WETHGateway__factory } from './contracts';
 import { constants, utils } from 'ethers';
 import * as core from 'src/core';
 import { expect } from 'chai';
-import { getContractAddress } from './config';
 import { mainnet } from './tokens/data';
 import * as rt from 'src/router';
 
@@ -56,12 +55,14 @@ describe('AaveV2DepositLogic', function () {
 
         expect(utils.isBytesLike(logic.data)).to.be.true;
         if (input.token.isNative()) {
-          expect(logic.to).to.eq(getContractAddress(chainId, 'WETHGateway'));
+          const wethGatewayAddress = await aavev2DepositLogic.service.getWETHGatewayAddress();
+          expect(logic.to).to.eq(wethGatewayAddress);
           expect(sig).to.eq(wethGatewayIface.getSighash('depositETH'));
           expect(logic.inputs[0].token).to.eq(core.tokens.ELASTIC_ADDRESS);
           expect(logic.inputs[0].doApprove).to.be.false;
         } else {
-          expect(logic.to).to.eq(getContractAddress(chainId, 'LendingPool'));
+          const lendingPoolAddress = await aavev2DepositLogic.service.getLendingPoolAddress();
+          expect(logic.to).to.eq(lendingPoolAddress);
           expect(sig).to.eq(lendingPoolIface.getSighash('deposit'));
           expect(logic.inputs[0].doApprove).to.be.true;
         }

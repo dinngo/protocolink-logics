@@ -1,32 +1,64 @@
-import { LendingPool__factory, ProtocolDataProvider__factory } from './contracts';
+import {
+  LendingPoolAddressesProvider__factory,
+  LendingPool__factory,
+  ProtocolDataProvider__factory,
+  WETHGateway__factory,
+} from './contracts';
 import { ReserveTokensAddress } from './types';
 import * as core from 'src/core';
 import { getContractAddress } from './config';
+import invariant from 'tiny-invariant';
 
 export class AaveV2Service extends core.Web3Toolkit {
-  readonly lendingPoolAddress: string;
   readonly protocolDataProviderAddress: string;
 
   constructor(options: core.Web3ToolkitOptions) {
     super(options);
     const { chainId } = options;
-    this.lendingPoolAddress = getContractAddress(chainId, 'LendingPool');
     this.protocolDataProviderAddress = getContractAddress(chainId, 'ProtocolDataProvider');
-  }
-
-  get lendingPool() {
-    return LendingPool__factory.connect(this.lendingPoolAddress, this.provider);
   }
 
   get protocolDataProvider() {
     return ProtocolDataProvider__factory.connect(this.protocolDataProviderAddress, this.provider);
   }
 
+  private lendingPoolAddress?: string;
+
+  async getLendingPoolAddress() {
+    if (!this.lendingPoolAddress) {
+      const lendingPoolAddressProviderAddress = await this.protocolDataProvider.ADDRESSES_PROVIDER();
+      const lendingPoolAddressProvider = LendingPoolAddressesProvider__factory.connect(
+        lendingPoolAddressProviderAddress,
+        this.provider
+      );
+      this.lendingPoolAddress = await lendingPoolAddressProvider.getLendingPool();
+    }
+
+    return this.lendingPoolAddress;
+  }
+
+  private wethGatewayAddress?: string;
+
+  async getWETHGatewayAddress() {
+    if (!this.wethGatewayAddress) {
+      const wethGatewayAddress = getContractAddress(this.chainId, 'WETHGateway');
+      const wethGateway = WETHGateway__factory.connect(wethGatewayAddress, this.provider);
+      const wethGatewayLendingPoolAddress = await wethGateway.getPool();
+      const lendingPoolAddress = await this.getLendingPoolAddress();
+      invariant(wethGatewayLendingPoolAddress === lendingPoolAddress, `The WETHGateway's Pool address is invalid`);
+      this.wethGatewayAddress = wethGatewayAddress;
+    }
+    return this.wethGatewayAddress;
+  }
+
   private assetAddresses?: string[];
 
   async getAssetAddresses() {
     if (!this.assetAddresses) {
-      const assetAddresses = await this.lendingPool.getReservesList();
+      const lendingPoolAddress = await this.getLendingPoolAddress();
+      const lendingPool = LendingPool__factory.connect(lendingPoolAddress, this.provider);
+
+      const assetAddresses = await lendingPool.getReservesList();
 
       const iface = ProtocolDataProvider__factory.createInterface();
       const calls: core.contracts.Multicall2.CallStruct[] = assetAddresses.map((assetAddress) => ({
