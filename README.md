@@ -1,5 +1,9 @@
 # Protocol Logics
 
+[![Lint](https://github.com/dinngodev/protocol-logics/actions/workflows/lint.yml/badge.svg)](https://github.com/dinngodev/protocol-logics/actions/workflows/lint.yml)
+[![Unit Test](https://github.com/dinngodev/protocol-logics/actions/workflows/unit-test.yml/badge.svg)](https://github.com/dinngodev/protocol-logics/actions/workflows/unit-test.yml)
+[![E2E Test](https://github.com/dinngodev/protocol-logics/actions/workflows/e2e-test.yml/badge.svg)](https://github.com/dinngodev/protocol-logics/actions/workflows/e2e-test.yml)
+
 An SDK that build protocol logics for Composable Router
 
 ## CLI

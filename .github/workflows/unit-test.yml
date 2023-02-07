@@ -1,0 +1,24 @@
+name: Unit Test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  run-unit-test:
+    name: Run unit test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run unit test
+        run: yarn test src/**/*.ts
