@@ -64,6 +64,7 @@ describe('Test ParaswapV5 Wrapped Logic', function () {
       const value = funds.native?.amountWei ?? 0;
 
       await expect(router.connect(user).execute(logics, tokensReturn, { value })).not.to.be.reverted;
+      await expect(user.address).to.changeBalance(input.token, -input.amount);
     });
   });
 });

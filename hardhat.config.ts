@@ -1,6 +1,7 @@
 import '@nomicfoundation/hardhat-chai-matchers';
 import '@typechain/hardhat';
 import 'tsconfig-paths/register';
+import 'test/chai-matchers';
 
 import { HardhatUserConfig } from 'hardhat/config';
 

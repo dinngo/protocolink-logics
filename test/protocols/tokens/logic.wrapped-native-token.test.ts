@@ -56,16 +56,9 @@ describe('Test WrappedNativeToken Logic', function () {
 
       const value = funds.native?.amountWei ?? 0;
 
-      const tokenInBalanceBefore = await utils.web3.getBalance(user.address, input.token);
-      const tokenOutBalanceBefore = await utils.web3.getBalance(user.address, output.token);
-
       await expect(router.connect(user).execute(logics, tokensReturn, { value })).not.to.be.reverted;
-
-      const tokenInBalanceAfter = await utils.web3.getBalance(user.address, input.token);
-      const tokenOutBalanceAfter = await utils.web3.getBalance(user.address, output.token);
-
-      expect(tokenInBalanceBefore.sub(tokenInBalanceAfter).amount).to.eq(input.amount);
-      expect(tokenOutBalanceAfter.sub(tokenOutBalanceBefore).amount).to.eq(output.amount);
+      await expect(user.address).to.changeBalance(input.token, -input.amount);
+      await expect(user.address).to.changeBalance(output.token, output.amount);
     });
   });
 });

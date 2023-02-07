@@ -1,5 +1,5 @@
 import { ELASTIC_ADDRESS } from './constants';
-import * as network from '../network';
+import { getConfig } from '../network';
 
 export interface TokenObject {
   chainId: number;
@@ -46,11 +46,11 @@ export class Token {
   }
 
   isNative() {
-    return this.is(network.getConfig(this.chainId).nativeToken);
+    return this.is(getConfig(this.chainId).nativeToken);
   }
 
   isWrapped() {
-    return this.is(network.getConfig(this.chainId).wrappedNativeToken);
+    return this.is(getConfig(this.chainId).wrappedNativeToken);
   }
 
   is(token: Token) {
@@ -58,7 +58,7 @@ export class Token {
   }
 
   wrapped() {
-    return this.isNative() ? network.getConfig(this.chainId).wrappedNativeToken : this;
+    return this.isNative() ? getConfig(this.chainId).wrappedNativeToken : this;
   }
 
   get elasticAddress() {
