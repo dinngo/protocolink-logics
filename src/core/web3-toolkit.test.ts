@@ -1,19 +1,19 @@
+import { ChainId } from './network';
+import { ELASTIC_ADDRESS, mainnet } from './tokens';
 import { Web3Toolkit } from './web3-toolkit';
 import { expect } from 'chai';
-import * as network from './network';
-import * as tokens from './tokens';
 
 describe('Web3Toolkit', function () {
-  const chainId = network.ChainId.mainnet;
+  const chainId = ChainId.mainnet;
   const web3Toolkit = new Web3Toolkit({ chainId });
 
   context('Test getToken', function () {
     const cases = [
-      { tokenAddress: tokens.mainnet.ETH.address, expected: tokens.mainnet.ETH },
-      { tokenAddress: tokens.ELASTIC_ADDRESS, expected: tokens.mainnet.ETH },
-      { tokenAddress: tokens.mainnet.USDC.address, expected: tokens.mainnet.USDC },
-      { tokenAddress: tokens.mainnet.WETH.address, expected: tokens.mainnet.WETH },
-      { tokenAddress: tokens.mainnet.MKR.address, expected: tokens.mainnet.MKR },
+      { tokenAddress: mainnet.ETH.address, expected: mainnet.ETH },
+      { tokenAddress: ELASTIC_ADDRESS, expected: mainnet.ETH },
+      { tokenAddress: mainnet.USDC.address, expected: mainnet.USDC },
+      { tokenAddress: mainnet.WETH.address, expected: mainnet.WETH },
+      { tokenAddress: mainnet.MKR.address, expected: mainnet.MKR },
     ];
 
     cases.forEach(({ tokenAddress, expected }) => {
@@ -28,19 +28,13 @@ describe('Web3Toolkit', function () {
     const cases = [
       {
         tokenAddresses: [
-          tokens.mainnet.USDC.address,
-          tokens.mainnet.ETH.address,
-          tokens.mainnet.WETH.address,
-          tokens.ELASTIC_ADDRESS,
-          tokens.mainnet.DAI.address,
+          mainnet.USDC.address,
+          mainnet.ETH.address,
+          mainnet.WETH.address,
+          ELASTIC_ADDRESS,
+          mainnet.DAI.address,
         ],
-        expected: [
-          tokens.mainnet.USDC,
-          tokens.mainnet.ETH,
-          tokens.mainnet.WETH,
-          tokens.mainnet.ETH,
-          tokens.mainnet.DAI,
-        ],
+        expected: [mainnet.USDC, mainnet.ETH, mainnet.WETH, mainnet.ETH, mainnet.DAI],
       },
     ];
 

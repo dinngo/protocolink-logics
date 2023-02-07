@@ -27,16 +27,17 @@ describe('Test ParaswapV5 Wrapped Logic', function () {
       input: new core.tokens.TokenAmount(core.tokens.mainnet.ETH, '1'),
       output: new core.tokens.TokenAmount(core.tokens.mainnet.USDC),
     },
-    {
-      slippage: 500,
-      input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1'),
-      output: new core.tokens.TokenAmount(core.tokens.mainnet.ETH),
-    },
-    {
-      slippage: 500,
-      input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1'),
-      output: new core.tokens.TokenAmount(core.tokens.mainnet.DAI),
-    },
+    // TODO: wait for router contract update with approveTo
+    // {
+    //   slippage: 500,
+    //   input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1'),
+    //   output: new core.tokens.TokenAmount(core.tokens.mainnet.ETH),
+    // },
+    // {
+    //   slippage: 500,
+    //   input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1'),
+    //   output: new core.tokens.TokenAmount(core.tokens.mainnet.DAI),
+    // },
   ];
 
   cases.forEach(({ slippage, input, output }, i) => {
@@ -64,6 +65,7 @@ describe('Test ParaswapV5 Wrapped Logic', function () {
       const value = funds.native?.amountWei ?? 0;
 
       await expect(router.connect(user).execute(logics, tokensReturn, { value })).not.to.be.reverted;
+      await expect(user.address).to.changeBalance(input.token, -input.amount);
     });
   });
 });

@@ -1,5 +1,5 @@
+import { Token } from '../tokens';
 import configsJSON from './config-data.json';
-import * as tokens from '../tokens';
 
 export interface NetworkConfig {
   id: string;
@@ -7,8 +7,8 @@ export interface NetworkConfig {
   name: string;
   explorerUrl: string;
   rpcUrl: string;
-  nativeToken: tokens.Token;
-  wrappedNativeToken: tokens.Token;
+  nativeToken: Token;
+  wrappedNativeToken: Token;
   multicall2Address: string;
 }
 
@@ -20,8 +20,8 @@ export const [configs, configMap] = configsJSON.reduce(
       name: configJSON.name,
       explorerUrl: configJSON.explorerUrl,
       rpcUrl: configJSON.rpcUrl,
-      nativeToken: new tokens.Token(configJSON.nativeToken),
-      wrappedNativeToken: new tokens.Token(configJSON.wrappedNativeToken),
+      nativeToken: new Token(configJSON.nativeToken),
+      wrappedNativeToken: new Token(configJSON.wrappedNativeToken),
       multicall2Address: configJSON.multicall2Address,
     };
     accumulator[0].push(config);

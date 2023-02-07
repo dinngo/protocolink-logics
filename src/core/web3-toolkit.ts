@@ -1,7 +1,7 @@
-import * as contracts from './contracts';
-import * as network from './network';
+import { ELASTIC_ADDRESS, Token } from './tokens';
+import { ERC20__factory, Multicall2, Multicall2__factory } from './contracts';
+import { NetworkConfig, getConfig } from './network';
 import { providers, utils } from 'ethers';
-import * as tokens from './tokens';
 
 export type Web3ToolkitOptions<T extends object = object> = {
   chainId: number;
@@ -10,29 +10,29 @@ export type Web3ToolkitOptions<T extends object = object> = {
 
 export class Web3Toolkit {
   readonly chainId: number;
-  readonly networkConfig: network.NetworkConfig;
+  readonly networkConfig: NetworkConfig;
   readonly provider: providers.Provider;
 
   constructor(options: Web3ToolkitOptions) {
     const { chainId, provider } = options;
 
     this.chainId = chainId;
-    this.networkConfig = network.getConfig(chainId);
+    this.networkConfig = getConfig(chainId);
     this.provider = provider ? provider : new providers.JsonRpcProvider(this.networkConfig.rpcUrl);
   }
 
   get multicall2() {
-    return contracts.Multicall2__factory.connect(this.networkConfig.multicall2Address, this.provider);
+    return Multicall2__factory.connect(this.networkConfig.multicall2Address, this.provider);
   }
 
   async getToken(tokenAddress: string) {
-    if (tokenAddress === this.networkConfig.nativeToken.address || tokenAddress === tokens.ELASTIC_ADDRESS) {
+    if (tokenAddress === this.networkConfig.nativeToken.address || tokenAddress === ELASTIC_ADDRESS) {
       return this.networkConfig.nativeToken;
     }
 
-    const iface = contracts.ERC20__factory.createInterface();
+    const iface = ERC20__factory.createInterface();
 
-    const calls: contracts.Multicall2.CallStruct[] = [
+    const calls: Multicall2.CallStruct[] = [
       { target: tokenAddress, callData: iface.encodeFunctionData('decimals') },
       { target: tokenAddress, callData: iface.encodeFunctionData('symbol') },
       { target: tokenAddress, callData: iface.encodeFunctionData('name') },
@@ -51,14 +51,14 @@ export class Web3Toolkit {
       name = utils.parseBytes32String(returnData[2]);
     }
 
-    return new tokens.Token(this.chainId, tokenAddress, decimals, symbol, name);
+    return new Token(this.chainId, tokenAddress, decimals, symbol, name);
   }
 
   async getTokens(tokenAddresses: string[]) {
-    const iface = contracts.ERC20__factory.createInterface();
-    const calls: contracts.Multicall2.CallStruct[] = [];
+    const iface = ERC20__factory.createInterface();
+    const calls: Multicall2.CallStruct[] = [];
     for (const tokenAddress of tokenAddresses) {
-      if (tokenAddress !== this.networkConfig.nativeToken.address && tokenAddress !== tokens.ELASTIC_ADDRESS) {
+      if (tokenAddress !== this.networkConfig.nativeToken.address && tokenAddress !== ELASTIC_ADDRESS) {
         calls.push({ target: tokenAddress, callData: iface.encodeFunctionData('decimals') });
         calls.push({ target: tokenAddress, callData: iface.encodeFunctionData('symbol') });
         calls.push({ target: tokenAddress, callData: iface.encodeFunctionData('name') });
@@ -66,11 +66,11 @@ export class Web3Toolkit {
     }
     const { returnData } = await this.multicall2.callStatic.aggregate(calls);
 
-    const _tokens: tokens.Token[] = [];
+    const tokens: Token[] = [];
     let j = 0;
     for (const tokenAddress of tokenAddresses) {
-      if (tokenAddress === this.networkConfig.nativeToken.address || tokenAddress === tokens.ELASTIC_ADDRESS) {
-        _tokens.push(this.networkConfig.nativeToken);
+      if (tokenAddress === this.networkConfig.nativeToken.address || tokenAddress === ELASTIC_ADDRESS) {
+        tokens.push(this.networkConfig.nativeToken);
       } else {
         const [decimals] = iface.decodeFunctionResult('decimals', returnData[j]);
         j++;
@@ -87,10 +87,10 @@ export class Web3Toolkit {
           name = utils.parseBytes32String(returnData[j]);
           j++;
         }
-        _tokens.push(new tokens.Token(this.chainId, tokenAddress, decimals, symbol, name));
+        tokens.push(new Token(this.chainId, tokenAddress, decimals, symbol, name));
       }
     }
 
-    return _tokens;
+    return tokens;
   }
 }
