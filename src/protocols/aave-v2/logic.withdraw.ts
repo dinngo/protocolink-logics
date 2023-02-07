@@ -35,14 +35,14 @@ export class AaveV2WithdrawLogic extends rt.logics.LogicBase implements rt.logic
       to = wethGatewayAddress;
       data = WETHGateway__factory.createInterface().encodeFunctionData('withdrawETH', [
         lendingPoolAddress,
-        output.amountWei,
+        input.amountWei,
         routerAddress,
       ]);
     } else {
       to = lendingPoolAddress;
       data = LendingPool__factory.createInterface().encodeFunctionData('withdraw', [
         output.token.address,
-        output.amountWei,
+        input.amountWei,
         routerAddress,
       ]);
     }
