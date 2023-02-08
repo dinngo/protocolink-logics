@@ -1,6 +1,7 @@
 import { BigNumber, BigNumberish } from 'ethers';
 import BigNumberJS from 'bignumber.js';
 import { Token } from './token';
+import invariant from 'tiny-invariant';
 import orderBy from 'lodash/orderBy';
 import { toBigUnit, toSmallUnit } from '../utils';
 
@@ -56,7 +57,7 @@ export class TokenAmount {
   precise(arg0: any) {
     let amount: string;
     if (arg0 instanceof TokenAmount) {
-      if (!arg0.token.is(this.token)) throw new Error("different tokens can't be clone");
+      invariant(arg0.token.is(this.token), "different tokens can't be clone");
       amount = arg0.amount;
     } else {
       amount = TokenAmount.precise(arg0, this.token.decimals);

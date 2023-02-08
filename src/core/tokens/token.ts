@@ -53,12 +53,12 @@ export class Token {
     return this.is(getConfig(this.chainId).wrappedNativeToken);
   }
 
-  is(token: Token) {
+  is(token: Token | TokenObject) {
     return this.chainId === token.chainId && this.address === token.address;
   }
 
   wrapped() {
-    return this.isNative() ? getConfig(this.chainId).wrappedNativeToken : this;
+    return this.isNative() ? new Token(getConfig(this.chainId).wrappedNativeToken) : this;
   }
 
   get elasticAddress() {
