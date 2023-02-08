@@ -7,9 +7,9 @@ export default async function () {
   const chainIds = [core.network.ChainId.mainnet];
 
   for (const chainId of chainIds) {
-    const aavev2 = new AaveV2Service({ chainId });
-    const assets = await aavev2.getAssets();
-    const aTokens = await aavev2.getATokens();
+    const aaveV2Service = new AaveV2Service({ chainId });
+    const assets = await aaveV2Service.getAssets();
+    const aTokens = await aaveV2Service.getATokens();
 
     const tokenMap = assets.reduce((accumulator, asset, i) => {
       accumulator[asset.symbol] = asset;

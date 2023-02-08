@@ -4,3 +4,8 @@ export interface ReserveTokensAddress {
   stableDebtTokenAddress: string;
   variableDebtTokenAddress: string;
 }
+
+export enum InterestRateMode {
+  stable = 1,
+  variable = 2,
+}

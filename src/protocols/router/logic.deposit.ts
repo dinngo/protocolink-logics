@@ -7,9 +7,9 @@ export class RouterDepositLogic extends rt.logics.LogicBase {
   spenderAddress: string;
 
   constructor(options: rt.logics.LogicBaseOptions<{ spenderAddress?: string }>) {
-    const { spenderAddress: spenderAddress, ...others } = options;
+    const { spenderAddress, ...others } = options;
     super(others);
-    this.spenderAddress = spenderAddress ? spenderAddress : this.routerConfig.erc20SpenderAddress;
+    this.spenderAddress = spenderAddress ?? rt.config.getContractAddress(this.chainId, 'SpenderERC20Approval');
   }
 
   async getLogic({ funds }: RouterDepositLogicGetLogicOptions) {

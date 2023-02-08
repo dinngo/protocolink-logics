@@ -47,7 +47,7 @@ describe('AaveV2WithdrawLogic', function () {
     cases.forEach(({ input, output }) => {
       it(`withdraw ${input.token.symbol}`, async function () {
         const logic = await aavev2WithdrawLogic.getLogic({
-          routerAddress: rt.config.getConfig(chainId).routerAddress,
+          routerAddress: rt.config.getContractAddress(chainId, 'Router'),
           input,
           output,
         });
