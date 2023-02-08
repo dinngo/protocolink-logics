@@ -29,11 +29,11 @@ export function newLogicInput(options: NewLogicInputOptions): IRouter.InputStruc
 
 export interface NewLogicOutputOptions {
   output: core.tokens.TokenAmount;
-  slippage: number;
+  slippage?: number;
 }
 
 export function newLogicOutput(options: NewLogicOutputOptions): IRouter.OutputStruct {
-  const { output, slippage } = options;
+  const { output, slippage = 0 } = options;
 
   return {
     token: output.token.elasticAddress,

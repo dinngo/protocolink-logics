@@ -47,7 +47,7 @@ describe('AaveV2DepositLogic', function () {
     cases.forEach(({ input, output }) => {
       it(`deposit ${input.token.symbol}`, async function () {
         const logic = await aavev2DepositLogic.getLogic({
-          routerAddress: rt.config.getConfig(chainId).routerAddress,
+          routerAddress: rt.config.getContractAddress(chainId, 'Router'),
           input,
           output,
         });

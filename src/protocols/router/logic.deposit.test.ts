@@ -27,7 +27,7 @@ describe('RouterDepositLogic', function () {
         } else {
           expect(sig).to.eq(iface.getSighash('pullTokens'));
         }
-        expect(logic.to).to.eq(routerDeposit.routerConfig.erc20SpenderAddress);
+        expect(logic.to).to.eq(rt.config.getContractAddress(chainId, 'SpenderERC20Approval'));
         expect(utils.isBytesLike(logic.data)).to.be.true;
         expect(logic.inputs).to.deep.eq([]);
         expect(logic.outputs).to.deep.eq([]);

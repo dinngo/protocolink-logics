@@ -1,5 +1,13 @@
 import * as core from 'src/core';
 
+export interface TokenInData {
+  input: core.tokens.TokenAmount;
+}
+
+export interface TokenOutData {
+  output: core.tokens.TokenAmount;
+}
+
 export interface TokenToTokenExactInData {
   input: core.tokens.TokenAmount;
   tokenOut: core.tokens.Token;
@@ -17,4 +25,9 @@ export interface TokenToTokenData {
 
 export interface TokenToTokenLogicInterface {
   getPrice(options: unknown): unknown;
+}
+
+export interface TokenToUserData {
+  input: core.tokens.TokenAmount;
+  recipient: string;
 }

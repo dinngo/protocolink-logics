@@ -2,7 +2,9 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { Router } from './Router';
+export type { SpenderAaveV2Delegation } from './SpenderAaveV2Delegation';
 export type { SpenderERC20Approval } from './SpenderERC20Approval';
 export * as factories from './factories';
 export { Router__factory } from './factories/Router__factory';
+export { SpenderAaveV2Delegation__factory } from './factories/SpenderAaveV2Delegation__factory';
 export { SpenderERC20Approval__factory } from './factories/SpenderERC20Approval__factory';

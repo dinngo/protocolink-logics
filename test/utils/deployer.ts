@@ -11,3 +11,10 @@ export async function deploySpenderERC20Approval(router: string, owner?: SignerW
   if (!owner) [owner] = await hre.ethers.getSigners();
   return await (await new rt.contracts.SpenderERC20Approval__factory().connect(owner).deploy(router)).deployed();
 }
+
+export async function deploySpenderAaveV2Delegation(router: string, aaveV2Provider: string, owner?: SignerWithAddress) {
+  if (!owner) [owner] = await hre.ethers.getSigners();
+  return await (
+    await new rt.contracts.SpenderAaveV2Delegation__factory().connect(owner).deploy(router, aaveV2Provider)
+  ).deployed();
+}

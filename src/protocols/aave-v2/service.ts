@@ -1,10 +1,12 @@
 import {
+  AToken__factory,
+  DebtTokenBase__factory,
   LendingPoolAddressesProvider__factory,
   LendingPool__factory,
   ProtocolDataProvider__factory,
   WETHGateway__factory,
 } from './contracts';
-import { ReserveTokensAddress } from './types';
+import { InterestRateMode, ReserveTokensAddress } from './types';
 import * as core from 'src/core';
 import { getContractAddress } from './config';
 import invariant from 'tiny-invariant';
@@ -129,5 +131,47 @@ export class AaveV2Service extends core.Web3Toolkit {
       this.aTokens = await this.getTokens(aTokenAddresses);
     }
     return this.aTokens;
+  }
+
+  async toAToken(asset: core.tokens.Token) {
+    const { aTokenAddress } = await this.protocolDataProvider.getReserveTokensAddresses(asset.wrapped().address);
+    return this.getToken(aTokenAddress);
+  }
+
+  async toAsset(aToken: core.tokens.Token) {
+    const contract = AToken__factory.connect(aToken.address, this.provider);
+    const assetAddress = await contract.UNDERLYING_ASSET_ADDRESS();
+    return this.getToken(assetAddress);
+  }
+
+  async getDebtTokenAddress(asset: core.tokens.Token, interestRateMode: InterestRateMode) {
+    const { stableDebtTokenAddress, variableDebtTokenAddress } =
+      await this.protocolDataProvider.getReserveTokensAddresses(asset.address);
+
+    return interestRateMode === InterestRateMode.variable ? variableDebtTokenAddress : stableDebtTokenAddress;
+  }
+
+  async isDelegationApproved(
+    account: string,
+    delegateeAddress: string,
+    assetAmount: core.tokens.TokenAmount,
+    interestRateMode: InterestRateMode
+  ) {
+    const debtTokenAddress = await this.getDebtTokenAddress(assetAmount.token, interestRateMode);
+    const debtToken = DebtTokenBase__factory.connect(debtTokenAddress, this.provider);
+    const borrowAllowance = await debtToken.borrowAllowance(account, delegateeAddress);
+
+    return borrowAllowance.gte(assetAmount.amountWei);
+  }
+
+  async buildApproveDelegationTx(
+    delegateeAddress: string,
+    assetAmount: core.tokens.TokenAmount,
+    interestRateMode: InterestRateMode
+  ) {
+    const debtTokenAddress = await this.getDebtTokenAddress(assetAmount.token, interestRateMode);
+    const debtToken = DebtTokenBase__factory.connect(debtTokenAddress, this.provider);
+
+    return debtToken.populateTransaction.approveDelegation(delegateeAddress, assetAmount.amountWei);
   }
 }
