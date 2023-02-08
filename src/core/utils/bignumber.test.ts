@@ -1,5 +1,5 @@
 import { BigNumber, BigNumberish, utils } from 'ethers';
-import { ToBigUnitOptions, toBigUnit, toSmallUnit } from './bignumber';
+import { ToBigUnitOptions, calcSlippage, toBigUnit, toSmallUnit } from './bignumber';
 import { expect } from 'chai';
 
 describe('Test toSmallUnit', function () {
@@ -153,6 +153,22 @@ describe('Test toBigUnit', function () {
   cases.forEach(({ title, amountWei, decimals, options, expected }) => {
     it(title, function () {
       expect(toBigUnit(amountWei, decimals, options)).to.eq(expected);
+    });
+  });
+});
+
+describe('Test calcSlippage', function () {
+  const cases = [
+    { amountWei: 100, slippage: 100, expected: 99 },
+    { amountWei: 100, slippage: 1000, expected: 90 },
+    { amountWei: 100, slippage: 10000, expected: 0 },
+    { amountWei: 123, slippage: 4567, expected: 66 },
+    { amountWei: 100, slippage: -100, expected: 101 },
+  ];
+
+  cases.forEach(({ amountWei, slippage, expected }, i) => {
+    it(`case ${i + 1}`, function () {
+      expect(calcSlippage(amountWei, slippage)).to.eq(expected);
     });
   });
 });

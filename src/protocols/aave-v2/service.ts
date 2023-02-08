@@ -174,4 +174,15 @@ export class AaveV2Service extends core.Web3Toolkit {
 
     return debtToken.populateTransaction.approveDelegation(delegateeAddress, assetAmount.amountWei);
   }
+
+  async getUserCurrentDebt(account: string, asset: core.tokens.Token, interestRateMode: InterestRateMode) {
+    const { currentStableDebt, currentVariableDebt } = await this.protocolDataProvider.getUserReserveData(
+      asset.address,
+      account
+    );
+    const currentDebt = new core.tokens.TokenAmount(asset);
+    currentDebt.setWei(interestRateMode === InterestRateMode.variable ? currentVariableDebt : currentStableDebt);
+
+    return currentDebt;
+  }
 }
