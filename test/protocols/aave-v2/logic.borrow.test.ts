@@ -65,7 +65,7 @@ describe('Test AaveV2Borrow Logic', function () {
       await helpers.deposit(chainId, user, deposit);
       await helpers.approveDelegation(chainId, user, spenderAaveV2Delegation.address, output, interestRateMode);
 
-      // 2. withdraw by router
+      // 2. borrow by router
       const balances = new core.tokens.TokenAmounts(output);
 
       const logics: rt.IRouter.LogicStruct[] = [];
