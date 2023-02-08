@@ -23,6 +23,6 @@ export class AaveV2BorrowLogic extends rt.logics.LogicBase {
       interestRateMode,
     ]);
 
-    return { to, data, inputs: [], outputs: [rt.logics.newLogicOutput({ output })], callback: constants.AddressZero };
+    return { to, data, inputs: [], outputs: [], callback: constants.AddressZero };
   }
 }
