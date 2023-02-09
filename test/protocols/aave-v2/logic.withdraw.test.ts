@@ -31,17 +31,35 @@ describe('Test AaveV2Withdraw Logic', function () {
       input: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.aUSDC, '1'),
       output: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.USDC, '1'),
     },
+    {
+      input: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.aWETH, '1'),
+      output: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.WETH, '1'),
+      amountBps: 5000,
+    },
+    {
+      input: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.aUSDC, '1'),
+      output: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.USDC, '1'),
+      amountBps: 5000,
+    },
   ];
 
-  cases.forEach(({ input, output }, i) => {
+  cases.forEach(({ input, output, amountBps }, i) => {
     it(`case ${i + 1}`, async function () {
+      const tokensReturn = [output.token.elasticAddress];
+      let funds: core.tokens.TokenAmounts;
+      if (amountBps) {
+        funds = new core.tokens.TokenAmounts(
+          new core.tokens.TokenAmount(input.token).setWei(input.amountWei.mul(rt.constants.BPS_BASE).div(amountBps))
+        );
+        tokensReturn.push(input.token.elasticAddress);
+      } else {
+        funds = new core.tokens.TokenAmounts(input);
+      }
+
       // 1. deposit first
-      await helpers.deposit(chainId, user, output);
+      await helpers.deposit(chainId, user, new core.tokens.TokenAmount(output.token, funds.at(0).amount));
 
       // 2. withdraw by router
-      const funds = new core.tokens.TokenAmounts(input);
-      const balances = new core.tokens.TokenAmounts(output);
-
       const logics: rt.IRouter.LogicStruct[] = [];
 
       const erc20Funds = funds.erc20;
@@ -53,9 +71,7 @@ describe('Test AaveV2Withdraw Logic', function () {
       logics.push(await routerDeposit.getLogic({ funds: erc20Funds }));
 
       const aaveV2Withdraw = new protocols.aavev2.AaveV2WithdrawLogic({ chainId });
-      logics.push(await aaveV2Withdraw.getLogic({ input, output, routerAddress: router.address }));
-
-      const tokensReturn = rt.utils.toTokensReturn(balances);
+      logics.push(await aaveV2Withdraw.getLogic({ input, output, amountBps, routerAddress: router.address }));
 
       await expect(router.connect(user).execute(logics, tokensReturn)).not.to.be.reverted;
       await expect(user.address).to.changeBalance(input.token, -input.amount, 3);

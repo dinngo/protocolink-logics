@@ -28,7 +28,7 @@ export class AaveV2DepositLogic extends rt.logics.LogicBase implements rt.logics
   }
 
   async getLogic(options: AaveV2DepositLogicGetLogicOptions) {
-    const { input, routerAddress, referralCode = 0 } = options;
+    const { input, amountBps, routerAddress, referralCode = 0 } = options;
     invariant(!input.token.isNative(), 'tokenIn should not be native token');
 
     const to = await this.service.getLendingPoolAddress();
@@ -38,7 +38,11 @@ export class AaveV2DepositLogic extends rt.logics.LogicBase implements rt.logics
       routerAddress,
       referralCode,
     ]);
+    const logicInput = rt.logics.newLogicInput({
+      input,
+      ...(amountBps ? { amountBps, amountOffset: core.utils.getParamOffset(1) } : {}),
+    });
 
-    return { to, data, inputs: [rt.logics.newLogicInput({ input })], outputs: [], callback: constants.AddressZero };
+    return { to, data, inputs: [logicInput], outputs: [], callback: constants.AddressZero };
   }
 }

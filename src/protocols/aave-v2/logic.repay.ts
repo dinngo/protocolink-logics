@@ -2,6 +2,7 @@ import { AaveV2Service } from './service';
 import { InterestRateMode } from './types';
 import { LendingPool__factory } from './contracts';
 import { constants } from 'ethers';
+import * as core from 'src/core';
 import invariant from 'tiny-invariant';
 import * as rt from 'src/router';
 
@@ -19,7 +20,7 @@ export class AaveV2RepayLogic extends rt.logics.LogicBase {
   }
 
   async getLogic(options: AaveV2RepayLogicGetLogicOptions) {
-    const { input, account, interestRateMode } = options;
+    const { input, account, interestRateMode, amountBps } = options;
     invariant(!input.token.isNative(), 'tokenIn should not be native token');
 
     const to = await this.service.getLendingPoolAddress();
@@ -29,7 +30,11 @@ export class AaveV2RepayLogic extends rt.logics.LogicBase {
       interestRateMode,
       account,
     ]);
+    const logicInput = rt.logics.newLogicInput({
+      input,
+      ...(amountBps ? { amountBps, amountOffset: core.utils.getParamOffset(1) } : {}),
+    });
 
-    return { to, data, inputs: [rt.logics.newLogicInput({ input })], outputs: [], callback: constants.AddressZero };
+    return { to, data, inputs: [logicInput], outputs: [], callback: constants.AddressZero };
   }
 }

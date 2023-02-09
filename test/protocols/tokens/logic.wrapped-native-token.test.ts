@@ -30,12 +30,30 @@ describe('Test WrappedNativeToken Logic', function () {
       input: new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '1'),
       output: new core.tokens.TokenAmount(core.tokens.mainnet.ETH, '1'),
     },
+    {
+      input: new core.tokens.TokenAmount(core.tokens.mainnet.ETH, '1'),
+      output: new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '1'),
+      amountBps: 5000,
+    },
+    {
+      input: new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '1'),
+      output: new core.tokens.TokenAmount(core.tokens.mainnet.ETH, '1'),
+      amountBps: 5000,
+    },
   ];
 
-  cases.forEach(({ input, output }, i) => {
+  cases.forEach(({ input, output, amountBps }, i) => {
     it(`case ${i + 1}`, async function () {
-      const funds = new core.tokens.TokenAmounts(input);
-      const balances = new core.tokens.TokenAmounts(output);
+      const tokensReturn = [output.token.elasticAddress];
+      let funds: core.tokens.TokenAmounts;
+      if (amountBps) {
+        funds = new core.tokens.TokenAmounts(
+          new core.tokens.TokenAmount(input.token).setWei(input.amountWei.mul(rt.constants.BPS_BASE).div(amountBps))
+        );
+        tokensReturn.push(input.token.elasticAddress);
+      } else {
+        funds = new core.tokens.TokenAmounts(input);
+      }
 
       const logics: rt.IRouter.LogicStruct[] = [];
 
@@ -50,9 +68,7 @@ describe('Test WrappedNativeToken Logic', function () {
       }
 
       const wrappedNativeToken = new protocols.tokens.WrappedNativeTokenLogic({ chainId });
-      logics.push(await wrappedNativeToken.getLogic({ input, output }));
-
-      const tokensReturn = rt.utils.toTokensReturn(balances);
+      logics.push(await wrappedNativeToken.getLogic({ input, output, amountBps }));
 
       const value = funds.native?.amountWei ?? 0;
 
