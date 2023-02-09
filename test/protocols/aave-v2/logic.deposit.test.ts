@@ -24,10 +24,6 @@ describe('Test AaveV2Deposit Logic', function () {
 
   const cases = [
     {
-      input: new core.tokens.TokenAmount(core.tokens.mainnet.ETH, '1'),
-      output: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.aWETH, '1'),
-    },
-    {
       input: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.WETH, '1'),
       output: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.aWETH, '1'),
     },
@@ -45,25 +41,25 @@ describe('Test AaveV2Deposit Logic', function () {
       const logics: rt.IRouter.LogicStruct[] = [];
 
       const erc20Funds = funds.erc20;
-      if (!erc20Funds.isEmpty()) {
-        await utils.web3.approves(user, erc20Spender.address, erc20Funds);
-        const routerDeposit = new protocols.router.RouterDepositLogic({
-          chainId,
-          spenderAddress: erc20Spender.address,
-        });
-        logics.push(await routerDeposit.getLogic({ funds: erc20Funds }));
-      }
+      await utils.web3.approves(user, erc20Spender.address, erc20Funds);
+      const routerDeposit = new protocols.router.RouterDepositLogic({
+        chainId,
+        spenderAddress: erc20Spender.address,
+      });
+      logics.push(await routerDeposit.getLogic({ funds: erc20Funds }));
 
       const aaveV2Deposit = new protocols.aavev2.AaveV2DepositLogic({ chainId });
       logics.push(await aaveV2Deposit.getLogic({ input, output, routerAddress: router.address }));
 
       const tokensReturn = rt.utils.toTokensReturn(balances);
 
-      const value = funds.native?.amountWei ?? 0;
-
-      await expect(router.connect(user).execute(logics, tokensReturn, { value })).not.to.be.reverted;
+      await expect(router.connect(user).execute(logics, tokensReturn)).not.to.be.reverted;
       await expect(user.address).to.changeBalance(input.token, -input.amount);
       await expect(user.address).to.changeBalance(output.token, output.amount, 3);
     });
+  });
+
+  after(async function () {
+    await utils.network.reset();
   });
 });

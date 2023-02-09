@@ -23,3 +23,9 @@ export function toBigUnit(amountWei: BigNumberish, decimals: number, options: To
     )
     .toString();
 }
+
+export function calcSlippage(amountWei: BigNumberish, slippage: number, base = 10000) {
+  return BigNumber.from(amountWei)
+    .mul(base - slippage)
+    .div(base);
+}

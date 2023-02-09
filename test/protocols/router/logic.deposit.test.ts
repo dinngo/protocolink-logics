@@ -56,4 +56,8 @@ describe('Test Router Deposit Logic', function () {
       await expect(router.connect(user).execute(logics, tokensReturn)).not.to.be.reverted;
     });
   });
+
+  after(async function () {
+    await utils.network.reset();
+  });
 });

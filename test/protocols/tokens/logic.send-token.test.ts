@@ -53,4 +53,8 @@ describe('Test SendToken Logic', function () {
       await expect(user2.address).to.changeBalance(input.token, input.amount);
     });
   });
+
+  after(async function () {
+    await utils.network.reset();
+  });
 });

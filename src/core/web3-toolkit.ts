@@ -12,6 +12,8 @@ export class Web3Toolkit {
   readonly chainId: number;
   readonly networkConfig: NetworkConfig;
   readonly provider: providers.Provider;
+  readonly nativeToken: Token;
+  readonly wrappedNativeToken: Token;
 
   constructor(options: Web3ToolkitOptions) {
     const { chainId, provider } = options;
@@ -19,6 +21,8 @@ export class Web3Toolkit {
     this.chainId = chainId;
     this.networkConfig = getConfig(chainId);
     this.provider = provider ? provider : new providers.JsonRpcProvider(this.networkConfig.rpcUrl);
+    this.nativeToken = new Token(this.networkConfig.nativeToken);
+    this.wrappedNativeToken = new Token(this.networkConfig.wrappedNativeToken);
   }
 
   get multicall2() {
@@ -26,8 +30,8 @@ export class Web3Toolkit {
   }
 
   async getToken(tokenAddress: string) {
-    if (tokenAddress === this.networkConfig.nativeToken.address || tokenAddress === ELASTIC_ADDRESS) {
-      return this.networkConfig.nativeToken;
+    if (tokenAddress === this.nativeToken.address || tokenAddress === ELASTIC_ADDRESS) {
+      return this.nativeToken;
     }
 
     const iface = ERC20__factory.createInterface();
@@ -58,7 +62,7 @@ export class Web3Toolkit {
     const iface = ERC20__factory.createInterface();
     const calls: Multicall2.CallStruct[] = [];
     for (const tokenAddress of tokenAddresses) {
-      if (tokenAddress !== this.networkConfig.nativeToken.address && tokenAddress !== ELASTIC_ADDRESS) {
+      if (tokenAddress !== this.nativeToken.address && tokenAddress !== ELASTIC_ADDRESS) {
         calls.push({ target: tokenAddress, callData: iface.encodeFunctionData('decimals') });
         calls.push({ target: tokenAddress, callData: iface.encodeFunctionData('symbol') });
         calls.push({ target: tokenAddress, callData: iface.encodeFunctionData('name') });
@@ -69,8 +73,8 @@ export class Web3Toolkit {
     const tokens: Token[] = [];
     let j = 0;
     for (const tokenAddress of tokenAddresses) {
-      if (tokenAddress === this.networkConfig.nativeToken.address || tokenAddress === ELASTIC_ADDRESS) {
-        tokens.push(this.networkConfig.nativeToken);
+      if (tokenAddress === this.nativeToken.address || tokenAddress === ELASTIC_ADDRESS) {
+        tokens.push(this.nativeToken);
       } else {
         const [decimals] = iface.decodeFunctionResult('decimals', returnData[j]);
         j++;

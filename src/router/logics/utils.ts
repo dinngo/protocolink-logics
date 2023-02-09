@@ -1,8 +1,8 @@
 import { BigNumberish, constants } from 'ethers';
 import { IRouter } from '../contracts/Router';
-import { calcAmountMin, validateAmountBps } from '../utils';
 import * as core from 'src/core';
 import invariant from 'tiny-invariant';
+import { validateAmountBps } from '../utils';
 
 export interface NewLogicInputOptions {
   input: core.tokens.TokenAmount;
@@ -37,6 +37,6 @@ export function newLogicOutput(options: NewLogicOutputOptions): IRouter.OutputSt
 
   return {
     token: output.token.elasticAddress,
-    amountMin: calcAmountMin(output.amountWei, slippage),
+    amountMin: slippage ? core.utils.calcSlippage(output.amountWei, slippage) : output.amountWei,
   };
 }

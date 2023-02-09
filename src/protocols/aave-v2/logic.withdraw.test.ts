@@ -1,5 +1,5 @@
 import { AaveV2WithdrawLogic } from './logic.withdraw';
-import { LendingPool__factory, WETHGateway__factory } from './contracts';
+import { LendingPool__factory } from './contracts';
 import { constants, utils } from 'ethers';
 import * as core from 'src/core';
 import { expect } from 'chai';
@@ -12,7 +12,6 @@ describe('AaveV2WithdrawLogic', function () {
 
   context('Test getPrice', function () {
     const cases = [
-      { input: new core.tokens.TokenAmount(mainnet.aWETH, '1'), tokenOut: core.tokens.mainnet.ETH },
       { input: new core.tokens.TokenAmount(mainnet.aWETH, '1'), tokenOut: mainnet.WETH },
       { input: new core.tokens.TokenAmount(mainnet.aUSDC, '1'), tokenOut: mainnet.USDC },
     ];
@@ -27,13 +26,8 @@ describe('AaveV2WithdrawLogic', function () {
 
   context('Test getLogic', function () {
     const lendingPoolIface = LendingPool__factory.createInterface();
-    const wethGatewayIface = WETHGateway__factory.createInterface();
 
     const cases = [
-      {
-        input: new core.tokens.TokenAmount(mainnet.aWETH, '1'),
-        output: new core.tokens.TokenAmount(core.tokens.mainnet.ETH, '1'),
-      },
       {
         input: new core.tokens.TokenAmount(mainnet.aWETH, '1'),
         output: new core.tokens.TokenAmount(mainnet.WETH, '1'),
@@ -54,15 +48,10 @@ describe('AaveV2WithdrawLogic', function () {
         const sig = logic.data.substring(0, 10);
 
         expect(utils.isBytesLike(logic.data)).to.be.true;
-        if (output.token.isNative()) {
-          const wethGatewayAddress = await aavev2WithdrawLogic.service.getWETHGatewayAddress();
-          expect(logic.to).to.eq(wethGatewayAddress);
-          expect(sig).to.eq(wethGatewayIface.getSighash('withdrawETH'));
-        } else {
-          const lendingPoolAddress = await aavev2WithdrawLogic.service.getLendingPoolAddress();
-          expect(logic.to).to.eq(lendingPoolAddress);
-          expect(sig).to.eq(lendingPoolIface.getSighash('withdraw'));
-        }
+
+        const lendingPoolAddress = await aavev2WithdrawLogic.service.getLendingPoolAddress();
+        expect(logic.to).to.eq(lendingPoolAddress);
+        expect(sig).to.eq(lendingPoolIface.getSighash('withdraw'));
         expect(logic.inputs[0].token).to.eq(input.token.address);
         expect(logic.inputs[0].doApprove).to.be.true;
         expect(logic.inputs[0].amountBps).to.eq(constants.MaxUint256);

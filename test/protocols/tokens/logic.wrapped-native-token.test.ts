@@ -61,4 +61,8 @@ describe('Test WrappedNativeToken Logic', function () {
       await expect(user.address).to.changeBalance(output.token, output.amount);
     });
   });
+
+  after(async function () {
+    await utils.network.reset();
+  });
 });

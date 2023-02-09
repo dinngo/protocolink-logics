@@ -1,4 +1,3 @@
-import { Token } from '../tokens';
 import configsJSON from './config-data.json';
 
 export interface NetworkConfig {
@@ -7,25 +6,27 @@ export interface NetworkConfig {
   name: string;
   explorerUrl: string;
   rpcUrl: string;
-  nativeToken: Token;
-  wrappedNativeToken: Token;
+  nativeToken: {
+    chainId: number;
+    address: string;
+    decimals: number;
+    symbol: string;
+    name: string;
+  };
+  wrappedNativeToken: {
+    chainId: number;
+    address: string;
+    decimals: number;
+    symbol: string;
+    name: string;
+  };
   multicall2Address: string;
 }
 
 export const [configs, configMap] = configsJSON.reduce(
-  (accumulator, configJSON) => {
-    const config: NetworkConfig = {
-      id: configJSON.id,
-      chainId: configJSON.chainId,
-      name: configJSON.name,
-      explorerUrl: configJSON.explorerUrl,
-      rpcUrl: configJSON.rpcUrl,
-      nativeToken: new Token(configJSON.nativeToken),
-      wrappedNativeToken: new Token(configJSON.wrappedNativeToken),
-      multicall2Address: configJSON.multicall2Address,
-    };
+  (accumulator, config) => {
     accumulator[0].push(config);
-    accumulator[1][configJSON.chainId] = config;
+    accumulator[1][config.chainId] = config;
     return accumulator;
   },
   [[] as NetworkConfig[], {} as Record<number, NetworkConfig>]

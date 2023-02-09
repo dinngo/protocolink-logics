@@ -1,4 +1,4 @@
-import { calcAmountBps, calcAmountMin, toTokensReturn, validateAmountBps } from './utils';
+import { calcAmountBps, toTokensReturn, validateAmountBps } from './utils';
 import { constants } from 'ethers';
 import * as core from 'src/core';
 import { expect } from 'chai';
@@ -37,22 +37,7 @@ describe('Test validateAmountBps', function () {
   });
 });
 
-describe('Test calcAmountMin', function () {
-  const cases = [
-    { amountWei: 100, slippage: 100, expected: 99 },
-    { amountWei: 100, slippage: 1000, expected: 90 },
-    { amountWei: 100, slippage: 10000, expected: 0 },
-    { amountWei: 123, slippage: 4567, expected: 66 },
-  ];
-
-  cases.forEach(({ amountWei, slippage, expected }, i) => {
-    it(`case ${i + 1}`, function () {
-      expect(calcAmountMin(amountWei, slippage)).to.eq(expected);
-    });
-  });
-});
-
-describe('Test calcAmountMin', function () {
+describe('Test toTokensReturn', function () {
   const cases: Array<{ balances: core.tokens.TokenAmounts; expected: string[] }> = [
     {
       balances: new core.tokens.TokenAmounts([core.tokens.mainnet.ETH, '1'], [core.tokens.mainnet.USDC, '1']),
