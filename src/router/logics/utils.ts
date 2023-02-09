@@ -37,6 +37,6 @@ export function newLogicOutput(options: NewLogicOutputOptions): IRouter.OutputSt
 
   return {
     token: output.token.elasticAddress,
-    amountMin: core.utils.calcSlippage(output.amountWei, slippage),
+    amountMin: slippage ? core.utils.calcSlippage(output.amountWei, slippage) : output.amountWei,
   };
 }

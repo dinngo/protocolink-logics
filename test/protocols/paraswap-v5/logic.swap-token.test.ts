@@ -68,4 +68,8 @@ describe('Test ParaswapV5 Wrapped Logic', function () {
       await expect(user.address).to.changeBalance(input.token, -input.amount);
     });
   });
+
+  after(async function () {
+    await utils.network.reset();
+  });
 });

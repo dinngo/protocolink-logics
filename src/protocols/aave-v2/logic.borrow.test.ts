@@ -14,11 +14,6 @@ describe('AaveV2BorrowLogic', function () {
     const spenderAaveV2Delegation = rt.contracts.SpenderAaveV2Delegation__factory.createInterface();
 
     const cases = [
-      // TODO: wait for aave v2 spender contract implement borrowETH
-      // {
-      //   output: new core.tokens.TokenAmount(core.tokens.mainnet.ETH, '1'),
-      //   interestRateMode: InterestRate.variable,
-      // },
       {
         output: new core.tokens.TokenAmount(mainnet.WETH, '1'),
         interestRateMode: InterestRateMode.variable,
@@ -42,8 +37,7 @@ describe('AaveV2BorrowLogic', function () {
           expect(sig).to.eq(spenderAaveV2Delegation.getSighash('borrow'));
         }
         expect(logic.inputs).to.deep.eq([]);
-        expect(logic.outputs[0].token).to.eq(output.token.address);
-        expect(logic.outputs[0].amountMin).to.eq(output.amountWei);
+        expect(logic.outputs).to.deep.eq([]);
         expect(logic.callback).to.eq(constants.AddressZero);
       });
     });

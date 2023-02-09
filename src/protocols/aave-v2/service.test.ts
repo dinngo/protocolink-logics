@@ -2,7 +2,6 @@ import { AaveV2Service } from './service';
 import * as core from 'src/core';
 import { expect } from 'chai';
 import { mainnet } from './tokens';
-import { utils } from 'ethers';
 
 describe('AaveV2Service', function () {
   const chainIds = [core.network.ChainId.mainnet];
@@ -17,22 +16,11 @@ describe('AaveV2Service', function () {
     });
   });
 
-  context('Test getWETHGatewayAddress', function () {
-    chainIds.forEach((chainId) => {
-      it(core.network.getNetworkId(chainId), async function () {
-        const service = new AaveV2Service({ chainId });
-        const wethGatewayAddress = await service.getWETHGatewayAddress();
-        expect(utils.isAddress(wethGatewayAddress)).to.be.true;
-      });
-    });
-  });
-
   context('Test toAToken', function () {
     const chainId = core.network.ChainId.mainnet;
     const service = new AaveV2Service({ chainId });
 
     const cases = [
-      { asset: core.tokens.mainnet.ETH, expected: mainnet.aWETH },
       { asset: mainnet.WETH, expected: mainnet.aWETH },
       { asset: mainnet.USDC, expected: mainnet.aUSDC },
     ];

@@ -82,4 +82,8 @@ describe('Test AaveV2Borrow Logic', function () {
       await expect(user.address).to.changeBalance(output.token, output.amount);
     });
   });
+
+  after(async function () {
+    await utils.network.reset();
+  });
 });

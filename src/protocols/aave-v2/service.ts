@@ -4,12 +4,10 @@ import {
   LendingPoolAddressesProvider__factory,
   LendingPool__factory,
   ProtocolDataProvider__factory,
-  WETHGateway__factory,
 } from './contracts';
 import { InterestRateMode, ReserveTokensAddress } from './types';
 import * as core from 'src/core';
 import { getContractAddress } from './config';
-import invariant from 'tiny-invariant';
 
 export class AaveV2Service extends core.Web3Toolkit {
   readonly protocolDataProviderAddress: string;
@@ -37,20 +35,6 @@ export class AaveV2Service extends core.Web3Toolkit {
     }
 
     return this.lendingPoolAddress;
-  }
-
-  private wethGatewayAddress?: string;
-
-  async getWETHGatewayAddress() {
-    if (!this.wethGatewayAddress) {
-      const wethGatewayAddress = getContractAddress(this.chainId, 'WETHGateway');
-      const wethGateway = WETHGateway__factory.connect(wethGatewayAddress, this.provider);
-      const wethGatewayLendingPoolAddress = await wethGateway.getPool();
-      const lendingPoolAddress = await this.getLendingPoolAddress();
-      invariant(wethGatewayLendingPoolAddress === lendingPoolAddress, `The WETHGateway's Pool address is invalid`);
-      this.wethGatewayAddress = wethGatewayAddress;
-    }
-    return this.wethGatewayAddress;
   }
 
   private assetAddresses?: string[];
