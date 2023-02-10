@@ -24,7 +24,7 @@ export function newLogicInput(options: NewLogicInputOptions): IRouter.InputStruc
     amountOrOffset = input.amountWei;
   }
 
-  return { token: input.token.elasticAddress, amountBps, amountOrOffset, doApprove: !input.token.isNative() };
+  return { token: input.token.elasticAddress, amountBps, amountOrOffset };
 }
 
 export interface NewLogicOutputOptions {
@@ -39,4 +39,25 @@ export function newLogicOutput(options: NewLogicOutputOptions): IRouter.OutputSt
     token: output.token.elasticAddress,
     amountMin: slippage ? core.utils.calcSlippage(output.amountWei, slippage) : output.amountWei,
   };
+}
+
+export interface NewLogicOptions {
+  to: string;
+  data: string;
+  inputs?: IRouter.InputStruct[];
+  outputs?: IRouter.OutputStruct[];
+  approveTo?: string;
+  callback?: string;
+}
+
+export function newLogic(options: NewLogicOptions) {
+  const {
+    to,
+    data,
+    inputs = [],
+    outputs = [],
+    approveTo = constants.AddressZero,
+    callback = constants.AddressZero,
+  } = options;
+  return { to, data, inputs, outputs, approveTo, callback };
 }

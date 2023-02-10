@@ -20,6 +20,8 @@ export class AaveV2FlashLoanLogic extends rt.logics.LogicBase {
   async getLogic(options: AaveV2FlashLoanLogicGetLogicOptions) {
     const { outputs, params, referralCode = 0 } = options;
 
+    const to = await this.service.getLendingPoolAddress();
+
     const assets: string[] = [];
     const amounts: BigNumberish[] = [];
     const modes: number[] = [];
@@ -28,8 +30,6 @@ export class AaveV2FlashLoanLogic extends rt.logics.LogicBase {
       amounts.push(output.amountWei);
       modes.push(InterestRateMode.none);
     }
-
-    const to = await this.service.getLendingPoolAddress();
     const data = LendingPool__factory.createInterface().encodeFunctionData('flashLoan', [
       this.callbackAddress,
       assets,
@@ -39,7 +39,8 @@ export class AaveV2FlashLoanLogic extends rt.logics.LogicBase {
       params,
       referralCode,
     ]);
+    const callback = this.callbackAddress;
 
-    return { to, data, inputs: [], outputs: [], callback: this.callbackAddress };
+    return rt.logics.newLogic({ to, data, callback });
   }
 }

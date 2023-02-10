@@ -55,10 +55,8 @@ describe('WrappedNativeTokenLogic', function () {
         if (input.token.isNative()) {
           expect(sig).to.eq(iface.getSighash('deposit'));
           expect(logic.inputs[0].token).to.eq(core.tokens.ELASTIC_ADDRESS);
-          expect(logic.inputs[0].doApprove).to.be.false;
         } else {
           expect(sig).to.eq(iface.getSighash('withdraw'));
-          expect(logic.inputs[0].doApprove).to.be.true;
         }
         if (amountBps) {
           expect(logic.inputs[0].amountBps).to.eq(amountBps);
@@ -68,6 +66,7 @@ describe('WrappedNativeTokenLogic', function () {
           expect(logic.inputs[0].amountOrOffset).to.eq(input.amountWei);
         }
         expect(logic.outputs).to.deep.eq([]);
+        expect(logic.approveTo).to.eq(constants.AddressZero);
         expect(logic.callback).to.eq(constants.AddressZero);
       });
     });

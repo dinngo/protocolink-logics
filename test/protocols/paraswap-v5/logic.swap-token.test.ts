@@ -27,17 +27,16 @@ describe('Test ParaswapV5 Wrapped Logic', function () {
       input: new core.tokens.TokenAmount(core.tokens.mainnet.ETH, '1'),
       output: new core.tokens.TokenAmount(core.tokens.mainnet.USDC),
     },
-    // TODO: wait for router contract update with approveTo
-    // {
-    //   slippage: 500,
-    //   input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1'),
-    //   output: new core.tokens.TokenAmount(core.tokens.mainnet.ETH),
-    // },
-    // {
-    //   slippage: 500,
-    //   input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1'),
-    //   output: new core.tokens.TokenAmount(core.tokens.mainnet.DAI),
-    // },
+    {
+      slippage: 500,
+      input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1'),
+      output: new core.tokens.TokenAmount(core.tokens.mainnet.ETH),
+    },
+    {
+      slippage: 500,
+      input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1'),
+      output: new core.tokens.TokenAmount(core.tokens.mainnet.DAI),
+    },
   ];
 
   cases.forEach(({ slippage, input, output }, i) => {

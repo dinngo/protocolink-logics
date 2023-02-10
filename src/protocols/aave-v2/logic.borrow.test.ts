@@ -38,6 +38,7 @@ describe('AaveV2BorrowLogic', function () {
         }
         expect(logic.inputs).to.deep.eq([]);
         expect(logic.outputs).to.deep.eq([]);
+        expect(logic.approveTo).to.eq(constants.AddressZero);
         expect(logic.callback).to.eq(constants.AddressZero);
       });
     });

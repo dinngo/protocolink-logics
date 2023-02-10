@@ -1,4 +1,3 @@
-import { constants } from 'ethers';
 import * as rt from 'src/router';
 
 export type RouterDepositLogicGetLogicOptions = Pick<rt.RouterGlobalOptions, 'funds'>;
@@ -13,18 +12,13 @@ export class RouterDepositLogic extends rt.logics.LogicBase {
   }
 
   async getLogic({ funds }: RouterDepositLogicGetLogicOptions) {
+    const to = this.spenderAddress;
     const iface = rt.contracts.SpenderERC20Approval__factory.createInterface();
     const data =
       funds.length === 1
         ? iface.encodeFunctionData('pullToken', funds.at(0).toValues())
         : iface.encodeFunctionData('pullTokens', funds.toValues());
 
-    return {
-      to: this.spenderAddress,
-      data,
-      inputs: [],
-      outputs: [],
-      callback: constants.AddressZero,
-    };
+    return rt.logics.newLogic({ to, data });
   }
 }

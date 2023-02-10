@@ -2,6 +2,7 @@ import { ParaswapV5SwapTokenLogic } from './logic.swap-token';
 import { constants, utils } from 'ethers';
 import * as core from 'src/core';
 import { expect } from 'chai';
+import { getContractAddress } from './config';
 
 describe('ParaswapV5SwapTokenLogic', function () {
   const chainId = core.network.ChainId.mainnet;
@@ -52,15 +53,13 @@ describe('ParaswapV5SwapTokenLogic', function () {
         expect(utils.isBytesLike(logic.data)).to.be.true;
         if (input.token.isNative()) {
           expect(logic.inputs[0].token).to.eq(core.tokens.ELASTIC_ADDRESS);
-          expect(logic.inputs[0].doApprove).to.be.false;
-        } else {
-          expect(logic.inputs[0].doApprove).to.be.true;
         }
         expect(logic.inputs[0].amountBps).to.eq(constants.MaxUint256);
         expect(logic.inputs[0].amountOrOffset).to.eq(input.amountWei);
         if (output.token.isNative()) {
           expect(logic.outputs[0].token).to.eq(core.tokens.ELASTIC_ADDRESS);
         }
+        expect(logic.approveTo).to.eq(getContractAddress(chainId, 'TokenTransferProxy'));
         expect(logic.callback).to.eq(constants.AddressZero);
       });
     });

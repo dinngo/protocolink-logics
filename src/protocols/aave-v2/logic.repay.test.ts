@@ -47,7 +47,6 @@ describe('AaveV2RepayLogic', function () {
         const lendingPoolAddress = await aavev2RepayLogic.service.getLendingPoolAddress();
         expect(logic.to).to.eq(lendingPoolAddress);
         expect(sig).to.eq(lendingPoolIface.getSighash('repay'));
-        expect(logic.inputs[0].doApprove).to.be.true;
         if (amountBps) {
           expect(logic.inputs[0].amountBps).to.eq(amountBps);
           expect(logic.inputs[0].amountOrOffset).to.eq(core.utils.getParamOffset(1));
@@ -56,6 +55,7 @@ describe('AaveV2RepayLogic', function () {
           expect(logic.inputs[0].amountOrOffset).eq(input.amountWei);
         }
         expect(logic.outputs).to.deep.eq([]);
+        expect(logic.approveTo).to.eq(constants.AddressZero);
         expect(logic.callback).to.eq(constants.AddressZero);
       });
     });

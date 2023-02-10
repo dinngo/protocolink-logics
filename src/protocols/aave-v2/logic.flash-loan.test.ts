@@ -1,9 +1,9 @@
 import { AaveV2FlashLoanLogic } from './logic.flash-loan';
 import { LendingPool__factory } from './contracts';
+import { constants, utils } from 'ethers';
 import * as core from 'src/core';
 import { expect } from 'chai';
 import { mainnet } from './tokens/data';
-import { utils } from 'ethers';
 
 describe('AaveV2FlashLoanLogic', function () {
   const chainId = core.network.ChainId.mainnet;
@@ -31,6 +31,7 @@ describe('AaveV2FlashLoanLogic', function () {
         expect(sig).to.eq(lendingPoolIface.getSighash('flashLoan'));
         expect(logic.inputs).to.deep.eq([]);
         expect(logic.outputs).to.deep.eq([]);
+        expect(logic.approveTo).to.eq(constants.AddressZero);
         expect(logic.callback).to.eq(aavev2FlashLoanLogic.callbackAddress);
       });
     });
