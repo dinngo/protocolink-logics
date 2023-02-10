@@ -117,6 +117,10 @@ export class TokenAmount {
   toValues(): [string, BigNumber] {
     return [this.token.address, this.amountWei];
   }
+
+  clone() {
+    return new TokenAmount(this.token, this.amount);
+  }
 }
 
 export type TokenAmountTypes = TokenAmountField | TokenAmountPair | TokenAmount;

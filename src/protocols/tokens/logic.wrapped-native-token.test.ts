@@ -46,7 +46,7 @@ describe('WrappedNativeTokenLogic', function () {
     ];
 
     cases.forEach(({ input, output, amountBps }) => {
-      it(`${input.token.symbol} to ${output.token.symbol}${amountBps ? ' - chained input' : ''}`, async function () {
+      it(`${input.token.symbol} to ${output.token.symbol}${amountBps ? ' with amountBps' : ''}`, async function () {
         const logic = await wrappedNativeToken.getLogic({ input, output, amountBps });
         const sig = logic.data.substring(0, 10);
 
@@ -62,10 +62,10 @@ describe('WrappedNativeTokenLogic', function () {
         }
         if (amountBps) {
           expect(logic.inputs[0].amountBps).to.eq(amountBps);
-          expect(logic.inputs[0].amountOrOffset).eq(input.token.isNative() ? constants.MaxUint256 : 0);
+          expect(logic.inputs[0].amountOrOffset).to.eq(input.token.isNative() ? constants.MaxUint256 : 0);
         } else {
           expect(logic.inputs[0].amountBps).to.eq(constants.MaxUint256);
-          expect(logic.inputs[0].amountOrOffset).eq(input.amountWei);
+          expect(logic.inputs[0].amountOrOffset).to.eq(input.amountWei);
         }
         expect(logic.outputs).to.deep.eq([]);
         expect(logic.callback).to.eq(constants.AddressZero);

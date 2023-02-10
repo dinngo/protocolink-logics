@@ -57,7 +57,7 @@ describe('ParaswapV5SwapTokenLogic', function () {
           expect(logic.inputs[0].doApprove).to.be.true;
         }
         expect(logic.inputs[0].amountBps).to.eq(constants.MaxUint256);
-        expect(logic.inputs[0].amountOrOffset).eq(input.amountWei);
+        expect(logic.inputs[0].amountOrOffset).to.eq(input.amountWei);
         if (output.token.isNative()) {
           expect(logic.outputs[0].token).to.eq(core.tokens.ELASTIC_ADDRESS);
         }
