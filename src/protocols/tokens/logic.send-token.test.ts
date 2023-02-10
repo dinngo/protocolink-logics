@@ -19,6 +19,7 @@ describe('SendTokenLogic', function () {
         input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1'),
         recipient: '0xa3C1C91403F0026b9dd086882aDbC8Cdbc3b3cfB',
       },
+      // TODO: wait for contract approveTo feature
     ];
 
     cases.forEach(({ input, recipient }) => {

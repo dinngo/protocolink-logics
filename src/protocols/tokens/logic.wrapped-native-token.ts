@@ -1,4 +1,4 @@
-import { constants } from 'ethers';
+import { BigNumberish, constants } from 'ethers';
 import * as core from 'src/core';
 import * as rt from 'src/router';
 
@@ -14,17 +14,24 @@ export class WrappedNativeTokenLogic extends rt.logics.LogicBase implements rt.l
   }
 
   async getLogic(options: WrappedNativeTokenLogicGetLogicOptions) {
-    const { input } = options;
+    const { input, amountBps } = options;
 
     const iface = core.contracts.WETH__factory.createInterface();
-    const data = input.token.isNative()
-      ? iface.encodeFunctionData('deposit')
-      : iface.encodeFunctionData('withdraw', [input.amountWei]);
+    let data: string;
+    let amountOffset: BigNumberish | undefined;
+    if (input.token.isNative()) {
+      data = iface.encodeFunctionData('deposit');
+      if (amountBps) amountOffset = constants.MaxUint256;
+    } else {
+      data = iface.encodeFunctionData('withdraw', [input.amountWei]);
+      if (amountBps) amountOffset = core.utils.getParamOffset(0);
+    }
+    const logicInput = rt.logics.newLogicInput({ input, amountBps, amountOffset });
 
     return {
       to: this.networkConfig.wrappedNativeToken.address,
       data,
-      inputs: [rt.logics.newLogicInput({ input })],
+      inputs: [logicInput],
       outputs: [],
       callback: constants.AddressZero,
     };

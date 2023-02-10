@@ -20,7 +20,7 @@ describe('Test AaveV2Repay Logic', function () {
     users = [user1, user2, user3];
     router = await utils.deployer.deployRouter();
     erc20Spender = await utils.deployer.deploySpenderERC20Approval(router.address);
-    await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '10000'), user1.address);
+    await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '20000'), user1.address);
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '100'), user1.address);
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '100'), user2.address);
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '100'), user2.address);
@@ -52,9 +52,37 @@ describe('Test AaveV2Repay Logic', function () {
       borrow: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.USDC, '1'),
       interestRateMode: protocols.aavev2.InterestRateMode.stable,
     },
+    {
+      userIndex: 0,
+      deposit: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.USDC, '5000'),
+      borrow: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.WETH, '1'),
+      interestRateMode: protocols.aavev2.InterestRateMode.variable,
+      amountBps: 5000,
+    },
+    {
+      userIndex: 0,
+      deposit: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.USDC, '5000'),
+      borrow: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.WETH, '1'),
+      interestRateMode: protocols.aavev2.InterestRateMode.stable,
+      amountBps: 5000,
+    },
+    {
+      userIndex: 1,
+      deposit: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.WETH, '1'),
+      borrow: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.USDC, '1'),
+      interestRateMode: protocols.aavev2.InterestRateMode.variable,
+      amountBps: 5000,
+    },
+    {
+      userIndex: 1,
+      deposit: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.WETH, '1'),
+      borrow: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.USDC, '1'),
+      interestRateMode: protocols.aavev2.InterestRateMode.stable,
+      amountBps: 5000,
+    },
   ];
 
-  cases.forEach(({ userIndex, deposit, borrow, interestRateMode }, i) => {
+  cases.forEach(({ userIndex, deposit, borrow, interestRateMode, amountBps }, i) => {
     it(`case ${i + 1}`, async function () {
       const user = users[userIndex];
 
@@ -70,8 +98,15 @@ describe('Test AaveV2Repay Logic', function () {
       const input = new core.tokens.TokenAmount(borrow.token).setWei(
         core.utils.calcSlippage(currentDebt.amountWei, -100) // slightly higher than the current borrowed amount
       );
-      const funds = new core.tokens.TokenAmounts(input);
-      const balances = new core.tokens.TokenAmounts(input); // maybe have dust
+      let funds: core.tokens.TokenAmounts;
+      if (amountBps) {
+        funds = new core.tokens.TokenAmounts(
+          new core.tokens.TokenAmount(input.token).setWei(input.amountWei.mul(rt.constants.BPS_BASE).div(amountBps))
+        );
+      } else {
+        funds = new core.tokens.TokenAmounts(input);
+      }
+      const tokensReturn = [input.token.elasticAddress];
 
       const logics: rt.IRouter.LogicStruct[] = [];
 
@@ -84,9 +119,7 @@ describe('Test AaveV2Repay Logic', function () {
       logics.push(await routerRepay.getLogic({ funds: erc20Funds }));
 
       const aaveV2Repay = new protocols.aavev2.AaveV2RepayLogic({ chainId });
-      logics.push(await aaveV2Repay.getLogic({ input, account: user.address, interestRateMode }));
-
-      const tokensReturn = rt.utils.toTokensReturn(balances);
+      logics.push(await aaveV2Repay.getLogic({ input, account: user.address, interestRateMode, amountBps }));
 
       await expect(router.connect(user).execute(logics, tokensReturn)).not.to.be.reverted;
 

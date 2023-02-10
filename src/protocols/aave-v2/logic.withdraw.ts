@@ -28,7 +28,7 @@ export class AaveV2WithdrawLogic extends rt.logics.LogicBase implements rt.logic
   }
 
   async getLogic(options: AaveV2WithdrawLogicGetLogicOptions) {
-    const { input, output, routerAddress } = options;
+    const { input, output, amountBps, routerAddress } = options;
     invariant(!output.token.isNative(), 'tokenOut should not be native token');
 
     const to = await this.service.getLendingPoolAddress();
@@ -37,7 +37,11 @@ export class AaveV2WithdrawLogic extends rt.logics.LogicBase implements rt.logic
       input.amountWei,
       routerAddress,
     ]);
+    const logicInput = rt.logics.newLogicInput({
+      input,
+      ...(amountBps ? { amountBps, amountOffset: core.utils.getParamOffset(1) } : {}),
+    });
 
-    return { to, data, inputs: [rt.logics.newLogicInput({ input })], outputs: [], callback: constants.AddressZero };
+    return { to, data, inputs: [logicInput], outputs: [], callback: constants.AddressZero };
   }
 }

@@ -1,7 +1,9 @@
+import { BigNumberish } from 'ethers';
 import * as core from 'src/core';
 
 export interface TokenInData {
   input: core.tokens.TokenAmount;
+  amountBps?: BigNumberish;
 }
 
 export interface TokenOutData {
@@ -21,6 +23,7 @@ export interface TokenToTokenExactOutData {
 export interface TokenToTokenData {
   input: core.tokens.TokenAmount;
   output: core.tokens.TokenAmount;
+  amountBps?: BigNumberish;
 }
 
 export interface TokenToTokenLogicInterface {
@@ -30,4 +33,5 @@ export interface TokenToTokenLogicInterface {
 export interface TokenToUserData {
   input: core.tokens.TokenAmount;
   recipient: string;
+  amountBps?: BigNumberish;
 }
