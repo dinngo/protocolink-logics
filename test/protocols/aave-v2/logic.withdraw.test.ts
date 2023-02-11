@@ -22,6 +22,10 @@ describe('Test AaveV2Withdraw Logic', function () {
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '100'), user.address);
   });
 
+  after(async function () {
+    await utils.network.reset();
+  });
+
   const cases = [
     {
       input: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.aWETH, '1'),
@@ -78,9 +82,5 @@ describe('Test AaveV2Withdraw Logic', function () {
       await expect(user.address).to.changeBalance(input.token, -input.amount, 3);
       await expect(user.address).to.changeBalance(output.token, output.amount);
     });
-  });
-
-  after(async function () {
-    await utils.network.reset();
   });
 });

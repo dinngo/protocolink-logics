@@ -22,6 +22,10 @@ describe('Test SendToken Logic', function () {
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '100'), user1.address);
   });
 
+  after(async function () {
+    await utils.network.reset();
+  });
+
   const cases = [
     { input: new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '1') },
     { input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1') },
@@ -63,9 +67,5 @@ describe('Test SendToken Logic', function () {
       await expect(user1.address).to.changeBalance(input.token, -input.amount);
       await expect(user2.address).to.changeBalance(input.token, input.amount);
     });
-  });
-
-  after(async function () {
-    await utils.network.reset();
   });
 });

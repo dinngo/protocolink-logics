@@ -13,6 +13,7 @@ describe('Test AaveV2Repay Logic', function () {
   let erc20Spender: rt.contracts.SpenderERC20Approval;
   let users: SignerWithAddress[];
   let aaveV2Service: protocols.aavev2.AaveV2Service;
+  let snapshotId: string;
 
   before(async function () {
     chainId = await utils.network.getChainId();
@@ -25,6 +26,18 @@ describe('Test AaveV2Repay Logic', function () {
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '100'), user2.address);
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '100'), user2.address);
     aaveV2Service = new protocols.aavev2.AaveV2Service({ chainId, provider: hre.ethers.provider });
+  });
+
+  after(async function () {
+    await utils.network.reset();
+  });
+
+  beforeEach(async function () {
+    snapshotId = await utils.network.takeSnapshot();
+  });
+
+  afterEach(async function () {
+    await utils.network.restoreSnapshot(snapshotId);
   });
 
   const cases = [
@@ -126,9 +139,5 @@ describe('Test AaveV2Repay Logic', function () {
       currentDebt = await aaveV2Service.getUserCurrentDebt(user.address, borrow.token, interestRateMode);
       await expect(currentDebt.amountWei).to.eq(0);
     });
-  });
-
-  after(async function () {
-    await utils.network.reset();
   });
 });

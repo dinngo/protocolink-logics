@@ -12,6 +12,7 @@ describe('Test AaveV2Borrow Logic', function () {
   let router: rt.contracts.Router;
   let spenderAaveV2Delegation: rt.contracts.SpenderAaveV2Delegation;
   let users: SignerWithAddress[];
+  let snapshotId: string;
 
   before(async function () {
     chainId = await utils.network.getChainId();
@@ -28,6 +29,18 @@ describe('Test AaveV2Borrow Logic', function () {
 
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '10000'), user1.address);
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '100'), user2.address);
+  });
+
+  after(async function () {
+    await utils.network.reset();
+  });
+
+  beforeEach(async function () {
+    snapshotId = await utils.network.takeSnapshot();
+  });
+
+  afterEach(async function () {
+    await utils.network.restoreSnapshot(snapshotId);
   });
 
   const cases = [
@@ -80,9 +93,5 @@ describe('Test AaveV2Borrow Logic', function () {
       await expect(router.connect(user).execute(logics, tokensReturn)).not.to.be.reverted;
       await expect(user.address).to.changeBalance(output.token, output.amount);
     });
-  });
-
-  after(async function () {
-    await utils.network.reset();
   });
 });

@@ -21,6 +21,10 @@ describe('Test ParaswapV5 Wrapped Logic', function () {
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '100'), user.address);
   });
 
+  after(async function () {
+    await utils.network.reset();
+  });
+
   const cases = [
     {
       slippage: 500,
@@ -66,9 +70,5 @@ describe('Test ParaswapV5 Wrapped Logic', function () {
       await expect(router.connect(user).execute(logics, tokensReturn, { value })).not.to.be.reverted;
       await expect(user.address).to.changeBalance(input.token, -input.amount);
     });
-  });
-
-  after(async function () {
-    await utils.network.reset();
   });
 });

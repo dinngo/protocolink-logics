@@ -21,6 +21,10 @@ describe('Test WrappedNativeToken Logic', function () {
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '100'), user.address);
   });
 
+  after(async function () {
+    await utils.network.reset();
+  });
+
   const cases = [
     {
       input: new core.tokens.TokenAmount(core.tokens.mainnet.ETH, '1'),
@@ -76,9 +80,5 @@ describe('Test WrappedNativeToken Logic', function () {
       await expect(user.address).to.changeBalance(input.token, -input.amount);
       await expect(user.address).to.changeBalance(output.token, output.amount);
     });
-  });
-
-  after(async function () {
-    await utils.network.reset();
   });
 });

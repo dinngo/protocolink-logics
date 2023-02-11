@@ -22,6 +22,10 @@ describe('Test AaveV2Deposit Logic', function () {
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '100'), user.address);
   });
 
+  after(async function () {
+    await utils.network.reset();
+  });
+
   const cases = [
     {
       input: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.WETH, '1'),
@@ -74,9 +78,5 @@ describe('Test AaveV2Deposit Logic', function () {
       await expect(user.address).to.changeBalance(input.token, -input.amount);
       await expect(user.address).to.changeBalance(output.token, output.amount, 3);
     });
-  });
-
-  after(async function () {
-    await utils.network.reset();
   });
 });

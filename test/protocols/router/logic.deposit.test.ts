@@ -22,6 +22,10 @@ describe('Test Router Deposit Logic', function () {
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '100'), user.address);
   });
 
+  after(async function () {
+    await utils.network.reset();
+  });
+
   const cases = [
     {
       funds: new core.tokens.TokenAmounts([core.tokens.mainnet.ETH, '1']),
@@ -55,9 +59,5 @@ describe('Test Router Deposit Logic', function () {
       // 3. send router tx
       await expect(router.connect(user).execute(logics, tokensReturn)).not.to.be.reverted;
     });
-  });
-
-  after(async function () {
-    await utils.network.reset();
   });
 });

@@ -34,6 +34,10 @@ describe('Test AaveV2FlashLoan Logic', function () {
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.DAI, '2'), user.address);
   });
 
+  after(async function () {
+    await utils.network.reset();
+  });
+
   const cases = [
     {
       outputs: [
@@ -91,9 +95,5 @@ describe('Test AaveV2FlashLoan Logic', function () {
         await expect(user.address).to.changeBalance(fund.token, -fund.amount);
       }
     });
-  });
-
-  after(async function () {
-    await utils.network.reset();
   });
 });

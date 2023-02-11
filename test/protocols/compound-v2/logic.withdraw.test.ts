@@ -1,12 +1,13 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import * as core from 'src/core';
 import { expect } from 'chai';
+import * as helpers from './helpers';
 import hre from 'hardhat';
 import * as protocols from 'src/protocols';
 import * as rt from 'src/router';
 import * as utils from 'test/utils';
 
-describe('Test CompoundV2Supply Logic', function () {
+describe('Test CompoundV2Withdraw Logic', function () {
   let chainId: number;
   let router: rt.contracts.Router;
   let erc20Spender: rt.contracts.SpenderERC20Approval;
@@ -27,28 +28,34 @@ describe('Test CompoundV2Supply Logic', function () {
 
   const cases = [
     {
-      input: new core.tokens.TokenAmount(protocols.compoundv2.tokens.underlyingTokens.ETH, '1'),
-      output: new core.tokens.TokenAmount(protocols.compoundv2.tokens.cTokens.cETH),
+      input: new core.tokens.TokenAmount(protocols.compoundv2.tokens.cTokens.cETH, '50'),
+      output: new core.tokens.TokenAmount(protocols.compoundv2.tokens.underlyingTokens.ETH),
     },
     {
-      input: new core.tokens.TokenAmount(protocols.compoundv2.tokens.underlyingTokens.USDC, '1'),
-      output: new core.tokens.TokenAmount(protocols.compoundv2.tokens.cTokens.cUSDC),
+      input: new core.tokens.TokenAmount(protocols.compoundv2.tokens.cTokens.cUSDC, '50'),
+      output: new core.tokens.TokenAmount(protocols.compoundv2.tokens.underlyingTokens.USDC),
     },
     {
-      input: new core.tokens.TokenAmount(protocols.compoundv2.tokens.underlyingTokens.ETH, '1'),
-      output: new core.tokens.TokenAmount(protocols.compoundv2.tokens.cTokens.cETH),
+      input: new core.tokens.TokenAmount(protocols.compoundv2.tokens.cTokens.cETH, '50'),
+      output: new core.tokens.TokenAmount(protocols.compoundv2.tokens.underlyingTokens.ETH),
       amountBps: 5000,
     },
     {
-      input: new core.tokens.TokenAmount(protocols.compoundv2.tokens.underlyingTokens.USDC, '1'),
-      output: new core.tokens.TokenAmount(protocols.compoundv2.tokens.cTokens.cUSDC),
+      input: new core.tokens.TokenAmount(protocols.compoundv2.tokens.cTokens.cUSDC, '50'),
+      output: new core.tokens.TokenAmount(protocols.compoundv2.tokens.underlyingTokens.USDC),
       amountBps: 5000,
     },
   ];
 
   cases.forEach(({ input, output, amountBps }, i) => {
     it(`case ${i + 1}`, async function () {
-      // 1. build funds, tokensReturn
+      // 1. supply first
+      const underlyingToken = output.token;
+      const supplyAmount = new core.tokens.TokenAmount(underlyingToken, '3');
+      const cToken = input.token;
+      await helpers.supply(user, supplyAmount, cToken);
+
+      // 2. build funds, tokensReturn
       const tokensReturn = [output.token.elasticAddress];
       const funds = new core.tokens.TokenAmounts();
       if (amountBps) {
@@ -58,7 +65,7 @@ describe('Test CompoundV2Supply Logic', function () {
         funds.add(input);
       }
 
-      // 2. build router logics
+      // 3. build router logics
       const logics: rt.IRouter.LogicStruct[] = [];
 
       const erc20Funds = funds.erc20;
@@ -71,12 +78,11 @@ describe('Test CompoundV2Supply Logic', function () {
         logics.push(await routerDeposit.getLogic({ funds: erc20Funds }));
       }
 
-      const compoundV2Supply = new protocols.compoundv2.CompoundV2SupplyLogic({ chainId });
-      logics.push(await compoundV2Supply.getLogic({ input, output, amountBps }));
+      const compoundV2Withdraw = new protocols.compoundv2.CompoundV2WithdrawLogic({ chainId });
+      logics.push(await compoundV2Withdraw.getLogic({ input, output, amountBps }));
 
-      // 3. send router tx
-      const value = funds.native?.amountWei ?? 0;
-      await expect(router.connect(user).execute(logics, tokensReturn, { value })).not.to.be.reverted;
+      // 4. send router tx
+      await expect(router.connect(user).execute(logics, tokensReturn)).not.to.be.reverted;
       await expect(user.address).to.changeBalance(input.token, -input.amount);
     });
   });
