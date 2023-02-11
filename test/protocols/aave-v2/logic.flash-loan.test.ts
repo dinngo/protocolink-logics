@@ -51,8 +51,7 @@ describe('Test AaveV2FlashLoan Logic', function () {
 
   cases.forEach(({ outputs }, i) => {
     it(`case ${i + 1}`, async function () {
-      const logics: rt.IRouter.LogicStruct[] = [];
-
+      // 1. build funds and router logics for flash loan by flash loan fee
       const funds = new core.tokens.TokenAmounts();
       const flashLoanLogics: rt.IRouter.LogicStruct[] = [];
       const sendToken = new protocols.tokens.SendTokenLogic({ chainId });
@@ -64,6 +63,9 @@ describe('Test AaveV2FlashLoan Logic', function () {
           await sendToken.getLogic({ input: output.clone().addWei(feeWei), recipient: flashLoanCallbackAaveV2.address })
         );
       }
+
+      // 2. build router logics
+      const logics: rt.IRouter.LogicStruct[] = [];
 
       const erc20Funds = funds.erc20;
       await utils.web3.approves(user, erc20Spender.address, erc20Funds);
@@ -83,6 +85,7 @@ describe('Test AaveV2FlashLoan Logic', function () {
       });
       logics.push(await aaveV2FlashLoan.getLogic({ outputs, params }));
 
+      // 3. send router tx
       await expect(router.connect(user).execute(logics, [])).not.to.be.reverted;
       for (const fund of funds.toArray()) {
         await expect(user.address).to.changeBalance(fund.token, -fund.amount);

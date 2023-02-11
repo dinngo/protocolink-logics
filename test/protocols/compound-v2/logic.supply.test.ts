@@ -6,7 +6,7 @@ import * as protocols from 'src/protocols';
 import * as rt from 'src/router';
 import * as utils from 'test/utils';
 
-describe('Test ParaswapV5 Wrapped Logic', function () {
+describe('Test CompoundV2Supply Logic', function () {
   let chainId: number;
   let router: rt.contracts.Router;
   let erc20Spender: rt.contracts.SpenderERC20Approval;
@@ -18,32 +18,41 @@ describe('Test ParaswapV5 Wrapped Logic', function () {
     router = await utils.deployer.deployRouter();
     erc20Spender = await utils.deployer.deploySpenderERC20Approval(router.address);
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.ETH, '100'), user.address);
-    await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '100'), user.address);
+    await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '100'), user.address);
   });
 
   const cases = [
     {
-      slippage: 500,
-      input: new core.tokens.TokenAmount(core.tokens.mainnet.ETH, '1'),
-      output: new core.tokens.TokenAmount(core.tokens.mainnet.USDC),
+      input: new core.tokens.TokenAmount(protocols.compoundv2.tokens.underlyingTokens.ETH, '1'),
+      output: new core.tokens.TokenAmount(protocols.compoundv2.tokens.cTokens.cETH),
     },
     {
-      slippage: 500,
-      input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1'),
-      output: new core.tokens.TokenAmount(core.tokens.mainnet.ETH),
+      input: new core.tokens.TokenAmount(protocols.compoundv2.tokens.underlyingTokens.USDC, '1'),
+      output: new core.tokens.TokenAmount(protocols.compoundv2.tokens.cTokens.cUSDC),
     },
     {
-      slippage: 500,
-      input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1'),
-      output: new core.tokens.TokenAmount(core.tokens.mainnet.DAI),
+      input: new core.tokens.TokenAmount(protocols.compoundv2.tokens.underlyingTokens.ETH, '1'),
+      output: new core.tokens.TokenAmount(protocols.compoundv2.tokens.cTokens.cETH),
+      amountBps: 5000,
+    },
+    {
+      input: new core.tokens.TokenAmount(protocols.compoundv2.tokens.underlyingTokens.USDC, '1'),
+      output: new core.tokens.TokenAmount(protocols.compoundv2.tokens.cTokens.cUSDC),
+      amountBps: 5000,
     },
   ];
 
-  cases.forEach(({ slippage, input, output }, i) => {
+  cases.forEach(({ input, output, amountBps }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. build funds, tokensReturn
-      const funds = new core.tokens.TokenAmounts(input);
       const tokensReturn = [output.token.elasticAddress];
+      const funds = new core.tokens.TokenAmounts();
+      if (amountBps) {
+        funds.add(utils.router.calcRequiredFundByAmountBps(input, amountBps));
+        tokensReturn.push(input.token.elasticAddress);
+      } else {
+        funds.add(input);
+      }
 
       // 2. build router logics
       const logics: rt.IRouter.LogicStruct[] = [];
@@ -58,8 +67,8 @@ describe('Test ParaswapV5 Wrapped Logic', function () {
         logics.push(await routerDeposit.getLogic({ funds: erc20Funds }));
       }
 
-      const paraswapV5SwapToken = new protocols.paraswapv5.ParaswapV5SwapTokenLogic({ chainId });
-      logics.push(await paraswapV5SwapToken.getLogic({ account: user.address, slippage, input, output }));
+      const compoundV2Supply = new protocols.compoundv2.CompoundV2SupplyLogic({ chainId });
+      logics.push(await compoundV2Supply.getLogic({ input, output, amountBps }));
 
       // 3. send router tx
       const value = funds.native?.amountWei ?? 0;

@@ -25,20 +25,21 @@ describe('Test Router Deposit Logic', function () {
   const cases = [
     {
       funds: new core.tokens.TokenAmounts([core.tokens.mainnet.ETH, '1']),
-      balances: new core.tokens.TokenAmounts([core.tokens.mainnet.ETH, '1']),
     },
     {
       funds: new core.tokens.TokenAmounts([core.tokens.mainnet.ETH, '1'], [core.tokens.mainnet.USDC, '1']),
-      balances: new core.tokens.TokenAmounts([core.tokens.mainnet.ETH, '1'], [core.tokens.mainnet.USDC, '1']),
     },
     {
       funds: new core.tokens.TokenAmounts([core.tokens.mainnet.WETH, '1'], [core.tokens.mainnet.USDC, '1']),
-      balances: new core.tokens.TokenAmounts([core.tokens.mainnet.WETH, '1'], [core.tokens.mainnet.USDC, '1']),
     },
   ];
 
-  cases.forEach(({ funds, balances }, i) => {
+  cases.forEach(({ funds }, i) => {
     it(`case ${i + 1}`, async function () {
+      // 1. build tokensReturn
+      const tokensReturn = funds.toArray().map((fund) => fund.token.elasticAddress);
+
+      // 2. build router logics
       const logics: rt.IRouter.LogicStruct[] = [];
 
       const erc20Funds = funds.erc20;
@@ -51,8 +52,7 @@ describe('Test Router Deposit Logic', function () {
         logics.push(await routerDeposit.getLogic({ funds: erc20Funds }));
       }
 
-      const tokensReturn = rt.utils.toTokensReturn(balances);
-
+      // 3. send router tx
       await expect(router.connect(user).execute(logics, tokensReturn)).not.to.be.reverted;
     });
   });

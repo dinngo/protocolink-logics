@@ -23,7 +23,7 @@ describe('Test faucet claim', function () {
       await utils.faucet.claim(tokenAmount, user.address);
       const balanceAfter = await utils.web3.getBalance(user.address, tokenAmount.token);
 
-      expect(balanceAfter.sub(balanceBefore).amount).to.eq(tokenAmount.amount);
+      expect(balanceAfter.sub(balanceBefore)).to.eq(tokenAmount.amountWei);
     });
   });
 });

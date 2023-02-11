@@ -59,15 +59,15 @@ describe('Test AaveV2Borrow Logic', function () {
 
   cases.forEach(({ userIndex, deposit, output, interestRateMode }, i) => {
     it(`case ${i + 1}`, async function () {
+      // 1. deposit and approve delegation
       const user = users[userIndex];
-
-      // 1. deposit first and approve delegation
       await helpers.deposit(chainId, user, deposit);
       await helpers.approveDelegation(chainId, user, spenderAaveV2Delegation.address, output, interestRateMode);
 
-      // 2. borrow by router
-      const balances = new core.tokens.TokenAmounts(output);
+      // 2. build tokensReturn
+      const tokensReturn = [output.token.address];
 
+      // 3. build router logics
       const logics: rt.IRouter.LogicStruct[] = [];
 
       const aaveV2Borrow = new protocols.aavev2.AaveV2BorrowLogic({
@@ -76,8 +76,7 @@ describe('Test AaveV2Borrow Logic', function () {
       });
       logics.push(await aaveV2Borrow.getLogic({ output, interestRateMode }));
 
-      const tokensReturn = rt.utils.toTokensReturn(balances);
-
+      // 4. send router tx
       await expect(router.connect(user).execute(logics, tokensReturn)).not.to.be.reverted;
       await expect(user.address).to.changeBalance(output.token, output.amount);
     });
