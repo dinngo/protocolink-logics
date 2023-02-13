@@ -1,6 +1,8 @@
 import { CErc20__factory } from './contracts/factories/CErc20__factory';
+import { COMP, isCToken, toCToken, toUnderlyingToken } from './tokens';
+import { CompoundLens__factory } from './contracts/factories/CompoundLens__factory';
 import * as core from 'src/core';
-import { isCToken, toCToken, toUnderlyingToken } from './tokens';
+import { getContractAddress } from './config';
 
 export class CompoundV2Service extends core.Web3Toolkit {
   constructor({ provider }: Pick<core.Web3ToolkitOptions, 'provider'>) {
@@ -50,5 +52,17 @@ export class CompoundV2Service extends core.Web3Toolkit {
     const borrowBalance = new core.tokens.TokenAmount(underlyingToken).setWei(borrowBalanceWei);
 
     return borrowBalance;
+  }
+
+  async getAllocatedCOMP(holder: string) {
+    const compoundLens = CompoundLens__factory.connect(getContractAddress('CompoundLens'), this.provider);
+    const metadata = await compoundLens.callStatic.getCompBalanceMetadataExt(
+      COMP.address,
+      getContractAddress('Comptroller'),
+      holder
+    );
+    const allocatedCOMP = new core.tokens.TokenAmount(COMP).setWei(metadata.allocated);
+
+    return allocatedCOMP;
   }
 }

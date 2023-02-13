@@ -31,7 +31,7 @@ describe('Test CompoundV2Supply Logic', function () {
       output: new core.tokens.TokenAmount(protocols.compoundv2.tokens.cTokens.cETH),
     },
     {
-      input: new core.tokens.TokenAmount(protocols.compoundv2.tokens.underlyingTokens.USDC, '1'),
+      input: new core.tokens.TokenAmount(protocols.compoundv2.tokens.underlyingTokens.USDC, '3000'),
       output: new core.tokens.TokenAmount(protocols.compoundv2.tokens.cTokens.cUSDC),
     },
     {
@@ -40,7 +40,7 @@ describe('Test CompoundV2Supply Logic', function () {
       amountBps: 5000,
     },
     {
-      input: new core.tokens.TokenAmount(protocols.compoundv2.tokens.underlyingTokens.USDC, '1'),
+      input: new core.tokens.TokenAmount(protocols.compoundv2.tokens.underlyingTokens.USDC, '3000'),
       output: new core.tokens.TokenAmount(protocols.compoundv2.tokens.cTokens.cUSDC),
       amountBps: 5000,
     },
