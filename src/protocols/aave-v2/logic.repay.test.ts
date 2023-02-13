@@ -15,23 +15,23 @@ describe('AaveV2RepayLogic', function () {
 
     const cases = [
       {
-        account: '0xa3C1C91403F0026b9dd086882aDbC8Cdbc3b3cfB',
+        account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
         input: new core.tokens.TokenAmount(mainnet.WETH, '1'),
         interestRateMode: InterestRateMode.variable,
       },
       {
-        account: '0xa3C1C91403F0026b9dd086882aDbC8Cdbc3b3cfB',
+        account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
         input: new core.tokens.TokenAmount(mainnet.USDC, '1'),
         interestRateMode: InterestRateMode.variable,
       },
       {
-        account: '0xa3C1C91403F0026b9dd086882aDbC8Cdbc3b3cfB',
+        account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
         input: new core.tokens.TokenAmount(mainnet.WETH, '1'),
         interestRateMode: InterestRateMode.variable,
         amountBps: 5000,
       },
       {
-        account: '0xa3C1C91403F0026b9dd086882aDbC8Cdbc3b3cfB',
+        account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
         input: new core.tokens.TokenAmount(mainnet.USDC, '1'),
         interestRateMode: InterestRateMode.variable,
         amountBps: 5000,

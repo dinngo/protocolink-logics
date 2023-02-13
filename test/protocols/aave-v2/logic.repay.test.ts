@@ -137,7 +137,7 @@ describe('Test AaveV2Repay Logic', function () {
 
       // 6. check user's debt should be zero
       currentDebt = await aaveV2Service.getUserCurrentDebt(user.address, borrow.token, interestRateMode);
-      await expect(currentDebt.amountWei).to.eq(0);
+      expect(currentDebt.amountWei).to.eq(0);
     });
   });
 });

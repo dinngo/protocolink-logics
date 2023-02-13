@@ -36,3 +36,7 @@ export function toUnderlyingToken(cToken: core.tokens.Token) {
 export function toCToken(underlyingToken: core.tokens.Token) {
   return underlyingToCTokenMap[underlyingToken.address];
 }
+
+export function isCToken(token: core.tokens.Token) {
+  return token.symbol.startsWith('c') && token.name.startsWith('Compound');
+}

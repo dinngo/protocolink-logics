@@ -52,8 +52,7 @@ describe('Test CompoundV2Withdraw Logic', function () {
       // 1. supply first
       const underlyingToken = output.token;
       const supplyAmount = new core.tokens.TokenAmount(underlyingToken, '3');
-      const cToken = input.token;
-      await helpers.supply(user, supplyAmount, cToken);
+      await helpers.supply(user, supplyAmount);
 
       // 2. build funds, tokensReturn
       const tokensReturn = [output.token.elasticAddress];

@@ -38,7 +38,7 @@ describe('Test getParamOffset', function () {
     },
     {
       types: ['address', 'uint256'],
-      values: ['0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', BigNumber.from(10).pow(18)],
+      values: ['0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa', BigNumber.from(10).pow(18)],
       paramIndex: 1,
       expected: {
         data: '0x000000000000000000000000aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa0000000000000000000000000000000000000000000000000de0b6b3a7640000',
@@ -49,7 +49,7 @@ describe('Test getParamOffset', function () {
     {
       types: ['address[]', 'uint256'],
       values: [
-        ['0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'],
+        ['0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa', '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB'],
         BigNumber.from(10).pow(18),
       ],
       paramIndex: 1,
@@ -86,12 +86,12 @@ describe('Test getParamOffset', function () {
       types: ['(address,uint256,address,bytes)', 'address[]', 'uint256'],
       values: [
         [
-          '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+          '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
           '1000000',
-          '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+          '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB',
           '0x095ea7b3000000000000000000000000a36972e347e538e6c7afb9f44fb10dda7bba9ba2ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
         ],
-        ['0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'],
+        ['0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa', '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB'],
         BigNumber.from(10).pow(18),
       ],
       paramIndex: 2,

@@ -26,19 +26,19 @@ describe('ParaswapV5SwapTokenLogic', function () {
   context('Test getLogic', function () {
     const cases = [
       {
-        account: '0xa3C1C91403F0026b9dd086882aDbC8Cdbc3b3cfB',
+        account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
         slippage: 500,
         input: new core.tokens.TokenAmount(core.tokens.mainnet.ETH, '1'),
         output: new core.tokens.TokenAmount(core.tokens.mainnet.USDC),
       },
       {
-        account: '0xa3C1C91403F0026b9dd086882aDbC8Cdbc3b3cfB',
+        account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
         slippage: 500,
         input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1'),
         output: new core.tokens.TokenAmount(core.tokens.mainnet.ETH),
       },
       {
-        account: '0xa3C1C91403F0026b9dd086882aDbC8Cdbc3b3cfB',
+        account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
         slippage: 500,
         input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1'),
         output: new core.tokens.TokenAmount(core.tokens.mainnet.DAI),

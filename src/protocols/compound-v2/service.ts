@@ -1,25 +1,11 @@
 import { CErc20__factory } from './contracts/factories/CErc20__factory';
-import { CompoundLens__factory, Comptroller__factory } from './contracts';
 import * as core from 'src/core';
-import { getContractAddress } from './config';
+import { isCToken, toCToken, toUnderlyingToken } from './tokens';
 
 export class CompoundV2Service extends core.Web3Toolkit {
-  readonly comptrollerAddress: string;
-  readonly compoundLensAddress: string;
-
-  constructor(options: core.Web3ToolkitOptions) {
-    super(options);
-    const { chainId } = options;
-    this.comptrollerAddress = getContractAddress(chainId, 'Comptroller');
-    this.compoundLensAddress = getContractAddress(chainId, 'CompoundLens');
-  }
-
-  get comptroller() {
-    return Comptroller__factory.connect(this.comptrollerAddress, this.provider);
-  }
-
-  get compoundLens() {
-    return CompoundLens__factory.connect(this.compoundLensAddress, this.provider);
+  constructor({ provider }: Pick<core.Web3ToolkitOptions, 'provider'>) {
+    const chainId = core.network.ChainId.mainnet;
+    super({ chainId, provider });
   }
 
   async toUnderlyingTokens(cTokens: core.tokens.Token[]) {
@@ -47,5 +33,22 @@ export class CompoundV2Service extends core.Web3Toolkit {
     const tokens = this.getTokens(tokenAddresses);
 
     return tokens;
+  }
+
+  async getBorrowBalance(borrower: string, token: core.tokens.Token) {
+    let underlyingToken: core.tokens.Token;
+    let cToken: core.tokens.Token;
+    if (isCToken(token)) {
+      underlyingToken = toUnderlyingToken(token);
+      cToken = token;
+    } else {
+      underlyingToken = token;
+      cToken = toCToken(token);
+    }
+    const cTokenContract = CErc20__factory.connect(cToken.address, this.provider);
+    const borrowBalanceWei = await cTokenContract.callStatic.borrowBalanceCurrent(borrower);
+    const borrowBalance = new core.tokens.TokenAmount(underlyingToken).setWei(borrowBalanceWei);
+
+    return borrowBalance;
   }
 }

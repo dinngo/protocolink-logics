@@ -494,7 +494,6 @@ export interface ComptrollerInterface extends utils.Interface {
     'NewPendingAdmin(address,address)': EventFragment;
     'NewAdmin(address,address)': EventFragment;
     'ActionPaused(string,bool)': EventFragment;
-    'ActionPaused(address,string,bool)': EventFragment;
     'CompAccruedAdjusted(address,uint256,uint256)': EventFragment;
     'CompBorrowSpeedUpdated(address,uint256)': EventFragment;
     'CompGranted(address,uint256)': EventFragment;
@@ -520,8 +519,7 @@ export interface ComptrollerInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: 'NewImplementation'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'NewPendingAdmin'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'NewAdmin'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'ActionPaused(string,bool)'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'ActionPaused(address,string,bool)'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'ActionPaused'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'CompAccruedAdjusted'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'CompBorrowSpeedUpdated'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'CompGranted'): EventFragment;
@@ -575,25 +573,13 @@ export type NewAdminEvent = TypedEvent<[string, string], NewAdminEventObject>;
 
 export type NewAdminEventFilter = TypedEventFilter<NewAdminEvent>;
 
-export interface ActionPaused_string_bool_EventObject {
+export interface ActionPausedEventObject {
   action: string;
   pauseState: boolean;
 }
-export type ActionPaused_string_bool_Event = TypedEvent<[string, boolean], ActionPaused_string_bool_EventObject>;
+export type ActionPausedEvent = TypedEvent<[string, boolean], ActionPausedEventObject>;
 
-export type ActionPaused_string_bool_EventFilter = TypedEventFilter<ActionPaused_string_bool_Event>;
-
-export interface ActionPaused_address_string_bool_EventObject {
-  cToken: string;
-  action: string;
-  pauseState: boolean;
-}
-export type ActionPaused_address_string_bool_Event = TypedEvent<
-  [string, string, boolean],
-  ActionPaused_address_string_bool_EventObject
->;
-
-export type ActionPaused_address_string_bool_EventFilter = TypedEventFilter<ActionPaused_address_string_bool_Event>;
+export type ActionPausedEventFilter = TypedEventFilter<ActionPausedEvent>;
 
 export interface CompAccruedAdjustedEventObject {
   user: string;
@@ -1939,12 +1925,8 @@ export interface Comptroller extends BaseContract {
     'NewAdmin(address,address)'(oldAdmin?: null, newAdmin?: null): NewAdminEventFilter;
     NewAdmin(oldAdmin?: null, newAdmin?: null): NewAdminEventFilter;
 
-    'ActionPaused(string,bool)'(action?: null, pauseState?: null): ActionPaused_string_bool_EventFilter;
-    'ActionPaused(address,string,bool)'(
-      cToken?: null,
-      action?: null,
-      pauseState?: null
-    ): ActionPaused_address_string_bool_EventFilter;
+    'ActionPaused(string,bool)'(action?: null, pauseState?: null): ActionPausedEventFilter;
+    ActionPaused(action?: null, pauseState?: null): ActionPausedEventFilter;
 
     'CompAccruedAdjusted(address,uint256,uint256)'(
       user?: PromiseOrValue<string> | null,
