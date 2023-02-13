@@ -25,11 +25,22 @@ describe('Test SendToken Logic', function () {
   const cases = [
     { input: new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '1') },
     { input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1') },
+    { input: new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '1'), amountBps: 5000 },
+    { input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1'), amountBps: 5000 },
   ];
 
-  cases.forEach(({ input }, i) => {
+  cases.forEach(({ input, amountBps }, i) => {
     it(`case ${i + 1}`, async function () {
-      const funds = new core.tokens.TokenAmounts(input);
+      let funds: core.tokens.TokenAmounts;
+      const tokensReturn = [];
+      if (amountBps) {
+        funds = new core.tokens.TokenAmounts(
+          new core.tokens.TokenAmount(input.token).setWei(input.amountWei.mul(rt.constants.BPS_BASE).div(amountBps))
+        );
+        tokensReturn.push(input.token.address);
+      } else {
+        funds = new core.tokens.TokenAmounts(input);
+      }
 
       const logics: rt.IRouter.LogicStruct[] = [];
 
@@ -48,7 +59,7 @@ describe('Test SendToken Logic', function () {
 
       const value = funds.native?.amountWei ?? 0;
 
-      await expect(router.connect(user1).execute(logics, [], { value })).not.to.be.reverted;
+      await expect(router.connect(user1).execute(logics, tokensReturn, { value })).not.to.be.reverted;
       await expect(user1.address).to.changeBalance(input.token, -input.amount);
       await expect(user2.address).to.changeBalance(input.token, input.amount);
     });

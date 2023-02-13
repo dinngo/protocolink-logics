@@ -1,6 +1,6 @@
 import { AaveV2Service } from './service';
+import { BigNumberish } from 'ethers';
 import { LendingPool__factory } from './contracts';
-import { constants } from 'ethers';
 import * as core from 'src/core';
 import invariant from 'tiny-invariant';
 import * as rt from 'src/router';
@@ -37,11 +37,10 @@ export class AaveV2WithdrawLogic extends rt.logics.LogicBase implements rt.logic
       input.amountWei,
       routerAddress,
     ]);
-    const logicInput = rt.logics.newLogicInput({
-      input,
-      ...(amountBps ? { amountBps, amountOffset: core.utils.getParamOffset(1) } : {}),
-    });
+    let amountOffset: BigNumberish | undefined;
+    if (amountBps) amountOffset = core.utils.getParamOffset(1);
+    const inputs = [rt.logics.newLogicInput({ input, amountBps, amountOffset })];
 
-    return { to, data, inputs: [logicInput], outputs: [], callback: constants.AddressZero };
+    return rt.logics.newLogic({ to, data, inputs });
   }
 }

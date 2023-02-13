@@ -1,5 +1,4 @@
 import { InterestRateMode } from './types';
-import { constants } from 'ethers';
 import invariant from 'tiny-invariant';
 import * as rt from 'src/router';
 
@@ -25,6 +24,6 @@ export class AaveV2BorrowLogic extends rt.logics.LogicBase {
       interestRateMode,
     ]);
 
-    return { to, data, inputs: [], outputs: [], callback: constants.AddressZero };
+    return rt.logics.newLogic({ to, data });
   }
 }

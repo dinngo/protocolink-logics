@@ -10,6 +10,10 @@ export interface TokenOutData {
   output: core.tokens.TokenAmount;
 }
 
+export interface TokensOutData {
+  outputs: core.tokens.TokenAmount[];
+}
+
 export interface TokenToTokenExactInData {
   input: core.tokens.TokenAmount;
   tokenOut: core.tokens.Token;

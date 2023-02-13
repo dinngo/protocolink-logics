@@ -27,31 +27,31 @@ describe('Test AaveV2Borrow Logic', function () {
     );
 
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '10000'), user1.address);
-    await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '10000'), user2.address);
+    await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '100'), user2.address);
   });
 
   const cases = [
     {
       userIndex: 0,
-      deposit: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '5000'),
-      output: new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '1'),
+      deposit: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.USDC, '5000'),
+      output: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.WETH, '1'),
       interestRateMode: protocols.aavev2.InterestRateMode.variable,
     },
     {
       userIndex: 0,
-      deposit: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '5000'),
-      output: new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '1'),
+      deposit: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.USDC, '5000'),
+      output: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.WETH, '1'),
       interestRateMode: protocols.aavev2.InterestRateMode.stable,
     },
     {
       userIndex: 1,
-      deposit: new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '1'),
+      deposit: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.WETH, '1'),
       output: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.USDC, '1'),
       interestRateMode: protocols.aavev2.InterestRateMode.variable,
     },
     {
       userIndex: 1,
-      deposit: new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '1'),
+      deposit: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.WETH, '1'),
       output: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.USDC, '1'),
       interestRateMode: protocols.aavev2.InterestRateMode.stable,
     },

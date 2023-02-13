@@ -6,6 +6,7 @@ export interface ReserveTokensAddress {
 }
 
 export enum InterestRateMode {
+  none = 0,
   stable = 1,
   variable = 2,
 }

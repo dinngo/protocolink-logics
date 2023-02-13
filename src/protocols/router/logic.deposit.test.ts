@@ -31,6 +31,7 @@ describe('RouterDepositLogic', function () {
         expect(utils.isBytesLike(logic.data)).to.be.true;
         expect(logic.inputs).to.deep.eq([]);
         expect(logic.outputs).to.deep.eq([]);
+        expect(logic.approveTo).to.eq(constants.AddressZero);
         expect(logic.callback).to.eq(constants.AddressZero);
       });
     });

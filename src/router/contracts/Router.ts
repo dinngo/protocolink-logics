@@ -22,14 +22,12 @@ export declare namespace IRouter {
     token: PromiseOrValue<string>;
     amountBps: PromiseOrValue<BigNumberish>;
     amountOrOffset: PromiseOrValue<BigNumberish>;
-    doApprove: PromiseOrValue<boolean>;
   };
 
-  export type InputStructOutput = [string, BigNumber, BigNumber, boolean] & {
+  export type InputStructOutput = [string, BigNumber, BigNumber] & {
     token: string;
     amountBps: BigNumber;
     amountOrOffset: BigNumber;
-    doApprove: boolean;
   };
 
   export type OutputStruct = {
@@ -47,6 +45,7 @@ export declare namespace IRouter {
     data: PromiseOrValue<BytesLike>;
     inputs: IRouter.InputStruct[];
     outputs: IRouter.OutputStruct[];
+    approveTo: PromiseOrValue<string>;
     callback: PromiseOrValue<string>;
   };
 
@@ -55,19 +54,21 @@ export declare namespace IRouter {
     string,
     IRouter.InputStructOutput[],
     IRouter.OutputStructOutput[],
+    string,
     string
   ] & {
     to: string;
     data: string;
     inputs: IRouter.InputStructOutput[];
     outputs: IRouter.OutputStructOutput[];
+    approveTo: string;
     callback: string;
   };
 }
 
 export interface RouterInterface extends utils.Interface {
   functions: {
-    'execute((address,bytes,(address,uint256,uint256,bool)[],(address,uint256)[],address)[],address[])': FunctionFragment;
+    'execute((address,bytes,(address,uint256,uint256)[],(address,uint256)[],address,address)[],address[])': FunctionFragment;
     'user()': FunctionFragment;
   };
 

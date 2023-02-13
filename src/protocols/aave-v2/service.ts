@@ -43,7 +43,6 @@ export class AaveV2Service extends core.Web3Toolkit {
     if (!this.assetAddresses) {
       const lendingPoolAddress = await this.getLendingPoolAddress();
       const lendingPool = LendingPool__factory.connect(lendingPoolAddress, this.provider);
-
       const assetAddresses = await lendingPool.getReservesList();
 
       const iface = ProtocolDataProvider__factory.createInterface();
@@ -133,6 +132,13 @@ export class AaveV2Service extends core.Web3Toolkit {
       await this.protocolDataProvider.getReserveTokensAddresses(asset.address);
 
     return interestRateMode === InterestRateMode.variable ? variableDebtTokenAddress : stableDebtTokenAddress;
+  }
+
+  async getFlashLoanPremiumTotal() {
+    const lendingPoolAddress = await this.getLendingPoolAddress();
+    const lendingPool = LendingPool__factory.connect(lendingPoolAddress, this.provider);
+    const premium = await lendingPool.FLASHLOAN_PREMIUM_TOTAL();
+    return premium.toNumber();
   }
 
   async isDelegationApproved(

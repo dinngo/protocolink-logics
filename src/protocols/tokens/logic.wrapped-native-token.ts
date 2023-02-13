@@ -16,6 +16,7 @@ export class WrappedNativeTokenLogic extends rt.logics.LogicBase implements rt.l
   async getLogic(options: WrappedNativeTokenLogicGetLogicOptions) {
     const { input, amountBps } = options;
 
+    const to = this.wrappedNativeToken.address;
     const iface = core.contracts.WETH__factory.createInterface();
     let data: string;
     let amountOffset: BigNumberish | undefined;
@@ -26,14 +27,8 @@ export class WrappedNativeTokenLogic extends rt.logics.LogicBase implements rt.l
       data = iface.encodeFunctionData('withdraw', [input.amountWei]);
       if (amountBps) amountOffset = core.utils.getParamOffset(0);
     }
-    const logicInput = rt.logics.newLogicInput({ input, amountBps, amountOffset });
+    const inputs = [rt.logics.newLogicInput({ input, amountBps, amountOffset })];
 
-    return {
-      to: this.networkConfig.wrappedNativeToken.address,
-      data,
-      inputs: [logicInput],
-      outputs: [],
-      callback: constants.AddressZero,
-    };
+    return rt.logics.newLogic({ to, data, inputs });
   }
 }
