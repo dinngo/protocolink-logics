@@ -6,7 +6,7 @@ import * as protocols from 'src/protocols';
 import * as rt from 'src/router';
 import * as utils from 'test/utils';
 
-describe('Test AaveV2FlashLoan Logic', function () {
+describe('Test AaveV2 FlashLoan Logic', function () {
   let chainId: number;
   let router: rt.contracts.Router;
   let erc20Spender: rt.contracts.SpenderERC20Approval;
@@ -30,7 +30,7 @@ describe('Test AaveV2FlashLoan Logic', function () {
 
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '2'), user.address);
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '2'), user.address);
-    await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.WBTC, '2'), user.address);
+    await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.USDT, '2'), user.address);
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.DAI, '2'), user.address);
   });
 
@@ -47,7 +47,7 @@ describe('Test AaveV2FlashLoan Logic', function () {
     },
     {
       outputs: [
-        new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.WBTC, '1'),
+        new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.USDT, '1'),
         new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.DAI, '1'),
       ],
     },

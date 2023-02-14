@@ -17,6 +17,7 @@ const config: HardhatUserConfig = {
   },
   networks: {
     hardhat: {
+      chainId: process.env.CHAIN_ID ? parseInt(process.env.CHAIN_ID) : 1,
       gasPrice: 0,
       initialBaseFeePerGas: 0,
       accounts: {

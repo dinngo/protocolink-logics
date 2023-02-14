@@ -7,7 +7,7 @@ import * as protocols from 'src/protocols';
 import * as rt from 'src/router';
 import * as utils from 'test/utils';
 
-describe('Test AaveV2Repay Logic', function () {
+describe('Test AaveV2 Repay Logic', function () {
   let chainId: number;
   let router: rt.contracts.Router;
   let erc20Spender: rt.contracts.SpenderERC20Approval;

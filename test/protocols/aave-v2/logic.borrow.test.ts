@@ -7,7 +7,7 @@ import * as protocols from 'src/protocols';
 import * as rt from 'src/router';
 import * as utils from 'test/utils';
 
-describe('Test AaveV2Borrow Logic', function () {
+describe('Test AaveV2 Borrow Logic', function () {
   let chainId: number;
   let router: rt.contracts.Router;
   let spenderAaveV2Delegation: rt.contracts.SpenderAaveV2Delegation;

@@ -8,7 +8,7 @@ import * as protocols from 'src/protocols';
 import * as rt from 'src/router';
 import * as utils from 'test/utils';
 
-describe('Test CompoundV2ClaimCOMP Logic', function () {
+describe('Test CompoundV2 ClaimCOMP Logic', function () {
   let chainId: number;
   let router: rt.contracts.Router;
   let users: SignerWithAddress[];

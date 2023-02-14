@@ -7,7 +7,7 @@ import * as protocols from 'src/protocols';
 import * as rt from 'src/router';
 import * as utils from 'test/utils';
 
-describe('Test CompoundV2Withdraw Logic', function () {
+describe('Test CompoundV2 Withdraw Logic', function () {
   let chainId: number;
   let router: rt.contracts.Router;
   let erc20Spender: rt.contracts.SpenderERC20Approval;
