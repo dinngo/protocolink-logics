@@ -9,6 +9,20 @@ describe('CompoundV2ClaimCOMPLogic', function () {
   const chainId = core.network.ChainId.mainnet;
   const compoundV2ClaimCOMP = new CompoundV2ClaimCOMPLogic({ chainId });
 
+  context('Test getPrice', function () {
+    const cases = [
+      { holder: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa' },
+      { holder: '0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB' },
+    ];
+
+    cases.forEach(({ holder }, i) => {
+      it(`case ${i + 1}`, async function () {
+        const output = await compoundV2ClaimCOMP.getPrice({ holder });
+        expect(output.amountWei.gte(0)).to.be.true;
+      });
+    });
+  });
+
   context('Test getLogic', function () {
     const comptroller = Comptroller__factory.createInterface();
 
