@@ -3,6 +3,6 @@ import * as rt from 'src/router';
 
 export function calcRequiredFundByAmountBps(input: core.tokens.TokenAmount, amountBps: number) {
   const requiredAmountWei = input.amountWei.mul(rt.constants.BPS_BASE).div(amountBps);
-  const reduiredFund = new core.tokens.TokenAmount(input.token).setWei(requiredAmountWei);
+  const requiredFund = new core.tokens.TokenAmount(input.token).setWei(requiredAmountWei);
   return reduiredFund;
 }
