@@ -21,6 +21,10 @@ describe('Test ParaswapV5 Wrapped Logic', function () {
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '100'), user.address);
   });
 
+  after(async function () {
+    await utils.network.reset();
+  });
+
   const cases = [
     {
       slippage: 500,
@@ -41,9 +45,11 @@ describe('Test ParaswapV5 Wrapped Logic', function () {
 
   cases.forEach(({ slippage, input, output }, i) => {
     it(`case ${i + 1}`, async function () {
+      // 1. build funds, tokensReturn
       const funds = new core.tokens.TokenAmounts(input);
-      const balances = new core.tokens.TokenAmounts(output);
+      const tokensReturn = [output.token.elasticAddress];
 
+      // 2. build router logics
       const logics: rt.IRouter.LogicStruct[] = [];
 
       const erc20Funds = funds.erc20;
@@ -59,16 +65,10 @@ describe('Test ParaswapV5 Wrapped Logic', function () {
       const paraswapV5SwapToken = new protocols.paraswapv5.ParaswapV5SwapTokenLogic({ chainId });
       logics.push(await paraswapV5SwapToken.getLogic({ account: user.address, slippage, input, output }));
 
-      const tokensReturn = rt.utils.toTokensReturn(balances);
-
+      // 3. send router tx
       const value = funds.native?.amountWei ?? 0;
-
       await expect(router.connect(user).execute(logics, tokensReturn, { value })).not.to.be.reverted;
       await expect(user.address).to.changeBalance(input.token, -input.amount);
     });
-  });
-
-  after(async function () {
-    await utils.network.reset();
   });
 });

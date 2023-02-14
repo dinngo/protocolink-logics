@@ -22,6 +22,10 @@ describe('Test SendToken Logic', function () {
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '100'), user1.address);
   });
 
+  after(async function () {
+    await utils.network.reset();
+  });
+
   const cases = [
     { input: new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '1') },
     { input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1') },
@@ -31,17 +35,17 @@ describe('Test SendToken Logic', function () {
 
   cases.forEach(({ input, amountBps }, i) => {
     it(`case ${i + 1}`, async function () {
-      let funds: core.tokens.TokenAmounts;
+      // 1. build funds, tokensReturn
       const tokensReturn = [];
+      const funds = new core.tokens.TokenAmounts();
       if (amountBps) {
-        funds = new core.tokens.TokenAmounts(
-          new core.tokens.TokenAmount(input.token).setWei(input.amountWei.mul(rt.constants.BPS_BASE).div(amountBps))
-        );
-        tokensReturn.push(input.token.address);
+        funds.add(utils.router.calcRequiredFundByAmountBps(input, amountBps));
+        tokensReturn.push(input.token.elasticAddress);
       } else {
-        funds = new core.tokens.TokenAmounts(input);
+        funds.add(input);
       }
 
+      // 2. build router logics
       const logics: rt.IRouter.LogicStruct[] = [];
 
       const erc20Funds = funds.erc20;
@@ -57,15 +61,11 @@ describe('Test SendToken Logic', function () {
       const sendToken = new protocols.tokens.SendTokenLogic({ chainId });
       logics.push(await sendToken.getLogic({ input, recipient: user2.address }));
 
+      // 3. send router tx
       const value = funds.native?.amountWei ?? 0;
-
       await expect(router.connect(user1).execute(logics, tokensReturn, { value })).not.to.be.reverted;
       await expect(user1.address).to.changeBalance(input.token, -input.amount);
       await expect(user2.address).to.changeBalance(input.token, input.amount);
     });
-  });
-
-  after(async function () {
-    await utils.network.reset();
   });
 });

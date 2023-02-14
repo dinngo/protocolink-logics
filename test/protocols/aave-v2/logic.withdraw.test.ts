@@ -22,6 +22,10 @@ describe('Test AaveV2Withdraw Logic', function () {
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '100'), user.address);
   });
 
+  after(async function () {
+    await utils.network.reset();
+  });
+
   const cases = [
     {
       input: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.aWETH, '1'),
@@ -45,21 +49,21 @@ describe('Test AaveV2Withdraw Logic', function () {
 
   cases.forEach(({ input, output, amountBps }, i) => {
     it(`case ${i + 1}`, async function () {
+      // 1. deposit first
+      const assetsAmount = new core.tokens.TokenAmount(output.token, '3');
+      await helpers.deposit(chainId, user, assetsAmount);
+
+      // 2. build funds, tokensReturn
       const tokensReturn = [output.token.elasticAddress];
-      let funds: core.tokens.TokenAmounts;
+      const funds = new core.tokens.TokenAmounts();
       if (amountBps) {
-        funds = new core.tokens.TokenAmounts(
-          new core.tokens.TokenAmount(input.token).setWei(input.amountWei.mul(rt.constants.BPS_BASE).div(amountBps))
-        );
+        funds.add(utils.router.calcRequiredFundByAmountBps(input, amountBps));
         tokensReturn.push(input.token.elasticAddress);
       } else {
-        funds = new core.tokens.TokenAmounts(input);
+        funds.add(input);
       }
 
-      // 1. deposit first
-      await helpers.deposit(chainId, user, new core.tokens.TokenAmount(output.token, funds.at(0).amount));
-
-      // 2. withdraw by router
+      // 3. build router logics
       const logics: rt.IRouter.LogicStruct[] = [];
 
       const erc20Funds = funds.erc20;
@@ -73,13 +77,10 @@ describe('Test AaveV2Withdraw Logic', function () {
       const aaveV2Withdraw = new protocols.aavev2.AaveV2WithdrawLogic({ chainId });
       logics.push(await aaveV2Withdraw.getLogic({ input, output, amountBps, routerAddress: router.address }));
 
+      // 4. send router tx
       await expect(router.connect(user).execute(logics, tokensReturn)).not.to.be.reverted;
       await expect(user.address).to.changeBalance(input.token, -input.amount, 3);
       await expect(user.address).to.changeBalance(output.token, output.amount);
     });
-  });
-
-  after(async function () {
-    await utils.network.reset();
   });
 });

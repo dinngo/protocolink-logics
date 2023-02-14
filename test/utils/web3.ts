@@ -5,12 +5,13 @@ import { expect } from 'chai';
 import hre from 'hardhat';
 
 export async function getBalance(account: string, token: core.tokens.Token, blockTag?: providers.BlockTag) {
-  const tokenAmount = new core.tokens.TokenAmount(token);
-  const balance = token.isNative()
+  const balanceWei = token.isNative()
     ? await hre.ethers.provider.getBalance(account, blockTag)
     : await core.contracts.ERC20__factory.connect(token.address, hre.ethers.provider).balanceOf(account, { blockTag });
-  tokenAmount.setWei(balance);
-  return tokenAmount;
+
+  const balance = new core.tokens.TokenAmount(token).setWei(balanceWei);
+
+  return balance;
 }
 
 export async function approve(user: SignerWithAddress, spender: string, tokenAmount: core.tokens.TokenAmount) {

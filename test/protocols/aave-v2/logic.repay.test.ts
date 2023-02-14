@@ -13,6 +13,7 @@ describe('Test AaveV2Repay Logic', function () {
   let erc20Spender: rt.contracts.SpenderERC20Approval;
   let users: SignerWithAddress[];
   let aaveV2Service: protocols.aavev2.AaveV2Service;
+  let snapshotId: string;
 
   before(async function () {
     chainId = await utils.network.getChainId();
@@ -25,6 +26,18 @@ describe('Test AaveV2Repay Logic', function () {
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '100'), user2.address);
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '100'), user2.address);
     aaveV2Service = new protocols.aavev2.AaveV2Service({ chainId, provider: hre.ethers.provider });
+  });
+
+  after(async function () {
+    await utils.network.reset();
+  });
+
+  beforeEach(async function () {
+    snapshotId = await utils.network.takeSnapshot();
+  });
+
+  afterEach(async function () {
+    await utils.network.restoreSnapshot(snapshotId);
   });
 
   const cases = [
@@ -84,30 +97,28 @@ describe('Test AaveV2Repay Logic', function () {
 
   cases.forEach(({ userIndex, deposit, borrow, interestRateMode, amountBps }, i) => {
     it(`case ${i + 1}`, async function () {
-      const user = users[userIndex];
-
       // 1. deposit and borrow first
+      const user = users[userIndex];
       await helpers.deposit(chainId, user, deposit);
       await helpers.borrow(chainId, user, borrow, interestRateMode);
 
-      // 2. check current debt is zero
+      // 2. calc input amount by current debt
       let currentDebt = await aaveV2Service.getUserCurrentDebt(user.address, borrow.token, interestRateMode);
       expect(currentDebt.amountWei).to.gt(0);
-
-      // 3. repay by router
       const input = new core.tokens.TokenAmount(borrow.token).setWei(
         core.utils.calcSlippage(currentDebt.amountWei, -100) // slightly higher than the current borrowed amount
       );
-      let funds: core.tokens.TokenAmounts;
+
+      // 3. build funds and tokensReturn
+      const funds = new core.tokens.TokenAmounts();
       if (amountBps) {
-        funds = new core.tokens.TokenAmounts(
-          new core.tokens.TokenAmount(input.token).setWei(input.amountWei.mul(rt.constants.BPS_BASE).div(amountBps))
-        );
+        funds.add(utils.router.calcRequiredFundByAmountBps(input, amountBps));
       } else {
-        funds = new core.tokens.TokenAmounts(input);
+        funds.add(input);
       }
       const tokensReturn = [input.token.elasticAddress];
 
+      // 4. build router logics
       const logics: rt.IRouter.LogicStruct[] = [];
 
       const erc20Funds = funds.erc20;
@@ -121,14 +132,12 @@ describe('Test AaveV2Repay Logic', function () {
       const aaveV2Repay = new protocols.aavev2.AaveV2RepayLogic({ chainId });
       logics.push(await aaveV2Repay.getLogic({ input, account: user.address, interestRateMode, amountBps }));
 
+      // 5. send router tx
       await expect(router.connect(user).execute(logics, tokensReturn)).not.to.be.reverted;
 
+      // 6. check user's debt should be zero
       currentDebt = await aaveV2Service.getUserCurrentDebt(user.address, borrow.token, interestRateMode);
-      await expect(currentDebt.amountWei).to.eq(0);
+      expect(currentDebt.amountWei).to.eq(0);
     });
-  });
-
-  after(async function () {
-    await utils.network.reset();
   });
 });

@@ -13,20 +13,20 @@ describe('SendTokenLogic', function () {
     const cases = [
       {
         input: new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '1'),
-        recipient: '0xa3C1C91403F0026b9dd086882aDbC8Cdbc3b3cfB',
+        recipient: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
       },
       {
         input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1'),
-        recipient: '0xa3C1C91403F0026b9dd086882aDbC8Cdbc3b3cfB',
+        recipient: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
       },
       {
         input: new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '1'),
-        recipient: '0xa3C1C91403F0026b9dd086882aDbC8Cdbc3b3cfB',
+        recipient: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
         amountBps: 5000,
       },
       {
         input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1'),
-        recipient: '0xa3C1C91403F0026b9dd086882aDbC8Cdbc3b3cfB',
+        recipient: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
         amountBps: 5000,
       },
     ];

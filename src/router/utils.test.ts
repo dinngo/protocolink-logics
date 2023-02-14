@@ -1,6 +1,5 @@
-import { calcAmountBps, toTokensReturn, validateAmountBps } from './utils';
+import { calcAmountBps, validateAmountBps } from './utils';
 import { constants } from 'ethers';
-import * as core from 'src/core';
 import { expect } from 'chai';
 
 describe('Test calcAmountBps', function () {
@@ -33,25 +32,6 @@ describe('Test validateAmountBps', function () {
   cases.forEach(({ amountBps, expected }, i) => {
     it(`case ${i + 1}`, function () {
       expect(validateAmountBps(amountBps)).to.eq(expected);
-    });
-  });
-});
-
-describe('Test toTokensReturn', function () {
-  const cases: Array<{ balances: core.tokens.TokenAmounts; expected: string[] }> = [
-    {
-      balances: new core.tokens.TokenAmounts([core.tokens.mainnet.ETH, '1'], [core.tokens.mainnet.USDC, '1']),
-      expected: [core.tokens.mainnet.ETH.elasticAddress, core.tokens.mainnet.USDC.address],
-    },
-    {
-      balances: new core.tokens.TokenAmounts([core.tokens.mainnet.WETH, '1'], [core.tokens.mainnet.DAI, '1']),
-      expected: [core.tokens.mainnet.WETH.address, core.tokens.mainnet.DAI.address],
-    },
-  ];
-
-  cases.forEach(({ balances, expected }, i) => {
-    it(`case ${i + 1}`, function () {
-      expect(toTokensReturn(balances)).to.deep.eq(expected);
     });
   });
 });

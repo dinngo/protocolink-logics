@@ -22,6 +22,10 @@ describe('Test AaveV2Deposit Logic', function () {
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '100'), user.address);
   });
 
+  after(async function () {
+    await utils.network.reset();
+  });
+
   const cases = [
     {
       input: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.WETH, '1'),
@@ -45,17 +49,17 @@ describe('Test AaveV2Deposit Logic', function () {
 
   cases.forEach(({ input, output, amountBps }, i) => {
     it(`case ${i + 1}`, async function () {
+      // 1. build funds, tokensReturn
       const tokensReturn = [output.token.elasticAddress];
-      let funds: core.tokens.TokenAmounts;
+      const funds = new core.tokens.TokenAmounts();
       if (amountBps) {
-        funds = new core.tokens.TokenAmounts(
-          new core.tokens.TokenAmount(input.token).setWei(input.amountWei.mul(rt.constants.BPS_BASE).div(amountBps))
-        );
+        funds.add(utils.router.calcRequiredFundByAmountBps(input, amountBps));
         tokensReturn.push(input.token.elasticAddress);
       } else {
-        funds = new core.tokens.TokenAmounts(input);
+        funds.add(input);
       }
 
+      // 2. build router logics
       const logics: rt.IRouter.LogicStruct[] = [];
 
       const erc20Funds = funds.erc20;
@@ -69,13 +73,10 @@ describe('Test AaveV2Deposit Logic', function () {
       const aaveV2Deposit = new protocols.aavev2.AaveV2DepositLogic({ chainId });
       logics.push(await aaveV2Deposit.getLogic({ input, output, amountBps, routerAddress: router.address }));
 
+      // 3. send router tx
       await expect(router.connect(user).execute(logics, tokensReturn)).not.to.be.reverted;
       await expect(user.address).to.changeBalance(input.token, -input.amount);
       await expect(user.address).to.changeBalance(output.token, output.amount, 3);
     });
-  });
-
-  after(async function () {
-    await utils.network.reset();
   });
 });
