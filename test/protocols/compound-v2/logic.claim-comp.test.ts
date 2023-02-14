@@ -13,7 +13,6 @@ describe('Test CompoundV2ClaimCOMP Logic', function () {
   let router: rt.contracts.Router;
   let users: SignerWithAddress[];
   let snapshotId: string;
-  const compoundV2Service = new protocols.compoundv2.CompoundV2Service({ provider: hre.ethers.provider });
 
   before(async function () {
     chainId = await utils.network.getChainId();
@@ -68,41 +67,32 @@ describe('Test CompoundV2ClaimCOMP Logic', function () {
     it(`case ${i + 1}`, async function () {
       const holder = users[holderIndex];
       const claimer = users[claimerIndex];
-      const COMP = protocols.compoundv2.tokens.COMP;
 
-      // 1. check holder's COMP balance and allocated COMP first
-      let compBalance = await utils.web3.getBalance(holder.address, COMP);
-      expect(compBalance.amountWei).to.eq(0);
-      let allocatedCOMP = await compoundV2Service.getAllocatedCOMP(holder.address);
-      expect(allocatedCOMP.amountWei).to.eq(0);
-
-      // 2. supply, enterMarkets and borrow first
+      // 1. supply, enterMarkets and borrow first
       await helpers.supply(holder, supply);
       await helpers.enterMarkets(holder, [supply.token]);
       await helpers.borrow(holder, borrow);
 
-      // 3. get allocated COMP amount after 1000 blocks
+      // 2. get allocated COMP amount after 1000 blocks
       await hrehelpers.mine(1000);
-      allocatedCOMP = await compoundV2Service.getAllocatedCOMP(holder.address);
-      expect(allocatedCOMP.amountWei).to.gt(0);
+      const compoundV2ClaimCOMP = new protocols.compoundv2.CompoundV2ClaimCOMPLogic({
+        chainId,
+        provider: hre.ethers.provider,
+      });
+      const output = await compoundV2ClaimCOMP.getPrice({ holder: holder.address });
+      expect(output.amountWei).to.be.gt(0);
 
       // 4. build tokensReturn
-      const tokensReturn = [COMP.address];
+      const tokensReturn = [output.token.address];
 
       // 5. build router logics
       const logics: rt.IRouter.LogicStruct[] = [];
 
-      const compoundV2ClaimCOMP = new protocols.compoundv2.CompoundV2ClaimCOMPLogic({ chainId });
       logics.push(await compoundV2ClaimCOMP.getLogic({ holder: holder.address }));
 
       // 6. send router tx
       await expect(router.connect(claimer).execute(logics, tokensReturn)).not.to.be.reverted;
-
-      // 7. check holder's COMP balance and allocated COMP
-      compBalance = await utils.web3.getBalance(holder.address, COMP);
-      expect(compBalance.amountWei).to.gt(0);
-      allocatedCOMP = await compoundV2Service.getAllocatedCOMP(holder.address);
-      expect(allocatedCOMP.amountWei).to.eq(0);
+      await expect(holder.address).to.changeBalance(output.token, output.amount, 1);
     });
   });
 });

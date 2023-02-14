@@ -10,20 +10,6 @@ describe('AaveV2DepositLogic', function () {
   const chainId = core.network.ChainId.mainnet;
   const aavev2DepositLogic = new AaveV2DepositLogic({ chainId });
 
-  context('Test getPrice', function () {
-    const cases = [
-      { input: new core.tokens.TokenAmount(mainnet.WETH, '1'), tokenOut: mainnet.aWETH },
-      { input: new core.tokens.TokenAmount(mainnet.USDC, '1'), tokenOut: mainnet.aUSDC },
-    ];
-
-    cases.forEach(({ input, tokenOut }) => {
-      it(`deposit ${input.token.symbol}`, async function () {
-        const output = await aavev2DepositLogic.getPrice({ input, tokenOut });
-        expect(output.amount).to.eq(input.amount);
-      });
-    });
-  });
-
   context('Test getLogic', function () {
     const lendingPoolIface = LendingPool__factory.createInterface();
 

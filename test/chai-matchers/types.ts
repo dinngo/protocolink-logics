@@ -3,6 +3,6 @@
 
 declare namespace Chai {
   interface Assertion extends LanguageChains, NumericComparison, TypeComparison {
-    changeBalance(token: any, balance: any, decimalPlaces?: number): AsyncAssertion;
+    changeBalance(token: any, balance: any, slippage?: number): AsyncAssertion;
   }
 }

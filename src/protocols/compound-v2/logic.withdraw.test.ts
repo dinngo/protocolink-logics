@@ -9,20 +9,6 @@ describe('CompoundV2WithdrawLogic', function () {
   const chainId = core.network.ChainId.mainnet;
   const compoundV2Withdraw = new CompoundV2WithdrawLogic({ chainId });
 
-  context('Test getPrice', function () {
-    const cases = [
-      { input: new core.tokens.TokenAmount(cTokens.cETH, '1'), tokenOut: underlyingTokens.ETH },
-      { input: new core.tokens.TokenAmount(cTokens.cUSDC, '1'), tokenOut: underlyingTokens.USDC },
-    ];
-
-    cases.forEach(({ input, tokenOut }) => {
-      it(`${input.token.symbol} to ${tokenOut.symbol}`, async function () {
-        const output = await compoundV2Withdraw.getPrice({ input, tokenOut });
-        expect(output.amountWei.gt(0)).to.be.true;
-      });
-    });
-  });
-
   context('Test getLogic', function () {
     const cErc20 = CErc20__factory.createInterface();
 

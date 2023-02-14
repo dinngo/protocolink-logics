@@ -28,27 +28,31 @@ describe('Test WrappedNativeToken Logic', function () {
   const cases = [
     {
       input: new core.tokens.TokenAmount(core.tokens.mainnet.ETH, '1'),
-      output: new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '1'),
+      tokenOut: core.tokens.mainnet.WETH,
     },
     {
       input: new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '1'),
-      output: new core.tokens.TokenAmount(core.tokens.mainnet.ETH, '1'),
+      tokenOut: core.tokens.mainnet.ETH,
     },
     {
       input: new core.tokens.TokenAmount(core.tokens.mainnet.ETH, '1'),
-      output: new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '1'),
+      tokenOut: core.tokens.mainnet.WETH,
       amountBps: 5000,
     },
     {
       input: new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '1'),
-      output: new core.tokens.TokenAmount(core.tokens.mainnet.ETH, '1'),
+      tokenOut: core.tokens.mainnet.ETH,
       amountBps: 5000,
     },
   ];
 
-  cases.forEach(({ input, output, amountBps }, i) => {
+  cases.forEach(({ input, tokenOut, amountBps }, i) => {
     it(`case ${i + 1}`, async function () {
-      // 1. build funds, tokensReturn
+      // 1. get output
+      const wrappedNativeToken = new protocols.tokens.WrappedNativeTokenLogic({ chainId });
+      const output = await wrappedNativeToken.getPrice({ input, tokenOut });
+
+      // 2. build funds, tokensReturn
       const tokensReturn = [output.token.elasticAddress];
       const funds = new core.tokens.TokenAmounts();
       if (amountBps) {
@@ -58,7 +62,7 @@ describe('Test WrappedNativeToken Logic', function () {
         funds.add(input);
       }
 
-      // 2. build router logics
+      // 3. build router logics
       const logics: rt.IRouter.LogicStruct[] = [];
 
       const erc20Funds = funds.erc20;
@@ -71,10 +75,9 @@ describe('Test WrappedNativeToken Logic', function () {
         logics.push(await routerDeposit.getLogic({ funds: erc20Funds }));
       }
 
-      const wrappedNativeToken = new protocols.tokens.WrappedNativeTokenLogic({ chainId });
       logics.push(await wrappedNativeToken.getLogic({ input, output, amountBps }));
 
-      // 3. send router tx
+      // 4. send router tx
       const value = funds.native?.amountWei ?? 0;
       await expect(router.connect(user).execute(logics, tokensReturn, { value })).not.to.be.reverted;
       await expect(user.address).to.changeBalance(input.token, -input.amount);

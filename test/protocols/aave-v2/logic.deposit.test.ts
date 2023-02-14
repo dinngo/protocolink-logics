@@ -29,26 +29,30 @@ describe('Test AaveV2Deposit Logic', function () {
   const cases = [
     {
       input: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.WETH, '1'),
-      output: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.aWETH, '1'),
+      tokenOut: protocols.aavev2.tokens.mainnet.aWETH,
     },
     {
       input: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.USDC, '1'),
-      output: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.aUSDC, '1'),
+      tokenOut: protocols.aavev2.tokens.mainnet.aUSDC,
     },
     {
       input: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.WETH, '1'),
-      output: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.aWETH, '1'),
+      tokenOut: protocols.aavev2.tokens.mainnet.aWETH,
       amountBps: 5000,
     },
     {
       input: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.USDC, '1'),
-      output: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.aUSDC, '1'),
+      tokenOut: protocols.aavev2.tokens.mainnet.aUSDC,
       amountBps: 5000,
     },
   ];
 
-  cases.forEach(({ input, output, amountBps }, i) => {
+  cases.forEach(({ input, tokenOut, amountBps }, i) => {
     it(`case ${i + 1}`, async function () {
+      // 1. get output
+      const aaveV2Deposit = new protocols.aavev2.AaveV2DepositLogic({ chainId });
+      const output = await aaveV2Deposit.getPrice({ input, tokenOut });
+
       // 1. build funds, tokensReturn
       const tokensReturn = [output.token.elasticAddress];
       const funds = new core.tokens.TokenAmounts();
@@ -70,13 +74,12 @@ describe('Test AaveV2Deposit Logic', function () {
       });
       logics.push(await routerDeposit.getLogic({ funds: erc20Funds }));
 
-      const aaveV2Deposit = new protocols.aavev2.AaveV2DepositLogic({ chainId });
       logics.push(await aaveV2Deposit.getLogic({ input, output, amountBps, routerAddress: router.address }));
 
       // 3. send router tx
       await expect(router.connect(user).execute(logics, tokensReturn)).not.to.be.reverted;
       await expect(user.address).to.changeBalance(input.token, -input.amount);
-      await expect(user.address).to.changeBalance(output.token, output.amount, 3);
+      await expect(user.address).to.changeBalance(output.token, output.amount, 1);
     });
   });
 });

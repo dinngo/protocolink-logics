@@ -10,20 +10,6 @@ describe('AaveV2WithdrawLogic', function () {
   const chainId = core.network.ChainId.mainnet;
   const aavev2WithdrawLogic = new AaveV2WithdrawLogic({ chainId });
 
-  context('Test getPrice', function () {
-    const cases = [
-      { input: new core.tokens.TokenAmount(mainnet.aWETH, '1'), tokenOut: mainnet.WETH },
-      { input: new core.tokens.TokenAmount(mainnet.aUSDC, '1'), tokenOut: mainnet.USDC },
-    ];
-
-    cases.forEach(({ input, tokenOut }) => {
-      it(`withdraw ${input.token.symbol}`, async function () {
-        const output = await aavev2WithdrawLogic.getPrice({ input, tokenOut });
-        expect(output.amount).to.eq(input.amount);
-      });
-    });
-  });
-
   context('Test getLogic', function () {
     const lendingPoolIface = LendingPool__factory.createInterface();
 

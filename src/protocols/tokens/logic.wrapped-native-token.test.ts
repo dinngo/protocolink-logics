@@ -7,20 +7,6 @@ describe('WrappedNativeTokenLogic', function () {
   const chainId = core.network.ChainId.mainnet;
   const wrappedNativeToken = new WrappedNativeTokenLogic({ chainId });
 
-  context('Test getPrice', function () {
-    const cases = [
-      { input: new core.tokens.TokenAmount(core.tokens.mainnet.ETH, '1'), tokenOut: core.tokens.mainnet.WETH },
-      { input: new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '1'), tokenOut: core.tokens.mainnet.ETH },
-    ];
-
-    cases.forEach(({ input, tokenOut }) => {
-      it(`${input.token.symbol} to ${tokenOut.symbol}`, async function () {
-        const output = await wrappedNativeToken.getPrice({ input, tokenOut });
-        expect(output.amount).to.eq(input.amount);
-      });
-    });
-  });
-
   context('Test getLogic', function () {
     const iface = core.contracts.WETH__factory.createInterface();
 

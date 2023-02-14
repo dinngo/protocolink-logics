@@ -4,11 +4,22 @@ import * as core from 'src/core';
 import * as rt from 'src/router';
 import { toCToken } from './tokens';
 
-export type CompoundV2RepayLogicGetPriceOptions = rt.logics.TokenToTokenExactInData;
+export type CompoundV2RepayLogicGetPriceOptions = { borrower: string; tokenIn: core.tokens.Token };
 
 export type CompoundV2RepayLogicGetLogicOptions = rt.logics.TokenInData & { borrower: string };
 
 export class CompoundV2RepayLogic extends rt.logics.LogicBase {
+  async getPrice(options: CompoundV2RepayLogicGetPriceOptions) {
+    const { borrower, tokenIn } = options;
+
+    const cToken = toCToken(tokenIn);
+    const cTokenContract = CErc20__factory.connect(cToken.address, this.provider);
+    const borrowBalanceWei = await cTokenContract.callStatic.borrowBalanceCurrent(borrower);
+    const input = new core.tokens.TokenAmount(tokenIn).setWei(borrowBalanceWei);
+
+    return input;
+  }
+
   async getLogic(options: CompoundV2RepayLogicGetLogicOptions) {
     const { borrower, input, amountBps } = options;
     const cToken = toCToken(input.token);

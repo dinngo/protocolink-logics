@@ -8,21 +8,6 @@ describe('ParaswapV5SwapTokenLogic', function () {
   const chainId = core.network.ChainId.mainnet;
   const paraswapV5SwapToken = new ParaswapV5SwapTokenLogic({ chainId });
 
-  context('Test getPrice', function () {
-    const cases = [
-      { input: new core.tokens.TokenAmount(core.tokens.mainnet.ETH, '1'), tokenOut: core.tokens.mainnet.USDC },
-      { input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1'), tokenOut: core.tokens.mainnet.ETH },
-      { input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1'), tokenOut: core.tokens.mainnet.DAI },
-    ];
-
-    cases.forEach(({ input, tokenOut }) => {
-      it(`${input.token.symbol} to ${tokenOut.symbol}`, async function () {
-        const output = await paraswapV5SwapToken.getPrice({ input, tokenOut });
-        expect(output.amountWei.gt(0)).to.be.true;
-      });
-    });
-  });
-
   context('Test getLogic', function () {
     const cases = [
       {
