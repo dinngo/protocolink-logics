@@ -1,4 +1,6 @@
 import { InterestRateMode } from './types';
+import { SpenderAaveV2Delegation__factory } from './contracts';
+import { getContractAddress } from './config';
 import invariant from 'tiny-invariant';
 import * as rt from 'src/router';
 
@@ -10,7 +12,7 @@ export class AaveV2BorrowLogic extends rt.logics.LogicBase {
   constructor(options: rt.logics.LogicBaseOptions<{ delegateeAddress?: string }>) {
     const { delegateeAddress, ...others } = options;
     super(others);
-    this.delegateeAddress = delegateeAddress ?? rt.config.getContractAddress(this.chainId, 'SpenderAaveV2Delegation');
+    this.delegateeAddress = delegateeAddress ?? getContractAddress(this.chainId, 'SpenderAaveV2Delegation');
   }
 
   async getLogic(options: AaveV2BorrowLogicGetLogicOptions) {
@@ -18,7 +20,7 @@ export class AaveV2BorrowLogic extends rt.logics.LogicBase {
     invariant(!output.token.isNative(), 'tokenOut should not be native token');
 
     const to = this.delegateeAddress;
-    const data = rt.contracts.SpenderAaveV2Delegation__factory.createInterface().encodeFunctionData('borrow', [
+    const data = SpenderAaveV2Delegation__factory.createInterface().encodeFunctionData('borrow', [
       output.token.address,
       output.amountWei,
       interestRateMode,

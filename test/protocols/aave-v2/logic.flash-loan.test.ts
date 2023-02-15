@@ -10,7 +10,7 @@ describe('Test AaveV2 FlashLoan Logic', function () {
   let chainId: number;
   let router: rt.contracts.Router;
   let erc20Spender: protocols.router.contracts.SpenderPermit2ERC20;
-  let flashLoanCallbackAaveV2: rt.contracts.FlashLoanCallbackAaveV2;
+  let flashLoanCallbackAaveV2: protocols.aavev2.contracts.FlashLoanCallbackAaveV2;
   let flashLoanPremiumTotal: number;
   let user: SignerWithAddress;
 

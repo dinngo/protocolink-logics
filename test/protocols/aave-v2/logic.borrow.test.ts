@@ -10,7 +10,7 @@ import * as utils from 'test/utils';
 describe('Test AaveV2 Borrow Logic', function () {
   let chainId: number;
   let router: rt.contracts.Router;
-  let spenderAaveV2Delegation: rt.contracts.SpenderAaveV2Delegation;
+  let spenderAaveV2Delegation: protocols.aavev2.contracts.SpenderAaveV2Delegation;
   let users: SignerWithAddress[];
   let snapshotId: string;
 

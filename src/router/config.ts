@@ -1,12 +1,10 @@
 import * as core from 'src/core';
 
-type ContractNames = 'Router' | 'SpenderAaveV2Delegation' | 'FlashLoanCallbackAaveV2';
+type ContractNames = 'Router';
 
 export const contractAddressMap: Record<number, { [k in ContractNames]: string }> = {
   [core.network.ChainId.mainnet]: {
     Router: '0x6181667418c8FA0d4ae3Aa90532D55D3994121F3',
-    SpenderAaveV2Delegation: '0xBca6B15F3eFe0CEFc78ECC8100d0DA257c0c423F',
-    FlashLoanCallbackAaveV2: '0xcfaa4D5C152Ac3DAc3e2feAAC9Cd70709f350982',
   },
 };
 
