@@ -6,11 +6,6 @@ import * as core from 'src/core';
 import invariant from 'tiny-invariant';
 import * as rt from 'src/router';
 
-export type AaveV2RepayLogicGetPriceOptions = Pick<rt.RouterGlobalOptions, 'account'> & {
-  tokenIn: core.tokens.Token;
-  interestRateMode: InterestRateMode;
-};
-
 export type AaveV2RepayLogicGetLogicOptions = rt.logics.TokenInData &
   Pick<rt.RouterGlobalOptions, 'account'> & { interestRateMode: InterestRateMode };
 
@@ -22,18 +17,16 @@ export class AaveV2RepayLogic extends rt.logics.LogicBase {
     this.service = new AaveV2Service(options);
   }
 
-  async getPrice(options: AaveV2RepayLogicGetPriceOptions) {
-    const { account, tokenIn, interestRateMode } = options;
-
+  async getDebt(user: string, asset: core.tokens.Token, interestRateMode: InterestRateMode) {
     const { currentStableDebt, currentVariableDebt } = await this.service.protocolDataProvider.getUserReserveData(
-      tokenIn.address,
-      account
+      asset.address,
+      user
     );
     const currentDebt = interestRateMode === InterestRateMode.variable ? currentVariableDebt : currentStableDebt;
     const amountWei = core.utils.calcSlippage(currentDebt, -100); // slightly higher than the current borrowed amount
-    const input = new core.tokens.TokenAmount(tokenIn).setWei(amountWei);
+    const debt = new core.tokens.TokenAmount(asset).setWei(amountWei);
 
-    return input;
+    return debt;
   }
 
   async getLogic(options: AaveV2RepayLogicGetLogicOptions) {
