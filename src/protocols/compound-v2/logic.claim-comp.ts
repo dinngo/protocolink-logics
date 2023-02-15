@@ -1,5 +1,6 @@
-import { CompoundV2Service } from './service';
-import { Comptroller__factory } from './contracts';
+import { COMP } from './tokens';
+import { CompoundLens__factory, Comptroller__factory } from './contracts';
+import * as core from 'src/core';
 import { getContractAddress } from './config';
 import * as rt from 'src/router';
 
@@ -11,10 +12,15 @@ export class CompoundV2ClaimCOMPLogic extends rt.logics.LogicBase {
   async getPrice(options: CompoundV2ClaimCOMPLogicGetPriceOptions) {
     const { holder } = options;
 
-    const service = new CompoundV2Service({ provider: this.provider });
-    const allocatedCOMP = await service.getAllocatedCOMP(holder);
+    const compoundLens = CompoundLens__factory.connect(getContractAddress('CompoundLens'), this.provider);
+    const metadata = await compoundLens.callStatic.getCompBalanceMetadataExt(
+      COMP.address,
+      getContractAddress('Comptroller'),
+      holder
+    );
+    const output = new core.tokens.TokenAmount(COMP).setWei(metadata.allocated);
 
-    return allocatedCOMP;
+    return output;
   }
 
   async getLogic(options: CompoundV2ClaimCOMPLogicGetLogicOptions) {

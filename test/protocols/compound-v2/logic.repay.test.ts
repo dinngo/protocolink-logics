@@ -14,7 +14,6 @@ describe('Test CompoundV2Repay Logic', function () {
   let erc20Spender: rt.contracts.SpenderERC20Approval;
   let user: SignerWithAddress;
   let snapshotId: string;
-  const compoundV2Service = new protocols.compoundv2.CompoundV2Service({ provider: hre.ethers.provider });
 
   before(async function () {
     chainId = await utils.network.getChainId();
@@ -67,11 +66,12 @@ describe('Test CompoundV2Repay Logic', function () {
 
       // 2. get borrow balance after 1000 blocks
       await hrehelpers.mine(1000);
-      const borrowBalance = await compoundV2Service.getBorrowBalance(user.address, borrow.token);
-      expect(borrowBalance.amountWei).to.gt(0);
+      const compoundV2Repay = new protocols.compoundv2.CompoundV2RepayLogic({ chainId, provider: hre.ethers.provider });
+      const debt = await compoundV2Repay.getDebt(user.address, borrow.token);
+      expect(debt.amountWei).to.gt(borrow.amountWei);
 
       // 3. build input, funds, tokensReturn
-      const input = borrowBalance.clone().setWei(borrowBalance.amountWei);
+      const input = debt;
       const funds = new core.tokens.TokenAmounts();
       if (amountBps) {
         funds.add(utils.router.calcRequiredFundByAmountBps(input, amountBps));
@@ -93,12 +93,12 @@ describe('Test CompoundV2Repay Logic', function () {
         logics.push(await routerDeposit.getLogic({ funds: erc20Funds }));
       }
 
-      const compoundV2Repay = new protocols.compoundv2.CompoundV2RepayLogic({ chainId });
       logics.push(await compoundV2Repay.getLogic({ input, amountBps, borrower: user.address }));
 
       // 5. send router tx
       const value = funds.native?.amountWei ?? 0;
       await expect(router.connect(user).execute(logics, tokensReturn, { value })).not.to.be.reverted;
+      await expect(user.address).to.changeBalance(input.token, -input.amount, 1);
     });
   });
 });

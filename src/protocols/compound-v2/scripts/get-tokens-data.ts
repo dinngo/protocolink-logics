@@ -1,4 +1,4 @@
-import { CompoundV2Service } from '../service';
+import { CErc20__factory } from '../contracts';
 import * as core from 'src/core';
 import fs from 'fs-extra';
 import { resolve } from 'path';
@@ -28,10 +28,30 @@ const cTokenAddresses = [
 
 export default async function () {
   const chainId = core.network.ChainId.mainnet;
-  const compoundV2Service = new CompoundV2Service({ chainId });
+  const web3Toolkit = new core.Web3Toolkit({ chainId });
 
-  const cTokens = await compoundV2Service.getTokens(cTokenAddresses);
-  const underlyingTokens = await compoundV2Service.toUnderlyingTokens(cTokens);
+  const cTokens = await web3Toolkit.getTokens(cTokenAddresses);
+  const calls: core.contracts.Multicall2.CallStruct[] = [];
+  const iface = CErc20__factory.createInterface();
+  for (const cToken of cTokens) {
+    if (cToken.symbol !== 'cETH') {
+      calls.push({ target: cToken.address, callData: iface.encodeFunctionData('underlying') });
+    }
+  }
+  const { returnData } = await web3Toolkit.multicall2.callStatic.aggregate(calls);
+
+  const tokenAddresses: string[] = [];
+  let j = 0;
+  for (const cToken of cTokens) {
+    if (cToken.symbol === 'cETH') {
+      tokenAddresses.push(web3Toolkit.nativeToken.address);
+    } else {
+      const [underlying] = iface.decodeFunctionResult('underlying', returnData[j]);
+      j++;
+      tokenAddresses.push(underlying);
+    }
+  }
+  const underlyingTokens = await web3Toolkit.getTokens(tokenAddresses);
 
   const cTokenMap: Record<string, core.tokens.Token> = {};
   const underlyingTokenMap: Record<string, core.tokens.Token> = {};

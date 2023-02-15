@@ -9,20 +9,6 @@ describe('CompoundV2SupplyLogic', function () {
   const chainId = core.network.ChainId.mainnet;
   const compoundV2Supply = new CompoundV2SupplyLogic({ chainId });
 
-  context('Test getPrice', function () {
-    const cases = [
-      { input: new core.tokens.TokenAmount(underlyingTokens.ETH, '1'), tokenOut: cTokens.cETH },
-      { input: new core.tokens.TokenAmount(underlyingTokens.USDC, '1'), tokenOut: cTokens.cUSDC },
-    ];
-
-    cases.forEach(({ input, tokenOut }) => {
-      it(`${input.token.symbol} to ${tokenOut.symbol}`, async function () {
-        const output = await compoundV2Supply.getPrice({ input, tokenOut });
-        expect(output.amountWei.gt(0)).to.be.true;
-      });
-    });
-  });
-
   context('Test getLogic', function () {
     const cEther = CEther__factory.createInterface();
     const cErc20 = CErc20__factory.createInterface();

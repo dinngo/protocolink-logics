@@ -29,31 +29,35 @@ describe('Test AaveV2Withdraw Logic', function () {
   const cases = [
     {
       input: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.aWETH, '1'),
-      output: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.WETH, '1'),
+      tokenOut: protocols.aavev2.tokens.mainnet.WETH,
     },
     {
       input: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.aUSDC, '1'),
-      output: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.USDC, '1'),
+      tokenOut: protocols.aavev2.tokens.mainnet.USDC,
     },
     {
       input: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.aWETH, '1'),
-      output: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.WETH, '1'),
+      tokenOut: protocols.aavev2.tokens.mainnet.WETH,
       amountBps: 5000,
     },
     {
       input: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.aUSDC, '1'),
-      output: new core.tokens.TokenAmount(protocols.aavev2.tokens.mainnet.USDC, '1'),
+      tokenOut: protocols.aavev2.tokens.mainnet.USDC,
       amountBps: 5000,
     },
   ];
 
-  cases.forEach(({ input, output, amountBps }, i) => {
+  cases.forEach(({ input, tokenOut, amountBps }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. deposit first
-      const assetsAmount = new core.tokens.TokenAmount(output.token, '3');
+      const assetsAmount = new core.tokens.TokenAmount(tokenOut, '3');
       await helpers.deposit(chainId, user, assetsAmount);
 
-      // 2. build funds, tokensReturn
+      // 2. get output
+      const aaveV2Withdraw = new protocols.aavev2.AaveV2WithdrawLogic({ chainId });
+      const output = await aaveV2Withdraw.getPrice({ input, tokenOut });
+
+      // 3. build funds, tokensReturn
       const tokensReturn = [output.token.elasticAddress];
       const funds = new core.tokens.TokenAmounts();
       if (amountBps) {
@@ -63,7 +67,7 @@ describe('Test AaveV2Withdraw Logic', function () {
         funds.add(input);
       }
 
-      // 3. build router logics
+      // 4. build router logics
       const logics: rt.IRouter.LogicStruct[] = [];
 
       const erc20Funds = funds.erc20;
@@ -74,12 +78,11 @@ describe('Test AaveV2Withdraw Logic', function () {
       });
       logics.push(await routerDeposit.getLogic({ funds: erc20Funds }));
 
-      const aaveV2Withdraw = new protocols.aavev2.AaveV2WithdrawLogic({ chainId });
       logics.push(await aaveV2Withdraw.getLogic({ input, output, amountBps, routerAddress: router.address }));
 
-      // 4. send router tx
+      // 5. send router tx
       await expect(router.connect(user).execute(logics, tokensReturn)).not.to.be.reverted;
-      await expect(user.address).to.changeBalance(input.token, -input.amount, 3);
+      await expect(user.address).to.changeBalance(input.token, -input.amount, 1);
       await expect(user.address).to.changeBalance(output.token, output.amount);
     });
   });

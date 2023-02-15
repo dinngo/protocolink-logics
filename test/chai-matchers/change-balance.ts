@@ -1,19 +1,23 @@
 import { BigNumber } from 'ethers';
-import BigNumberJS from 'bignumber.js';
 import * as core from 'src/core';
 
 export function supportChangeBalance(Assertion: Chai.AssertionStatic, utils: Chai.ChaiUtils) {
   Assertion.addMethod(
     'changeBalance',
-    function (this: any, token: core.tokens.Token, balanceChange: string, decimalPlaces?: number) {
+    function (this: any, token: core.tokens.Token, expectedBalanceChange: string, slippage?: number) {
       const promise = getBalances(utils.flag(this, 'object'), token).then(([before, after]) => {
-        let beforeAmount = BigNumberJS(before.amount);
-        let afterAmount = BigNumberJS(after.amount);
-        if (decimalPlaces !== undefined) {
-          beforeAmount = beforeAmount.decimalPlaces(decimalPlaces);
-          afterAmount = afterAmount.decimalPlaces(decimalPlaces);
+        const balanceChange = after.amountWei.sub(before.amountWei);
+        let expectedBalanceChangeWei = core.utils.toSmallUnit(expectedBalanceChange, token.decimals);
+        if (slippage !== undefined) {
+          expectedBalanceChangeWei = core.utils.calcSlippage(expectedBalanceChangeWei, slippage);
+          if (balanceChange.isNegative()) {
+            new Assertion(balanceChange).to.lte(expectedBalanceChangeWei);
+          } else {
+            new Assertion(balanceChange).to.gte(expectedBalanceChangeWei);
+          }
+        } else {
+          new Assertion(balanceChange).to.eq(expectedBalanceChangeWei);
         }
-        new Assertion(afterAmount.minus(beforeAmount).toString()).to.eq(BigNumberJS(balanceChange).toString());
       });
       this.then = promise.then.bind(promise);
       this.catch = promise.then.bind(promise);

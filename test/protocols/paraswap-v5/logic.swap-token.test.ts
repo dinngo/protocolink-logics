@@ -27,29 +27,33 @@ describe('Test ParaswapV5 Wrapped Logic', function () {
 
   const cases = [
     {
-      slippage: 500,
       input: new core.tokens.TokenAmount(core.tokens.mainnet.ETH, '1'),
-      output: new core.tokens.TokenAmount(core.tokens.mainnet.USDC),
+      tokenOut: core.tokens.mainnet.USDC,
+      slippage: 500,
     },
     {
-      slippage: 500,
       input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1'),
-      output: new core.tokens.TokenAmount(core.tokens.mainnet.ETH),
+      tokenOut: core.tokens.mainnet.ETH,
+      slippage: 500,
     },
     {
-      slippage: 500,
       input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1'),
-      output: new core.tokens.TokenAmount(core.tokens.mainnet.DAI),
+      tokenOut: core.tokens.mainnet.DAI,
+      slippage: 500,
     },
   ];
 
-  cases.forEach(({ slippage, input, output }, i) => {
+  cases.forEach(({ input, tokenOut, slippage }, i) => {
     it(`case ${i + 1}`, async function () {
-      // 1. build funds, tokensReturn
+      // 1. get output
+      const paraswapV5SwapToken = new protocols.paraswapv5.ParaswapV5SwapTokenLogic({ chainId });
+      const output = await paraswapV5SwapToken.getPrice({ input, tokenOut });
+
+      // 2. build funds, tokensReturn
       const funds = new core.tokens.TokenAmounts(input);
       const tokensReturn = [output.token.elasticAddress];
 
-      // 2. build router logics
+      // 3. build router logics
       const logics: rt.IRouter.LogicStruct[] = [];
 
       const erc20Funds = funds.erc20;
@@ -62,13 +66,13 @@ describe('Test ParaswapV5 Wrapped Logic', function () {
         logics.push(await routerDeposit.getLogic({ funds: erc20Funds }));
       }
 
-      const paraswapV5SwapToken = new protocols.paraswapv5.ParaswapV5SwapTokenLogic({ chainId });
-      logics.push(await paraswapV5SwapToken.getLogic({ account: user.address, slippage, input, output }));
+      logics.push(await paraswapV5SwapToken.getLogic({ account: user.address, input, output, slippage }));
 
-      // 3. send router tx
+      // 4. send router tx
       const value = funds.native?.amountWei ?? 0;
       await expect(router.connect(user).execute(logics, tokensReturn, { value })).not.to.be.reverted;
       await expect(user.address).to.changeBalance(input.token, -input.amount);
+      await expect(user.address).to.changeBalance(output.token, output.amount, 100);
     });
   });
 });
