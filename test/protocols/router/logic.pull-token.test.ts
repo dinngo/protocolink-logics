@@ -6,11 +6,12 @@ import * as protocols from 'src/protocols';
 import * as rt from 'src/router';
 import * as utils from 'test/utils';
 
-describe('Test ParaswapV5 SwapToken Logic', function () {
+describe('Test Router Deposit Logic', function () {
   let chainId: number;
   let router: rt.contracts.Router;
   let erc20Spender: protocols.router.contracts.SpenderPermit2ERC20;
   let user: SignerWithAddress;
+  let snapshotId: string;
 
   before(async function () {
     chainId = await utils.network.getChainId();
@@ -20,7 +21,7 @@ describe('Test ParaswapV5 SwapToken Logic', function () {
       router.address,
       protocols.router.config.getContractAddress(chainId, 'Permit2')
     );
-    await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.ETH, '100'), user.address);
+    await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '100'), user.address);
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '100'), user.address);
   });
 
@@ -28,35 +29,33 @@ describe('Test ParaswapV5 SwapToken Logic', function () {
     await utils.network.reset();
   });
 
+  beforeEach(async function () {
+    snapshotId = await utils.network.takeSnapshot();
+  });
+
+  afterEach(async function () {
+    await utils.network.restoreSnapshot(snapshotId);
+  });
+
   const cases = [
+    { funds: new core.tokens.TokenAmounts([core.tokens.mainnet.ETH, '1']) },
+    { funds: new core.tokens.TokenAmounts([core.tokens.mainnet.ETH, '1'], [core.tokens.mainnet.WETH, '1']) },
     {
-      input: new core.tokens.TokenAmount(core.tokens.mainnet.ETH, '1'),
-      tokenOut: core.tokens.mainnet.USDC,
-      slippage: 500,
+      funds: new core.tokens.TokenAmounts(
+        [core.tokens.mainnet.ETH, '1'],
+        [core.tokens.mainnet.WETH, '1'],
+        [core.tokens.mainnet.USDC, '1']
+      ),
     },
-    {
-      input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1'),
-      tokenOut: core.tokens.mainnet.ETH,
-      slippage: 500,
-    },
-    {
-      input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1'),
-      tokenOut: core.tokens.mainnet.DAI,
-      slippage: 500,
-    },
+    { funds: new core.tokens.TokenAmounts([core.tokens.mainnet.WETH, '1'], [core.tokens.mainnet.USDC, '1']) },
   ];
 
-  cases.forEach(({ input, tokenOut, slippage }, i) => {
+  cases.forEach(({ funds }, i) => {
     it(`case ${i + 1}`, async function () {
-      // 1. get output
-      const paraswapV5SwapToken = new protocols.paraswapv5.ParaswapV5SwapTokenLogic({ chainId });
-      const output = await paraswapV5SwapToken.getPrice({ input, tokenOut });
+      // 1. build tokensReturn
+      const tokensReturn = funds.map((fund) => fund.token.elasticAddress);
 
-      // 2. build funds, tokensReturn
-      const funds = new core.tokens.TokenAmounts(input);
-      const tokensReturn = [output.token.elasticAddress];
-
-      // 3. build router logics
+      // 2. build router logics
       const erc20Funds = funds.erc20;
       const logics = await utils.router.getPermitAndPullTokenLogics(
         chainId,
@@ -66,13 +65,9 @@ describe('Test ParaswapV5 SwapToken Logic', function () {
         erc20Spender.address
       );
 
-      logics.push(await paraswapV5SwapToken.getLogic({ account: user.address, input, output, slippage }));
-
-      // 4. send router tx
+      // 3. send router tx
       const value = funds.native?.amountWei ?? 0;
       await expect(router.connect(user).execute(logics, tokensReturn, { value })).not.to.be.reverted;
-      await expect(user.address).to.changeBalance(input.token, -input.amount);
-      await expect(user.address).to.changeBalance(output.token, output.amount, 100);
     });
   });
 });

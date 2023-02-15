@@ -9,14 +9,17 @@ import * as utils from 'test/utils';
 describe('Test AaveV2 Deposit Logic', function () {
   let chainId: number;
   let router: rt.contracts.Router;
-  let erc20Spender: rt.contracts.SpenderERC20Approval;
+  let erc20Spender: protocols.router.contracts.SpenderPermit2ERC20;
   let user: SignerWithAddress;
 
   before(async function () {
     chainId = await utils.network.getChainId();
     [, user] = await hre.ethers.getSigners();
     router = await utils.deployer.deployRouter();
-    erc20Spender = await utils.deployer.deploySpenderERC20Approval(router.address);
+    erc20Spender = await utils.deployer.deploySpenderPermit2ERC20(
+      router.address,
+      protocols.router.config.getContractAddress(chainId, 'Permit2')
+    );
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.ETH, '100'), user.address);
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '100'), user.address);
     await utils.faucet.claim(new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '100'), user.address);
@@ -64,15 +67,14 @@ describe('Test AaveV2 Deposit Logic', function () {
       }
 
       // 3. build router logics
-      const logics: rt.IRouter.LogicStruct[] = [];
-
       const erc20Funds = funds.erc20;
-      await utils.web3.approves(user, erc20Spender.address, erc20Funds);
-      const routerDeposit = new protocols.router.RouterDepositLogic({
+      const logics = await utils.router.getPermitAndPullTokenLogics(
         chainId,
-        spenderAddress: erc20Spender.address,
-      });
-      logics.push(await routerDeposit.getLogic({ funds: erc20Funds }));
+        user,
+        erc20Funds,
+        router.address,
+        erc20Spender.address
+      );
 
       logics.push(await aaveV2Deposit.getLogic({ input, output, amountBps, routerAddress: router.address }));
 

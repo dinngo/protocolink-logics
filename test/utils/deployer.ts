@@ -8,11 +8,6 @@ export async function deployRouter(owner?: SignerWithAddress) {
   return await (await new rt.contracts.Router__factory().connect(owner).deploy()).deployed();
 }
 
-export async function deploySpenderERC20Approval(router: string, owner?: SignerWithAddress) {
-  if (!owner) [owner] = await hre.ethers.getSigners();
-  return await (await new rt.contracts.SpenderERC20Approval__factory().connect(owner).deploy(router)).deployed();
-}
-
 export async function deploySpenderPermit2ERC20(router: string, permit2: string, owner?: SignerWithAddress) {
   if (!owner) [owner] = await hre.ethers.getSigners();
   return await (

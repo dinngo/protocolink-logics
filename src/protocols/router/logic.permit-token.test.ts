@@ -32,10 +32,10 @@ describe('RouterPermitTokenLogic', function () {
         const sig = logic.data.substring(0, 10);
 
         expect(logic.to).to.eq(getContractAddress(chainId, 'Permit2'));
+        expect(utils.isBytesLike(logic.data)).to.be.true;
         expect(sig).to.eq(
           iface.getSighash('permit(address,((address,uint160,uint48,uint48)[],address,uint256),bytes)')
         );
-        expect(utils.isBytesLike(logic.data)).to.be.true;
         expect(logic.inputs).to.deep.eq([]);
         expect(logic.outputs).to.deep.eq([]);
         expect(logic.approveTo).to.eq(constants.AddressZero);

@@ -9,7 +9,7 @@ import * as utils from 'test/utils';
 describe('Test AaveV2 FlashLoan Logic', function () {
   let chainId: number;
   let router: rt.contracts.Router;
-  let erc20Spender: rt.contracts.SpenderERC20Approval;
+  let erc20Spender: protocols.router.contracts.SpenderPermit2ERC20;
   let flashLoanCallbackAaveV2: rt.contracts.FlashLoanCallbackAaveV2;
   let flashLoanPremiumTotal: number;
   let user: SignerWithAddress;
@@ -18,7 +18,10 @@ describe('Test AaveV2 FlashLoan Logic', function () {
     chainId = await utils.network.getChainId();
     [, user] = await hre.ethers.getSigners();
     router = await utils.deployer.deployRouter();
-    erc20Spender = await utils.deployer.deploySpenderERC20Approval(router.address);
+    erc20Spender = await utils.deployer.deploySpenderPermit2ERC20(
+      router.address,
+      protocols.router.config.getContractAddress(chainId, 'Permit2')
+    );
 
     const aaveV2Service = new protocols.aavev2.AaveV2Service({ chainId, provider: hre.ethers.provider });
     const aaveV2AddressesProvider = await aaveV2Service.protocolDataProvider.ADDRESSES_PROVIDER();
@@ -69,15 +72,14 @@ describe('Test AaveV2 FlashLoan Logic', function () {
       }
 
       // 2. build router logics
-      const logics: rt.IRouter.LogicStruct[] = [];
-
       const erc20Funds = funds.erc20;
-      await utils.web3.approves(user, erc20Spender.address, erc20Funds);
-      const routerDeposit = new protocols.router.RouterDepositLogic({
+      const logics = await utils.router.getPermitAndPullTokenLogics(
         chainId,
-        spenderAddress: erc20Spender.address,
-      });
-      logics.push(await routerDeposit.getLogic({ funds: erc20Funds }));
+        user,
+        erc20Funds,
+        router.address,
+        erc20Spender.address
+      );
 
       const params = rt.contracts.Router__factory.createInterface().encodeFunctionData('execute', [
         flashLoanLogics,

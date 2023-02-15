@@ -24,5 +24,5 @@ export async function approve(user: SignerWithAddress, spender: string, tokenAmo
 }
 
 export async function approves(user: SignerWithAddress, spender: string, tokenAmounts: core.tokens.TokenAmounts) {
-  return Promise.all(tokenAmounts.toArray().map((tokenAmount) => approve(user, spender, tokenAmount)));
+  return Promise.all(tokenAmounts.map((tokenAmount) => approve(user, spender, tokenAmount)));
 }
