@@ -3,7 +3,7 @@ import * as helpers from '@nomicfoundation/hardhat-network-helpers';
 import hre from 'hardhat';
 
 export const faucetMap: Record<number, string> = {
-  1: '0x28c6c06298d514db089934071355e5743bf21d60',
+  1: '0x47ac0Fb4F2D84898e4D9E7b4DaB3C24507a6D503',
 };
 
 export async function claim(tokenAmount: core.tokens.TokenAmount, recepient: string) {

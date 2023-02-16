@@ -253,4 +253,17 @@ export class TokenAmounts implements RelativeIndexable<TokenAmount> {
       return accumulator;
     }, new TokenAmounts());
   }
+
+  get tokens() {
+    return Object.keys(this.tokenAmountMap).reduce((accumulator, tokenAddress) => {
+      accumulator.push(this.tokenAmountMap[tokenAddress].token);
+      return accumulator;
+    }, [] as Token[]);
+  }
+
+  map<U>(callbackfn: (value: TokenAmount, index: number, array: TokenAmounts) => U): U[] {
+    return Object.keys(this.tokenAmountMap).map((tokenAddress, index) =>
+      callbackfn(this.tokenAmountMap[tokenAddress], index, this)
+    );
+  }
 }
