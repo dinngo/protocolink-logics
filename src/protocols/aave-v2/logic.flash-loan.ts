@@ -40,6 +40,7 @@ export class AaveV2FlashLoanLogic extends rt.logics.LogicBase {
       params,
       referralCode,
     ]);
+
     const callback = this.callbackAddress;
 
     return rt.logics.newLogic({ to, data, callback });

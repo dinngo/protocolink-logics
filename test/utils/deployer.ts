@@ -32,3 +32,10 @@ export async function deployFlashLoanCallbackAaveV2(router: string, aaveV2Provid
       .deploy(router, aaveV2Provider)
   ).deployed();
 }
+
+export async function deployFlashLoanCallbackBalancerV2(router: string, vault: string, owner?: SignerWithAddress) {
+  if (!owner) [owner] = await hre.ethers.getSigners();
+  return await (
+    await new protocols.balancerv2.contracts.FlashLoanCallbackBalancerV2__factory().connect(owner).deploy(router, vault)
+  ).deployed();
+}

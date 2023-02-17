@@ -20,7 +20,7 @@
     "lint": "eslint --fix src",
     "prepublishOnly": "yarn build",
     "test": "mocha",
-    "cli": "ts-node -r tsconfig-paths/register cli/index.ts"
+    "cli": "ts-node cli/index.ts"
   },
   "dependencies": {
     "@paraswap/sdk": "^6.1.2",

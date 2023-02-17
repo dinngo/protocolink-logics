@@ -3,6 +3,7 @@ import BigNumberJS from 'bignumber.js';
 import { Token } from './token';
 import invariant from 'tiny-invariant';
 import orderBy from 'lodash/orderBy';
+import sortBy from 'lodash/sortBy';
 import { toBigUnit, toSmallUnit } from '../utils';
 
 export interface TokenAmountField {
@@ -46,6 +47,10 @@ export class TokenAmount {
 
   static precise(amount: string, decimals: number) {
     return BigNumberJS(amount).decimalPlaces(decimals, BigNumberJS.ROUND_DOWN).toString();
+  }
+
+  static sortByAddress(tokenAmounts: TokenAmount[]) {
+    return sortBy(tokenAmounts, (tokenAmount) => tokenAmount.token.address.toLowerCase());
   }
 
   get amountWei() {
