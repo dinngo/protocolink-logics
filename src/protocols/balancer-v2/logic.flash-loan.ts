@@ -1,40 +1,35 @@
 import { BigNumberish } from 'ethers';
 import { Vault__factory } from './contracts';
-import * as core from 'src/core';
+import * as common from '@composable-router/common';
+import * as core from '@composable-router/core';
 import { getContractAddress } from './config';
-import * as rt from 'src/router';
 
-export type BalancerV2FlashLoanLogicGetLogicOptions = rt.logics.TokensOutData & { userData: string };
+export type FlashLoanLogicFields = core.FlashLoanFields;
 
-export class BalancerV2FlashLoanLogic extends rt.logics.LogicBase {
-  callbackAddress: string;
+@core.LogicDefinitionDecorator()
+export class FlashLoanLogic extends core.Logic {
+  static readonly supportedChainIds = [common.ChainId.mainnet];
 
-  constructor(options: rt.logics.LogicBaseOptions<{ callbackAddress?: string }>) {
-    const { chainId, provider, callbackAddress } = options;
-    super({ chainId, provider });
-    this.callbackAddress = callbackAddress ?? getContractAddress(chainId, 'FlashLoanCallbackBalancerV2');
-  }
+  async getLogic(fields: FlashLoanLogicFields) {
+    const { outputs, params } = fields;
 
-  async getLogic(options: BalancerV2FlashLoanLogicGetLogicOptions) {
-    const { outputs, userData } = options;
-
-    const to = await getContractAddress(this.chainId, 'Vault');
+    const to = getContractAddress(this.chainId, 'Vault');
 
     const assets: string[] = [];
     const amounts: BigNumberish[] = [];
-    for (const output of core.tokens.TokenAmount.sortByAddress(outputs)) {
+    for (const output of common.sortByAddress(outputs.toArray())) {
       assets.push(output.token.address);
       amounts.push(output.amountWei);
     }
     const data = Vault__factory.createInterface().encodeFunctionData('flashLoan', [
-      this.callbackAddress,
+      getContractAddress(this.chainId, 'FlashLoanCallbackBalancerV2'),
       assets,
       amounts,
-      userData,
+      params,
     ]);
 
-    const callback = this.callbackAddress;
+    const callback = getContractAddress(this.chainId, 'FlashLoanCallbackBalancerV2');
 
-    return rt.logics.newLogic({ to, data, callback });
+    return core.newLogic({ to, data, callback });
   }
 }

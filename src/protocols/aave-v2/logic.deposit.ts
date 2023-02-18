@@ -1,47 +1,42 @@
-import { AaveV2Service } from './service';
 import { BigNumberish } from 'ethers';
 import { LendingPool__factory } from './contracts';
-import * as core from 'src/core';
+import { Service } from './service';
+import * as common from '@composable-router/common';
+import * as core from '@composable-router/core';
 import invariant from 'tiny-invariant';
-import * as rt from 'src/router';
 
-export type AaveV2DepositLogicGetPriceOptions = rt.logics.TokenToTokenExactInData;
+export type DepositLogicParams = core.TokenToTokenExactInParams;
 
-export type AaveV2DepositLogicGetLogicOptions = rt.logics.TokenToTokenData &
-  Pick<rt.RouterGlobalOptions, 'routerAddress'> & { referralCode?: number };
+export type DepositLogicFields = core.TokenToTokenFields<{ referralCode?: number }>;
 
-export class AaveV2DepositLogic extends rt.logics.LogicBase implements rt.logics.TokenToTokenLogicInterface {
-  service: AaveV2Service;
+@core.LogicDefinitionDecorator()
+export class DepositLogic extends core.ExchangeLogic {
+  static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon, common.ChainId.avalanche];
 
-  constructor(options: rt.logics.LogicBaseOptions) {
-    super(options);
-    this.service = new AaveV2Service(options);
-  }
-
-  async getPrice(options: AaveV2DepositLogicGetPriceOptions) {
-    const { input, tokenOut } = options;
+  async getPrice(params: DepositLogicParams) {
+    const { input, tokenOut } = params;
     invariant(!input.token.isNative(), 'tokenIn should not be native token');
-
-    const output = new core.tokens.TokenAmount(tokenOut, input.amount);
+    const output = new common.TokenAmount(tokenOut, input.amount);
 
     return output;
   }
 
-  async getLogic(options: AaveV2DepositLogicGetLogicOptions) {
-    const { input, amountBps, routerAddress, referralCode = 0 } = options;
+  async getLogic(fields: DepositLogicFields) {
+    const { input, amountBps, referralCode = 0 } = fields;
     invariant(!input.token.isNative(), 'tokenIn should not be native token');
 
-    const to = await this.service.getLendingPoolAddress();
+    const service = new Service(this.chainId, this.provider);
+    const to = await service.getLendingPoolAddress();
     const data = LendingPool__factory.createInterface().encodeFunctionData('deposit', [
       input.token.address,
       input.amountWei,
-      routerAddress,
+      core.getContractAddress(this.chainId, 'Router'),
       referralCode,
     ]);
     let amountOffset: BigNumberish | undefined;
-    if (amountBps) amountOffset = core.utils.getParamOffset(1);
-    const inputs = [rt.logics.newLogicInput({ input, amountBps, amountOffset })];
+    if (amountBps) amountOffset = common.getParamOffset(1);
+    const inputs = [core.newLogicInput({ input, amountBps, amountOffset })];
 
-    return rt.logics.newLogic({ to, data, inputs });
+    return core.newLogic({ to, data, inputs });
   }
 }

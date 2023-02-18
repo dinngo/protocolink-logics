@@ -1,38 +1,47 @@
-import { AaveV2FlashLoanLogic } from './logic.flash-loan';
+import { FlashLoanLogic, FlashLoanLogicFields } from './logic.flash-loan';
 import { LendingPool__factory } from './contracts';
+import { LogicTestCase } from 'test/types';
+import { Service } from './service';
+import * as common from '@composable-router/common';
 import { constants, utils } from 'ethers';
-import * as core from 'src/core';
 import { expect } from 'chai';
-import { mainnet } from './tokens/data';
+import { getContractAddress } from './config';
+import { mainnetTokens } from './tokens';
 
-describe('AaveV2FlashLoanLogic', function () {
-  const chainId = core.network.ChainId.mainnet;
-  const aavev2FlashLoanLogic = new AaveV2FlashLoanLogic({ chainId });
+describe('AaveV2 FlashLoanLogic', function () {
+  const chainId = common.ChainId.mainnet;
+  const aaveV2FlashLoanLogic = new FlashLoanLogic(chainId);
+  let lendingPoolAddress: string;
+
+  before(async function () {
+    const service = new Service(chainId);
+    lendingPoolAddress = await service.getLendingPoolAddress();
+  });
 
   context('Test getLogic', function () {
     const lendingPoolIface = LendingPool__factory.createInterface();
 
-    const cases = [
+    const testCases: LogicTestCase<FlashLoanLogicFields>[] = [
       {
-        outputs: [new core.tokens.TokenAmount(mainnet.WETH, '1'), new core.tokens.TokenAmount(mainnet.USDC, '1')],
-        params: '0x',
+        fields: {
+          outputs: new common.TokenAmounts([mainnetTokens.WETH, '1'], [mainnetTokens.USDC, '1']),
+          params: '0x',
+        },
       },
     ];
 
-    cases.forEach(({ outputs, params }) => {
-      it(`flash loan ${outputs.map((output) => output.token.symbol).join(',')}`, async function () {
-        const logic = await aavev2FlashLoanLogic.getLogic({ outputs, params });
-        const sig = logic.data.substring(0, 10);
+    testCases.forEach(({ fields }) => {
+      it(`flash loan ${fields.outputs.map((output) => output.token.symbol).join(',')}`, async function () {
+        const routerLogic = await aaveV2FlashLoanLogic.getLogic(fields);
+        const sig = routerLogic.data.substring(0, 10);
 
-        expect(utils.isBytesLike(logic.data)).to.be.true;
-
-        const lendingPoolAddress = await aavev2FlashLoanLogic.service.getLendingPoolAddress();
-        expect(logic.to).to.eq(lendingPoolAddress);
+        expect(utils.isBytesLike(routerLogic.data)).to.be.true;
+        expect(routerLogic.to).to.eq(lendingPoolAddress);
         expect(sig).to.eq(lendingPoolIface.getSighash('flashLoan'));
-        expect(logic.inputs).to.deep.eq([]);
-        expect(logic.outputs).to.deep.eq([]);
-        expect(logic.approveTo).to.eq(constants.AddressZero);
-        expect(logic.callback).to.eq(aavev2FlashLoanLogic.callbackAddress);
+        expect(routerLogic.inputs).to.deep.eq([]);
+        expect(routerLogic.outputs).to.deep.eq([]);
+        expect(routerLogic.approveTo).to.eq(constants.AddressZero);
+        expect(routerLogic.callback).to.eq(getContractAddress(chainId, 'FlashLoanCallbackAaveV2'));
       });
     });
   });

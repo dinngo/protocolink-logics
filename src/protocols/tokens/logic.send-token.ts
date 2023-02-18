@@ -1,22 +1,28 @@
-import * as core from 'src/core';
-import * as rt from 'src/router';
+import * as common from '@composable-router/common';
+import * as core from '@composable-router/core';
 
-export type SendTokenLogicGetLogicOptions = rt.logics.TokenToUserData;
+export type SendTokenLogicFields = core.TokenToUserFields;
 
-export class SendTokenLogic extends rt.logics.LogicBase {
-  async getLogic(options: SendTokenLogicGetLogicOptions) {
-    const { input, recipient, amountBps } = options;
+@core.LogicDefinitionDecorator()
+export class SendTokenLogic extends core.Logic {
+  static readonly supportedChainIds = [
+    common.ChainId.mainnet,
+    common.ChainId.polygon,
+    common.ChainId.arbitrum,
+    common.ChainId.optimism,
+    common.ChainId.avalanche,
+  ];
+
+  async getLogic(fields: SendTokenLogicFields) {
+    const { input, recipient, amountBps } = fields;
 
     const to = input.token.address;
-    const data = core.contracts.ERC20__factory.createInterface().encodeFunctionData('transfer', [
-      recipient,
-      input.amountWei,
-    ]);
+    const data = common.ERC20__factory.createInterface().encodeFunctionData('transfer', [recipient, input.amountWei]);
     const inputs = [];
     if (amountBps) {
-      inputs.push(rt.logics.newLogicInput({ input, amountBps, amountOffset: core.utils.getParamOffset(1) }));
+      inputs.push(core.newLogicInput({ input, amountBps, amountOffset: common.getParamOffset(1) }));
     }
 
-    return rt.logics.newLogic({ to, data, inputs });
+    return core.newLogic({ to, data, inputs });
   }
 }

@@ -1,46 +1,48 @@
-import { AaveV2BorrowLogic } from './logic.borrow';
+import { BorrowLogic, BorrowLogicFields } from './logic.borrow';
 import { InterestRateMode } from './types';
+import { LogicTestCase } from 'test/types';
 import { SpenderAaveV2Delegation__factory } from './contracts';
+import * as common from '@composable-router/common';
 import { constants, utils } from 'ethers';
-import * as core from 'src/core';
 import { expect } from 'chai';
 import { getContractAddress } from './config';
-import { mainnet } from './tokens/data';
+import { mainnetTokens } from './tokens';
 
-describe('AaveV2BorrowLogic', function () {
-  const chainId = core.network.ChainId.mainnet;
-  const aavev2BorrowLogic = new AaveV2BorrowLogic({ chainId });
+describe('AaveV2 BorrowLogic', function () {
+  const chainId = common.ChainId.mainnet;
+  const aaveV2BorrowLogic = new BorrowLogic(chainId);
 
   context('Test getLogic', function () {
     const spenderAaveV2Delegation = SpenderAaveV2Delegation__factory.createInterface();
 
-    const cases = [
+    const testCases: LogicTestCase<BorrowLogicFields>[] = [
       {
-        output: new core.tokens.TokenAmount(mainnet.WETH, '1'),
-        interestRateMode: InterestRateMode.variable,
+        fields: {
+          output: new common.TokenAmount(mainnetTokens.WETH, '1'),
+          interestRateMode: InterestRateMode.variable,
+        },
       },
       {
-        output: new core.tokens.TokenAmount(mainnet.USDC, '1'),
-        interestRateMode: InterestRateMode.variable,
+        fields: {
+          output: new common.TokenAmount(mainnetTokens.USDC, '1'),
+          interestRateMode: InterestRateMode.variable,
+        },
       },
     ];
 
-    cases.forEach(({ output, interestRateMode }) => {
-      it(`borrow ${output.token.symbol}`, async function () {
-        const logic = await aavev2BorrowLogic.getLogic({ output, interestRateMode });
-        const sig = logic.data.substring(0, 10);
+    testCases.forEach(({ fields }) => {
+      it(`borrow ${fields.output.token.symbol}`, async function () {
+        const routerLogic = await aaveV2BorrowLogic.getLogic(fields);
+        const sig = routerLogic.data.substring(0, 10);
+        const { output } = fields;
 
-        expect(utils.isBytesLike(logic.data)).to.be.true;
-        expect(logic.to).to.eq(getContractAddress(chainId, 'SpenderAaveV2Delegation'));
-        if (output.token.isNative()) {
-          expect(sig).to.eq(spenderAaveV2Delegation.getSighash('borrowETH'));
-        } else {
-          expect(sig).to.eq(spenderAaveV2Delegation.getSighash('borrow'));
-        }
-        expect(logic.inputs).to.deep.eq([]);
-        expect(logic.outputs).to.deep.eq([]);
-        expect(logic.approveTo).to.eq(constants.AddressZero);
-        expect(logic.callback).to.eq(constants.AddressZero);
+        expect(utils.isBytesLike(routerLogic.data)).to.be.true;
+        expect(routerLogic.to).to.eq(getContractAddress(chainId, 'SpenderAaveV2Delegation'));
+        expect(sig).to.eq(spenderAaveV2Delegation.getSighash(output.token.isNative() ? 'borrowETH' : 'borrow'));
+        expect(routerLogic.inputs).to.deep.eq([]);
+        expect(routerLogic.outputs).to.deep.eq([]);
+        expect(routerLogic.approveTo).to.eq(constants.AddressZero);
+        expect(routerLogic.callback).to.eq(constants.AddressZero);
       });
     });
   });

@@ -21,4 +21,4 @@ jobs:
         run: yarn install
 
       - name: Run unit test
-        run: yarn test src/**/*.ts
+        run: yarn test:unit

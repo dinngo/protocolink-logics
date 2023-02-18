@@ -1,38 +1,33 @@
-import { AaveV2Service } from './service';
 import { BigNumberish, constants } from 'ethers';
 import { InterestRateMode } from './types';
 import { LendingPool__factory } from './contracts';
+import { Service } from './service';
+import * as common from '@composable-router/common';
+import * as core from '@composable-router/core';
 import { getContractAddress } from './config';
-import * as rt from 'src/router';
 
-export type AaveV2FlashLoanLogicGetLogicOptions = rt.logics.TokensOutData & { params: string; referralCode?: number };
+export type FlashLoanLogicFields = core.FlashLoanFields<{ referralCode?: number }>;
 
-export class AaveV2FlashLoanLogic extends rt.logics.LogicBase {
-  service: AaveV2Service;
-  callbackAddress: string;
+@core.LogicDefinitionDecorator()
+export class FlashLoanLogic extends core.Logic {
+  static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon, common.ChainId.avalanche];
 
-  constructor(options: rt.logics.LogicBaseOptions<{ callbackAddress?: string }>) {
-    const { chainId, provider, callbackAddress } = options;
-    super({ chainId, provider });
-    this.service = new AaveV2Service({ chainId, provider });
-    this.callbackAddress = callbackAddress ?? getContractAddress(chainId, 'FlashLoanCallbackAaveV2');
-  }
+  async getLogic(fields: FlashLoanLogicFields) {
+    const { outputs, params, referralCode = 0 } = fields;
 
-  async getLogic(options: AaveV2FlashLoanLogicGetLogicOptions) {
-    const { outputs, params, referralCode = 0 } = options;
-
-    const to = await this.service.getLendingPoolAddress();
+    const service = new Service(this.chainId, this.provider);
+    const to = await service.getLendingPoolAddress();
 
     const assets: string[] = [];
     const amounts: BigNumberish[] = [];
     const modes: number[] = [];
-    for (const output of outputs) {
+    outputs.forEach((output) => {
       assets.push(output.token.address);
       amounts.push(output.amountWei);
       modes.push(InterestRateMode.none);
-    }
+    });
     const data = LendingPool__factory.createInterface().encodeFunctionData('flashLoan', [
-      this.callbackAddress,
+      getContractAddress(this.chainId, 'FlashLoanCallbackAaveV2'),
       assets,
       amounts,
       modes,
@@ -41,8 +36,8 @@ export class AaveV2FlashLoanLogic extends rt.logics.LogicBase {
       referralCode,
     ]);
 
-    const callback = this.callbackAddress;
+    const callback = getContractAddress(this.chainId, 'FlashLoanCallbackAaveV2');
 
-    return rt.logics.newLogic({ to, data, callback });
+    return core.newLogic({ to, data, callback });
   }
 }

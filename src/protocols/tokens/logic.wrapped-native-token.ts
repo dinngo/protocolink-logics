@@ -1,23 +1,32 @@
 import { BigNumberish, constants } from 'ethers';
-import * as core from 'src/core';
-import * as rt from 'src/router';
+import * as common from '@composable-router/common';
+import * as core from '@composable-router/core';
 
-export type WrappedNativeTokenLogicGetPriceOptions = rt.logics.TokenToTokenExactInData;
+export type WrappedNativeTokenLogicParams = core.TokenToTokenExactInParams;
 
-export type WrappedNativeTokenLogicGetLogicOptions = rt.logics.TokenToTokenData;
+export type WrappedNativeTokenLogicFields = core.TokenToTokenFields;
 
-export class WrappedNativeTokenLogic extends rt.logics.LogicBase implements rt.logics.TokenToTokenLogicInterface {
-  async getPrice(options: WrappedNativeTokenLogicGetPriceOptions) {
-    const { input, tokenOut } = options;
-    const output = new core.tokens.TokenAmount(tokenOut, input.amount);
+@core.LogicDefinitionDecorator()
+export class WrappedNativeTokenLogic extends core.ExchangeLogic {
+  static readonly supportedChainIds = [
+    common.ChainId.mainnet,
+    common.ChainId.polygon,
+    common.ChainId.arbitrum,
+    common.ChainId.optimism,
+    common.ChainId.avalanche,
+  ];
+
+  getPrice(params: WrappedNativeTokenLogicParams) {
+    const { input, tokenOut } = params;
+    const output = new common.TokenAmount(tokenOut, input.amount);
     return output;
   }
 
-  async getLogic(options: WrappedNativeTokenLogicGetLogicOptions) {
-    const { input, amountBps } = options;
+  async getLogic(fields: WrappedNativeTokenLogicFields) {
+    const { input, amountBps } = fields;
 
     const to = this.wrappedNativeToken.address;
-    const iface = core.contracts.WETH__factory.createInterface();
+    const iface = common.WETH__factory.createInterface();
     let data: string;
     let amountOffset: BigNumberish | undefined;
     if (input.token.isNative()) {
@@ -25,10 +34,10 @@ export class WrappedNativeTokenLogic extends rt.logics.LogicBase implements rt.l
       if (amountBps) amountOffset = constants.MaxUint256;
     } else {
       data = iface.encodeFunctionData('withdraw', [input.amountWei]);
-      if (amountBps) amountOffset = core.utils.getParamOffset(0);
+      if (amountBps) amountOffset = common.getParamOffset(0);
     }
-    const inputs = [rt.logics.newLogicInput({ input, amountBps, amountOffset })];
+    const inputs = [core.newLogicInput({ input, amountBps, amountOffset })];
 
-    return rt.logics.newLogic({ to, data, inputs });
+    return core.newLogic({ to, data, inputs });
   }
 }

@@ -1,53 +1,66 @@
-import { SendTokenLogic } from './logic.send-token';
+import { LogicTestCase } from 'test/types';
+import { SendTokenLogic, SendTokenLogicFields } from './logic.send-token';
+import * as common from '@composable-router/common';
 import { constants, utils } from 'ethers';
-import * as core from 'src/core';
 import { expect } from 'chai';
+import { mainnetTokens } from '@composable-router/test-helpers';
 
-describe('SendTokenLogic', function () {
-  const chainId = core.network.ChainId.mainnet;
-  const sendToken = new SendTokenLogic({ chainId });
+describe('Tokens SendTokenLogic', function () {
+  const chainId = common.ChainId.mainnet;
+  const tokensSendTokenLogic = new SendTokenLogic(chainId);
 
   context('Test getLogic', function () {
-    const iface = core.contracts.ERC20__factory.createInterface();
+    const iface = common.ERC20__factory.createInterface();
 
-    const cases = [
+    const testCases: LogicTestCase<SendTokenLogicFields>[] = [
       {
-        input: new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '1'),
-        recipient: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
+        fields: {
+          input: new common.TokenAmount(mainnetTokens.WETH, '1'),
+          recipient: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
+        },
       },
       {
-        input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1'),
-        recipient: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
+        fields: {
+          input: new common.TokenAmount(mainnetTokens.USDC, '1'),
+          recipient: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
+        },
       },
       {
-        input: new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '1'),
-        recipient: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
-        amountBps: 5000,
+        fields: {
+          input: new common.TokenAmount(mainnetTokens.WETH, '1'),
+          recipient: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
+          amountBps: 5000,
+        },
       },
       {
-        input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1'),
-        recipient: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
-        amountBps: 5000,
+        fields: {
+          input: new common.TokenAmount(mainnetTokens.USDC, '1'),
+          recipient: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
+          amountBps: 5000,
+        },
       },
     ];
 
-    cases.forEach(({ input, recipient, amountBps }) => {
-      it(`${input.token.symbol} to ${recipient}${amountBps ? ' with amountBps' : ''}`, async function () {
-        const logic = await sendToken.getLogic({ input, recipient, amountBps });
-        const sig = logic.data.substring(0, 10);
+    testCases.forEach(({ fields }) => {
+      it(`${fields.input.token.symbol} to ${fields.recipient}${
+        fields.amountBps ? ' with amountBps' : ''
+      }`, async function () {
+        const routerLogic = await tokensSendTokenLogic.getLogic(fields);
+        const sig = routerLogic.data.substring(0, 10);
+        const { input, amountBps } = fields;
 
-        expect(logic.to).to.eq(input.token.address);
-        expect(utils.isBytesLike(logic.data)).to.be.true;
+        expect(routerLogic.to).to.eq(input.token.address);
+        expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(sig).to.eq(iface.getSighash('transfer'));
         if (amountBps) {
-          expect(logic.inputs[0].amountBps).to.eq(amountBps);
-          expect(logic.inputs[0].amountOrOffset).to.eq(32);
+          expect(routerLogic.inputs[0].amountBps).to.eq(amountBps);
+          expect(routerLogic.inputs[0].amountOrOffset).to.eq(32);
         } else {
-          expect(logic.inputs).to.deep.eq([]);
+          expect(routerLogic.inputs).to.deep.eq([]);
         }
-        expect(logic.outputs).to.deep.eq([]);
-        expect(logic.approveTo).to.eq(constants.AddressZero);
-        expect(logic.callback).to.eq(constants.AddressZero);
+        expect(routerLogic.outputs).to.deep.eq([]);
+        expect(routerLogic.approveTo).to.eq(constants.AddressZero);
+        expect(routerLogic.callback).to.eq(constants.AddressZero);
       });
     });
   });

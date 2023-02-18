@@ -1,51 +1,57 @@
-import { ParaswapV5SwapTokenLogic } from './logic.swap-token';
+import { LogicTestCase } from 'test/types';
+import { SwapTokenLogic, SwapTokenLogicFields, SwapTokenLogicOptions } from './logic.swap-token';
+import * as common from '@composable-router/common';
 import { constants, utils } from 'ethers';
-import * as core from 'src/core';
 import { expect } from 'chai';
 import { getContractAddress } from './config';
+import { mainnetTokens } from '@composable-router/test-helpers';
 
-describe('ParaswapV5SwapTokenLogic', function () {
-  const chainId = core.network.ChainId.mainnet;
-  const paraswapV5SwapToken = new ParaswapV5SwapTokenLogic({ chainId });
+describe('ParaswapV5 SwapTokenLogic', function () {
+  const chainId = common.ChainId.mainnet;
+  const paraswapV5SwapTokenLogic = new SwapTokenLogic(chainId);
 
   context('Test getLogic', function () {
-    const cases = [
+    const testCases: LogicTestCase<SwapTokenLogicFields, SwapTokenLogicOptions>[] = [
       {
-        account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
-        slippage: 500,
-        input: new core.tokens.TokenAmount(core.tokens.mainnet.ETH, '1'),
-        output: new core.tokens.TokenAmount(core.tokens.mainnet.USDC),
+        fields: {
+          input: new common.TokenAmount(mainnetTokens.ETH, '1'),
+          output: new common.TokenAmount(mainnetTokens.USDC, '0'),
+        },
+        options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa', slippage: 500 },
       },
       {
-        account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
-        slippage: 500,
-        input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1'),
-        output: new core.tokens.TokenAmount(core.tokens.mainnet.ETH),
+        fields: {
+          input: new common.TokenAmount(mainnetTokens.USDC, '1'),
+          output: new common.TokenAmount(mainnetTokens.ETH, '0'),
+        },
+        options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa', slippage: 500 },
       },
       {
-        account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
-        slippage: 500,
-        input: new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1'),
-        output: new core.tokens.TokenAmount(core.tokens.mainnet.DAI),
+        fields: {
+          input: new common.TokenAmount(mainnetTokens.USDC, '1'),
+          output: new common.TokenAmount(mainnetTokens.DAI, '0'),
+        },
+        options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa', slippage: 500 },
       },
     ];
 
-    cases.forEach(({ input, output, ...others }) => {
-      it(`${input.token.symbol} to ${output.token.symbol}`, async function () {
-        const logic = await paraswapV5SwapToken.getLogic({ input, output, ...others });
+    testCases.forEach(({ fields, options }) => {
+      it(`${fields.input.token.symbol} to ${fields.output.token.symbol}`, async function () {
+        const routerLogic = await paraswapV5SwapTokenLogic.getLogic(fields, options);
+        const { input, output } = fields;
 
-        expect(logic.to).to.eq('0xDEF171Fe48CF0115B1d80b88dc8eAB59176FEe57');
-        expect(utils.isBytesLike(logic.data)).to.be.true;
+        expect(routerLogic.to).to.eq('0xDEF171Fe48CF0115B1d80b88dc8eAB59176FEe57');
+        expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         if (input.token.isNative()) {
-          expect(logic.inputs[0].token).to.eq(core.tokens.ELASTIC_ADDRESS);
+          expect(routerLogic.inputs[0].token).to.eq(common.ELASTIC_ADDRESS);
         }
-        expect(logic.inputs[0].amountBps).to.eq(constants.MaxUint256);
-        expect(logic.inputs[0].amountOrOffset).to.eq(input.amountWei);
+        expect(routerLogic.inputs[0].amountBps).to.eq(constants.MaxUint256);
+        expect(routerLogic.inputs[0].amountOrOffset).to.eq(input.amountWei);
         if (output.token.isNative()) {
-          expect(logic.outputs[0].token).to.eq(core.tokens.ELASTIC_ADDRESS);
+          expect(routerLogic.outputs[0].token).to.eq(common.ELASTIC_ADDRESS);
         }
-        expect(logic.approveTo).to.eq(getContractAddress(chainId, 'TokenTransferProxy'));
-        expect(logic.callback).to.eq(constants.AddressZero);
+        expect(routerLogic.approveTo).to.eq(getContractAddress(chainId, 'TokenTransferProxy'));
+        expect(routerLogic.callback).to.eq(constants.AddressZero);
       });
     });
   });

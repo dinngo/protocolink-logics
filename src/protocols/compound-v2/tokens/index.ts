@@ -1,21 +1,21 @@
 import cTokensJSON from './data/cTokens.json';
-import * as core from 'src/core';
+import * as common from '@composable-router/common';
 import underlyingTokensJSON from './data/underlyingTokens.json';
 
-export const COMP = new core.tokens.Token(1, '0xc00e94Cb662C3520282E6f5717214004A7f26888', 18, 'COMP', 'Compound');
+export const COMP = new common.Token(1, '0xc00e94Cb662C3520282E6f5717214004A7f26888', 18, 'COMP', 'Compound');
 
 type CTokenSymbols = keyof typeof cTokensJSON;
 
-export const cTokens = core.tokens.toTokenMap<CTokenSymbols>(cTokensJSON);
+export const cTokens = common.toTokenMap<CTokenSymbols>(cTokensJSON);
 
 type UnderlyingTokenSymbols = keyof typeof underlyingTokensJSON;
 
-export const underlyingTokens = core.tokens.toTokenMap<UnderlyingTokenSymbols>(underlyingTokensJSON);
+export const underlyingTokens = common.toTokenMap<UnderlyingTokenSymbols>(underlyingTokensJSON);
 
 export const [tokenPairs, underlyingToCTokenMap, cTokenToUnderlyingMap] = Object.keys(underlyingTokensJSON).reduce(
   (accumulator, underlyingTokenSymbol) => {
-    const underlyingToken = (underlyingTokens as Record<string, core.tokens.Token>)[underlyingTokenSymbol];
-    const cToken = (cTokens as Record<string, core.tokens.Token>)[`c${underlyingTokenSymbol}`];
+    const underlyingToken = (underlyingTokens as Record<string, common.Token>)[underlyingTokenSymbol];
+    const cToken = (cTokens as Record<string, common.Token>)[`c${underlyingTokenSymbol}`];
     accumulator[0].push({ cToken, underlyingToken });
     accumulator[1][underlyingToken.address] = cToken;
     accumulator[2][cToken.address] = underlyingToken;
@@ -23,20 +23,20 @@ export const [tokenPairs, underlyingToCTokenMap, cTokenToUnderlyingMap] = Object
     return accumulator;
   },
   [
-    [] as Array<{ cToken: core.tokens.Token; underlyingToken: core.tokens.Token }>,
-    {} as Record<string, core.tokens.Token>,
-    {} as Record<string, core.tokens.Token>,
+    [] as Array<{ cToken: common.Token; underlyingToken: common.Token }>,
+    {} as Record<string, common.Token>,
+    {} as Record<string, common.Token>,
   ]
 );
 
-export function toUnderlyingToken(cToken: core.tokens.Token) {
-  return cTokenToUnderlyingMap[cToken.address];
+export function toUnderlyingToken(cTokenOrAddress: common.TokenOrAddress) {
+  return cTokenToUnderlyingMap[common.Token.getAddress(cTokenOrAddress)];
 }
 
-export function toCToken(underlyingToken: core.tokens.Token) {
-  return underlyingToCTokenMap[underlyingToken.address];
+export function toCToken(underlyingTokenOrAddress: common.TokenOrAddress) {
+  return underlyingToCTokenMap[common.Token.getAddress(underlyingTokenOrAddress)];
 }
 
-export function isCToken(token: core.tokens.Token) {
+export function isCToken(token: common.TokenTypes) {
   return token.symbol.startsWith('c') && token.name.startsWith('Compound');
 }

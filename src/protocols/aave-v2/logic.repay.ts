@@ -1,49 +1,46 @@
-import { AaveV2Service } from './service';
 import { BigNumberish } from 'ethers';
 import { InterestRateMode } from './types';
 import { LendingPool__factory } from './contracts';
-import * as core from 'src/core';
+import { Service } from './service';
+import * as common from '@composable-router/common';
+import * as core from '@composable-router/core';
 import invariant from 'tiny-invariant';
-import * as rt from 'src/router';
 
-export type AaveV2RepayLogicGetLogicOptions = rt.logics.TokenInData &
-  Pick<rt.RouterGlobalOptions, 'account'> & { interestRateMode: InterestRateMode };
+export type RepayLogicFields = core.TokenInFields<{ interestRateMode: InterestRateMode; address: string }>;
 
-export class AaveV2RepayLogic extends rt.logics.LogicBase {
-  service: AaveV2Service;
+@core.LogicDefinitionDecorator()
+export class RepayLogic extends core.Logic {
+  static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon, common.ChainId.avalanche];
 
-  constructor(options: rt.logics.LogicBaseOptions) {
-    super(options);
-    this.service = new AaveV2Service(options);
-  }
-
-  async getDebt(user: string, asset: core.tokens.Token, interestRateMode: InterestRateMode) {
-    const { currentStableDebt, currentVariableDebt } = await this.service.protocolDataProvider.getUserReserveData(
+  async getDebt(user: string, asset: common.Token, interestRateMode: InterestRateMode) {
+    const service = new Service(this.chainId, this.provider);
+    const { currentStableDebt, currentVariableDebt } = await service.protocolDataProvider.getUserReserveData(
       asset.address,
       user
     );
     const currentDebt = interestRateMode === InterestRateMode.variable ? currentVariableDebt : currentStableDebt;
-    const amountWei = core.utils.calcSlippage(currentDebt, -100); // slightly higher than the current borrowed amount
-    const debt = new core.tokens.TokenAmount(asset).setWei(amountWei);
+    const amountWei = common.calcSlippage(currentDebt, -100); // slightly higher than the current borrowed amount
+    const debt = new common.TokenAmount(asset).setWei(amountWei);
 
     return debt;
   }
 
-  async getLogic(options: AaveV2RepayLogicGetLogicOptions) {
-    const { account, input, interestRateMode, amountBps } = options;
+  async getLogic(fields: RepayLogicFields) {
+    const { input, interestRateMode, address, amountBps } = fields;
     invariant(!input.token.isNative(), 'tokenIn should not be native token');
 
-    const to = await this.service.getLendingPoolAddress();
+    const service = new Service(this.chainId, this.provider);
+    const to = await service.getLendingPoolAddress();
     const data = LendingPool__factory.createInterface().encodeFunctionData('repay', [
       input.token.address,
       input.amountWei,
       interestRateMode,
-      account,
+      address,
     ]);
     let amountOffset: BigNumberish | undefined;
-    if (amountBps) amountOffset = core.utils.getParamOffset(1);
-    const inputs = [rt.logics.newLogicInput({ input, amountBps, amountOffset })];
+    if (amountBps) amountOffset = common.getParamOffset(1);
+    const inputs = [core.newLogicInput({ input, amountBps, amountOffset })];
 
-    return rt.logics.newLogic({ to, data, inputs });
+    return core.newLogic({ to, data, inputs });
   }
 }

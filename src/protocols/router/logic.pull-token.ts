@@ -1,38 +1,42 @@
 import { IAllowanceTransfer } from './contracts/SpenderPermit2ERC20';
 import { SpenderPermit2ERC20__factory } from './contracts';
+import * as common from '@composable-router/common';
+import * as core from '@composable-router/core';
 import { getContractAddress } from './config';
-import * as rt from 'src/router';
 
-export type RouterPullTokenLogicGetLogicOptions = Pick<
-  rt.RouterGlobalOptions,
-  'account' | 'routerAddress' | 'erc20Funds'
->;
+export type PullTokenLogicFields = core.TokensInFields;
 
-export class RouterPullTokenLogic extends rt.logics.LogicBase {
-  spenderAddress: string;
+export type PullTokenLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
-  constructor(options: rt.logics.LogicBaseOptions<{ spenderAddress?: string }>) {
-    const { spenderAddress, ...others } = options;
-    super(others);
-    this.spenderAddress = spenderAddress ?? getContractAddress(this.chainId, 'SpenderPermit2ERC20');
-  }
+@core.LogicDefinitionDecorator()
+export class PullTokenLogic extends core.Logic {
+  static readonly supportedChainIds = [
+    common.ChainId.mainnet,
+    common.ChainId.polygon,
+    common.ChainId.arbitrum,
+    common.ChainId.optimism,
+    common.ChainId.avalanche,
+  ];
 
-  async getLogic(options: RouterPullTokenLogicGetLogicOptions) {
-    const { account, routerAddress, erc20Funds } = options;
+  async getLogic(fields: PullTokenLogicFields, options: PullTokenLogicOptions) {
+    const { inputs } = fields;
+    const { account } = options;
 
-    const to = this.spenderAddress;
+    const to = getContractAddress(this.chainId, 'SpenderPermit2ERC20');
     const iface = SpenderPermit2ERC20__factory.createInterface();
     let data: string;
-    if (erc20Funds.length === 1) {
-      data = iface.encodeFunctionData('pullToken', erc20Funds.at(0).toValues());
+    if (inputs.length === 1) {
+      data = iface.encodeFunctionData('pullToken', inputs.at(0).toValues());
     } else {
-      const details: IAllowanceTransfer.AllowanceTransferDetailsStruct[] = [];
-      for (const fund of erc20Funds.toArray()) {
-        details.push({ from: account, to: routerAddress, token: fund.token.address, amount: fund.amountWei });
-      }
+      const details: IAllowanceTransfer.AllowanceTransferDetailsStruct[] = inputs.map((input) => ({
+        from: account,
+        to: core.getContractAddress(this.chainId, 'Router'),
+        token: input.token.address,
+        amount: input.amountWei,
+      }));
       data = iface.encodeFunctionData('pullTokens', [details]);
     }
 
-    return rt.logics.newLogic({ to, data });
+    return core.newLogic({ to, data });
   }
 }

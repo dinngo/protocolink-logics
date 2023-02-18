@@ -1,5 +1,5 @@
 import 'hardhat';
-import '@typechain/hardhat';
+import '@nomicfoundation/hardhat-chai-matchers';
 
 import inquirer from 'inquirer';
 import inquirerAutocomplete from 'inquirer-autocomplete-prompt';

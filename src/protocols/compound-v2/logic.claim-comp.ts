@@ -1,34 +1,33 @@
 import { COMP } from './tokens';
 import { CompoundLens__factory, Comptroller__factory } from './contracts';
-import * as core from 'src/core';
+import * as common from '@composable-router/common';
+import * as core from '@composable-router/core';
 import { getContractAddress } from './config';
-import * as rt from 'src/router';
 
-export type CompoundV2ClaimCOMPLogicGetPriceOptions = { holder: string };
+export type ClaimCOMPLogicFields = core.ClaimTokenFields;
 
-export type CompoundV2ClaimCOMPLogicGetLogicOptions = { holder: string };
+@core.LogicDefinitionDecorator()
+export class ClaimCOMPLogic extends core.Logic {
+  static readonly supportedChainIds = [common.ChainId.mainnet];
 
-export class CompoundV2ClaimCOMPLogic extends rt.logics.LogicBase {
-  async getPrice(options: CompoundV2ClaimCOMPLogicGetPriceOptions) {
-    const { holder } = options;
-
+  async getReward(owner: string) {
     const compoundLens = CompoundLens__factory.connect(getContractAddress('CompoundLens'), this.provider);
     const metadata = await compoundLens.callStatic.getCompBalanceMetadataExt(
       COMP.address,
       getContractAddress('Comptroller'),
-      holder
+      owner
     );
-    const output = new core.tokens.TokenAmount(COMP).setWei(metadata.allocated);
+    const output = new common.TokenAmount(COMP).setWei(metadata.allocated);
 
     return output;
   }
 
-  async getLogic(options: CompoundV2ClaimCOMPLogicGetLogicOptions) {
-    const { holder } = options;
+  async getLogic(fields: ClaimCOMPLogicFields) {
+    const { owner } = fields;
 
     const to = getContractAddress('Comptroller');
-    const data = Comptroller__factory.createInterface().encodeFunctionData('claimComp(address)', [holder]);
+    const data = Comptroller__factory.createInterface().encodeFunctionData('claimComp(address)', [owner]);
 
-    return rt.logics.newLogic({ to, data });
+    return core.newLogic({ to, data });
   }
 }

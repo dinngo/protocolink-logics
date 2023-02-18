@@ -1,25 +1,29 @@
 import { BigNumber, BigNumberish, constants } from 'ethers';
 import { CErc20__factory, CEther__factory } from './contracts';
-import * as core from 'src/core';
-import * as rt from 'src/router';
+import * as common from '@composable-router/common';
+import * as core from '@composable-router/core';
 
-export type CompoundV2SupplyLogicGetPriceOptions = rt.logics.TokenToTokenExactInData;
+export type SupplyLogicParams = core.TokenToTokenExactInParams;
 
-export type CompoundV2SupplyLogicGetLogicOptions = rt.logics.TokenToTokenData;
+export type SupplyLogicFields = core.TokenToTokenFields;
 
-export class CompoundV2SupplyLogic extends rt.logics.LogicBase implements rt.logics.TokenToTokenLogicInterface {
-  async getPrice(options: CompoundV2SupplyLogicGetPriceOptions) {
-    const { input, tokenOut } = options;
+@core.LogicDefinitionDecorator()
+export class SupplyLogic extends core.ExchangeLogic {
+  static readonly supportedChainIds = [common.ChainId.mainnet];
+
+  async getPrice(params: SupplyLogicParams) {
+    const { input, tokenOut } = params;
+
     const cToken = CErc20__factory.connect(tokenOut.address, this.provider);
     const exchangeRateCurrent = await cToken.callStatic.exchangeRateCurrent();
     const amountOutWei = input.amountWei.mul(BigNumber.from(10).pow(18)).div(exchangeRateCurrent);
-    const output = new core.tokens.TokenAmount(tokenOut).setWei(amountOutWei);
+    const output = new common.TokenAmount(tokenOut).setWei(amountOutWei);
 
     return output;
   }
 
-  async getLogic(options: CompoundV2SupplyLogicGetLogicOptions) {
-    const { input, output, amountBps } = options;
+  async getLogic(fields: SupplyLogicFields) {
+    const { input, output, amountBps } = fields;
 
     const to = output.token.address;
     let data: string;
@@ -29,10 +33,10 @@ export class CompoundV2SupplyLogic extends rt.logics.LogicBase implements rt.log
       if (amountBps) amountOffset = constants.MaxUint256;
     } else {
       data = CErc20__factory.createInterface().encodeFunctionData('mint', [input.amountWei]);
-      if (amountBps) amountOffset = core.utils.getParamOffset(0);
+      if (amountBps) amountOffset = common.getParamOffset(0);
     }
-    const inputs = [rt.logics.newLogicInput({ input, amountBps, amountOffset })];
+    const inputs = [core.newLogicInput({ input, amountBps, amountOffset })];
 
-    return rt.logics.newLogic({ to, data, inputs });
+    return core.newLogic({ to, data, inputs });
   }
 }

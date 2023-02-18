@@ -2,17 +2,6 @@ import fs from 'fs-extra';
 import inquirer from 'inquirer';
 import path from 'path';
 
-export async function categoryPrompt(message: string) {
-  return inquirer.prompt<{ category: string }>([
-    {
-      name: 'category',
-      type: 'list',
-      message,
-      choices: ['core', 'router', 'protocols'],
-    },
-  ]);
-}
-
 export async function protocolPrompt() {
   const cwd = process.cwd();
   const protocols = fs

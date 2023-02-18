@@ -1,8 +1,8 @@
 import '@nomicfoundation/hardhat-chai-matchers';
-import '@typechain/hardhat';
-import 'test/chai-matchers';
 
 import { HardhatUserConfig } from 'hardhat/config';
+import { deployContracts } from 'test/hooks';
+import { revert, snapshot } from '@composable-router/test-helpers';
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -29,7 +29,11 @@ const config: HardhatUserConfig = {
       },
     },
   },
-  mocha: { timeout: 1200000 },
+  mocha: {
+    timeout: 1200000,
+    retries: 3,
+    rootHooks: { beforeAll: [deployContracts], beforeEach: [snapshot], afterEach: [revert] },
+  },
 };
 
 export default config;

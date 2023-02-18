@@ -1,40 +1,40 @@
-import { BalancerV2FlashLoanLogic } from './logic.flash-loan';
+import { FlashLoanLogic, FlashLoanLogicFields } from './logic.flash-loan';
+import { LogicTestCase } from 'test/types';
 import { Vault__factory } from './contracts';
+import * as common from '@composable-router/common';
 import { constants, utils } from 'ethers';
-import * as core from 'src/core';
 import { expect } from 'chai';
 import { getContractAddress } from './config';
+import { mainnetTokens } from '@composable-router/test-helpers';
 
-describe('BalancerV2FlashLoanLogic', function () {
-  const chainId = core.network.ChainId.mainnet;
-  const aavev2FlashLoanLogic = new BalancerV2FlashLoanLogic({ chainId });
+describe('BalancerV2 FlashLoanLogic', function () {
+  const chainId = common.ChainId.mainnet;
+  const balancerV2FlashLoanLogic = new FlashLoanLogic(chainId);
 
   context('Test getLogic', function () {
     const vaultIface = Vault__factory.createInterface();
 
-    const cases = [
+    const testCases: LogicTestCase<FlashLoanLogicFields>[] = [
       {
-        outputs: [
-          new core.tokens.TokenAmount(core.tokens.mainnet.WETH, '1'),
-          new core.tokens.TokenAmount(core.tokens.mainnet.USDC, '1'),
-        ],
-        userData: '0x',
+        fields: {
+          outputs: new common.TokenAmounts([mainnetTokens.WETH, '1'], [mainnetTokens.USDC, '1']),
+          params: '0x',
+        },
       },
     ];
 
-    cases.forEach(({ outputs, userData }) => {
-      it(`flash loan ${outputs.map((output) => output.token.symbol).join(',')}`, async function () {
-        const logic = await aavev2FlashLoanLogic.getLogic({ outputs, userData });
-        const sig = logic.data.substring(0, 10);
+    testCases.forEach(({ fields }) => {
+      it(`flash loan ${fields.outputs.map((output) => output.token.symbol).join(',')}`, async function () {
+        const routerLogic = await balancerV2FlashLoanLogic.getLogic(fields);
+        const sig = routerLogic.data.substring(0, 10);
 
-        expect(utils.isBytesLike(logic.data)).to.be.true;
-
-        expect(logic.to).to.eq(getContractAddress(chainId, 'Vault'));
+        expect(utils.isBytesLike(routerLogic.data)).to.be.true;
+        expect(routerLogic.to).to.eq(getContractAddress(chainId, 'Vault'));
         expect(sig).to.eq(vaultIface.getSighash('flashLoan'));
-        expect(logic.inputs).to.deep.eq([]);
-        expect(logic.outputs).to.deep.eq([]);
-        expect(logic.approveTo).to.eq(constants.AddressZero);
-        expect(logic.callback).to.eq(aavev2FlashLoanLogic.callbackAddress);
+        expect(routerLogic.inputs).to.deep.eq([]);
+        expect(routerLogic.outputs).to.deep.eq([]);
+        expect(routerLogic.approveTo).to.eq(constants.AddressZero);
+        expect(routerLogic.callback).to.eq(getContractAddress(chainId, 'FlashLoanCallbackBalancerV2'));
       });
     });
   });

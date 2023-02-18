@@ -1,46 +1,41 @@
-import { AaveV2Service } from './service';
 import { BigNumberish } from 'ethers';
 import { LendingPool__factory } from './contracts';
-import * as core from 'src/core';
+import { Service } from './service';
+import * as common from '@composable-router/common';
+import * as core from '@composable-router/core';
 import invariant from 'tiny-invariant';
-import * as rt from 'src/router';
 
-export type AaveV2WithdrawLogicGetPriceOptions = rt.logics.TokenToTokenExactInData;
+export type WithdrawLogicParams = core.TokenToTokenExactInParams;
 
-export type AaveV2WithdrawLogicGetLogicOptions = rt.logics.TokenToTokenData &
-  Pick<rt.RouterGlobalOptions, 'routerAddress'>;
+export type WithdrawLogicFields = core.TokenToTokenFields;
 
-export class AaveV2WithdrawLogic extends rt.logics.LogicBase implements rt.logics.TokenToTokenLogicInterface {
-  service: AaveV2Service;
+@core.LogicDefinitionDecorator()
+export class WithdrawLogic extends core.ExchangeLogic {
+  static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon, common.ChainId.avalanche];
 
-  constructor(options: rt.logics.LogicBaseOptions) {
-    super(options);
-    this.service = new AaveV2Service(options);
-  }
-
-  async getPrice(options: AaveV2WithdrawLogicGetPriceOptions) {
-    const { input, tokenOut } = options;
+  async getPrice(params: WithdrawLogicParams) {
+    const { input, tokenOut } = params;
     invariant(!tokenOut.isNative(), 'tokenOut should not be native token');
-
-    const output = new core.tokens.TokenAmount(tokenOut, input.amount);
+    const output = new common.TokenAmount(tokenOut, input.amount);
 
     return output;
   }
 
-  async getLogic(options: AaveV2WithdrawLogicGetLogicOptions) {
-    const { input, output, amountBps, routerAddress } = options;
+  async getLogic(fields: WithdrawLogicFields) {
+    const { input, output, amountBps } = fields;
     invariant(!output.token.isNative(), 'tokenOut should not be native token');
 
-    const to = await this.service.getLendingPoolAddress();
+    const service = new Service(this.chainId, this.provider);
+    const to = await service.getLendingPoolAddress();
     const data = LendingPool__factory.createInterface().encodeFunctionData('withdraw', [
       output.token.address,
       input.amountWei,
-      routerAddress,
+      core.getContractAddress(this.chainId, 'Router'),
     ]);
     let amountOffset: BigNumberish | undefined;
-    if (amountBps) amountOffset = core.utils.getParamOffset(1);
-    const inputs = [rt.logics.newLogicInput({ input, amountBps, amountOffset })];
+    if (amountBps) amountOffset = common.getParamOffset(1);
+    const inputs = [core.newLogicInput({ input, amountBps, amountOffset })];
 
-    return rt.logics.newLogic({ to, data, inputs });
+    return core.newLogic({ to, data, inputs });
   }
 }

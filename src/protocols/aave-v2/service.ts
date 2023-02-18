@@ -6,20 +6,16 @@ import {
   ProtocolDataProvider__factory,
 } from './contracts';
 import { InterestRateMode, ReserveTokensAddress } from './types';
-import * as core from 'src/core';
+import * as common from '@composable-router/common';
+import { constants } from 'ethers';
 import { getContractAddress } from './config';
 
-export class AaveV2Service extends core.Web3Toolkit {
-  readonly protocolDataProviderAddress: string;
-
-  constructor(options: core.Web3ToolkitOptions) {
-    super(options);
-    const { chainId } = options;
-    this.protocolDataProviderAddress = getContractAddress(chainId, 'ProtocolDataProvider');
-  }
-
+export class Service extends common.Web3Toolkit {
   get protocolDataProvider() {
-    return ProtocolDataProvider__factory.connect(this.protocolDataProviderAddress, this.provider);
+    return ProtocolDataProvider__factory.connect(
+      getContractAddress(this.chainId, 'ProtocolDataProvider'),
+      this.provider
+    );
   }
 
   private lendingPoolAddress?: string;
@@ -46,8 +42,8 @@ export class AaveV2Service extends core.Web3Toolkit {
       const assetAddresses = await lendingPool.getReservesList();
 
       const iface = ProtocolDataProvider__factory.createInterface();
-      const calls: core.contracts.Multicall2.CallStruct[] = assetAddresses.map((assetAddress) => ({
-        target: this.protocolDataProviderAddress,
+      const calls: common.Multicall2.CallStruct[] = assetAddresses.map((assetAddress) => ({
+        target: getContractAddress(this.chainId, 'ProtocolDataProvider'),
         callData: iface.encodeFunctionData('getReserveConfigurationData', [assetAddress]),
       }));
       const { returnData } = await this.multicall2.callStatic.aggregate(calls);
@@ -70,8 +66,8 @@ export class AaveV2Service extends core.Web3Toolkit {
       const assetAddresses = await this.getAssetAddresses();
 
       const iface = ProtocolDataProvider__factory.createInterface();
-      const calls: core.contracts.Multicall2.CallStruct[] = assetAddresses.map((asset) => ({
-        target: this.protocolDataProviderAddress,
+      const calls: common.Multicall2.CallStruct[] = assetAddresses.map((asset) => ({
+        target: getContractAddress(this.chainId, 'ProtocolDataProvider'),
         callData: iface.encodeFunctionData('getReserveTokensAddresses', [asset]),
       }));
       const { returnData } = await this.multicall2.callStatic.aggregate(calls);
@@ -95,7 +91,7 @@ export class AaveV2Service extends core.Web3Toolkit {
     return this.reserveTokensAddresses;
   }
 
-  private assets?: core.tokens.Token[];
+  private assets?: common.Token[];
 
   async getAssets() {
     if (!this.assets) {
@@ -105,7 +101,7 @@ export class AaveV2Service extends core.Web3Toolkit {
     return this.assets;
   }
 
-  private aTokens?: core.tokens.Token[];
+  private aTokens?: common.Token[];
 
   async getATokens() {
     if (!this.aTokens) {
@@ -116,18 +112,18 @@ export class AaveV2Service extends core.Web3Toolkit {
     return this.aTokens;
   }
 
-  async toAToken(asset: core.tokens.Token) {
+  async toAToken(asset: common.Token) {
     const { aTokenAddress } = await this.protocolDataProvider.getReserveTokensAddresses(asset.wrapped().address);
     return this.getToken(aTokenAddress);
   }
 
-  async toAsset(aToken: core.tokens.Token) {
+  async toAsset(aToken: common.Token) {
     const contract = AToken__factory.connect(aToken.address, this.provider);
     const assetAddress = await contract.UNDERLYING_ASSET_ADDRESS();
     return this.getToken(assetAddress);
   }
 
-  async getDebtTokenAddress(asset: core.tokens.Token, interestRateMode: InterestRateMode) {
+  async getDebtTokenAddress(asset: common.Token, interestRateMode: InterestRateMode) {
     const { stableDebtTokenAddress, variableDebtTokenAddress } =
       await this.protocolDataProvider.getReserveTokensAddresses(asset.address);
 
@@ -144,7 +140,7 @@ export class AaveV2Service extends core.Web3Toolkit {
   async isDelegationApproved(
     account: string,
     delegateeAddress: string,
-    assetAmount: core.tokens.TokenAmount,
+    assetAmount: common.TokenAmount,
     interestRateMode: InterestRateMode
   ) {
     const debtTokenAddress = await this.getDebtTokenAddress(assetAmount.token, interestRateMode);
@@ -154,14 +150,15 @@ export class AaveV2Service extends core.Web3Toolkit {
     return borrowAllowance.gte(assetAmount.amountWei);
   }
 
-  async buildApproveDelegationTx(
+  async buildApproveDelegationTransactionRequest(
     delegateeAddress: string,
-    assetAmount: core.tokens.TokenAmount,
+    assetAmount: common.TokenAmount,
     interestRateMode: InterestRateMode
-  ) {
-    const debtTokenAddress = await this.getDebtTokenAddress(assetAmount.token, interestRateMode);
-    const debtToken = DebtTokenBase__factory.connect(debtTokenAddress, this.provider);
+  ): Promise<common.TransactionRequest> {
+    const to = await this.getDebtTokenAddress(assetAmount.token, interestRateMode);
+    const iface = DebtTokenBase__factory.createInterface();
+    const data = iface.encodeFunctionData('approveDelegation', [delegateeAddress, constants.MaxUint256]);
 
-    return debtToken.populateTransaction.approveDelegation(delegateeAddress, assetAmount.amountWei);
+    return { to, data };
   }
 }

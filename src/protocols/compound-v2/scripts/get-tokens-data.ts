@@ -1,5 +1,5 @@
 import { CErc20__factory } from '../contracts';
-import * as core from 'src/core';
+import * as common from '@composable-router/common';
 import fs from 'fs-extra';
 import { resolve } from 'path';
 
@@ -27,11 +27,11 @@ const cTokenAddresses = [
 ];
 
 export default async function () {
-  const chainId = core.network.ChainId.mainnet;
-  const web3Toolkit = new core.Web3Toolkit({ chainId });
+  const chainId = common.ChainId.mainnet;
+  const web3Toolkit = new common.Web3Toolkit(chainId);
 
   const cTokens = await web3Toolkit.getTokens(cTokenAddresses);
-  const calls: core.contracts.Multicall2.CallStruct[] = [];
+  const calls: common.Multicall2.CallStruct[] = [];
   const iface = CErc20__factory.createInterface();
   for (const cToken of cTokens) {
     if (cToken.symbol !== 'cETH') {
@@ -53,8 +53,8 @@ export default async function () {
   }
   const underlyingTokens = await web3Toolkit.getTokens(tokenAddresses);
 
-  const cTokenMap: Record<string, core.tokens.Token> = {};
-  const underlyingTokenMap: Record<string, core.tokens.Token> = {};
+  const cTokenMap: Record<string, common.Token> = {};
+  const underlyingTokenMap: Record<string, common.Token> = {};
   cTokens.forEach((cToken, i) => {
     cTokenMap[cToken.symbol] = cToken;
     const underlyingToken = underlyingTokens[i];

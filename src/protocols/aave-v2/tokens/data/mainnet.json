@@ -69,20 +69,6 @@
     "symbol": "aAAVE",
     "name": "Aave interest bearing AAVE"
   },
-  "BUSD": {
-    "chainId": 1,
-    "address": "0x4Fabb145d64652a948d72533023f6E7A623C7C53",
-    "decimals": 18,
-    "symbol": "BUSD",
-    "name": "Binance USD"
-  },
-  "aBUSD": {
-    "chainId": 1,
-    "address": "0xA361718326c15715591c299427c62086F69923D9",
-    "decimals": 18,
-    "symbol": "aBUSD",
-    "name": "Aave interest bearing BUSD"
-  },
   "DAI": {
     "chainId": 1,
     "address": "0x6B175474E89094C44Da98b954EedeAC495271d0F",

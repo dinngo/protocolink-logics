@@ -1,31 +1,30 @@
-import { AaveV2Service } from './service';
-import * as core from 'src/core';
+import { Service } from './service';
+import * as common from '@composable-router/common';
 import { expect } from 'chai';
-import { mainnet } from './tokens';
+import { mainnetTokens } from './tokens';
 
-describe('AaveV2Service', function () {
-  const chainIds = [core.network.ChainId.mainnet];
+describe('AaveV2 Service', function () {
+  const chainIds = [common.ChainId.mainnet];
 
   context('Test getReserveTokensAddresses', function () {
     chainIds.forEach((chainId) => {
-      it(core.network.getNetworkId(chainId), async function () {
-        const service = new AaveV2Service({ chainId });
+      it(common.getNetworkId(chainId), async function () {
+        const service = new Service(chainId);
         const reserveTokensAddresses = await service.getReserveTokensAddresses();
-        expect(reserveTokensAddresses.length).to.eq(22);
+        expect(reserveTokensAddresses.length).to.eq(21);
       });
     });
   });
 
   context('Test toAToken', function () {
-    const chainId = core.network.ChainId.mainnet;
-    const service = new AaveV2Service({ chainId });
+    const service = new Service(common.ChainId.mainnet);
 
-    const cases = [
-      { asset: mainnet.WETH, expected: mainnet.aWETH },
-      { asset: mainnet.USDC, expected: mainnet.aUSDC },
+    const testCases = [
+      { asset: mainnetTokens.WETH, expected: mainnetTokens.aWETH },
+      { asset: mainnetTokens.USDC, expected: mainnetTokens.aUSDC },
     ];
 
-    cases.forEach(({ asset, expected }) => {
+    testCases.forEach(({ asset, expected }) => {
       it(`${asset.symbol} to ${expected.symbol}`, async function () {
         const aToken = await service.toAToken(asset);
         expect(aToken.toObject()).to.deep.eq(expected.toObject());
@@ -34,15 +33,14 @@ describe('AaveV2Service', function () {
   });
 
   context('Test toAsset', function () {
-    const chainId = core.network.ChainId.mainnet;
-    const service = new AaveV2Service({ chainId });
+    const service = new Service(common.ChainId.mainnet);
 
-    const cases = [
-      { aToken: mainnet.aWETH, expected: mainnet.WETH },
-      { aToken: mainnet.aUSDC, expected: mainnet.USDC },
+    const testCases = [
+      { aToken: mainnetTokens.aWETH, expected: mainnetTokens.WETH },
+      { aToken: mainnetTokens.aUSDC, expected: mainnetTokens.USDC },
     ];
 
-    cases.forEach(({ aToken, expected }) => {
+    testCases.forEach(({ aToken, expected }) => {
       it(`${aToken.symbol} to ${expected.symbol}`, async function () {
         const asset = await service.toAsset(aToken);
         expect(asset.toObject()).to.deep.eq(expected.toObject());

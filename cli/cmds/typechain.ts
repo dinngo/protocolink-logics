@@ -11,22 +11,15 @@ export const describe = "Generate core or protocol's abis TypeScript classes";
 const outDir = 'contracts';
 
 export async function handler() {
-  // 1. choose category
-  const { category } = await prompts.categoryPrompt('Whose abis do you want to typechain?');
-
-  // 2. get paths
-  const dirs = [process.cwd(), 'src', category];
-  if (category === 'protocols') {
-    const { protocol } = await prompts.protocolPrompt();
-    dirs.push(protocol);
-  }
-  const rootPath = path.join(...dirs);
+  // 1. get paths
+  const { protocol } = await prompts.protocolPrompt();
+  const rootPath = path.join(process.cwd(), 'src', 'protocols', protocol);
   const contractsPath = path.join(rootPath, outDir);
 
-  // 3. remove old contracts dir
+  // 2. remove old contracts dir
   fs.removeSync(contractsPath);
 
-  // 4. run typechain
+  // 3. run typechain
   const allFiles = glob(rootPath, ['abis/*.json']);
   if (allFiles.length === 0) {
     console.log('No files passed.');

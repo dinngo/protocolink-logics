@@ -1,31 +1,34 @@
-import { CompoundV2ClaimCOMPLogic } from './logic.claim-comp';
+import { ClaimCOMPLogic, ClaimCOMPLogicFields } from './logic.claim-comp';
 import { Comptroller__factory } from './contracts';
+import { LogicTestCase } from 'test/types';
+import * as common from '@composable-router/common';
 import { constants, utils } from 'ethers';
-import * as core from 'src/core';
 import { expect } from 'chai';
 import { getContractAddress } from './config';
 
-describe('CompoundV2ClaimCOMPLogic', function () {
-  const chainId = core.network.ChainId.mainnet;
-  const compoundV2ClaimCOMP = new CompoundV2ClaimCOMPLogic({ chainId });
+describe('CompoundV2 ClaimCOMPLogic', function () {
+  const chainId = common.ChainId.mainnet;
+  const compoundV2ClaimCOMPLogic = new ClaimCOMPLogic(chainId);
 
   context('Test getLogic', function () {
     const comptroller = Comptroller__factory.createInterface();
 
-    const cases = [{ holder: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa' }];
+    const testCases: LogicTestCase<ClaimCOMPLogicFields>[] = [
+      { fields: { owner: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa' } },
+    ];
 
-    cases.forEach(({ holder }, i) => {
+    testCases.forEach(({ fields }, i) => {
       it(`case ${i + 1}`, async function () {
-        const logic = await compoundV2ClaimCOMP.getLogic({ holder });
-        const sig = logic.data.substring(0, 10);
+        const routerLogic = await compoundV2ClaimCOMPLogic.getLogic(fields);
+        const sig = routerLogic.data.substring(0, 10);
 
-        expect(logic.to).to.eq(getContractAddress('Comptroller'));
-        expect(utils.isBytesLike(logic.data)).to.be.true;
+        expect(routerLogic.to).to.eq(getContractAddress('Comptroller'));
+        expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(sig).to.eq(comptroller.getSighash('claimComp(address)'));
-        expect(logic.inputs).to.deep.eq([]);
-        expect(logic.outputs).to.deep.eq([]);
-        expect(logic.approveTo).to.eq(constants.AddressZero);
-        expect(logic.callback).to.eq(constants.AddressZero);
+        expect(routerLogic.inputs).to.deep.eq([]);
+        expect(routerLogic.outputs).to.deep.eq([]);
+        expect(routerLogic.approveTo).to.eq(constants.AddressZero);
+        expect(routerLogic.callback).to.eq(constants.AddressZero);
       });
     });
   });
