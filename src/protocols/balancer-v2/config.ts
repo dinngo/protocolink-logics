@@ -1,10 +1,11 @@
 import * as core from 'src/core';
 
-type ContractNames = 'Router';
+type ContractNames = 'Vault' | 'FlashLoanCallbackBalancerV2';
 
 export const contractAddressMap: Record<number, { [k in ContractNames]: string }> = {
   [core.network.ChainId.mainnet]: {
-    Router: '0x6181667418c8FA0d4ae3Aa90532D55D3994121F3',
+    Vault: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+    FlashLoanCallbackBalancerV2: '0x3AC9d552Dab7b2FF2980F59C6735CAB9F1fF4136',
   },
 };
 

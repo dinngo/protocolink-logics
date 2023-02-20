@@ -2,6 +2,7 @@ import { AaveV2Service } from './service';
 import { BigNumberish, constants } from 'ethers';
 import { InterestRateMode } from './types';
 import { LendingPool__factory } from './contracts';
+import { getContractAddress } from './config';
 import * as rt from 'src/router';
 
 export type AaveV2FlashLoanLogicGetLogicOptions = rt.logics.TokensOutData & { params: string; referralCode?: number };
@@ -14,7 +15,7 @@ export class AaveV2FlashLoanLogic extends rt.logics.LogicBase {
     const { chainId, provider, callbackAddress } = options;
     super({ chainId, provider });
     this.service = new AaveV2Service({ chainId, provider });
-    this.callbackAddress = callbackAddress ?? rt.config.getContractAddress(chainId, 'FlashLoanCallbackAaveV2');
+    this.callbackAddress = callbackAddress ?? getContractAddress(chainId, 'FlashLoanCallbackAaveV2');
   }
 
   async getLogic(options: AaveV2FlashLoanLogicGetLogicOptions) {
@@ -39,6 +40,7 @@ export class AaveV2FlashLoanLogic extends rt.logics.LogicBase {
       params,
       referralCode,
     ]);
+
     const callback = this.callbackAddress;
 
     return rt.logics.newLogic({ to, data, callback });
