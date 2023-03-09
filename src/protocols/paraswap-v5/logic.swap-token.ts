@@ -14,7 +14,7 @@ export type SwapTokenLogicFields = core.TokenToTokenFields<Pick<BuildSwapTxInput
 export type SwapTokenLogicOptions = Pick<core.GlobalOptions, 'account' | 'slippage'>;
 
 @core.LogicDefinitionDecorator()
-export class SwapTokenLogic extends core.ExchangeLogic {
+export class SwapTokenLogic extends core.Logic implements core.LogicInterfaceGetPrice {
   static readonly supportedChainIds = [
     common.ChainId.mainnet,
     common.ChainId.polygon,

@@ -29,14 +29,16 @@ export declare enum ChainId {
     polygon = 137,
     arbitrum = 42161,
     optimism = 10,
-    avalanche = 43114
+    avalanche = 43114,
+    fantom = 250
 }
 export declare enum NetworkId {
     mainnet = "mainnet",
     polygon = "polygon",
     arbitrum = "arbitrum",
     optimism = "optimism",
-    avalanche = "avalanche"
+    avalanche = "avalanche",
+    fantom = "fantom"
 }
 export declare function isSupportedChainId(chainId: number): boolean;
 export declare function isSupportedNetworkId(networkId: string): boolean;

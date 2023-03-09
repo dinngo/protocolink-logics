@@ -8,7 +8,7 @@ export type WithdrawLogicParams = core.TokenToTokenExactInParams;
 export type WithdrawLogicFields = core.TokenToTokenFields;
 
 @core.LogicDefinitionDecorator()
-export class WithdrawLogic extends core.ExchangeLogic {
+export class WithdrawLogic extends core.Logic implements core.LogicInterfaceGetPrice {
   static readonly supportedChainIds = [common.ChainId.mainnet];
 
   async getPrice(params: WithdrawLogicParams) {

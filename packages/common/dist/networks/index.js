@@ -23,6 +23,7 @@ var ChainId;
     ChainId[ChainId["arbitrum"] = 42161] = "arbitrum";
     ChainId[ChainId["optimism"] = 10] = "optimism";
     ChainId[ChainId["avalanche"] = 43114] = "avalanche";
+    ChainId[ChainId["fantom"] = 250] = "fantom";
 })(ChainId = exports.ChainId || (exports.ChainId = {}));
 var NetworkId;
 (function (NetworkId) {
@@ -31,6 +32,7 @@ var NetworkId;
     NetworkId["arbitrum"] = "arbitrum";
     NetworkId["optimism"] = "optimism";
     NetworkId["avalanche"] = "avalanche";
+    NetworkId["fantom"] = "fantom";
 })(NetworkId = exports.NetworkId || (exports.NetworkId = {}));
 function isSupportedChainId(chainId) {
     return exports.networks.some((network) => network.chainId == chainId);

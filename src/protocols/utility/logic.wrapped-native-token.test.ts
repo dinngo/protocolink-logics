@@ -6,10 +6,19 @@ import { expect } from 'chai';
 import { mainnetTokens } from '@composable-router/test-helpers';
 
 describe('Utility WrappedNativeTokenLogic', function () {
-  const chainId = common.ChainId.mainnet;
-  const wrappedNativeTokenLogic = new WrappedNativeTokenLogic(chainId);
+  context('Test getSupportedTokens', async function () {
+    WrappedNativeTokenLogic.supportedChainIds.forEach((chainId) => {
+      it(`network: ${common.getNetworkId(chainId)}`, async function () {
+        const wrappedNativeTokenLogic = new WrappedNativeTokenLogic(chainId);
+        const tokens = wrappedNativeTokenLogic.getSupportedTokens();
+        expect(tokens.length).to.be.gt(0);
+      });
+    });
+  });
 
   context('Test getLogic', function () {
+    const chainId = common.ChainId.mainnet;
+    const wrappedNativeTokenLogic = new WrappedNativeTokenLogic(chainId);
     const iface = common.WETH__factory.createInterface();
 
     const testCases: LogicTestCase<WrappedNativeTokenLogicFields>[] = [

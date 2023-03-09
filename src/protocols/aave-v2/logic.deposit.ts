@@ -10,7 +10,7 @@ export type DepositLogicParams = core.TokenToTokenExactInParams;
 export type DepositLogicFields = core.TokenToTokenFields<{ referralCode?: number }>;
 
 @core.LogicDefinitionDecorator()
-export class DepositLogic extends core.ExchangeLogic {
+export class DepositLogic extends core.Logic implements core.LogicInterfaceGetPrice {
   static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon, common.ChainId.avalanche];
 
   async getPrice(params: DepositLogicParams) {

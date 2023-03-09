@@ -6,10 +6,20 @@ import { expect } from 'chai';
 import { mainnetTokens } from '@composable-router/test-helpers';
 
 describe('Utility SendTokenLogic', function () {
-  const chainId = common.ChainId.mainnet;
-  const sendTokenLogic = new SendTokenLogic(chainId);
+  context('Test getSupportedTokens', async function () {
+    SendTokenLogic.supportedChainIds.forEach((chainId) => {
+      it(`network: ${common.getNetworkId(chainId)}`, async function () {
+        const sendTokenLogic = new SendTokenLogic(chainId);
+        const tokens = await sendTokenLogic.getSupportedTokens();
+        expect(tokens.length).to.be.gt(0);
+      });
+    });
+  });
 
   context('Test getLogic', function () {
+    const chainId = common.ChainId.mainnet;
+    const sendTokenLogic = new SendTokenLogic(chainId);
+
     const iface = common.ERC20__factory.createInterface();
 
     const testCases: LogicTestCase<SendTokenLogicFields>[] = [

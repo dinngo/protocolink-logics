@@ -7,14 +7,25 @@ export type WrappedNativeTokenLogicParams = core.TokenToTokenExactInParams;
 export type WrappedNativeTokenLogicFields = core.TokenToTokenFields;
 
 @core.LogicDefinitionDecorator()
-export class WrappedNativeTokenLogic extends core.ExchangeLogic {
+export class WrappedNativeTokenLogic
+  extends core.Logic
+  implements core.LogicInterfaceGetSupportedTokens, core.LogicInterfaceGetPrice
+{
   static readonly supportedChainIds = [
     common.ChainId.mainnet,
     common.ChainId.polygon,
     common.ChainId.arbitrum,
     common.ChainId.optimism,
     common.ChainId.avalanche,
+    common.ChainId.fantom,
   ];
+
+  getSupportedTokens() {
+    return [
+      [this.nativeToken, this.wrappedNativeToken],
+      [this.wrappedNativeToken, this.nativeToken],
+    ];
+  }
 
   getPrice(params: WrappedNativeTokenLogicParams) {
     const { input, tokenOut } = params;

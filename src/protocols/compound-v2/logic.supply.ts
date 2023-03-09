@@ -8,7 +8,7 @@ export type SupplyLogicParams = core.TokenToTokenExactInParams;
 export type SupplyLogicFields = core.TokenToTokenFields;
 
 @core.LogicDefinitionDecorator()
-export class SupplyLogic extends core.ExchangeLogic {
+export class SupplyLogic extends core.Logic implements core.LogicInterfaceGetPrice {
   static readonly supportedChainIds = [common.ChainId.mainnet];
 
   async getPrice(params: SupplyLogicParams) {
