@@ -5,9 +5,9 @@ import { constants, utils } from 'ethers';
 import { expect } from 'chai';
 import { mainnetTokens } from '@composable-router/test-helpers';
 
-describe('Tokens WrappedNativeTokenLogic', function () {
+describe('Utility WrappedNativeTokenLogic', function () {
   const chainId = common.ChainId.mainnet;
-  const tokensWrappedNativeTokenLogic = new WrappedNativeTokenLogic(chainId);
+  const wrappedNativeTokenLogic = new WrappedNativeTokenLogic(chainId);
 
   context('Test getLogic', function () {
     const iface = common.WETH__factory.createInterface();
@@ -45,7 +45,7 @@ describe('Tokens WrappedNativeTokenLogic', function () {
       it(`${fields.input.token.symbol} to ${fields.output.token.symbol}${
         fields.amountBps ? ' with amountBps' : ''
       }`, async function () {
-        const routerLogic = await tokensWrappedNativeTokenLogic.getLogic(fields);
+        const routerLogic = await wrappedNativeTokenLogic.getLogic(fields);
         const sig = routerLogic.data.substring(0, 10);
         const { input, amountBps } = fields;
 

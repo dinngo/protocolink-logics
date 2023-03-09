@@ -44,13 +44,13 @@ describe('Test AaveV2 FlashLoan Logic', function () {
       // 1. build funds and router logics for flash loan by flash loan fee
       const funds = new common.TokenAmounts();
       const flashLoanRouterLogics: core.IRouter.LogicStruct[] = [];
-      const sendToken = new protocols.tokens.SendTokenLogic(chainId);
+      const utilitySendTokenLogic = new protocols.utility.SendTokenLogic(chainId);
       for (const output of outputs.toArray()) {
         const feeWei = common.calcFee(output.amountWei, flashLoanPremiumTotal);
         const fund = new common.TokenAmount(output.token).addWei(feeWei);
         funds.add(fund);
         flashLoanRouterLogics.push(
-          await sendToken.getLogic({
+          await utilitySendTokenLogic.getLogic({
             input: output.clone().addWei(feeWei),
             recipient: protocols.aavev2.getContractAddress(chainId, 'FlashLoanCallbackAaveV2'),
           })

@@ -5,9 +5,9 @@ import { constants, utils } from 'ethers';
 import { expect } from 'chai';
 import { mainnetTokens } from '@composable-router/test-helpers';
 
-describe('Tokens SendTokenLogic', function () {
+describe('Utility SendTokenLogic', function () {
   const chainId = common.ChainId.mainnet;
-  const tokensSendTokenLogic = new SendTokenLogic(chainId);
+  const sendTokenLogic = new SendTokenLogic(chainId);
 
   context('Test getLogic', function () {
     const iface = common.ERC20__factory.createInterface();
@@ -45,7 +45,7 @@ describe('Tokens SendTokenLogic', function () {
       it(`${fields.input.token.symbol} to ${fields.recipient}${
         fields.amountBps ? ' with amountBps' : ''
       }`, async function () {
-        const routerLogic = await tokensSendTokenLogic.getLogic(fields);
+        const routerLogic = await sendTokenLogic.getLogic(fields);
         const sig = routerLogic.data.substring(0, 10);
         const { input, amountBps } = fields;
 

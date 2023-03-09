@@ -7,7 +7,7 @@ import hre from 'hardhat';
 import * as protocols from 'src/protocols';
 import * as utils from 'test/utils';
 
-describe('Test Tokens SendToken Logic', function () {
+describe('Test Utility SendToken Logic', function () {
   let chainId: number;
   let user1: SignerWithAddress;
   let user2: SignerWithAddress;
@@ -42,8 +42,8 @@ describe('Test Tokens SendToken Logic', function () {
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user1, erc20Funds);
 
-      const sendToken = new protocols.tokens.SendTokenLogic(chainId);
-      routerLogics.push(await sendToken.getLogic({ input, recipient: user2.address }));
+      const utilitySendTokenLogic = new protocols.utility.SendTokenLogic(chainId);
+      routerLogics.push(await utilitySendTokenLogic.getLogic({ input, recipient: user2.address }));
 
       // 3. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({

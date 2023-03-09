@@ -7,7 +7,7 @@ import hre from 'hardhat';
 import * as protocols from 'src/protocols';
 import * as utils from 'test/utils';
 
-describe('Test Tokens WrappedNativeToken Logic', function () {
+describe('Test Utility WrappedNativeToken Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
 
@@ -28,8 +28,8 @@ describe('Test Tokens WrappedNativeToken Logic', function () {
   testCases.forEach(({ input, tokenOut, amountBps }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. get output
-      const wrappedNativeToken = new protocols.tokens.WrappedNativeTokenLogic(chainId);
-      const output = wrappedNativeToken.getPrice({ input, tokenOut });
+      const utilityWrappedNativeTokenLogic = new protocols.utility.WrappedNativeTokenLogic(chainId);
+      const output = utilityWrappedNativeTokenLogic.getPrice({ input, tokenOut });
 
       // 2. build funds, tokensReturn
       const tokensReturn = [output.token.elasticAddress];
@@ -45,7 +45,7 @@ describe('Test Tokens WrappedNativeToken Logic', function () {
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
 
-      routerLogics.push(await wrappedNativeToken.getLogic({ input, output, amountBps }));
+      routerLogics.push(await utilityWrappedNativeTokenLogic.getLogic({ input, output, amountBps }));
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({
