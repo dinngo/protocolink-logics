@@ -5,7 +5,7 @@ import {
   LendingPool__factory,
   ProtocolDataProvider__factory,
 } from './contracts';
-import { InterestRateMode, ReserveTokensAddress } from './types';
+import { InterestRateMode, ReserveTokens, ReserveTokensAddress } from './types';
 import * as common from '@composable-router/common';
 import { constants } from 'ethers';
 import { getContractAddress } from './config';
@@ -110,6 +110,38 @@ export class Service extends common.Web3Toolkit {
       this.aTokens = await this.getTokens(aTokenAddresses);
     }
     return this.aTokens;
+  }
+
+  private reserveTokens?: ReserveTokens[];
+
+  async getReserveTokens() {
+    if (!this.reserveTokens) {
+      const reserveTokensAddresses = await this.getReserveTokensAddresses();
+      const tokenAddresses = reserveTokensAddresses.reduce<string[]>((accumulator, reserveTokensAddress) => {
+        accumulator.push(reserveTokensAddress.assetAddress);
+        accumulator.push(reserveTokensAddress.aTokenAddress);
+        accumulator.push(reserveTokensAddress.stableDebtTokenAddress);
+        accumulator.push(reserveTokensAddress.variableDebtTokenAddress);
+        return accumulator;
+      }, []);
+      const tokens = await this.getTokens(tokenAddresses);
+
+      this.reserveTokens = [];
+      let j = 0;
+      for (let i = 0; i < reserveTokensAddresses.length; i++) {
+        const asset = tokens[j];
+        j++;
+        const aToken = tokens[j];
+        j++;
+        const stableDebtToken = tokens[j];
+        j++;
+        const variableDebtToken = tokens[j];
+        j++;
+        this.reserveTokens.push({ asset, aToken, stableDebtToken, variableDebtToken });
+      }
+    }
+
+    return this.reserveTokens;
   }
 
   async toAToken(asset: common.Token) {

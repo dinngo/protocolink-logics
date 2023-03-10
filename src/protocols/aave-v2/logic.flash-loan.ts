@@ -9,8 +9,15 @@ import { getContractAddress } from './config';
 export type FlashLoanLogicFields = core.FlashLoanFields<{ referralCode?: number }>;
 
 @core.LogicDefinitionDecorator()
-export class FlashLoanLogic extends core.Logic {
+export class FlashLoanLogic extends core.Logic implements core.LogicInterfaceGetSupportedTokens {
   static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon, common.ChainId.avalanche];
+
+  async getSupportedTokens() {
+    const service = new Service(this.chainId, this.provider);
+    const tokens = await service.getAssets();
+
+    return tokens;
+  }
 
   async getLogic(fields: FlashLoanLogicFields) {
     const { outputs, params, referralCode = 0 } = fields;

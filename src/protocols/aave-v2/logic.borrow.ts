@@ -1,4 +1,5 @@
 import { InterestRateMode } from './types';
+import { Service } from './service';
 import { SpenderAaveV2Delegation__factory } from './contracts';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
@@ -8,8 +9,15 @@ import invariant from 'tiny-invariant';
 export type BorrowLogicFields = core.TokenOutFields<{ interestRateMode: InterestRateMode }>;
 
 @core.LogicDefinitionDecorator()
-export class BorrowLogic extends core.Logic {
+export class BorrowLogic extends core.Logic implements core.LogicInterfaceGetSupportedTokens {
   static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon, common.ChainId.avalanche];
+
+  async getSupportedTokens() {
+    const service = new Service(this.chainId, this.provider);
+    const tokens = await service.getAssets();
+
+    return tokens;
+  }
 
   async getLogic(fields: BorrowLogicFields) {
     const { output, interestRateMode } = fields;

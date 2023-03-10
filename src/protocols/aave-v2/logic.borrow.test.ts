@@ -9,10 +9,19 @@ import { getContractAddress } from './config';
 import { mainnetTokens } from './tokens';
 
 describe('AaveV2 BorrowLogic', function () {
-  const chainId = common.ChainId.mainnet;
-  const aaveV2BorrowLogic = new BorrowLogic(chainId);
+  context('Test getSupportedTokens', async function () {
+    BorrowLogic.supportedChainIds.forEach((chainId) => {
+      it(`network: ${common.getNetworkId(chainId)}`, async function () {
+        const borrowLogic = new BorrowLogic(chainId);
+        const tokens = await borrowLogic.getSupportedTokens();
+        expect(tokens.length).to.be.gt(0);
+      });
+    });
+  });
 
   context('Test getLogic', function () {
+    const chainId = common.ChainId.mainnet;
+    const aaveV2BorrowLogic = new BorrowLogic(chainId);
     const spenderAaveV2Delegation = SpenderAaveV2Delegation__factory.createInterface();
 
     const testCases: LogicTestCase<BorrowLogicFields>[] = [

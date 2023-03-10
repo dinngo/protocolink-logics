@@ -7,14 +7,12 @@ export default async function () {
   const chainIds = [common.ChainId.mainnet];
 
   for (const chainId of chainIds) {
-    const aaveV2Service = new Service(chainId);
-    const assets = await aaveV2Service.getAssets();
-    const aTokens = await aaveV2Service.getATokens();
+    const service = new Service(chainId);
+    const reserveTokens = await service.getReserveTokens();
 
-    const tokenMap = assets.reduce((accumulator, asset, i) => {
-      accumulator[asset.symbol] = asset;
-      const aToken = aTokens[i];
-      accumulator[aToken.symbol] = aToken;
+    const tokenMap = reserveTokens.reduce((accumulator, reserveToken) => {
+      accumulator[reserveToken.asset.symbol] = reserveToken.asset;
+      accumulator[reserveToken.aToken.symbol] = reserveToken.aToken;
       return accumulator;
     }, {} as Record<string, common.Token>);
 

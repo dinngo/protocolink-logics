@@ -8,17 +8,26 @@ import { expect } from 'chai';
 import { mainnetTokens } from './tokens';
 
 describe('AaveV2 DepositLogic', function () {
-  const chainId = common.ChainId.mainnet;
-  const aaveV2DepositLogic = new DepositLogic(chainId);
-  let lendingPoolAddress: string;
-
-  before(async function () {
-    const service = new Service(chainId);
-    lendingPoolAddress = await service.getLendingPoolAddress();
+  context('Test getSupportedTokens', async function () {
+    DepositLogic.supportedChainIds.forEach((chainId) => {
+      it(`network: ${common.getNetworkId(chainId)}`, async function () {
+        const borrowLogic = new DepositLogic(chainId);
+        const tokens = await borrowLogic.getSupportedTokens();
+        expect(tokens.length).to.be.gt(0);
+      });
+    });
   });
 
   context('Test getLogic', function () {
+    const chainId = common.ChainId.mainnet;
+    const aaveV2DepositLogic = new DepositLogic(chainId);
+    let lendingPoolAddress: string;
     const lendingPoolIface = LendingPool__factory.createInterface();
+
+    before(async function () {
+      const service = new Service(chainId);
+      lendingPoolAddress = await service.getLendingPoolAddress();
+    });
 
     const testCases: LogicTestCase<DepositLogicFields>[] = [
       {

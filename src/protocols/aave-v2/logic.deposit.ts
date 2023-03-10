@@ -10,8 +10,18 @@ export type DepositLogicParams = core.TokenToTokenExactInParams;
 export type DepositLogicFields = core.TokenToTokenFields<{ referralCode?: number }>;
 
 @core.LogicDefinitionDecorator()
-export class DepositLogic extends core.Logic implements core.LogicInterfaceGetPrice {
+export class DepositLogic
+  extends core.Logic
+  implements core.LogicInterfaceGetSupportedTokens, core.LogicInterfaceGetPrice
+{
   static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon, common.ChainId.avalanche];
+
+  async getSupportedTokens() {
+    const service = new Service(this.chainId, this.provider);
+    const reserveTokens = await service.getReserveTokens();
+
+    return reserveTokens.map((reserveToken) => [reserveToken.asset, reserveToken.aToken]);
+  }
 
   async getPrice(params: DepositLogicParams) {
     const { input, tokenOut } = params;

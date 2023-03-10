@@ -10,8 +10,18 @@ export type WithdrawLogicParams = core.TokenToTokenExactInParams;
 export type WithdrawLogicFields = core.TokenToTokenFields;
 
 @core.LogicDefinitionDecorator()
-export class WithdrawLogic extends core.Logic implements core.LogicInterfaceGetPrice {
+export class WithdrawLogic
+  extends core.Logic
+  implements core.LogicInterfaceGetSupportedTokens, core.LogicInterfaceGetPrice
+{
   static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon, common.ChainId.avalanche];
+
+  async getSupportedTokens() {
+    const service = new Service(this.chainId, this.provider);
+    const reserveTokens = await service.getReserveTokens();
+
+    return reserveTokens.map((reserveToken) => [reserveToken.aToken, reserveToken.asset]);
+  }
 
   async getPrice(params: WithdrawLogicParams) {
     const { input, tokenOut } = params;

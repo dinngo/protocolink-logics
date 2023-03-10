@@ -9,17 +9,26 @@ import { getContractAddress } from './config';
 import { mainnetTokens } from './tokens';
 
 describe('AaveV2 FlashLoanLogic', function () {
-  const chainId = common.ChainId.mainnet;
-  const aaveV2FlashLoanLogic = new FlashLoanLogic(chainId);
-  let lendingPoolAddress: string;
-
-  before(async function () {
-    const service = new Service(chainId);
-    lendingPoolAddress = await service.getLendingPoolAddress();
+  context('Test getSupportedTokens', async function () {
+    FlashLoanLogic.supportedChainIds.forEach((chainId) => {
+      it(`network: ${common.getNetworkId(chainId)}`, async function () {
+        const flashLoanLogic = new FlashLoanLogic(chainId);
+        const tokens = await flashLoanLogic.getSupportedTokens();
+        expect(tokens.length).to.be.gt(0);
+      });
+    });
   });
 
   context('Test getLogic', function () {
+    const chainId = common.ChainId.mainnet;
+    const aaveV2FlashLoanLogic = new FlashLoanLogic(chainId);
+    let lendingPoolAddress: string;
     const lendingPoolIface = LendingPool__factory.createInterface();
+
+    before(async function () {
+      const service = new Service(chainId);
+      lendingPoolAddress = await service.getLendingPoolAddress();
+    });
 
     const testCases: LogicTestCase<FlashLoanLogicFields>[] = [
       {

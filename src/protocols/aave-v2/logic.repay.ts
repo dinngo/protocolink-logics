@@ -9,8 +9,15 @@ import invariant from 'tiny-invariant';
 export type RepayLogicFields = core.TokenInFields<{ interestRateMode: InterestRateMode; address: string }>;
 
 @core.LogicDefinitionDecorator()
-export class RepayLogic extends core.Logic {
+export class RepayLogic extends core.Logic implements core.LogicInterfaceGetSupportedTokens {
   static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon, common.ChainId.avalanche];
+
+  async getSupportedTokens() {
+    const service = new Service(this.chainId, this.provider);
+    const tokens = await service.getAssets();
+
+    return tokens;
+  }
 
   async getDebt(user: string, asset: common.Token, interestRateMode: InterestRateMode) {
     const service = new Service(this.chainId, this.provider);

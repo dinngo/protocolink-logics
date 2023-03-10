@@ -9,17 +9,26 @@ import { expect } from 'chai';
 import { mainnetTokens } from './tokens';
 
 describe('AaveV2 RepayLogic', function () {
-  const chainId = common.ChainId.mainnet;
-  const aaveV2RepayLogic = new RepayLogic(chainId);
-  let lendingPoolAddress: string;
-
-  before(async function () {
-    const service = new Service(chainId);
-    lendingPoolAddress = await service.getLendingPoolAddress();
+  context('Test getSupportedTokens', async function () {
+    RepayLogic.supportedChainIds.forEach((chainId) => {
+      it(`network: ${common.getNetworkId(chainId)}`, async function () {
+        const repayLogic = new RepayLogic(chainId);
+        const tokens = await repayLogic.getSupportedTokens();
+        expect(tokens.length).to.be.gt(0);
+      });
+    });
   });
 
   context('Test getLogic', function () {
+    const chainId = common.ChainId.mainnet;
+    const aaveV2RepayLogic = new RepayLogic(chainId);
+    let lendingPoolAddress: string;
     const lendingPoolIface = LendingPool__factory.createInterface();
+
+    before(async function () {
+      const service = new Service(chainId);
+      lendingPoolAddress = await service.getLendingPoolAddress();
+    });
 
     const testCases: LogicTestCase<RepayLogicFields>[] = [
       {
