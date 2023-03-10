@@ -2,14 +2,22 @@ import { BigNumber, BigNumberish, constants } from 'ethers';
 import { CErc20__factory, CEther__factory } from './contracts';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
+import { tokenPairs } from './tokens';
 
 export type SupplyLogicParams = core.TokenToTokenExactInParams;
 
 export type SupplyLogicFields = core.TokenToTokenFields;
 
 @core.LogicDefinitionDecorator()
-export class SupplyLogic extends core.Logic implements core.LogicInterfaceGetPrice {
+export class SupplyLogic
+  extends core.Logic
+  implements core.LogicInterfaceGetSupportedTokens, core.LogicInterfaceGetPrice
+{
   static readonly supportedChainIds = [common.ChainId.mainnet];
+
+  getSupportedTokens() {
+    return tokenPairs.map((tokenPair) => [tokenPair.underlyingToken, tokenPair.cToken]);
+  }
 
   async getPrice(params: SupplyLogicParams) {
     const { input, tokenOut } = params;

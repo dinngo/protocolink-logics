@@ -2,13 +2,17 @@ import { BigNumberish, constants } from 'ethers';
 import { CErc20__factory, CEther__factory } from './contracts';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
-import { toCToken } from './tokens';
+import { toCToken, underlyingTokens } from './tokens';
 
 export type RepayLogicFields = core.TokenInFields<{ borrower: string }>;
 
 @core.LogicDefinitionDecorator()
-export class RepayLogic extends core.Logic {
+export class RepayLogic extends core.Logic implements core.LogicInterfaceGetSupportedTokens {
   static readonly supportedChainIds = [common.ChainId.mainnet];
+
+  getSupportedTokens() {
+    return Object.values(underlyingTokens);
+  }
 
   async getDebt(borrower: string, underlyingToken: common.Token) {
     const cToken = toCToken(underlyingToken);

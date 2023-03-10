@@ -5,15 +5,6 @@ import { deployContracts } from 'test/hooks';
 import { revert, snapshot } from '@composable-router/test-helpers';
 
 const config: HardhatUserConfig = {
-  solidity: {
-    version: '0.8.17',
-    settings: {
-      optimizer: {
-        enabled: true,
-        runs: 200,
-      },
-    },
-  },
   networks: {
     hardhat: {
       chainId: process.env.CHAIN_ID ? parseInt(process.env.CHAIN_ID) : 1,

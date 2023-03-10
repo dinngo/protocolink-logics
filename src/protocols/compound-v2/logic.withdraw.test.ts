@@ -7,10 +7,19 @@ import { constants, utils } from 'ethers';
 import { expect } from 'chai';
 
 describe('CompoundV2 WithdrawLogic', function () {
-  const chainId = common.ChainId.mainnet;
-  const compoundV2WithdrawLogic = new WithdrawLogic(chainId);
+  context('Test getSupportedTokens', async function () {
+    WithdrawLogic.supportedChainIds.forEach((chainId) => {
+      it(`network: ${common.getNetworkId(chainId)}`, async function () {
+        const withdrawLogic = new WithdrawLogic(chainId);
+        const tokens = await withdrawLogic.getSupportedTokens();
+        expect(tokens.length).to.be.gt(0);
+      });
+    });
+  });
 
   context('Test getLogic', function () {
+    const chainId = common.ChainId.mainnet;
+    const compoundV2WithdrawLogic = new WithdrawLogic(chainId);
     const cErc20 = CErc20__factory.createInterface();
 
     const testCases: LogicTestCase<WithdrawLogicFields>[] = [

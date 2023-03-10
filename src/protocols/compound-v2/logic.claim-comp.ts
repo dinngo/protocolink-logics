@@ -7,8 +7,12 @@ import { getContractAddress } from './config';
 export type ClaimCOMPLogicFields = core.ClaimTokenFields;
 
 @core.LogicDefinitionDecorator()
-export class ClaimCOMPLogic extends core.Logic {
+export class ClaimCOMPLogic extends core.Logic implements core.LogicInterfaceGetSupportedTokens {
   static readonly supportedChainIds = [common.ChainId.mainnet];
+
+  getSupportedTokens() {
+    return [COMP];
+  }
 
   async getReward(owner: string) {
     const compoundLens = CompoundLens__factory.connect(getContractAddress('CompoundLens'), this.provider);

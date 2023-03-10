@@ -7,10 +7,19 @@ import { expect } from 'chai';
 import { toCToken, underlyingTokens } from './tokens';
 
 describe('CompoundV2 RepayLogic', function () {
-  const chainId = common.ChainId.mainnet;
-  const compoundV2RepayLogic = new RepayLogic(chainId);
+  context('Test getSupportedTokens', async function () {
+    RepayLogic.supportedChainIds.forEach((chainId) => {
+      it(`network: ${common.getNetworkId(chainId)}`, async function () {
+        const repayLogic = new RepayLogic(chainId);
+        const tokens = await repayLogic.getSupportedTokens();
+        expect(tokens.length).to.be.gt(0);
+      });
+    });
+  });
 
   context('Test getLogic', function () {
+    const chainId = common.ChainId.mainnet;
+    const compoundV2RepayLogic = new RepayLogic(chainId);
     const cEther = CEther__factory.createInterface();
     const cErc20 = CErc20__factory.createInterface();
 

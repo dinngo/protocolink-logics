@@ -7,10 +7,19 @@ import { expect } from 'chai';
 import { getContractAddress } from './config';
 
 describe('CompoundV2 ClaimCOMPLogic', function () {
-  const chainId = common.ChainId.mainnet;
-  const compoundV2ClaimCOMPLogic = new ClaimCOMPLogic(chainId);
+  context('Test getSupportedTokens', async function () {
+    ClaimCOMPLogic.supportedChainIds.forEach((chainId) => {
+      it(`network: ${common.getNetworkId(chainId)}`, async function () {
+        const claimCOMPLogic = new ClaimCOMPLogic(chainId);
+        const tokens = await claimCOMPLogic.getSupportedTokens();
+        expect(tokens.length).to.be.gt(0);
+      });
+    });
+  });
 
   context('Test getLogic', function () {
+    const chainId = common.ChainId.mainnet;
+    const compoundV2ClaimCOMPLogic = new ClaimCOMPLogic(chainId);
     const comptroller = Comptroller__factory.createInterface();
 
     const testCases: LogicTestCase<ClaimCOMPLogicFields>[] = [

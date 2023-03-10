@@ -7,10 +7,19 @@ import { constants, utils } from 'ethers';
 import { expect } from 'chai';
 
 describe('CompoundV2 SupplyLogic', function () {
-  const chainId = common.ChainId.mainnet;
-  const compoundV2SupplyLogic = new SupplyLogic(chainId);
+  context('Test getSupportedTokens', async function () {
+    SupplyLogic.supportedChainIds.forEach((chainId) => {
+      it(`network: ${common.getNetworkId(chainId)}`, async function () {
+        const supplyLogic = new SupplyLogic(chainId);
+        const tokens = await supplyLogic.getSupportedTokens();
+        expect(tokens.length).to.be.gt(0);
+      });
+    });
+  });
 
   context('Test getLogic', function () {
+    const chainId = common.ChainId.mainnet;
+    const compoundV2SupplyLogic = new SupplyLogic(chainId);
     const cEther = CEther__factory.createInterface();
     const cErc20 = CErc20__factory.createInterface();
 

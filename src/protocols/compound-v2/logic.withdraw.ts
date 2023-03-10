@@ -2,14 +2,22 @@ import { BigNumber, BigNumberish } from 'ethers';
 import { CErc20__factory } from './contracts';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
+import { tokenPairs } from './tokens';
 
 export type WithdrawLogicParams = core.TokenToTokenExactInParams;
 
 export type WithdrawLogicFields = core.TokenToTokenFields;
 
 @core.LogicDefinitionDecorator()
-export class WithdrawLogic extends core.Logic implements core.LogicInterfaceGetPrice {
+export class WithdrawLogic
+  extends core.Logic
+  implements core.LogicInterfaceGetSupportedTokens, core.LogicInterfaceGetPrice
+{
   static readonly supportedChainIds = [common.ChainId.mainnet];
+
+  getSupportedTokens() {
+    return tokenPairs.map((tokenPair) => [tokenPair.cToken, tokenPair.underlyingToken]);
+  }
 
   async getPrice(params: WithdrawLogicParams) {
     const { input, tokenOut } = params;
