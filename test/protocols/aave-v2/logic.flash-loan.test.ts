@@ -43,7 +43,7 @@ describe('Test AaveV2 FlashLoan Logic', function () {
     it(`case ${i + 1}`, async function () {
       // 1. build funds and router logics for flash loan by flash loan fee
       const funds = new common.TokenAmounts();
-      const flashLoanRouterLogics: core.IRouter.LogicStruct[] = [];
+      const flashLoanRouterLogics: core.IParam.LogicStruct[] = [];
       const utilitySendTokenLogic = new protocols.utility.SendTokenLogic(chainId);
       for (const output of outputs.toArray()) {
         const feeWei = common.calcFee(output.amountWei, flashLoanPremiumTotal);
@@ -67,7 +67,7 @@ describe('Test AaveV2 FlashLoan Logic', function () {
 
       // 3. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics });
-      await expect(user.sendTransaction(transactionRequest)).not.to.be.reverted;
+      await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
       for (const fund of funds.toArray()) {
         await expect(user.address).to.changeBalance(fund.token, -fund.amount);
       }

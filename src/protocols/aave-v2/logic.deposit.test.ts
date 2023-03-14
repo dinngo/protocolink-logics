@@ -23,6 +23,7 @@ describe('AaveV2 DepositLogic', function () {
     const aaveV2DepositLogic = new DepositLogic(chainId);
     let lendingPoolAddress: string;
     const lendingPoolIface = LendingPool__factory.createInterface();
+    const account = '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa';
 
     before(async function () {
       const service = new Service(chainId);
@@ -60,7 +61,7 @@ describe('AaveV2 DepositLogic', function () {
 
     testCases.forEach(({ fields }) => {
       it(`deposit ${fields.input.token.symbol}${fields.amountBps ? ' with amountBps' : ''}`, async function () {
-        const routerLogic = await aaveV2DepositLogic.getLogic(fields);
+        const routerLogic = await aaveV2DepositLogic.getLogic(fields, { account });
         const sig = routerLogic.data.substring(0, 10);
         const { input, amountBps } = fields;
 
@@ -74,7 +75,6 @@ describe('AaveV2 DepositLogic', function () {
           expect(routerLogic.inputs[0].amountBps).to.eq(constants.MaxUint256);
           expect(routerLogic.inputs[0].amountOrOffset).eq(input.amountWei);
         }
-        expect(routerLogic.outputs).to.deep.eq([]);
         expect(routerLogic.approveTo).to.eq(constants.AddressZero);
         expect(routerLogic.callback).to.eq(constants.AddressZero);
       });

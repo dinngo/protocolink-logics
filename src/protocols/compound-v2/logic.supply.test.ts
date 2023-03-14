@@ -75,7 +75,6 @@ describe('CompoundV2 SupplyLogic', function () {
           expect(routerLogic.inputs[0].amountBps).to.eq(constants.MaxUint256);
           expect(routerLogic.inputs[0].amountOrOffset).to.eq(input.amountWei);
         }
-        expect(routerLogic.outputs).to.deep.eq([]);
         expect(routerLogic.approveTo).to.eq(constants.AddressZero);
         expect(routerLogic.callback).to.eq(constants.AddressZero);
       });

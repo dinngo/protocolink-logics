@@ -47,7 +47,7 @@ describe('Test Router PermitToken Logic', function () {
       for (const token of erc20Tokens) {
         // 1. user approve permit2 to spend fund erc20 token
         const erc20 = common.ERC20__factory.connect(token.address, user);
-        await expect(erc20.approve(permit2.address, constants.MaxUint256)).not.to.be.reverted;
+        await expect(erc20.approve(permit2.address, constants.MaxUint256)).to.not.be.reverted;
 
         // 2. check erc20 fund allowance
         const allowance = await permit2.allowance(user.address, token.address, erc20SpenderAaddress);
@@ -65,12 +65,12 @@ describe('Test Router PermitToken Logic', function () {
       const permitSig = await user._signTypedData(permitData.domain, permitData.types, permitData.values);
 
       // 4. build router logics
-      const routerLogics: core.IRouter.LogicStruct[] = [];
+      const routerLogics: core.IParam.LogicStruct[] = [];
       routerLogics.push(await routerPermitTokenLogic.getLogic({ permit, sig: permitSig }, { account: user.address }));
 
       // 5. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics });
-      await expect(user.sendTransaction(transactionRequest)).not.to.be.reverted;
+      await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
 
       // 6. check erc20 funds allowance
       for (let i = 0; i < erc20Tokens.length; i++) {

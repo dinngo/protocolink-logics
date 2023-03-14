@@ -32,7 +32,6 @@ describe('BalancerV2 FlashLoanLogic', function () {
         expect(routerLogic.to).to.eq(getContractAddress(chainId, 'Vault'));
         expect(sig).to.eq(vaultIface.getSighash('flashLoan'));
         expect(routerLogic.inputs).to.deep.eq([]);
-        expect(routerLogic.outputs).to.deep.eq([]);
         expect(routerLogic.approveTo).to.eq(constants.AddressZero);
         expect(routerLogic.callback).to.eq(getContractAddress(chainId, 'FlashLoanCallbackBalancerV2'));
       });

@@ -9,6 +9,8 @@ export type WithdrawLogicParams = core.TokenToTokenExactInParams;
 
 export type WithdrawLogicFields = core.TokenToTokenFields;
 
+export type WithdrawLogicOptions = Pick<core.GlobalOptions, 'account'>;
+
 @core.LogicDefinitionDecorator()
 export class WithdrawLogic
   extends core.Logic
@@ -31,16 +33,17 @@ export class WithdrawLogic
     return output;
   }
 
-  async getLogic(fields: WithdrawLogicFields) {
+  async getLogic(fields: WithdrawLogicFields, options: WithdrawLogicOptions) {
     const { input, output, amountBps } = fields;
     invariant(!output.token.isNative(), 'tokenOut should not be native token');
+    const { account } = options;
 
     const service = new Service(this.chainId, this.provider);
     const to = await service.getLendingPoolAddress();
     const data = LendingPool__factory.createInterface().encodeFunctionData('withdraw', [
       output.token.address,
       input.amountWei,
-      core.getContractAddress(this.chainId, 'Router'),
+      core.calcAccountAgent(this.chainId, account),
     ]);
     let amountOffset: BigNumberish | undefined;
     if (amountBps) amountOffset = common.getParamOffset(1);

@@ -54,7 +54,7 @@ describe('Test Utility WrappedNativeToken Logic', function () {
         tokensReturn,
         value: funds.native?.amountWei ?? 0,
       });
-      await expect(user.sendTransaction(transactionRequest)).not.to.be.reverted;
+      await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
       await expect(user.address).to.changeBalance(input.token, -input.amount);
       await expect(user.address).to.changeBalance(output.token, output.amount);
     });

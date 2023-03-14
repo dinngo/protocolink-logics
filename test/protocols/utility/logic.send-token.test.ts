@@ -52,7 +52,7 @@ describe('Test Utility SendToken Logic', function () {
         tokensReturn,
         value: funds.native?.amountWei ?? 0,
       });
-      await expect(user1.sendTransaction(transactionRequest)).not.to.be.reverted;
+      await expect(user1.sendTransaction(transactionRequest)).to.not.be.reverted;
       await expect(user1.address).to.changeBalance(input.token, -input.amount);
       await expect(user2.address).to.changeBalance(input.token, input.amount);
     });

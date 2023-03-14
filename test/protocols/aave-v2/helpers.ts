@@ -10,7 +10,7 @@ export async function deposit(chainId: number, user: SignerWithAddress, assetAmo
   const lendingPoolAddress = await aaveV2Service.getLendingPoolAddress();
   await approve(user, lendingPoolAddress, assetAmount);
   const lendingPool = protocols.aavev2.LendingPool__factory.connect(lendingPoolAddress, user);
-  await expect(lendingPool.deposit(assetAmount.token.address, assetAmount.amountWei, user.address, 0)).not.to.be
+  await expect(lendingPool.deposit(assetAmount.token.address, assetAmount.amountWei, user.address, 0)).to.not.be
     .reverted;
 }
 
@@ -35,7 +35,7 @@ export async function approveDelegation(
       assetAmount,
       interestRateMode
     );
-    await expect(user.sendTransaction(tx)).not.to.be.reverted;
+    await expect(user.sendTransaction(tx)).to.not.be.reverted;
   }
 }
 
@@ -50,5 +50,5 @@ export async function borrow(
   await approve(user, lendingPoolAddress, assetAmount);
   const lendingPool = protocols.aavev2.LendingPool__factory.connect(lendingPoolAddress, user);
   await expect(lendingPool.borrow(assetAmount.token.address, assetAmount.amountWei, interestRateMode, 0, user.address))
-    .not.to.be.reverted;
+    .to.not.be.reverted;
 }

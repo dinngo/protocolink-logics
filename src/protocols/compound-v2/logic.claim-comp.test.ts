@@ -35,7 +35,6 @@ describe('CompoundV2 ClaimCOMPLogic', function () {
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(sig).to.eq(comptroller.getSighash('claimComp(address)'));
         expect(routerLogic.inputs).to.deep.eq([]);
-        expect(routerLogic.outputs).to.deep.eq([]);
         expect(routerLogic.approveTo).to.eq(constants.AddressZero);
         expect(routerLogic.callback).to.eq(constants.AddressZero);
       });

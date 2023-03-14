@@ -16,7 +16,7 @@ export async function getPermitAndPullTokenRouterLogics(
   user: SignerWithAddress,
   erc20Funds: common.TokenAmounts
 ) {
-  const routerLogics: core.IRouter.LogicStruct[] = [];
+  const routerLogics: core.IParam.LogicStruct[] = [];
   if (!erc20Funds.isEmpty()) {
     const permit2Address = protocols.router.getContractAddress(chainId, 'Permit2');
     const erc20SpenderAddress = protocols.router.getContractAddress(chainId, 'SpenderPermit2ERC20');

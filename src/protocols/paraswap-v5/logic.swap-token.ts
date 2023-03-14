@@ -71,9 +71,8 @@ export class SwapTokenLogic extends core.Logic implements core.LogicInterfaceGet
       { ignoreChecks: true, ignoreGasEstimate: true }
     );
     const inputs = [core.newLogicInput({ input })];
-    const outputs = [core.newLogicOutput({ output, slippage })];
     const approveTo = getContractAddress(this.chainId, 'TokenTransferProxy');
 
-    return core.newLogic({ to, data, inputs, outputs, approveTo });
+    return core.newLogic({ to, data, inputs, approveTo });
   }
 }

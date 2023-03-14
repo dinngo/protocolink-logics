@@ -15,7 +15,7 @@ function toBigUnit(amountWei, decimals, options = {}) {
     return (0, bignumber_js_1.default)(amountWei.toString())
         .shiftedBy(-decimals)
         .decimalPlaces(displayDecimals ? displayDecimals : decimals, mode === 'round' ? bignumber_js_1.default.ROUND_HALF_UP : mode === 'ceil' ? bignumber_js_1.default.ROUND_CEIL : bignumber_js_1.default.ROUND_FLOOR)
-        .toString();
+        .toFixed();
 }
 exports.toBigUnit = toBigUnit;
 function calcSlippage(amountWei, slippage, base = 10000) {

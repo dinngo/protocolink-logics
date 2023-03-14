@@ -36,7 +36,6 @@ describe('Router PermitTokenLogic', function () {
           iface.getSighash('permit(address,((address,uint160,uint48,uint48)[],address,uint256),bytes)')
         );
         expect(routerLogic.inputs).to.deep.eq([]);
-        expect(routerLogic.outputs).to.deep.eq([]);
         expect(routerLogic.approveTo).to.eq(constants.AddressZero);
         expect(routerLogic.callback).to.eq(constants.AddressZero);
       });

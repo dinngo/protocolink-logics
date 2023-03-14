@@ -15,8 +15,7 @@ describe('Test CompoundV2 Withdraw Logic', function () {
   before(async function () {
     chainId = await getChainId();
     [, user] = await hre.ethers.getSigners();
-    await claimToken(chainId, user.address, mainnetTokens.ETH, '100');
-    await claimToken(chainId, user.address, mainnetTokens.USDC, '100');
+    await claimToken(chainId, user.address, mainnetTokens.WBTC, '10');
   });
 
   const testCases = [
@@ -25,8 +24,8 @@ describe('Test CompoundV2 Withdraw Logic', function () {
       tokenOut: protocols.compoundv2.underlyingTokens.ETH,
     },
     {
-      input: new common.TokenAmount(protocols.compoundv2.cTokens.cUSDC, '50'),
-      tokenOut: protocols.compoundv2.underlyingTokens.USDC,
+      input: new common.TokenAmount(protocols.compoundv2.cTokens.cWBTC, '50'),
+      tokenOut: protocols.compoundv2.underlyingTokens.WBTC,
     },
     {
       input: new common.TokenAmount(protocols.compoundv2.cTokens.cETH, '50'),
@@ -34,8 +33,8 @@ describe('Test CompoundV2 Withdraw Logic', function () {
       amountBps: 5000,
     },
     {
-      input: new common.TokenAmount(protocols.compoundv2.cTokens.cUSDC, '50'),
-      tokenOut: protocols.compoundv2.underlyingTokens.USDC,
+      input: new common.TokenAmount(protocols.compoundv2.cTokens.cWBTC, '50'),
+      tokenOut: protocols.compoundv2.underlyingTokens.WBTC,
       amountBps: 5000,
     },
   ];
@@ -68,7 +67,7 @@ describe('Test CompoundV2 Withdraw Logic', function () {
 
       // 5. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics, tokensReturn });
-      await expect(user.sendTransaction(transactionRequest)).not.to.be.reverted;
+      await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
       await expect(user.address).to.changeBalance(input.token, -input.amount);
       await expect(user.address).to.changeBalance(output.token, output.amount, 1);
     });

@@ -59,11 +59,11 @@ describe('Test AaveV2 Deposit Logic', function () {
       // 3. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
-      routerLogics.push(await aaveV2Deposit.getLogic({ input, output, amountBps }));
+      routerLogics.push(await aaveV2Deposit.getLogic({ input, output, amountBps }, { account: user.address }));
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics, tokensReturn });
-      await expect(user.sendTransaction(transactionRequest)).not.to.be.reverted;
+      await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
       await expect(user.address).to.changeBalance(input.token, -input.amount);
       await expect(user.address).to.changeBalance(output.token, output.amount, 1);
     });

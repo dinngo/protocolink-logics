@@ -14,8 +14,7 @@ describe('Test CompoundV2 Supply Logic', function () {
   before(async function () {
     chainId = await getChainId();
     [, user] = await hre.ethers.getSigners();
-    await claimToken(chainId, user.address, mainnetTokens.ETH, '100');
-    await claimToken(chainId, user.address, mainnetTokens.USDC, '100');
+    await claimToken(chainId, user.address, mainnetTokens.WBTC, '10');
   });
 
   const testCases = [
@@ -24,8 +23,8 @@ describe('Test CompoundV2 Supply Logic', function () {
       tokenOut: protocols.compoundv2.cTokens.cETH,
     },
     {
-      input: new common.TokenAmount(protocols.compoundv2.underlyingTokens.USDC, '10'),
-      tokenOut: protocols.compoundv2.cTokens.cUSDC,
+      input: new common.TokenAmount(protocols.compoundv2.underlyingTokens.WBTC, '1'),
+      tokenOut: protocols.compoundv2.cTokens.cWBTC,
     },
     {
       input: new common.TokenAmount(protocols.compoundv2.underlyingTokens.ETH, '1'),
@@ -33,8 +32,8 @@ describe('Test CompoundV2 Supply Logic', function () {
       amountBps: 5000,
     },
     {
-      input: new common.TokenAmount(protocols.compoundv2.underlyingTokens.USDC, '10'),
-      tokenOut: protocols.compoundv2.cTokens.cUSDC,
+      input: new common.TokenAmount(protocols.compoundv2.underlyingTokens.WBTC, '1'),
+      tokenOut: protocols.compoundv2.cTokens.cWBTC,
       amountBps: 5000,
     },
   ];
@@ -67,7 +66,7 @@ describe('Test CompoundV2 Supply Logic', function () {
         tokensReturn,
         value: funds.native?.amountWei ?? 0,
       });
-      await expect(user.sendTransaction(transactionRequest)).not.to.be.reverted;
+      await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
       await expect(user.address).to.changeBalance(input.token, -input.amount);
       await expect(user.address).to.changeBalance(output.token, output.amount, 1);
     });

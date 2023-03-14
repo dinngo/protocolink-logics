@@ -1,30 +1,23 @@
 import { BigNumberish } from 'ethers';
-import { IRouter } from './contracts/Router';
+import { IParam } from './contracts/Router';
 import * as common from '@composable-router/common';
 export interface NewLogicInputOptions {
     input: common.TokenAmount;
     amountBps?: BigNumberish;
     amountOffset?: BigNumberish;
 }
-export declare function newLogicInput(options: NewLogicInputOptions): IRouter.InputStruct;
-export interface NewLogicOutputOptions {
-    output: common.TokenAmount;
-    slippage?: number;
-}
-export declare function newLogicOutput(options: NewLogicOutputOptions): IRouter.OutputStruct;
+export declare function newLogicInput(options: NewLogicInputOptions): IParam.InputStruct;
 export interface NewLogicOptions {
     to: string;
     data: string;
-    inputs?: IRouter.InputStruct[];
-    outputs?: IRouter.OutputStruct[];
+    inputs?: IParam.InputStruct[];
     approveTo?: string;
     callback?: string;
 }
 export declare function newLogic(options: NewLogicOptions): {
     to: string;
     data: string;
-    inputs: IRouter.InputStruct[];
-    outputs: IRouter.OutputStruct[];
+    inputs: IParam.InputStruct[];
     approveTo: string;
     callback: string;
 };

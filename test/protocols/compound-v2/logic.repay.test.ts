@@ -16,26 +16,25 @@ describe('Test CompoundV2 Repay Logic', function () {
   before(async function () {
     chainId = await getChainId();
     [, user] = await hre.ethers.getSigners();
-    await claimToken(chainId, user.address, mainnetTokens.ETH, '100');
-    await claimToken(chainId, user.address, mainnetTokens.USDC, '5000');
+    await claimToken(chainId, user.address, mainnetTokens.WBTC, '10');
   });
 
   const testCases = [
     {
-      supply: new common.TokenAmount(protocols.compoundv2.underlyingTokens.ETH, '1'),
-      borrow: new common.TokenAmount(protocols.compoundv2.underlyingTokens.USDC, '100'),
+      supply: new common.TokenAmount(protocols.compoundv2.underlyingTokens.ETH, '100'),
+      borrow: new common.TokenAmount(protocols.compoundv2.underlyingTokens.WBTC, '1'),
     },
     {
-      supply: new common.TokenAmount(protocols.compoundv2.underlyingTokens.USDC, '3000'),
+      supply: new common.TokenAmount(protocols.compoundv2.underlyingTokens.WBTC, '1'),
       borrow: new common.TokenAmount(protocols.compoundv2.underlyingTokens.ETH, '1'),
     },
     {
-      supply: new common.TokenAmount(protocols.compoundv2.underlyingTokens.ETH, '1'),
-      borrow: new common.TokenAmount(protocols.compoundv2.underlyingTokens.USDC, '100'),
+      supply: new common.TokenAmount(protocols.compoundv2.underlyingTokens.ETH, '100'),
+      borrow: new common.TokenAmount(protocols.compoundv2.underlyingTokens.WBTC, '1'),
       amountBps: 5000,
     },
     {
-      supply: new common.TokenAmount(protocols.compoundv2.underlyingTokens.USDC, '3000'),
+      supply: new common.TokenAmount(protocols.compoundv2.underlyingTokens.WBTC, '1'),
       borrow: new common.TokenAmount(protocols.compoundv2.underlyingTokens.ETH, '1'),
       amountBps: 5000,
     },
@@ -52,7 +51,7 @@ describe('Test CompoundV2 Repay Logic', function () {
       await hrehelpers.mine(1000);
       const compoundV2Repay = new protocols.compoundv2.RepayLogic(chainId, hre.ethers.provider);
       const debt = await compoundV2Repay.getDebt(user.address, borrow.token);
-      expect(debt.amountWei).to.gt(borrow.amountWei);
+      expect(debt.amountWei).to.be.gt(borrow.amountWei);
 
       // 3. build input, funds, tokensReturn
       const input = debt;
@@ -76,7 +75,7 @@ describe('Test CompoundV2 Repay Logic', function () {
         tokensReturn,
         value: funds.native?.amountWei ?? 0,
       });
-      await expect(user.sendTransaction(transactionRequest)).not.to.be.reverted;
+      await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
       await expect(user.address).to.changeBalance(input.token, -input.amount, 1);
     });
   });

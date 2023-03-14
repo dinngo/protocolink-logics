@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.newLogic = exports.newLogicOutput = exports.newLogicInput = void 0;
+exports.newLogic = exports.newLogicInput = void 0;
 const tslib_1 = require("tslib");
 const ethers_1 = require("ethers");
 const common = tslib_1.__importStar(require("@composable-router/common"));
@@ -21,17 +21,9 @@ function newLogicInput(options) {
     return { token: input.token.elasticAddress, amountBps, amountOrOffset };
 }
 exports.newLogicInput = newLogicInput;
-function newLogicOutput(options) {
-    const { output, slippage = 0 } = options;
-    return {
-        token: output.token.elasticAddress,
-        amountMin: slippage ? common.calcSlippage(output.amountWei, slippage) : output.amountWei,
-    };
-}
-exports.newLogicOutput = newLogicOutput;
 function newLogic(options) {
-    const { to, data, inputs = [], outputs = [], approveTo = ethers_1.constants.AddressZero, callback = ethers_1.constants.AddressZero, } = options;
-    return { to, data, inputs, outputs, approveTo, callback };
+    const { to, data, inputs = [], approveTo = ethers_1.constants.AddressZero, callback = ethers_1.constants.AddressZero } = options;
+    return { to, data, inputs, approveTo, callback };
 }
 exports.newLogic = newLogic;
-//# sourceMappingURL=utils.js.map
+//# sourceMappingURL=logic.utils.js.map

@@ -10,6 +10,8 @@ export async function deployContracts() {
   // deploy Router
   const router = await (await new core.Router__factory().connect(deployer).deploy()).deployed();
   core.setContractAddress(chainId, 'Router', router.address);
+  const agentImplementation = await router.agentImplementation();
+  core.setContractAddress(chainId, 'AgentImplementation', agentImplementation);
 
   // deploy SpenderPermit2ERC20
   const spenderPermit2ERC20 = await (

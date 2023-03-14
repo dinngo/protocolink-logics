@@ -1,4 +1,4 @@
-type ContractNames = 'Router';
+type ContractNames = 'Router' | 'AgentImplementation';
 export declare const contractAddressMap: Record<number, {
     [k in ContractNames]: string;
 }>;

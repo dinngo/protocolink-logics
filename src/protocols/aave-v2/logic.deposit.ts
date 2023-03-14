@@ -9,6 +9,8 @@ export type DepositLogicParams = core.TokenToTokenExactInParams;
 
 export type DepositLogicFields = core.TokenToTokenFields<{ referralCode?: number }>;
 
+export type DepositLogicOptions = Pick<core.GlobalOptions, 'account'>;
+
 @core.LogicDefinitionDecorator()
 export class DepositLogic
   extends core.Logic
@@ -31,16 +33,17 @@ export class DepositLogic
     return output;
   }
 
-  async getLogic(fields: DepositLogicFields) {
+  async getLogic(fields: DepositLogicFields, options: DepositLogicOptions) {
     const { input, amountBps, referralCode = 0 } = fields;
     invariant(!input.token.isNative(), 'tokenIn should not be native token');
+    const { account } = options;
 
     const service = new Service(this.chainId, this.provider);
     const to = await service.getLendingPoolAddress();
     const data = LendingPool__factory.createInterface().encodeFunctionData('deposit', [
       input.token.address,
       input.amountWei,
-      core.getContractAddress(this.chainId, 'Router'),
+      core.calcAccountAgent(this.chainId, account),
       referralCode,
     ]);
     let amountOffset: BigNumberish | undefined;

@@ -57,14 +57,14 @@ describe('Test AaveV2 Borrow Logic', function () {
       const tokensReturn = [output.token.address];
 
       // 3. build router logics
-      const routerLogics: core.IRouter.LogicStruct[] = [];
+      const routerLogics: core.IParam.LogicStruct[] = [];
 
       const aaveV2Borrow = new protocols.aavev2.BorrowLogic(chainId);
       routerLogics.push(await aaveV2Borrow.getLogic({ output, interestRateMode }));
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics, tokensReturn });
-      await expect(user.sendTransaction(transactionRequest)).not.to.be.reverted;
+      await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
       await expect(user.address).to.changeBalance(output.token, output.amount);
     });
   });

@@ -6,7 +6,7 @@ import { expect } from 'chai';
 import hre from 'hardhat';
 import * as utils from 'test/utils';
 
-describe('Test Router Deposit Logic', function () {
+describe('Test Router PullToken Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
 
@@ -40,7 +40,7 @@ describe('Test Router Deposit Logic', function () {
         tokensReturn,
         value: funds.native?.amountWei ?? 0,
       });
-      await expect(user.sendTransaction(transactionRequest)).not.to.be.reverted;
+      await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
     });
   });
 });

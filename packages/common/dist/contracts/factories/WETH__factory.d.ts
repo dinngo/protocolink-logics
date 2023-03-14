@@ -1,6 +1,6 @@
-import { Signer } from 'ethers';
-import type { Provider } from '@ethersproject/providers';
-import type { WETH, WETHInterface } from '../WETH';
+import { Signer } from "ethers";
+import type { Provider } from "@ethersproject/providers";
+import type { WETH, WETHInterface } from "../WETH";
 export declare class WETH__factory {
     static readonly abi: readonly [{
         readonly constant: false;

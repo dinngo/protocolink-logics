@@ -16,11 +16,10 @@ describe('Test CompoundV2 ClaimCOMP Logic', function () {
     chainId = await getChainId();
     const [, user1, user2] = await hre.ethers.getSigners();
     users = [user1, user2];
-    await claimToken(chainId, user1.address, mainnetTokens.ETH, '100');
     await claimToken(chainId, user1.address, mainnetTokens.USDC, '5000');
-    await claimToken(chainId, user2.address, mainnetTokens.ETH, '100');
   });
 
+  // https://app.compound.finance/markets?market=1_Compound+V2_0x3d9819210A31b4961b30EF54bE2aeD79B9c9Cd3B
   const testCases = [
     {
       userIndex: 0,
@@ -42,13 +41,13 @@ describe('Test CompoundV2 ClaimCOMP Logic', function () {
     },
     {
       userIndex: 0,
-      claimerIndex: 0,
+      claimerIndex: 1,
       supply: new common.TokenAmount(protocols.compoundv2.underlyingTokens.USDC, '3000'),
       borrow: new common.TokenAmount(protocols.compoundv2.underlyingTokens.ETH, '1'),
     },
   ];
 
-  testCases.forEach(({ userIndex: userIndex, claimerIndex, supply, borrow }, i) => {
+  testCases.forEach(({ userIndex, claimerIndex, supply, borrow }, i) => {
     it(`case ${i + 1}`, async function () {
       const owner = users[userIndex];
       const claimer = users[claimerIndex];
@@ -68,12 +67,12 @@ describe('Test CompoundV2 ClaimCOMP Logic', function () {
       const tokensReturn = [output.token.address];
 
       // 5. build router logics
-      const routerLogics: core.IRouter.LogicStruct[] = [];
+      const routerLogics: core.IParam.LogicStruct[] = [];
       routerLogics.push(await compoundV2ClaimCOMP.getLogic({ owner: owner.address }));
 
       // 6. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics, tokensReturn });
-      await expect(claimer.sendTransaction(transactionRequest)).not.to.be.reverted;
+      await expect(claimer.sendTransaction(transactionRequest)).to.not.be.reverted;
       await expect(owner.address).to.changeBalance(output.token, output.amount, 1);
     });
   });

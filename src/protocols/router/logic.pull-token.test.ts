@@ -34,7 +34,6 @@ describe('Router PullTokenLogic', function () {
           expect(sig).to.eq(iface.getSighash('pullTokens'));
         }
         expect(routerLogic.inputs).to.deep.eq([]);
-        expect(routerLogic.outputs).to.deep.eq([]);
         expect(routerLogic.approveTo).to.eq(constants.AddressZero);
         expect(routerLogic.callback).to.eq(constants.AddressZero);
       });

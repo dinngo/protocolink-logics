@@ -38,7 +38,7 @@ describe('ParaswapV5 SwapTokenLogic', function () {
     testCases.forEach(({ fields, options }) => {
       it(`${fields.input.token.symbol} to ${fields.output.token.symbol}`, async function () {
         const routerLogic = await paraswapV5SwapTokenLogic.getLogic(fields, options);
-        const { input, output } = fields;
+        const { input } = fields;
 
         expect(routerLogic.to).to.eq('0xDEF171Fe48CF0115B1d80b88dc8eAB59176FEe57');
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;
@@ -47,9 +47,6 @@ describe('ParaswapV5 SwapTokenLogic', function () {
         }
         expect(routerLogic.inputs[0].amountBps).to.eq(constants.MaxUint256);
         expect(routerLogic.inputs[0].amountOrOffset).to.eq(input.amountWei);
-        if (output.token.isNative()) {
-          expect(routerLogic.outputs[0].token).to.eq(common.ELASTIC_ADDRESS);
-        }
         expect(routerLogic.approveTo).to.eq(getContractAddress(chainId, 'TokenTransferProxy'));
         expect(routerLogic.callback).to.eq(constants.AddressZero);
       });

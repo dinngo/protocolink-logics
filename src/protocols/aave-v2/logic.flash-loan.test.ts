@@ -48,7 +48,6 @@ describe('AaveV2 FlashLoanLogic', function () {
         expect(routerLogic.to).to.eq(lendingPoolAddress);
         expect(sig).to.eq(lendingPoolIface.getSighash('flashLoan'));
         expect(routerLogic.inputs).to.deep.eq([]);
-        expect(routerLogic.outputs).to.deep.eq([]);
         expect(routerLogic.approveTo).to.eq(constants.AddressZero);
         expect(routerLogic.callback).to.eq(getContractAddress(chainId, 'FlashLoanCallbackAaveV2'));
       });

@@ -49,7 +49,6 @@ describe('AaveV2 BorrowLogic', function () {
         expect(routerLogic.to).to.eq(getContractAddress(chainId, 'SpenderAaveV2Delegation'));
         expect(sig).to.eq(spenderAaveV2Delegation.getSighash(output.token.isNative() ? 'borrowETH' : 'borrow'));
         expect(routerLogic.inputs).to.deep.eq([]);
-        expect(routerLogic.outputs).to.deep.eq([]);
         expect(routerLogic.approveTo).to.eq(constants.AddressZero);
         expect(routerLogic.callback).to.eq(constants.AddressZero);
       });

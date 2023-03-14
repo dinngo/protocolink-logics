@@ -30,7 +30,7 @@ export class PullTokenLogic extends core.Logic {
     } else {
       const details: IAllowanceTransfer.AllowanceTransferDetailsStruct[] = inputs.map((input) => ({
         from: account,
-        to: core.getContractAddress(this.chainId, 'Router'),
+        to: core.calcAccountAgent(this.chainId, account),
         token: input.token.address,
         amount: input.amountWei,
       }));

@@ -1,6 +1,6 @@
-import { Signer } from 'ethers';
-import type { Provider } from '@ethersproject/providers';
-import type { Multicall2, Multicall2Interface } from '../Multicall2';
+import { Signer } from "ethers";
+import type { Provider } from "@ethersproject/providers";
+import type { Multicall2, Multicall2Interface } from "../Multicall2";
 export declare class Multicall2__factory {
     static readonly abi: readonly [{
         readonly inputs: readonly [{

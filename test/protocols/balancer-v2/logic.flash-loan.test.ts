@@ -23,7 +23,7 @@ describe('Test BalancerV2 FlashLoan Logic', function () {
   testCases.forEach(({ outputs }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. build funds and router logics for flash loan
-      const flashLoanRouterLogics: core.IRouter.LogicStruct[] = [];
+      const flashLoanRouterLogics: core.IParam.LogicStruct[] = [];
       const utilitySendTokenLogic = new protocols.utility.SendTokenLogic(chainId);
       for (const output of outputs.toArray()) {
         flashLoanRouterLogics.push(
@@ -35,7 +35,7 @@ describe('Test BalancerV2 FlashLoan Logic', function () {
       }
 
       // 2. build router logics
-      const routerLogics: core.IRouter.LogicStruct[] = [];
+      const routerLogics: core.IParam.LogicStruct[] = [];
 
       const userData = core.Router__factory.createInterface().encodeFunctionData('execute', [
         flashLoanRouterLogics,
@@ -46,7 +46,7 @@ describe('Test BalancerV2 FlashLoan Logic', function () {
 
       // 3. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics });
-      await expect(user.sendTransaction(transactionRequest)).not.to.be.reverted;
+      await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
     });
   });
 });

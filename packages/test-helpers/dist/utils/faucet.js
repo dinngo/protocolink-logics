@@ -5,7 +5,7 @@ const tslib_1 = require("tslib");
 const common = tslib_1.__importStar(require("@composable-router/common"));
 const helpers = tslib_1.__importStar(require("@nomicfoundation/hardhat-network-helpers"));
 exports.faucetMap = {
-    1: '0x47ac0Fb4F2D84898e4D9E7b4DaB3C24507a6D503',
+    1: '0x0D0707963952f2fBA59dD06f2b425ace40b492Fe',
 };
 async function claimToken(chainId, recepient, tokenOrAddress, amount) {
     const hre = await Promise.resolve().then(() => tslib_1.__importStar(require('hardhat')));

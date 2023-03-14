@@ -1,17 +1,17 @@
-import type { BaseContract, BigNumber, BigNumberish, BytesLike, CallOverrides, ContractTransaction, Overrides, PayableOverrides, PopulatedTransaction, Signer, utils } from 'ethers';
-import type { FunctionFragment, Result } from '@ethersproject/abi';
-import type { Listener, Provider } from '@ethersproject/providers';
-import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent, PromiseOrValue } from './common';
+import type { BaseContract, BigNumber, BigNumberish, BytesLike, CallOverrides, ContractTransaction, Overrides, PayableOverrides, PopulatedTransaction, Signer, utils } from "ethers";
+import type { FunctionFragment, Result } from "@ethersproject/abi";
+import type { Listener, Provider } from "@ethersproject/providers";
+import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent, PromiseOrValue } from "./common";
 export interface WETHInterface extends utils.Interface {
     functions: {
-        'deposit()': FunctionFragment;
-        'withdraw(uint256)': FunctionFragment;
+        "deposit()": FunctionFragment;
+        "withdraw(uint256)": FunctionFragment;
     };
-    getFunction(nameOrSignatureOrTopic: 'deposit' | 'withdraw'): FunctionFragment;
-    encodeFunctionData(functionFragment: 'deposit', values?: undefined): string;
-    encodeFunctionData(functionFragment: 'withdraw', values: [PromiseOrValue<BigNumberish>]): string;
-    decodeFunctionResult(functionFragment: 'deposit', data: BytesLike): Result;
-    decodeFunctionResult(functionFragment: 'withdraw', data: BytesLike): Result;
+    getFunction(nameOrSignatureOrTopic: "deposit" | "withdraw"): FunctionFragment;
+    encodeFunctionData(functionFragment: "deposit", values?: undefined): string;
+    encodeFunctionData(functionFragment: "withdraw", values: [PromiseOrValue<BigNumberish>]): string;
+    decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
+    decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
     events: {};
 }
 export interface WETH extends BaseContract {
