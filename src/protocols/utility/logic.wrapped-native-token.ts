@@ -4,12 +4,12 @@ import * as core from '@composable-router/core';
 
 export type WrappedNativeTokenLogicParams = core.TokenToTokenExactInParams;
 
-export type WrappedNativeTokenLogicFields = core.TokenToTokenFields;
+export type WrappedNativeTokenLogicFields = core.TokenToTokenExactInFields;
 
 @core.LogicDefinitionDecorator()
 export class WrappedNativeTokenLogic
   extends core.Logic
-  implements core.LogicInterfaceGetSupportedTokens, core.LogicInterfaceGetPrice
+  implements core.LogicTokenListInterface, core.LogicOracleInterface
 {
   static readonly supportedChainIds = [
     common.ChainId.mainnet,
@@ -20,14 +20,14 @@ export class WrappedNativeTokenLogic
     common.ChainId.fantom,
   ];
 
-  getSupportedTokens() {
+  getTokenList() {
     return [
       [this.nativeToken, this.wrappedNativeToken],
       [this.wrappedNativeToken, this.nativeToken],
     ];
   }
 
-  getPrice(params: WrappedNativeTokenLogicParams) {
+  quote(params: WrappedNativeTokenLogicParams) {
     const { input, tokenOut } = params;
     const output = new common.TokenAmount(tokenOut, input.amount);
     return output;
@@ -40,7 +40,7 @@ export class WrappedNativeTokenLogic
     const iface = common.WETH__factory.createInterface();
     let data: string;
     let amountOffset: BigNumberish | undefined;
-    if (input.token.isNative()) {
+    if (input.token.isNative) {
       data = iface.encodeFunctionData('deposit');
       if (amountBps) amountOffset = constants.MaxUint256;
     } else {

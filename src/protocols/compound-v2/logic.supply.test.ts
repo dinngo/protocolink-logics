@@ -7,11 +7,11 @@ import { constants, utils } from 'ethers';
 import { expect } from 'chai';
 
 describe('CompoundV2 SupplyLogic', function () {
-  context('Test getSupportedTokens', async function () {
+  context('Test getTokenList', async function () {
     SupplyLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.getNetworkId(chainId)}`, async function () {
         const supplyLogic = new SupplyLogic(chainId);
-        const tokens = await supplyLogic.getSupportedTokens();
+        const tokens = await supplyLogic.getTokenList();
         expect(tokens.length).to.be.gt(0);
       });
     });
@@ -62,7 +62,7 @@ describe('CompoundV2 SupplyLogic', function () {
 
         expect(routerLogic.to).to.eq(output.token.address);
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;
-        if (input.token.isNative()) {
+        if (input.token.isNative) {
           expect(sig).to.eq(cEther.getSighash('mint'));
           expect(routerLogic.inputs[0].token).to.eq(common.ELASTIC_ADDRESS);
         } else {
@@ -70,7 +70,7 @@ describe('CompoundV2 SupplyLogic', function () {
         }
         if (amountBps) {
           expect(routerLogic.inputs[0].amountBps).to.eq(amountBps);
-          expect(routerLogic.inputs[0].amountOrOffset).to.eq(input.token.isNative() ? constants.MaxUint256 : 0);
+          expect(routerLogic.inputs[0].amountOrOffset).to.eq(input.token.isNative ? constants.MaxUint256 : 0);
         } else {
           expect(routerLogic.inputs[0].amountBps).to.eq(constants.MaxUint256);
           expect(routerLogic.inputs[0].amountOrOffset).to.eq(input.amountWei);

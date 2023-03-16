@@ -9,7 +9,7 @@ axiosRetry(axios, { retries: 5, retryDelay: axiosRetry.exponentialDelay });
 export type SendTokenLogicFields = core.TokenToUserFields;
 
 @core.LogicDefinitionDecorator()
-export class SendTokenLogic extends core.Logic implements core.LogicInterfaceGetSupportedTokens {
+export class SendTokenLogic extends core.Logic implements core.LogicTokenListInterface {
   static readonly supportedChainIds = [
     common.ChainId.mainnet,
     common.ChainId.polygon,
@@ -19,7 +19,7 @@ export class SendTokenLogic extends core.Logic implements core.LogicInterfaceGet
     common.ChainId.fantom,
   ];
 
-  async getSupportedTokens() {
+  async getTokenList() {
     const { data } = await axios.get<{
       tokens: Record<string, { symbol: string; name: string; decimals: number; address: string }>;
     }>(`https://api.1inch.io/v5.0/${this.chainId}/tokens`);

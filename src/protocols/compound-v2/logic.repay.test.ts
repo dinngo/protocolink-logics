@@ -7,11 +7,11 @@ import { expect } from 'chai';
 import { toCToken, underlyingTokens } from './tokens';
 
 describe('CompoundV2 RepayLogic', function () {
-  context('Test getSupportedTokens', async function () {
+  context('Test getTokenList', async function () {
     RepayLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.getNetworkId(chainId)}`, async function () {
         const repayLogic = new RepayLogic(chainId);
-        const tokens = await repayLogic.getSupportedTokens();
+        const tokens = await repayLogic.getTokenList();
         expect(tokens.length).to.be.gt(0);
       });
     });
@@ -60,7 +60,7 @@ describe('CompoundV2 RepayLogic', function () {
 
         expect(routerLogic.to).to.eq(toCToken(input.token).address);
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;
-        if (input.token.isNative()) {
+        if (input.token.isNative) {
           expect(sig).to.eq(cEther.getSighash('repayBorrowBehalf'));
           expect(routerLogic.inputs[0].token).to.eq(common.ELASTIC_ADDRESS);
         } else {
@@ -68,7 +68,7 @@ describe('CompoundV2 RepayLogic', function () {
         }
         if (amountBps) {
           expect(routerLogic.inputs[0].amountBps).to.eq(amountBps);
-          expect(routerLogic.inputs[0].amountOrOffset).to.eq(input.token.isNative() ? constants.MaxUint256 : 32);
+          expect(routerLogic.inputs[0].amountOrOffset).to.eq(input.token.isNative ? constants.MaxUint256 : 32);
         } else {
           expect(routerLogic.inputs[0].amountBps).to.eq(constants.MaxUint256);
           expect(routerLogic.inputs[0].amountOrOffset).to.eq(input.amountWei);

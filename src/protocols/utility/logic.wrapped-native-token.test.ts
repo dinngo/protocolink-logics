@@ -6,11 +6,11 @@ import { expect } from 'chai';
 import { mainnetTokens } from '@composable-router/test-helpers';
 
 describe('Utility WrappedNativeTokenLogic', function () {
-  context('Test getSupportedTokens', async function () {
+  context('Test getTokenList', async function () {
     WrappedNativeTokenLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.getNetworkId(chainId)}`, async function () {
         const wrappedNativeTokenLogic = new WrappedNativeTokenLogic(chainId);
-        const tokens = wrappedNativeTokenLogic.getSupportedTokens();
+        const tokens = wrappedNativeTokenLogic.getTokenList();
         expect(tokens.length).to.be.gt(0);
       });
     });
@@ -60,7 +60,7 @@ describe('Utility WrappedNativeTokenLogic', function () {
 
         expect(routerLogic.to).to.eq(mainnetTokens.WETH.address);
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;
-        if (input.token.isNative()) {
+        if (input.token.isNative) {
           expect(sig).to.eq(iface.getSighash('deposit'));
           expect(routerLogic.inputs[0].token).to.eq(common.ELASTIC_ADDRESS);
         } else {
@@ -68,7 +68,7 @@ describe('Utility WrappedNativeTokenLogic', function () {
         }
         if (amountBps) {
           expect(routerLogic.inputs[0].amountBps).to.eq(amountBps);
-          expect(routerLogic.inputs[0].amountOrOffset).to.eq(input.token.isNative() ? constants.MaxUint256 : 0);
+          expect(routerLogic.inputs[0].amountOrOffset).to.eq(input.token.isNative ? constants.MaxUint256 : 0);
         } else {
           expect(routerLogic.inputs[0].amountBps).to.eq(constants.MaxUint256);
           expect(routerLogic.inputs[0].amountOrOffset).to.eq(input.amountWei);

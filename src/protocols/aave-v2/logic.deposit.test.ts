@@ -8,11 +8,11 @@ import { expect } from 'chai';
 import { mainnetTokens } from './tokens';
 
 describe('AaveV2 DepositLogic', function () {
-  context('Test getSupportedTokens', async function () {
+  context('Test getTokenList', async function () {
     DepositLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.getNetworkId(chainId)}`, async function () {
         const borrowLogic = new DepositLogic(chainId);
-        const tokens = await borrowLogic.getSupportedTokens();
+        const tokens = await borrowLogic.getTokenList();
         expect(tokens.length).to.be.gt(0);
       });
     });

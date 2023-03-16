@@ -6,6 +6,10 @@ export interface GlobalOptions {
     readonly balances: common.TokenAmounts;
     readonly slippage: number;
 }
+export declare enum TradeType {
+    exactIn = "exactIn",
+    exactOut = "exactOut"
+}
 export type TokenToTokenExactInParams<T = object> = {
     input: common.TokenAmount;
     tokenOut: common.Token;
@@ -14,6 +18,9 @@ export type TokenToTokenExactOutParams<T = object> = {
     tokenIn: common.Token;
     output: common.TokenAmount;
 } & T;
+export type TokenToTokenParams<T = object> = (TokenToTokenExactInParams | TokenToTokenExactOutParams) & T;
+export declare function isTokenToTokenExactInParams<T = object>(v: any): v is TokenToTokenExactInParams<T>;
+export declare function isTokenToTokenExactOutParams<T = object>(v: any): v is TokenToTokenExactOutParams<T>;
 export type TokenInFields<T = object> = {
     input: common.TokenAmount;
     amountBps?: BigNumberish;
@@ -27,7 +34,13 @@ export type TokenOutFields<T = object> = {
 export type TokensOutFields<T = object> = {
     outputs: common.TokenAmounts;
 } & T;
+export type TokenToTokenExactInFields<T = object> = {
+    input: common.TokenAmount;
+    output: common.TokenAmount;
+    amountBps?: BigNumberish;
+} & T;
 export type TokenToTokenFields<T = object> = {
+    tradeType: TradeType;
     input: common.TokenAmount;
     output: common.TokenAmount;
     amountBps?: BigNumberish;

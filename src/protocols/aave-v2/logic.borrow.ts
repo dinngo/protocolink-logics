@@ -9,10 +9,10 @@ import invariant from 'tiny-invariant';
 export type BorrowLogicFields = core.TokenOutFields<{ interestRateMode: InterestRateMode }>;
 
 @core.LogicDefinitionDecorator()
-export class BorrowLogic extends core.Logic implements core.LogicInterfaceGetSupportedTokens {
+export class BorrowLogic extends core.Logic implements core.LogicTokenListInterface {
   static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon, common.ChainId.avalanche];
 
-  async getSupportedTokens() {
+  async getTokenList() {
     const service = new Service(this.chainId, this.provider);
     const tokens = await service.getAssets();
 
@@ -21,7 +21,7 @@ export class BorrowLogic extends core.Logic implements core.LogicInterfaceGetSup
 
   async getLogic(fields: BorrowLogicFields) {
     const { output, interestRateMode } = fields;
-    invariant(!output.token.isNative(), 'tokenOut should not be native token');
+    invariant(!output.token.isNative, 'tokenOut should not be native token');
 
     const to = getContractAddress(this.chainId, 'SpenderAaveV2Delegation');
     const data = SpenderAaveV2Delegation__factory.createInterface().encodeFunctionData('borrow', [

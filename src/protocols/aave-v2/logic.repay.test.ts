@@ -9,11 +9,11 @@ import { expect } from 'chai';
 import { mainnetTokens } from './tokens';
 
 describe('AaveV2 RepayLogic', function () {
-  context('Test getSupportedTokens', async function () {
+  context('Test getTokenList', async function () {
     RepayLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.getNetworkId(chainId)}`, async function () {
         const repayLogic = new RepayLogic(chainId);
-        const tokens = await repayLogic.getSupportedTokens();
+        const tokens = await repayLogic.getTokenList();
         expect(tokens.length).to.be.gt(0);
       });
     });

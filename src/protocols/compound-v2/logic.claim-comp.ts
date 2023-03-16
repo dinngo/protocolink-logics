@@ -7,10 +7,10 @@ import { getContractAddress } from './config';
 export type ClaimCOMPLogicFields = core.ClaimTokenFields;
 
 @core.LogicDefinitionDecorator()
-export class ClaimCOMPLogic extends core.Logic implements core.LogicInterfaceGetSupportedTokens {
+export class ClaimCOMPLogic extends core.Logic implements core.LogicTokenListInterface {
   static readonly supportedChainIds = [common.ChainId.mainnet];
 
-  getSupportedTokens() {
+  getTokenList() {
     return [COMP];
   }
 

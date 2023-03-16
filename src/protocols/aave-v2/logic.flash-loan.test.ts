@@ -9,11 +9,11 @@ import { getContractAddress } from './config';
 import { mainnetTokens } from './tokens';
 
 describe('AaveV2 FlashLoanLogic', function () {
-  context('Test getSupportedTokens', async function () {
+  context('Test getTokenList', async function () {
     FlashLoanLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.getNetworkId(chainId)}`, async function () {
         const flashLoanLogic = new FlashLoanLogic(chainId);
-        const tokens = await flashLoanLogic.getSupportedTokens();
+        const tokens = await flashLoanLogic.getTokenList();
         expect(tokens.length).to.be.gt(0);
       });
     });

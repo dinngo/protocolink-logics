@@ -42,7 +42,7 @@ describe('ParaswapV5 SwapTokenLogic', function () {
 
         expect(routerLogic.to).to.eq('0xDEF171Fe48CF0115B1d80b88dc8eAB59176FEe57');
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;
-        if (input.token.isNative()) {
+        if (input.token.isNative) {
           expect(routerLogic.inputs[0].token).to.eq(common.ELASTIC_ADDRESS);
         }
         expect(routerLogic.inputs[0].amountBps).to.eq(constants.MaxUint256);

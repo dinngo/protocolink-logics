@@ -6,20 +6,17 @@ import { tokenPairs } from './tokens';
 
 export type WithdrawLogicParams = core.TokenToTokenExactInParams;
 
-export type WithdrawLogicFields = core.TokenToTokenFields;
+export type WithdrawLogicFields = core.TokenToTokenExactInFields;
 
 @core.LogicDefinitionDecorator()
-export class WithdrawLogic
-  extends core.Logic
-  implements core.LogicInterfaceGetSupportedTokens, core.LogicInterfaceGetPrice
-{
+export class WithdrawLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicOracleInterface {
   static readonly supportedChainIds = [common.ChainId.mainnet];
 
-  getSupportedTokens() {
+  getTokenList() {
     return tokenPairs.map((tokenPair) => [tokenPair.cToken, tokenPair.underlyingToken]);
   }
 
-  async getPrice(params: WithdrawLogicParams) {
+  async quote(params: WithdrawLogicParams) {
     const { input, tokenOut } = params;
 
     const cToken = CErc20__factory.connect(input.token.address, this.provider);

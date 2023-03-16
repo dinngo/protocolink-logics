@@ -9,10 +9,10 @@ import invariant from 'tiny-invariant';
 export type RepayLogicFields = core.TokenInFields<{ interestRateMode: InterestRateMode; address: string }>;
 
 @core.LogicDefinitionDecorator()
-export class RepayLogic extends core.Logic implements core.LogicInterfaceGetSupportedTokens {
+export class RepayLogic extends core.Logic implements core.LogicTokenListInterface {
   static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon, common.ChainId.avalanche];
 
-  async getSupportedTokens() {
+  async getTokenList() {
     const service = new Service(this.chainId, this.provider);
     const tokens = await service.getAssets();
 
@@ -34,7 +34,7 @@ export class RepayLogic extends core.Logic implements core.LogicInterfaceGetSupp
 
   async getLogic(fields: RepayLogicFields) {
     const { input, interestRateMode, address, amountBps } = fields;
-    invariant(!input.token.isNative(), 'tokenIn should not be native token');
+    invariant(!input.token.isNative, 'tokenIn should not be native token');
 
     const service = new Service(this.chainId, this.provider);
     const to = await service.getLendingPoolAddress();

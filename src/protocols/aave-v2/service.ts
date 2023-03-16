@@ -145,7 +145,7 @@ export class Service extends common.Web3Toolkit {
   }
 
   async toAToken(asset: common.Token) {
-    const { aTokenAddress } = await this.protocolDataProvider.getReserveTokensAddresses(asset.wrapped().address);
+    const { aTokenAddress } = await this.protocolDataProvider.getReserveTokensAddresses(asset.wrapped.address);
     return this.getToken(aTokenAddress);
   }
 

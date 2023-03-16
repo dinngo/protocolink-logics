@@ -25,7 +25,7 @@ export class PermitTokenLogic extends core.Logic {
 
   async getPermitDetails(account: string, erc20Funds: common.TokenAmounts, spender: string) {
     const details: PermitDetails[] = [];
-    if (!erc20Funds.isEmpty()) {
+    if (!erc20Funds.isEmpty) {
       const iface = Permit2__factory.createInterface();
       const calls: common.Multicall2.CallStruct[] = erc20Funds.map((fund) => ({
         target: getContractAddress(this.chainId, 'Permit2'),

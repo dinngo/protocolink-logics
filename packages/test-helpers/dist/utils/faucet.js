@@ -14,11 +14,11 @@ async function claimToken(chainId, recepient, tokenOrAddress, amount) {
     const signer = await hre.ethers.provider.getSigner(faucet);
     const token = await common.tokenOrAddressToToken(chainId, tokenOrAddress, hre.ethers.provider);
     const tokenAmount = new common.TokenAmount(token, amount);
-    if (token.isNative()) {
+    if (token.isNative) {
         await signer.sendTransaction({ to: recepient, value: tokenAmount.amountWei });
     }
     else {
-        if (token.isWrapped()) {
+        if (token.isWrapped) {
             const weth = common.WETH__factory.connect(token.address, signer);
             await (await weth.deposit({ value: tokenAmount.amountWei })).wait();
         }

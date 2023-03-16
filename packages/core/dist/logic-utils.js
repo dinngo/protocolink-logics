@@ -26,4 +26,4 @@ function newLogic(options) {
     return { to, data, inputs, approveTo, callback };
 }
 exports.newLogic = newLogic;
-//# sourceMappingURL=logic.utils.js.map
+//# sourceMappingURL=logic-utils.js.map

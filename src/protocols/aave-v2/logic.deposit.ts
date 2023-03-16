@@ -7,27 +7,24 @@ import invariant from 'tiny-invariant';
 
 export type DepositLogicParams = core.TokenToTokenExactInParams;
 
-export type DepositLogicFields = core.TokenToTokenFields<{ referralCode?: number }>;
+export type DepositLogicFields = core.TokenToTokenExactInFields<{ referralCode?: number }>;
 
 export type DepositLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
 @core.LogicDefinitionDecorator()
-export class DepositLogic
-  extends core.Logic
-  implements core.LogicInterfaceGetSupportedTokens, core.LogicInterfaceGetPrice
-{
+export class DepositLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicOracleInterface {
   static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon, common.ChainId.avalanche];
 
-  async getSupportedTokens() {
+  async getTokenList() {
     const service = new Service(this.chainId, this.provider);
     const reserveTokens = await service.getReserveTokens();
 
     return reserveTokens.map((reserveToken) => [reserveToken.asset, reserveToken.aToken]);
   }
 
-  async getPrice(params: DepositLogicParams) {
+  async quote(params: DepositLogicParams) {
     const { input, tokenOut } = params;
-    invariant(!input.token.isNative(), 'tokenIn should not be native token');
+    invariant(!input.token.isNative, 'tokenIn should not be native token');
     const output = new common.TokenAmount(tokenOut, input.amount);
 
     return output;
@@ -35,7 +32,7 @@ export class DepositLogic
 
   async getLogic(fields: DepositLogicFields, options: DepositLogicOptions) {
     const { input, amountBps, referralCode = 0 } = fields;
-    invariant(!input.token.isNative(), 'tokenIn should not be native token');
+    invariant(!input.token.isNative, 'tokenIn should not be native token');
     const { account } = options;
 
     const service = new Service(this.chainId, this.provider);

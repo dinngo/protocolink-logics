@@ -28,7 +28,7 @@ describe('Test ParaswapV5 SwapToken Logic', function () {
     it(`case ${i + 1}`, async function () {
       // 1. get output
       const paraswapV5SwapToken = new protocols.paraswapv5.SwapTokenLogic(chainId);
-      const output = await paraswapV5SwapToken.getPrice({ input, tokenOut });
+      const output = await paraswapV5SwapToken.quote({ input, tokenOut });
 
       // 2. build funds, tokensReturn
       const funds = new common.TokenAmounts(input);

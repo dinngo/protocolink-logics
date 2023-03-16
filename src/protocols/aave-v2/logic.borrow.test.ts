@@ -9,11 +9,11 @@ import { getContractAddress } from './config';
 import { mainnetTokens } from './tokens';
 
 describe('AaveV2 BorrowLogic', function () {
-  context('Test getSupportedTokens', async function () {
+  context('Test getTokenList', async function () {
     BorrowLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.getNetworkId(chainId)}`, async function () {
         const borrowLogic = new BorrowLogic(chainId);
-        const tokens = await borrowLogic.getSupportedTokens();
+        const tokens = await borrowLogic.getTokenList();
         expect(tokens.length).to.be.gt(0);
       });
     });
@@ -47,7 +47,7 @@ describe('AaveV2 BorrowLogic', function () {
 
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(routerLogic.to).to.eq(getContractAddress(chainId, 'SpenderAaveV2Delegation'));
-        expect(sig).to.eq(spenderAaveV2Delegation.getSighash(output.token.isNative() ? 'borrowETH' : 'borrow'));
+        expect(sig).to.eq(spenderAaveV2Delegation.getSighash(output.token.isNative ? 'borrowETH' : 'borrow'));
         expect(routerLogic.inputs).to.deep.eq([]);
         expect(routerLogic.approveTo).to.eq(constants.AddressZero);
         expect(routerLogic.callback).to.eq(constants.AddressZero);

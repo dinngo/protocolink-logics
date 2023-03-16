@@ -71,7 +71,7 @@ class TokenAmount {
         this.amount = (0, bignumber_js_1.default)(this.amount).minus((0, utils_1.toBigUnit)(amountWei, this.token.decimals)).toString();
         return this;
     }
-    isZero() {
+    get isZero() {
         return (0, bignumber_js_1.default)(this.amount).isZero();
     }
     eq(tokenAmount) {
@@ -193,20 +193,20 @@ class TokenAmounts {
     compact() {
         const tokenAmounts = new TokenAmounts();
         Object.keys(this.tokenAmountMap).forEach((tokenAddress) => {
-            if (!this.tokenAmountMap[tokenAddress].isZero()) {
+            if (!this.tokenAmountMap[tokenAddress].isZero) {
                 tokenAmounts.add(this.tokenAmountMap[tokenAddress]);
             }
         });
         return tokenAmounts;
     }
-    isEmpty() {
+    get isEmpty() {
         return this.length === 0;
     }
     get native() {
         let nativeTokenAmount;
         for (const tokenAddress of Object.keys(this.tokenAmountMap)) {
             const tokenAmount = this.tokenAmountMap[tokenAddress];
-            if (tokenAmount.token.isNative()) {
+            if (tokenAmount.token.isNative) {
                 nativeTokenAmount = tokenAmount;
                 break;
             }
@@ -216,7 +216,7 @@ class TokenAmounts {
     get erc20() {
         return Object.keys(this.tokenAmountMap).reduce((accumulator, tokenAddress) => {
             const tokenAmount = this.tokenAmountMap[tokenAddress];
-            if (!tokenAmount.token.isNative())
+            if (!tokenAmount.token.isNative)
                 accumulator.set(tokenAmount);
             return accumulator;
         }, new TokenAmounts());

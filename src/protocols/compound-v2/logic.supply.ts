@@ -6,20 +6,17 @@ import { tokenPairs } from './tokens';
 
 export type SupplyLogicParams = core.TokenToTokenExactInParams;
 
-export type SupplyLogicFields = core.TokenToTokenFields;
+export type SupplyLogicFields = core.TokenToTokenExactInFields;
 
 @core.LogicDefinitionDecorator()
-export class SupplyLogic
-  extends core.Logic
-  implements core.LogicInterfaceGetSupportedTokens, core.LogicInterfaceGetPrice
-{
+export class SupplyLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicOracleInterface {
   static readonly supportedChainIds = [common.ChainId.mainnet];
 
-  getSupportedTokens() {
+  getTokenList() {
     return tokenPairs.map((tokenPair) => [tokenPair.underlyingToken, tokenPair.cToken]);
   }
 
-  async getPrice(params: SupplyLogicParams) {
+  async quote(params: SupplyLogicParams) {
     const { input, tokenOut } = params;
 
     const cToken = CErc20__factory.connect(tokenOut.address, this.provider);
@@ -36,7 +33,7 @@ export class SupplyLogic
     const to = output.token.address;
     let data: string;
     let amountOffset: BigNumberish | undefined;
-    if (input.token.isNative()) {
+    if (input.token.isNative) {
       data = CEther__factory.createInterface().encodeFunctionData('mint');
       if (amountBps) amountOffset = constants.MaxUint256;
     } else {

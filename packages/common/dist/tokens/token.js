@@ -59,23 +59,23 @@ class Token {
         }
         return address;
     }
-    wrapped() {
-        return this.isNative() ? new Token((0, networks_1.getNetwork)(this.chainId).wrappedNativeToken) : this;
+    get wrapped() {
+        return this.isNative ? new Token((0, networks_1.getNetwork)(this.chainId).wrappedNativeToken) : this;
     }
     is(token) {
         return this.chainId === token.chainId && this.address === token.address;
     }
-    isNative() {
+    get isNative() {
         return this.is((0, networks_1.getNetwork)(this.chainId).nativeToken);
     }
-    isWrapped() {
+    get isWrapped() {
         return this.is((0, networks_1.getNetwork)(this.chainId).wrappedNativeToken);
     }
     get elasticAddress() {
-        return this.isNative() ? constants_1.ELASTIC_ADDRESS : this.address;
+        return this.isNative ? constants_1.ELASTIC_ADDRESS : this.address;
     }
     sortsBefore(token) {
-        return this.wrapped().address.toLowerCase() < Token.from(token).wrapped().address.toLowerCase();
+        return this.wrapped.address.toLowerCase() < Token.from(token).wrapped.address.toLowerCase();
     }
     toObject() {
         return {

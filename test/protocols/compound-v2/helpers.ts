@@ -6,7 +6,7 @@ import * as protocols from 'src/protocols';
 
 export async function supply(user: SignerWithAddress, supplyAmount: common.TokenAmount) {
   const cToken = protocols.compoundv2.toCToken(supplyAmount.token);
-  if (supplyAmount.token.isNative()) {
+  if (supplyAmount.token.isNative) {
     const cEther = protocols.compoundv2.CEther__factory.connect(cToken.address, user);
     await expect(cEther.mint({ value: supplyAmount.amountWei })).to.not.be.reverted;
   } else {

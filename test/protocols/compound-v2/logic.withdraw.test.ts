@@ -43,7 +43,7 @@ describe('Test CompoundV2 Withdraw Logic', function () {
     it(`case ${i + 1}`, async function () {
       // 1. get output
       const compoundV2Withdraw = new protocols.compoundv2.WithdrawLogic(chainId, hre.ethers.provider);
-      const output = await compoundV2Withdraw.getPrice({ input, tokenOut });
+      const output = await compoundV2Withdraw.quote({ input, tokenOut });
 
       // 2. supply
       const underlyingToken = output.token;

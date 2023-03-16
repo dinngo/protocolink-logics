@@ -26,7 +26,7 @@ export declare class TokenAmount {
     sub(amount: string): TokenAmount;
     sub(tokenAmount: TokenAmount): TokenAmount;
     subWei(amountWei: BigNumberish): this;
-    isZero(): boolean;
+    get isZero(): boolean;
     eq(tokenAmount: TokenAmount): boolean;
     gt(tokenAmount: TokenAmount): boolean;
     gte(tokenAmount: TokenAmount): boolean;
@@ -62,7 +62,7 @@ export declare class TokenAmounts {
     toJSON(): TokenAmountObject[];
     toValues(): [string[], BigNumber[]];
     compact(): TokenAmounts;
-    isEmpty(): boolean;
+    get isEmpty(): boolean;
     get native(): TokenAmount | undefined;
     get erc20(): TokenAmounts;
     get tokens(): Token[];

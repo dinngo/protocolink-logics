@@ -7,11 +7,11 @@ import { constants, utils } from 'ethers';
 import { expect } from 'chai';
 
 describe('CompoundV2 WithdrawLogic', function () {
-  context('Test getSupportedTokens', async function () {
+  context('Test getTokenList', async function () {
     WithdrawLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.getNetworkId(chainId)}`, async function () {
         const withdrawLogic = new WithdrawLogic(chainId);
-        const tokens = await withdrawLogic.getSupportedTokens();
+        const tokens = await withdrawLogic.getTokenList();
         expect(tokens.length).to.be.gt(0);
       });
     });

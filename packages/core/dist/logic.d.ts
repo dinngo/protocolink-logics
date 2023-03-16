@@ -6,11 +6,11 @@ export declare abstract class Logic extends common.Web3Toolkit {
     static get rid(): string;
     abstract getLogic(fields: any, options?: any): Promise<IParam.LogicStruct>;
 }
-export interface LogicInterfaceGetSupportedTokens {
-    getSupportedTokens(): any;
+export interface LogicTokenListInterface {
+    getTokenList(): any;
 }
-export interface LogicInterfaceGetPrice {
-    getPrice(params: any): any;
+export interface LogicOracleInterface {
+    quote(params: any): any;
 }
 export interface LogicClassInterface {
     new (...args: any[]): Logic;

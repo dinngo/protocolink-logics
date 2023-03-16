@@ -7,27 +7,24 @@ import invariant from 'tiny-invariant';
 
 export type WithdrawLogicParams = core.TokenToTokenExactInParams;
 
-export type WithdrawLogicFields = core.TokenToTokenFields;
+export type WithdrawLogicFields = core.TokenToTokenExactInFields;
 
 export type WithdrawLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
 @core.LogicDefinitionDecorator()
-export class WithdrawLogic
-  extends core.Logic
-  implements core.LogicInterfaceGetSupportedTokens, core.LogicInterfaceGetPrice
-{
+export class WithdrawLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicOracleInterface {
   static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon, common.ChainId.avalanche];
 
-  async getSupportedTokens() {
+  async getTokenList() {
     const service = new Service(this.chainId, this.provider);
     const reserveTokens = await service.getReserveTokens();
 
     return reserveTokens.map((reserveToken) => [reserveToken.aToken, reserveToken.asset]);
   }
 
-  async getPrice(params: WithdrawLogicParams) {
+  async quote(params: WithdrawLogicParams) {
     const { input, tokenOut } = params;
-    invariant(!tokenOut.isNative(), 'tokenOut should not be native token');
+    invariant(!tokenOut.isNative, 'tokenOut should not be native token');
     const output = new common.TokenAmount(tokenOut, input.amount);
 
     return output;
@@ -35,7 +32,7 @@ export class WithdrawLogic
 
   async getLogic(fields: WithdrawLogicFields, options: WithdrawLogicOptions) {
     const { input, output, amountBps } = fields;
-    invariant(!output.token.isNative(), 'tokenOut should not be native token');
+    invariant(!output.token.isNative, 'tokenOut should not be native token');
     const { account } = options;
 
     const service = new Service(this.chainId, this.provider);

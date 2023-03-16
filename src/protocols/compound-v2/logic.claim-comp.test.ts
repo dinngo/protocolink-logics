@@ -7,11 +7,11 @@ import { expect } from 'chai';
 import { getContractAddress } from './config';
 
 describe('CompoundV2 ClaimCOMPLogic', function () {
-  context('Test getSupportedTokens', async function () {
+  context('Test getTokenList', async function () {
     ClaimCOMPLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.getNetworkId(chainId)}`, async function () {
         const claimCOMPLogic = new ClaimCOMPLogic(chainId);
-        const tokens = await claimCOMPLogic.getSupportedTokens();
+        const tokens = await claimCOMPLogic.getTokenList();
         expect(tokens.length).to.be.gt(0);
       });
     });

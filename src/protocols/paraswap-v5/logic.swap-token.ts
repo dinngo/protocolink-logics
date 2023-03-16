@@ -9,12 +9,12 @@ axiosRetry(axios, { retries: 5, retryDelay: axiosRetry.exponentialDelay });
 
 export type SwapTokenLogicParams = core.TokenToTokenExactInParams;
 
-export type SwapTokenLogicFields = core.TokenToTokenFields<Pick<BuildSwapTxInput, 'partner' | 'partnerAddress'>>;
+export type SwapTokenLogicFields = core.TokenToTokenExactInFields<Pick<BuildSwapTxInput, 'partner' | 'partnerAddress'>>;
 
 export type SwapTokenLogicOptions = Pick<core.GlobalOptions, 'account' | 'slippage'>;
 
 @core.LogicDefinitionDecorator()
-export class SwapTokenLogic extends core.Logic implements core.LogicInterfaceGetPrice {
+export class SwapTokenLogic extends core.Logic implements core.LogicOracleInterface {
   static readonly supportedChainIds = [
     common.ChainId.mainnet,
     common.ChainId.polygon,
@@ -27,7 +27,7 @@ export class SwapTokenLogic extends core.Logic implements core.LogicInterfaceGet
     return constructSimpleSDK({ chainId: this.chainId, axios });
   }
 
-  async getPrice(params: SwapTokenLogicParams) {
+  async quote(params: SwapTokenLogicParams) {
     const { input, tokenOut } = params;
 
     const { destAmount } = await this.sdk.swap.getRate({

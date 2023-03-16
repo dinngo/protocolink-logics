@@ -7,10 +7,10 @@ import { toCToken, underlyingTokens } from './tokens';
 export type RepayLogicFields = core.TokenInFields<{ borrower: string }>;
 
 @core.LogicDefinitionDecorator()
-export class RepayLogic extends core.Logic implements core.LogicInterfaceGetSupportedTokens {
+export class RepayLogic extends core.Logic implements core.LogicTokenListInterface {
   static readonly supportedChainIds = [common.ChainId.mainnet];
 
-  getSupportedTokens() {
+  getTokenList() {
     return Object.values(underlyingTokens);
   }
 
@@ -30,7 +30,7 @@ export class RepayLogic extends core.Logic implements core.LogicInterfaceGetSupp
     const to = cToken.address;
     let data: string;
     let amountOffset: BigNumberish | undefined;
-    if (input.token.isNative()) {
+    if (input.token.isNative) {
       data = CEther__factory.createInterface().encodeFunctionData('repayBorrowBehalf', [borrower]);
       if (amountBps) amountOffset = constants.MaxUint256;
     } else {

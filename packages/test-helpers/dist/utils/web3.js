@@ -10,7 +10,7 @@ async function getBalance(account, tokenOrAddress, blockTag) {
     const hre = await Promise.resolve().then(() => tslib_1.__importStar(require('hardhat')));
     const chainId = await (0, network_1.getChainId)();
     const token = await common.tokenOrAddressToToken(chainId, tokenOrAddress, hre.ethers.provider);
-    const balanceWei = token.isNative()
+    const balanceWei = token.isNative
         ? await hre.ethers.provider.getBalance(account, blockTag)
         : await common.ERC20__factory.connect(token.address, hre.ethers.provider).balanceOf(account, { blockTag });
     const balance = new common.TokenAmount(token).setWei(balanceWei);
@@ -18,7 +18,7 @@ async function getBalance(account, tokenOrAddress, blockTag) {
 }
 exports.getBalance = getBalance;
 async function approve(user, spender, tokenAmount) {
-    if (tokenAmount.token.isNative())
+    if (tokenAmount.token.isNative)
         return;
     const erc20 = common.ERC20__factory.connect(tokenAmount.token.address, user);
     const allowance = await erc20.allowance(user.address, spender);

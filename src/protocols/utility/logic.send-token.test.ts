@@ -6,11 +6,11 @@ import { expect } from 'chai';
 import { mainnetTokens } from '@composable-router/test-helpers';
 
 describe('Utility SendTokenLogic', function () {
-  context('Test getSupportedTokens', async function () {
+  context('Test getTokenList', async function () {
     SendTokenLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.getNetworkId(chainId)}`, async function () {
         const sendTokenLogic = new SendTokenLogic(chainId);
-        const tokens = await sendTokenLogic.getSupportedTokens();
+        const tokens = await sendTokenLogic.getTokenList();
         expect(tokens.length).to.be.gt(0);
       });
     });
