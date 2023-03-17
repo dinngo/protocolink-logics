@@ -26,7 +26,7 @@ class Token {
     static isNative(arg0, ...otherArgs) {
         let chainId;
         let address;
-        if (isTokenObject(arg0)) {
+        if (isTokenTypes(arg0)) {
             chainId = arg0.chainId;
             address = arg0.address;
         }
@@ -39,7 +39,7 @@ class Token {
     static isWrapped(arg0, ...otherArgs) {
         let chainId;
         let address;
-        if (isTokenObject(arg0)) {
+        if (isTokenTypes(arg0)) {
             chainId = arg0.chainId;
             address = arg0.address;
         }

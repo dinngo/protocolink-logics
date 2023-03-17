@@ -1,0 +1,23 @@
+{
+  "DAI": {
+    "chainId": 10,
+    "address": "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
+    "decimals": 18,
+    "symbol": "DAI",
+    "name": "Dai Stablecoin"
+  },
+  "USDT": {
+    "chainId": 10,
+    "address": "0x94b008aA00579c1307B0EF2c499aD98a8ce58e58",
+    "decimals": 18,
+    "symbol": "USDT",
+    "name": "Tether USD"
+  },
+  "WBTC": {
+    "chainId": 10,
+    "address": "0x68f180fcCe6836688e9084f035309E29Bf0A2095",
+    "decimals": 18,
+    "symbol": "WBTC",
+    "name": "Wrapped BTC"
+  }
+}
