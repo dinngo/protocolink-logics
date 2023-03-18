@@ -6,10 +6,12 @@ import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
 import invariant from 'tiny-invariant';
 
-export type RepayLogicFields = core.TokenInFields<{ interestRateMode: InterestRateMode; address: string }>;
+export type RepayLogicParams = core.RepayParams<{ interestRateMode: InterestRateMode }>;
+
+export type RepayLogicFields = core.RepayFields<{ interestRateMode: InterestRateMode }>;
 
 @core.LogicDefinitionDecorator()
-export class RepayLogic extends core.Logic implements core.LogicTokenListInterface {
+export class RepayLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicOracleInterface {
   static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon, common.ChainId.avalanche];
 
   async getTokenList() {
@@ -19,21 +21,23 @@ export class RepayLogic extends core.Logic implements core.LogicTokenListInterfa
     return tokens;
   }
 
-  async getDebt(user: string, asset: common.Token, interestRateMode: InterestRateMode) {
+  async quote(params: RepayLogicParams) {
+    const { borrower, tokenIn, interestRateMode } = params;
+
     const service = new Service(this.chainId, this.provider);
     const { currentStableDebt, currentVariableDebt } = await service.protocolDataProvider.getUserReserveData(
-      asset.address,
-      user
+      tokenIn.address,
+      borrower
     );
     const currentDebt = interestRateMode === InterestRateMode.variable ? currentVariableDebt : currentStableDebt;
     const amountWei = common.calcSlippage(currentDebt, -100); // slightly higher than the current borrowed amount
-    const debt = new common.TokenAmount(asset).setWei(amountWei);
+    const input = new common.TokenAmount(tokenIn).setWei(amountWei);
 
-    return debt;
+    return { borrower, interestRateMode, input };
   }
 
   async getLogic(fields: RepayLogicFields) {
-    const { input, interestRateMode, address, amountBps } = fields;
+    const { input, interestRateMode, borrower, amountBps } = fields;
     invariant(!input.token.isNative, 'tokenIn should not be native token');
 
     const service = new Service(this.chainId, this.provider);
@@ -42,7 +46,7 @@ export class RepayLogic extends core.Logic implements core.LogicTokenListInterfa
       input.token.address,
       input.amountWei,
       interestRateMode,
-      address,
+      borrower,
     ]);
     let amountOffset: BigNumberish | undefined;
     if (amountBps) amountOffset = common.getParamOffset(1);

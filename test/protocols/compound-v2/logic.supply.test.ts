@@ -42,7 +42,7 @@ describe('Test CompoundV2 Supply Logic', function () {
     it(`case ${i + 1}`, async function () {
       // 1. get output
       const compoundV2Supply = new protocols.compoundv2.SupplyLogic(chainId, hre.ethers.provider);
-      const output = await compoundV2Supply.quote({ input, tokenOut });
+      const { output } = await compoundV2Supply.quote({ input, tokenOut });
 
       // 2. build funds, tokensReturn
       const tokensReturn = [output.token.elasticAddress];

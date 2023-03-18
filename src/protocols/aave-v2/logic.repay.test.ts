@@ -35,21 +35,21 @@ describe('AaveV2 RepayLogic', function () {
         fields: {
           input: new common.TokenAmount(mainnetTokens.WETH, '1'),
           interestRateMode: InterestRateMode.variable,
-          address: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
+          borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
         },
       },
       {
         fields: {
           input: new common.TokenAmount(mainnetTokens.USDC, '1'),
           interestRateMode: InterestRateMode.variable,
-          address: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
+          borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
         },
       },
       {
         fields: {
           input: new common.TokenAmount(mainnetTokens.WETH, '1'),
           interestRateMode: InterestRateMode.variable,
-          address: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
+          borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
           amountBps: 5000,
         },
       },
@@ -57,7 +57,7 @@ describe('AaveV2 RepayLogic', function () {
         fields: {
           input: new common.TokenAmount(mainnetTokens.USDC, '1'),
           interestRateMode: InterestRateMode.variable,
-          address: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
+          borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
           amountBps: 5000,
         },
       },

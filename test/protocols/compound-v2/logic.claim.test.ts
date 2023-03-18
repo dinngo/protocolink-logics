@@ -8,7 +8,7 @@ import hre from 'hardhat';
 import * as hrehelpers from '@nomicfoundation/hardhat-network-helpers';
 import * as protocols from 'src/protocols';
 
-describe('Test CompoundV2 ClaimCOMP Logic', function () {
+describe('Test CompoundV2 Claim Logic', function () {
   let chainId: number;
   let users: SignerWithAddress[];
 
@@ -59,8 +59,8 @@ describe('Test CompoundV2 ClaimCOMP Logic', function () {
 
       // 2. get allocated COMP amount after 1000 blocks
       await hrehelpers.mine(1000);
-      const compoundV2ClaimCOMP = new protocols.compoundv2.ClaimCOMPLogic(chainId, hre.ethers.provider);
-      const output = await compoundV2ClaimCOMP.getReward(owner.address);
+      const compoundV2Claim = new protocols.compoundv2.ClaimLogic(chainId, hre.ethers.provider);
+      const { output } = await compoundV2Claim.quote({ owner: owner.address });
       expect(output.amountWei).to.be.gt(0);
 
       // 4. build tokensReturn
@@ -68,7 +68,7 @@ describe('Test CompoundV2 ClaimCOMP Logic', function () {
 
       // 5. build router logics
       const routerLogics: core.IParam.LogicStruct[] = [];
-      routerLogics.push(await compoundV2ClaimCOMP.getLogic({ owner: owner.address }));
+      routerLogics.push(await compoundV2Claim.getLogic({ owner: owner.address }));
 
       // 6. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics, tokensReturn });

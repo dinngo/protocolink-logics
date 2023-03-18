@@ -21,19 +21,6 @@ export type TokenToTokenExactOutParams<T = object> = {
 export type TokenToTokenParams<T = object> = (TokenToTokenExactInParams | TokenToTokenExactOutParams) & T;
 export declare function isTokenToTokenExactInParams<T = object>(v: any): v is TokenToTokenExactInParams<T>;
 export declare function isTokenToTokenExactOutParams<T = object>(v: any): v is TokenToTokenExactOutParams<T>;
-export type TokenInFields<T = object> = {
-    input: common.TokenAmount;
-    amountBps?: BigNumberish;
-} & T;
-export type TokensInFields<T = object> = {
-    inputs: common.TokenAmounts;
-} & T;
-export type TokenOutFields<T = object> = {
-    output: common.TokenAmount;
-} & T;
-export type TokensOutFields<T = object> = {
-    outputs: common.TokenAmounts;
-} & T;
 export type TokenToTokenExactInFields<T = object> = {
     input: common.TokenAmount;
     output: common.TokenAmount;
@@ -45,12 +32,40 @@ export type TokenToTokenFields<T = object> = {
     output: common.TokenAmount;
     amountBps?: BigNumberish;
 } & T;
+export type TokenInParams<T = object> = {
+    tokenIn: common.Token;
+} & T;
+export type TokenInFields<T = object> = {
+    input: common.TokenAmount;
+    amountBps?: BigNumberish;
+} & T;
+export type TokensInFields<T = object> = {
+    inputs: common.TokenAmounts;
+} & T;
+export type TokenOutParams<T = object> = {
+    tokenOut: common.Token;
+} & T;
+export type TokenOutFields<T = object> = {
+    output: common.TokenAmount;
+} & T;
+export type TokensOutFields<T = object> = {
+    outputs: common.TokenAmounts;
+} & T;
 export type TokenToUserFields<T = object> = {
     input: common.TokenAmount;
     recipient: string;
     amountBps?: BigNumberish;
 } & T;
-export type ClaimTokenFields<T = object> = {
+export type RepayParams<T = object> = TokenInParams<{
+    borrower: string;
+}> & T;
+export type RepayFields<T = object> = TokenInFields<{
+    borrower: string;
+}> & T;
+export type ClaimParams<T = object> = {
+    owner: string;
+} & T;
+export type ClaimFields<T = object> = {
     owner: string;
 } & T;
 export type FlashLoanFields<T = object> = TokensOutFields<{

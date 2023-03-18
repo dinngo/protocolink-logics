@@ -50,11 +50,10 @@ describe('Test CompoundV2 Repay Logic', function () {
       // 2. get borrow balance after 1000 blocks
       await hrehelpers.mine(1000);
       const compoundV2Repay = new protocols.compoundv2.RepayLogic(chainId, hre.ethers.provider);
-      const debt = await compoundV2Repay.getDebt(user.address, borrow.token);
-      expect(debt.amountWei).to.be.gt(borrow.amountWei);
+      const { input } = await compoundV2Repay.quote({ borrower: user.address, tokenIn: borrow.token });
+      expect(input.amountWei).to.be.gt(borrow.amountWei);
 
       // 3. build input, funds, tokensReturn
-      const input = debt;
       const funds = new common.TokenAmounts();
       if (amountBps) {
         funds.add(utils.calcRequiredFundByAmountBps(input, amountBps));

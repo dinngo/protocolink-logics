@@ -44,7 +44,7 @@ describe('Test AaveV2 Deposit Logic', function () {
     it(`case ${i + 1}`, async function () {
       // 1. get output
       const aaveV2Deposit = new protocols.aavev2.DepositLogic(chainId);
-      const output = await aaveV2Deposit.quote({ input, tokenOut });
+      const { output } = await aaveV2Deposit.quote({ input, tokenOut });
 
       // 2. build funds, tokensReturn
       const tokensReturn = [output.token.elasticAddress];

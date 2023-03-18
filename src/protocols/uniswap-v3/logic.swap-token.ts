@@ -15,16 +15,6 @@ import { getDeadline } from './utils';
 
 axiosRetry(axios, { retries: 5, retryDelay: axiosRetry.exponentialDelay });
 
-export type SwapTokenLogicSingleHopQuotation = { amount: string; fee: number };
-
-export type SwapTokenLogicMultiHopQuotation = { amount: string; path: string };
-
-export type SwapTokenLogicQuotation = SwapTokenLogicSingleHopQuotation | SwapTokenLogicMultiHopQuotation;
-
-export function isSwapTokenLogicSingleHopQuotation(v: any): v is SwapTokenLogicSingleHopQuotation {
-  return !!v.fee;
-}
-
 export type SwapTokenLogicParams = core.TokenToTokenParams;
 
 export type SwapTokenLogicSingleHopFields = core.TokenToTokenFields<{ fee: number }>;
@@ -103,29 +93,28 @@ export class SwapTokenLogic extends core.Logic implements core.LogicTokenListInt
   }
 
   async quote(params: SwapTokenLogicParams) {
-    let quotation: SwapTokenLogicQuotation;
     if (core.isTokenToTokenExactInParams(params)) {
+      const tradeType = core.TradeType.exactIn;
       const { input, tokenOut } = params;
       const { route, outputAmount } = await this.getExactInBestTrade(input, tokenOut);
-      const amount = outputAmount.toExact();
+      const output = new common.TokenAmount(tokenOut, outputAmount.toExact());
       if (route.pools.length === 1) {
-        quotation = { amount, fee: route.pools[0].fee };
+        return { tradeType, input, output, fee: route.pools[0].fee };
       } else {
-        quotation = { amount, path: encodeRouteToPath(route, false) };
+        return { tradeType, input, output, path: encodeRouteToPath(route, false) };
       }
     } else {
+      const tradeType = core.TradeType.exactOut;
       const { tokenIn, output } = params;
       const { route, inputAmount } = await this.getExactOutBestTrade(tokenIn, output);
       const amountIn = common.calcSlippage(inputAmount.quotient.toString(), -100); // 1% slippage
-      const amount = common.toBigUnit(amountIn, tokenIn.decimals);
+      const input = new common.TokenAmount(tokenIn, common.toBigUnit(amountIn, tokenIn.decimals));
       if (route.pools.length === 1) {
-        quotation = { amount, fee: route.pools[0].fee };
+        return { tradeType, input, output, fee: route.pools[0].fee };
       } else {
-        quotation = { amount, path: encodeRouteToPath(route, true) };
+        return { tradeType, input, output, path: encodeRouteToPath(route, true) };
       }
     }
-
-    return quotation;
   }
 
   // https://github.com/Uniswap/v3-sdk/blob/000fccfbbebadabadfa6d689ebc85a50489d25d4/src/swapRouter.ts#L64
