@@ -67,15 +67,17 @@ export declare namespace IAllowanceTransfer {
   };
 
   export type AllowanceTransferDetailsStruct = {
-    token: PromiseOrValue<string>;
-    amount: PromiseOrValue<BigNumberish>;
+    from: PromiseOrValue<string>;
     to: PromiseOrValue<string>;
+    amount: PromiseOrValue<BigNumberish>;
+    token: PromiseOrValue<string>;
   };
 
-  export type AllowanceTransferDetailsStructOutput = [string, BigNumber, string] & {
-    token: string;
-    amount: BigNumber;
+  export type AllowanceTransferDetailsStructOutput = [string, string, BigNumber, string] & {
+    from: string;
     to: string;
+    amount: BigNumber;
+    token: string;
   };
 }
 
@@ -88,32 +90,6 @@ export declare namespace ISignatureTransfer {
   export type TokenPermissionsStructOutput = [string, BigNumber] & {
     token: string;
     amount: BigNumber;
-  };
-
-  export type PermitBatchTransferFromStruct = {
-    permitted: ISignatureTransfer.TokenPermissionsStruct[];
-    nonce: PromiseOrValue<BigNumberish>;
-    deadline: PromiseOrValue<BigNumberish>;
-  };
-
-  export type PermitBatchTransferFromStructOutput = [
-    ISignatureTransfer.TokenPermissionsStructOutput[],
-    BigNumber,
-    BigNumber
-  ] & {
-    permitted: ISignatureTransfer.TokenPermissionsStructOutput[];
-    nonce: BigNumber;
-    deadline: BigNumber;
-  };
-
-  export type SignatureTransferDetailsStruct = {
-    to: PromiseOrValue<string>;
-    requestedAmount: PromiseOrValue<BigNumberish>;
-  };
-
-  export type SignatureTransferDetailsStructOutput = [string, BigNumber] & {
-    to: string;
-    requestedAmount: BigNumber;
   };
 
   export type PermitTransferFromStruct = {
@@ -131,6 +107,32 @@ export declare namespace ISignatureTransfer {
     nonce: BigNumber;
     deadline: BigNumber;
   };
+
+  export type SignatureTransferDetailsStruct = {
+    to: PromiseOrValue<string>;
+    requestedAmount: PromiseOrValue<BigNumberish>;
+  };
+
+  export type SignatureTransferDetailsStructOutput = [string, BigNumber] & {
+    to: string;
+    requestedAmount: BigNumber;
+  };
+
+  export type PermitBatchTransferFromStruct = {
+    permitted: ISignatureTransfer.TokenPermissionsStruct[];
+    nonce: PromiseOrValue<BigNumberish>;
+    deadline: PromiseOrValue<BigNumberish>;
+  };
+
+  export type PermitBatchTransferFromStructOutput = [
+    ISignatureTransfer.TokenPermissionsStructOutput[],
+    BigNumber,
+    BigNumber
+  ] & {
+    permitted: ISignatureTransfer.TokenPermissionsStructOutput[];
+    nonce: BigNumber;
+    deadline: BigNumber;
+  };
 }
 
 export interface Permit2Interface extends utils.Interface {
@@ -144,12 +146,12 @@ export interface Permit2Interface extends utils.Interface {
     'nonceBitmap(address,uint256)': FunctionFragment;
     'permit(address,((address,uint160,uint48,uint48)[],address,uint256),bytes)': FunctionFragment;
     'permit(address,((address,uint160,uint48,uint48),address,uint256),bytes)': FunctionFragment;
-    'permitTransferFrom(((address,uint256)[],uint256,uint256),address,(address,uint256)[],bytes)': FunctionFragment;
-    'permitTransferFrom(((address,uint256),uint256,uint256),address,address,uint256,bytes)': FunctionFragment;
-    'permitWitnessTransferFrom(((address,uint256),uint256,uint256),address,address,uint256,bytes32,string,string,bytes)': FunctionFragment;
-    'permitWitnessTransferFrom(((address,uint256)[],uint256,uint256),address,(address,uint256)[],bytes32,string,string,bytes)': FunctionFragment;
-    'transferFrom(address,address,address,uint160)': FunctionFragment;
-    'transferFrom(address,(address,uint160,address)[])': FunctionFragment;
+    'permitTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes)': FunctionFragment;
+    'permitTransferFrom(((address,uint256)[],uint256,uint256),(address,uint256)[],address,bytes)': FunctionFragment;
+    'permitWitnessTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes32,string,bytes)': FunctionFragment;
+    'permitWitnessTransferFrom(((address,uint256)[],uint256,uint256),(address,uint256)[],address,bytes32,string,bytes)': FunctionFragment;
+    'transferFrom((address,address,uint160,address)[])': FunctionFragment;
+    'transferFrom(address,address,uint160,address)': FunctionFragment;
   };
 
   getFunction(
@@ -163,12 +165,12 @@ export interface Permit2Interface extends utils.Interface {
       | 'nonceBitmap'
       | 'permit(address,((address,uint160,uint48,uint48)[],address,uint256),bytes)'
       | 'permit(address,((address,uint160,uint48,uint48),address,uint256),bytes)'
-      | 'permitTransferFrom(((address,uint256)[],uint256,uint256),address,(address,uint256)[],bytes)'
-      | 'permitTransferFrom(((address,uint256),uint256,uint256),address,address,uint256,bytes)'
-      | 'permitWitnessTransferFrom(((address,uint256),uint256,uint256),address,address,uint256,bytes32,string,string,bytes)'
-      | 'permitWitnessTransferFrom(((address,uint256)[],uint256,uint256),address,(address,uint256)[],bytes32,string,string,bytes)'
-      | 'transferFrom(address,address,address,uint160)'
-      | 'transferFrom(address,(address,uint160,address)[])'
+      | 'permitTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes)'
+      | 'permitTransferFrom(((address,uint256)[],uint256,uint256),(address,uint256)[],address,bytes)'
+      | 'permitWitnessTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes32,string,bytes)'
+      | 'permitWitnessTransferFrom(((address,uint256)[],uint256,uint256),(address,uint256)[],address,bytes32,string,bytes)'
+      | 'transferFrom((address,address,uint160,address)[])'
+      | 'transferFrom(address,address,uint160,address)'
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: 'DOMAIN_SEPARATOR', values?: undefined): string;
@@ -202,56 +204,52 @@ export interface Permit2Interface extends utils.Interface {
     values: [PromiseOrValue<string>, IAllowanceTransfer.PermitSingleStruct, PromiseOrValue<BytesLike>]
   ): string;
   encodeFunctionData(
-    functionFragment: 'permitTransferFrom(((address,uint256)[],uint256,uint256),address,(address,uint256)[],bytes)',
-    values: [
-      ISignatureTransfer.PermitBatchTransferFromStruct,
-      PromiseOrValue<string>,
-      ISignatureTransfer.SignatureTransferDetailsStruct[],
-      PromiseOrValue<BytesLike>
-    ]
-  ): string;
-  encodeFunctionData(
-    functionFragment: 'permitTransferFrom(((address,uint256),uint256,uint256),address,address,uint256,bytes)',
+    functionFragment: 'permitTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes)',
     values: [
       ISignatureTransfer.PermitTransferFromStruct,
-      PromiseOrValue<string>,
-      PromiseOrValue<string>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BytesLike>
-    ]
-  ): string;
-  encodeFunctionData(
-    functionFragment: 'permitWitnessTransferFrom(((address,uint256),uint256,uint256),address,address,uint256,bytes32,string,string,bytes)',
-    values: [
-      ISignatureTransfer.PermitTransferFromStruct,
-      PromiseOrValue<string>,
-      PromiseOrValue<string>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BytesLike>,
-      PromiseOrValue<string>,
+      ISignatureTransfer.SignatureTransferDetailsStruct,
       PromiseOrValue<string>,
       PromiseOrValue<BytesLike>
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'permitWitnessTransferFrom(((address,uint256)[],uint256,uint256),address,(address,uint256)[],bytes32,string,string,bytes)',
+    functionFragment: 'permitTransferFrom(((address,uint256)[],uint256,uint256),(address,uint256)[],address,bytes)',
     values: [
       ISignatureTransfer.PermitBatchTransferFromStruct,
-      PromiseOrValue<string>,
       ISignatureTransfer.SignatureTransferDetailsStruct[],
-      PromiseOrValue<BytesLike>,
-      PromiseOrValue<string>,
       PromiseOrValue<string>,
       PromiseOrValue<BytesLike>
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'transferFrom(address,address,address,uint160)',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+    functionFragment: 'permitWitnessTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes32,string,bytes)',
+    values: [
+      ISignatureTransfer.PermitTransferFromStruct,
+      ISignatureTransfer.SignatureTransferDetailsStruct,
+      PromiseOrValue<string>,
+      PromiseOrValue<BytesLike>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BytesLike>
+    ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'transferFrom(address,(address,uint160,address)[])',
-    values: [PromiseOrValue<string>, IAllowanceTransfer.AllowanceTransferDetailsStruct[]]
+    functionFragment: 'permitWitnessTransferFrom(((address,uint256)[],uint256,uint256),(address,uint256)[],address,bytes32,string,bytes)',
+    values: [
+      ISignatureTransfer.PermitBatchTransferFromStruct,
+      ISignatureTransfer.SignatureTransferDetailsStruct[],
+      PromiseOrValue<string>,
+      PromiseOrValue<BytesLike>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BytesLike>
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: 'transferFrom((address,address,uint160,address)[])',
+    values: [IAllowanceTransfer.AllowanceTransferDetailsStruct[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: 'transferFrom(address,address,uint160,address)',
+    values: [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
   ): string;
 
   decodeFunctionResult(functionFragment: 'DOMAIN_SEPARATOR', data: BytesLike): Result;
@@ -270,34 +268,36 @@ export interface Permit2Interface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'permitTransferFrom(((address,uint256)[],uint256,uint256),address,(address,uint256)[],bytes)',
+    functionFragment: 'permitTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes)',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'permitTransferFrom(((address,uint256),uint256,uint256),address,address,uint256,bytes)',
+    functionFragment: 'permitTransferFrom(((address,uint256)[],uint256,uint256),(address,uint256)[],address,bytes)',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'permitWitnessTransferFrom(((address,uint256),uint256,uint256),address,address,uint256,bytes32,string,string,bytes)',
+    functionFragment: 'permitWitnessTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes32,string,bytes)',
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'permitWitnessTransferFrom(((address,uint256)[],uint256,uint256),address,(address,uint256)[],bytes32,string,string,bytes)',
+    functionFragment: 'permitWitnessTransferFrom(((address,uint256)[],uint256,uint256),(address,uint256)[],address,bytes32,string,bytes)',
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: 'transferFrom(address,address,address,uint160)', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'transferFrom(address,(address,uint160,address)[])', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'transferFrom((address,address,uint160,address)[])', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'transferFrom(address,address,uint160,address)', data: BytesLike): Result;
 
   events: {
     'Approval(address,address,address,uint160,uint48)': EventFragment;
     'Lockdown(address,address,address)': EventFragment;
     'NonceInvalidation(address,address,address,uint48,uint48)': EventFragment;
+    'Permit(address,address,address,uint160,uint48,uint48)': EventFragment;
     'UnorderedNonceInvalidation(address,uint256,uint256)': EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: 'Approval'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'Lockdown'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'NonceInvalidation'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'Permit'): EventFragment;
   getEvent(nameOrSignatureOrTopic: 'UnorderedNonceInvalidation'): EventFragment;
 }
 
@@ -331,6 +331,18 @@ export interface NonceInvalidationEventObject {
 export type NonceInvalidationEvent = TypedEvent<[string, string, string, number, number], NonceInvalidationEventObject>;
 
 export type NonceInvalidationEventFilter = TypedEventFilter<NonceInvalidationEvent>;
+
+export interface PermitEventObject {
+  owner: string;
+  token: string;
+  spender: string;
+  amount: BigNumber;
+  expiration: number;
+  nonce: number;
+}
+export type PermitEvent = TypedEvent<[string, string, string, BigNumber, number, number], PermitEventObject>;
+
+export type PermitEventFilter = TypedEventFilter<PermitEvent>;
 
 export interface UnorderedNonceInvalidationEventObject {
   owner: string;
@@ -370,9 +382,9 @@ export interface Permit2 extends BaseContract {
     DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<[string]>;
 
     allowance(
-      owner: PromiseOrValue<string>,
-      token: PromiseOrValue<string>,
-      spender: PromiseOrValue<string>,
+      arg0: PromiseOrValue<string>,
+      arg1: PromiseOrValue<string>,
+      arg2: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<
       [BigNumber, number, number] & {
@@ -428,57 +440,52 @@ export interface Permit2 extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    'permitTransferFrom(((address,uint256)[],uint256,uint256),address,(address,uint256)[],bytes)'(
-      permit: ISignatureTransfer.PermitBatchTransferFromStruct,
-      owner: PromiseOrValue<string>,
-      transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct[],
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    'permitTransferFrom(((address,uint256),uint256,uint256),address,address,uint256,bytes)'(
+    'permitTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes)'(
       permit: ISignatureTransfer.PermitTransferFromStruct,
+      transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct,
       owner: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      requestedAmount: PromiseOrValue<BigNumberish>,
       signature: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    'permitWitnessTransferFrom(((address,uint256),uint256,uint256),address,address,uint256,bytes32,string,string,bytes)'(
-      permit: ISignatureTransfer.PermitTransferFromStruct,
-      owner: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      requestedAmount: PromiseOrValue<BigNumberish>,
-      witness: PromiseOrValue<BytesLike>,
-      witnessTypeName: PromiseOrValue<string>,
-      witnessType: PromiseOrValue<string>,
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    'permitWitnessTransferFrom(((address,uint256)[],uint256,uint256),address,(address,uint256)[],bytes32,string,string,bytes)'(
+    'permitTransferFrom(((address,uint256)[],uint256,uint256),(address,uint256)[],address,bytes)'(
       permit: ISignatureTransfer.PermitBatchTransferFromStruct,
-      owner: PromiseOrValue<string>,
       transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct[],
-      witness: PromiseOrValue<BytesLike>,
-      witnessTypeName: PromiseOrValue<string>,
-      witnessType: PromiseOrValue<string>,
+      owner: PromiseOrValue<string>,
       signature: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    'transferFrom(address,address,address,uint160)'(
-      token: PromiseOrValue<string>,
+    'permitWitnessTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes32,string,bytes)'(
+      permit: ISignatureTransfer.PermitTransferFromStruct,
+      transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct,
+      owner: PromiseOrValue<string>,
+      witness: PromiseOrValue<BytesLike>,
+      witnessTypeString: PromiseOrValue<string>,
+      signature: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    'permitWitnessTransferFrom(((address,uint256)[],uint256,uint256),(address,uint256)[],address,bytes32,string,bytes)'(
+      permit: ISignatureTransfer.PermitBatchTransferFromStruct,
+      transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct[],
+      owner: PromiseOrValue<string>,
+      witness: PromiseOrValue<BytesLike>,
+      witnessTypeString: PromiseOrValue<string>,
+      signature: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    'transferFrom((address,address,uint160,address)[])'(
+      transferDetails: IAllowanceTransfer.AllowanceTransferDetailsStruct[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    'transferFrom(address,address,uint160,address)'(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    'transferFrom(address,(address,uint160,address)[])'(
-      from: PromiseOrValue<string>,
-      transferDetails: IAllowanceTransfer.AllowanceTransferDetailsStruct[],
+      token: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
   };
@@ -486,9 +493,9 @@ export interface Permit2 extends BaseContract {
   DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<string>;
 
   allowance(
-    owner: PromiseOrValue<string>,
-    token: PromiseOrValue<string>,
-    spender: PromiseOrValue<string>,
+    arg0: PromiseOrValue<string>,
+    arg1: PromiseOrValue<string>,
+    arg2: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<
     [BigNumber, number, number] & {
@@ -544,57 +551,52 @@ export interface Permit2 extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  'permitTransferFrom(((address,uint256)[],uint256,uint256),address,(address,uint256)[],bytes)'(
-    permit: ISignatureTransfer.PermitBatchTransferFromStruct,
-    owner: PromiseOrValue<string>,
-    transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct[],
-    signature: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  'permitTransferFrom(((address,uint256),uint256,uint256),address,address,uint256,bytes)'(
+  'permitTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes)'(
     permit: ISignatureTransfer.PermitTransferFromStruct,
+    transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct,
     owner: PromiseOrValue<string>,
-    to: PromiseOrValue<string>,
-    requestedAmount: PromiseOrValue<BigNumberish>,
     signature: PromiseOrValue<BytesLike>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  'permitWitnessTransferFrom(((address,uint256),uint256,uint256),address,address,uint256,bytes32,string,string,bytes)'(
-    permit: ISignatureTransfer.PermitTransferFromStruct,
-    owner: PromiseOrValue<string>,
-    to: PromiseOrValue<string>,
-    requestedAmount: PromiseOrValue<BigNumberish>,
-    witness: PromiseOrValue<BytesLike>,
-    witnessTypeName: PromiseOrValue<string>,
-    witnessType: PromiseOrValue<string>,
-    signature: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  'permitWitnessTransferFrom(((address,uint256)[],uint256,uint256),address,(address,uint256)[],bytes32,string,string,bytes)'(
+  'permitTransferFrom(((address,uint256)[],uint256,uint256),(address,uint256)[],address,bytes)'(
     permit: ISignatureTransfer.PermitBatchTransferFromStruct,
-    owner: PromiseOrValue<string>,
     transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct[],
-    witness: PromiseOrValue<BytesLike>,
-    witnessTypeName: PromiseOrValue<string>,
-    witnessType: PromiseOrValue<string>,
+    owner: PromiseOrValue<string>,
     signature: PromiseOrValue<BytesLike>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  'transferFrom(address,address,address,uint160)'(
-    token: PromiseOrValue<string>,
+  'permitWitnessTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes32,string,bytes)'(
+    permit: ISignatureTransfer.PermitTransferFromStruct,
+    transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct,
+    owner: PromiseOrValue<string>,
+    witness: PromiseOrValue<BytesLike>,
+    witnessTypeString: PromiseOrValue<string>,
+    signature: PromiseOrValue<BytesLike>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  'permitWitnessTransferFrom(((address,uint256)[],uint256,uint256),(address,uint256)[],address,bytes32,string,bytes)'(
+    permit: ISignatureTransfer.PermitBatchTransferFromStruct,
+    transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct[],
+    owner: PromiseOrValue<string>,
+    witness: PromiseOrValue<BytesLike>,
+    witnessTypeString: PromiseOrValue<string>,
+    signature: PromiseOrValue<BytesLike>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  'transferFrom((address,address,uint160,address)[])'(
+    transferDetails: IAllowanceTransfer.AllowanceTransferDetailsStruct[],
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  'transferFrom(address,address,uint160,address)'(
     from: PromiseOrValue<string>,
     to: PromiseOrValue<string>,
     amount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  'transferFrom(address,(address,uint160,address)[])'(
-    from: PromiseOrValue<string>,
-    transferDetails: IAllowanceTransfer.AllowanceTransferDetailsStruct[],
+    token: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -602,9 +604,9 @@ export interface Permit2 extends BaseContract {
     DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<string>;
 
     allowance(
-      owner: PromiseOrValue<string>,
-      token: PromiseOrValue<string>,
-      spender: PromiseOrValue<string>,
+      arg0: PromiseOrValue<string>,
+      arg1: PromiseOrValue<string>,
+      arg2: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<
       [BigNumber, number, number] & {
@@ -657,57 +659,52 @@ export interface Permit2 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    'permitTransferFrom(((address,uint256)[],uint256,uint256),address,(address,uint256)[],bytes)'(
-      permit: ISignatureTransfer.PermitBatchTransferFromStruct,
-      owner: PromiseOrValue<string>,
-      transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct[],
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    'permitTransferFrom(((address,uint256),uint256,uint256),address,address,uint256,bytes)'(
+    'permitTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes)'(
       permit: ISignatureTransfer.PermitTransferFromStruct,
+      transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct,
       owner: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      requestedAmount: PromiseOrValue<BigNumberish>,
       signature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    'permitWitnessTransferFrom(((address,uint256),uint256,uint256),address,address,uint256,bytes32,string,string,bytes)'(
-      permit: ISignatureTransfer.PermitTransferFromStruct,
-      owner: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      requestedAmount: PromiseOrValue<BigNumberish>,
-      witness: PromiseOrValue<BytesLike>,
-      witnessTypeName: PromiseOrValue<string>,
-      witnessType: PromiseOrValue<string>,
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    'permitWitnessTransferFrom(((address,uint256)[],uint256,uint256),address,(address,uint256)[],bytes32,string,string,bytes)'(
+    'permitTransferFrom(((address,uint256)[],uint256,uint256),(address,uint256)[],address,bytes)'(
       permit: ISignatureTransfer.PermitBatchTransferFromStruct,
-      owner: PromiseOrValue<string>,
       transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct[],
-      witness: PromiseOrValue<BytesLike>,
-      witnessTypeName: PromiseOrValue<string>,
-      witnessType: PromiseOrValue<string>,
+      owner: PromiseOrValue<string>,
       signature: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    'transferFrom(address,address,address,uint160)'(
-      token: PromiseOrValue<string>,
+    'permitWitnessTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes32,string,bytes)'(
+      permit: ISignatureTransfer.PermitTransferFromStruct,
+      transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct,
+      owner: PromiseOrValue<string>,
+      witness: PromiseOrValue<BytesLike>,
+      witnessTypeString: PromiseOrValue<string>,
+      signature: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    'permitWitnessTransferFrom(((address,uint256)[],uint256,uint256),(address,uint256)[],address,bytes32,string,bytes)'(
+      permit: ISignatureTransfer.PermitBatchTransferFromStruct,
+      transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct[],
+      owner: PromiseOrValue<string>,
+      witness: PromiseOrValue<BytesLike>,
+      witnessTypeString: PromiseOrValue<string>,
+      signature: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    'transferFrom((address,address,uint160,address)[])'(
+      transferDetails: IAllowanceTransfer.AllowanceTransferDetailsStruct[],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    'transferFrom(address,address,uint160,address)'(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    'transferFrom(address,(address,uint160,address)[])'(
-      from: PromiseOrValue<string>,
-      transferDetails: IAllowanceTransfer.AllowanceTransferDetailsStruct[],
+      token: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
   };
@@ -750,6 +747,23 @@ export interface Permit2 extends BaseContract {
       oldNonce?: null
     ): NonceInvalidationEventFilter;
 
+    'Permit(address,address,address,uint160,uint48,uint48)'(
+      owner?: PromiseOrValue<string> | null,
+      token?: PromiseOrValue<string> | null,
+      spender?: PromiseOrValue<string> | null,
+      amount?: null,
+      expiration?: null,
+      nonce?: null
+    ): PermitEventFilter;
+    Permit(
+      owner?: PromiseOrValue<string> | null,
+      token?: PromiseOrValue<string> | null,
+      spender?: PromiseOrValue<string> | null,
+      amount?: null,
+      expiration?: null,
+      nonce?: null
+    ): PermitEventFilter;
+
     'UnorderedNonceInvalidation(address,uint256,uint256)'(
       owner?: PromiseOrValue<string> | null,
       word?: null,
@@ -766,9 +780,9 @@ export interface Permit2 extends BaseContract {
     DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<BigNumber>;
 
     allowance(
-      owner: PromiseOrValue<string>,
-      token: PromiseOrValue<string>,
-      spender: PromiseOrValue<string>,
+      arg0: PromiseOrValue<string>,
+      arg1: PromiseOrValue<string>,
+      arg2: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -818,57 +832,52 @@ export interface Permit2 extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    'permitTransferFrom(((address,uint256)[],uint256,uint256),address,(address,uint256)[],bytes)'(
-      permit: ISignatureTransfer.PermitBatchTransferFromStruct,
-      owner: PromiseOrValue<string>,
-      transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct[],
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    'permitTransferFrom(((address,uint256),uint256,uint256),address,address,uint256,bytes)'(
+    'permitTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes)'(
       permit: ISignatureTransfer.PermitTransferFromStruct,
+      transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct,
       owner: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      requestedAmount: PromiseOrValue<BigNumberish>,
       signature: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    'permitWitnessTransferFrom(((address,uint256),uint256,uint256),address,address,uint256,bytes32,string,string,bytes)'(
-      permit: ISignatureTransfer.PermitTransferFromStruct,
-      owner: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      requestedAmount: PromiseOrValue<BigNumberish>,
-      witness: PromiseOrValue<BytesLike>,
-      witnessTypeName: PromiseOrValue<string>,
-      witnessType: PromiseOrValue<string>,
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    'permitWitnessTransferFrom(((address,uint256)[],uint256,uint256),address,(address,uint256)[],bytes32,string,string,bytes)'(
+    'permitTransferFrom(((address,uint256)[],uint256,uint256),(address,uint256)[],address,bytes)'(
       permit: ISignatureTransfer.PermitBatchTransferFromStruct,
-      owner: PromiseOrValue<string>,
       transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct[],
-      witness: PromiseOrValue<BytesLike>,
-      witnessTypeName: PromiseOrValue<string>,
-      witnessType: PromiseOrValue<string>,
+      owner: PromiseOrValue<string>,
       signature: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    'transferFrom(address,address,address,uint160)'(
-      token: PromiseOrValue<string>,
+    'permitWitnessTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes32,string,bytes)'(
+      permit: ISignatureTransfer.PermitTransferFromStruct,
+      transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct,
+      owner: PromiseOrValue<string>,
+      witness: PromiseOrValue<BytesLike>,
+      witnessTypeString: PromiseOrValue<string>,
+      signature: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    'permitWitnessTransferFrom(((address,uint256)[],uint256,uint256),(address,uint256)[],address,bytes32,string,bytes)'(
+      permit: ISignatureTransfer.PermitBatchTransferFromStruct,
+      transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct[],
+      owner: PromiseOrValue<string>,
+      witness: PromiseOrValue<BytesLike>,
+      witnessTypeString: PromiseOrValue<string>,
+      signature: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    'transferFrom((address,address,uint160,address)[])'(
+      transferDetails: IAllowanceTransfer.AllowanceTransferDetailsStruct[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    'transferFrom(address,address,uint160,address)'(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    'transferFrom(address,(address,uint160,address)[])'(
-      from: PromiseOrValue<string>,
-      transferDetails: IAllowanceTransfer.AllowanceTransferDetailsStruct[],
+      token: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
   };
@@ -877,9 +886,9 @@ export interface Permit2 extends BaseContract {
     DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     allowance(
-      owner: PromiseOrValue<string>,
-      token: PromiseOrValue<string>,
-      spender: PromiseOrValue<string>,
+      arg0: PromiseOrValue<string>,
+      arg1: PromiseOrValue<string>,
+      arg2: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -929,57 +938,52 @@ export interface Permit2 extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    'permitTransferFrom(((address,uint256)[],uint256,uint256),address,(address,uint256)[],bytes)'(
-      permit: ISignatureTransfer.PermitBatchTransferFromStruct,
-      owner: PromiseOrValue<string>,
-      transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct[],
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    'permitTransferFrom(((address,uint256),uint256,uint256),address,address,uint256,bytes)'(
+    'permitTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes)'(
       permit: ISignatureTransfer.PermitTransferFromStruct,
+      transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct,
       owner: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      requestedAmount: PromiseOrValue<BigNumberish>,
       signature: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    'permitWitnessTransferFrom(((address,uint256),uint256,uint256),address,address,uint256,bytes32,string,string,bytes)'(
-      permit: ISignatureTransfer.PermitTransferFromStruct,
-      owner: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      requestedAmount: PromiseOrValue<BigNumberish>,
-      witness: PromiseOrValue<BytesLike>,
-      witnessTypeName: PromiseOrValue<string>,
-      witnessType: PromiseOrValue<string>,
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    'permitWitnessTransferFrom(((address,uint256)[],uint256,uint256),address,(address,uint256)[],bytes32,string,string,bytes)'(
+    'permitTransferFrom(((address,uint256)[],uint256,uint256),(address,uint256)[],address,bytes)'(
       permit: ISignatureTransfer.PermitBatchTransferFromStruct,
-      owner: PromiseOrValue<string>,
       transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct[],
-      witness: PromiseOrValue<BytesLike>,
-      witnessTypeName: PromiseOrValue<string>,
-      witnessType: PromiseOrValue<string>,
+      owner: PromiseOrValue<string>,
       signature: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    'transferFrom(address,address,address,uint160)'(
-      token: PromiseOrValue<string>,
+    'permitWitnessTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes32,string,bytes)'(
+      permit: ISignatureTransfer.PermitTransferFromStruct,
+      transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct,
+      owner: PromiseOrValue<string>,
+      witness: PromiseOrValue<BytesLike>,
+      witnessTypeString: PromiseOrValue<string>,
+      signature: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    'permitWitnessTransferFrom(((address,uint256)[],uint256,uint256),(address,uint256)[],address,bytes32,string,bytes)'(
+      permit: ISignatureTransfer.PermitBatchTransferFromStruct,
+      transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct[],
+      owner: PromiseOrValue<string>,
+      witness: PromiseOrValue<BytesLike>,
+      witnessTypeString: PromiseOrValue<string>,
+      signature: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    'transferFrom((address,address,uint160,address)[])'(
+      transferDetails: IAllowanceTransfer.AllowanceTransferDetailsStruct[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    'transferFrom(address,address,uint160,address)'(
       from: PromiseOrValue<string>,
       to: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    'transferFrom(address,(address,uint160,address)[])'(
-      from: PromiseOrValue<string>,
-      transferDetails: IAllowanceTransfer.AllowanceTransferDetailsStruct[],
+      token: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };

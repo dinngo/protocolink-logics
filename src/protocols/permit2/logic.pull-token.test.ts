@@ -1,19 +1,19 @@
 import { LogicTestCase } from 'test/types';
+import { Permit2__factory } from './contracts';
 import { PullTokenLogic, PullTokenLogicFields } from './logic.pull-token';
-import { SpenderPermit2ERC20__factory } from './contracts';
 import * as common from '@composable-router/common';
 import { constants, utils } from 'ethers';
 import { expect } from 'chai';
 import { getContractAddress } from './config';
 import { mainnetTokens } from '@composable-router/test-helpers';
 
-describe('Router PullTokenLogic', function () {
+describe('Permit2 PullTokenLogic', function () {
   const chainId = common.ChainId.mainnet;
   const routerPullTokenLogic = new PullTokenLogic(chainId);
 
   context('Test getLogic', function () {
     const account = '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa';
-    const iface = SpenderPermit2ERC20__factory.createInterface();
+    const iface = Permit2__factory.createInterface();
 
     const testCases: LogicTestCase<PullTokenLogicFields>[] = [
       { fields: { inputs: new common.TokenAmounts([mainnetTokens.WETH, '1']) } },
@@ -26,13 +26,15 @@ describe('Router PullTokenLogic', function () {
         const sig = routerLogic.data.substring(0, 10);
         const { inputs } = fields;
 
-        expect(routerLogic.to).to.eq(getContractAddress(chainId, 'SpenderPermit2ERC20'));
+        expect(routerLogic.to).to.eq(getContractAddress(chainId, 'Permit2'));
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;
-        if (inputs.length == 1) {
-          expect(sig).to.eq(iface.getSighash('pullToken'));
-        } else {
-          expect(sig).to.eq(iface.getSighash('pullTokens'));
-        }
+        expect(sig).to.eq(
+          iface.getSighash(
+            inputs.length == 1
+              ? 'transferFrom(address,address,uint160,address)'
+              : 'transferFrom((address,address,uint160,address)[])'
+          )
+        );
         expect(routerLogic.inputs).to.deep.eq([]);
         expect(routerLogic.approveTo).to.eq(constants.AddressZero);
         expect(routerLogic.callback).to.eq(constants.AddressZero);

@@ -1,12 +1,13 @@
 import { InterestRateMode } from './types';
+import { LendingPool__factory } from './contracts';
 import { Service } from './service';
-import { SpenderAaveV2Delegation__factory } from './contracts';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
-import { getContractAddress } from './config';
 import invariant from 'tiny-invariant';
 
-export type BorrowLogicFields = core.TokenOutFields<{ interestRateMode: InterestRateMode }>;
+export type BorrowLogicFields = core.TokenOutFields<{ interestRateMode: InterestRateMode; referralCode?: number }>;
+
+export type BorrowLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
 @core.LogicDefinitionDecorator()
 export class BorrowLogic extends core.Logic implements core.LogicTokenListInterface {
@@ -19,15 +20,19 @@ export class BorrowLogic extends core.Logic implements core.LogicTokenListInterf
     return tokens;
   }
 
-  async getLogic(fields: BorrowLogicFields) {
-    const { output, interestRateMode } = fields;
+  async getLogic(fields: BorrowLogicFields, options: BorrowLogicOptions) {
+    const { output, interestRateMode, referralCode = 0 } = fields;
     invariant(!output.token.isNative, 'tokenOut should not be native token');
+    const { account } = options;
 
-    const to = getContractAddress(this.chainId, 'SpenderAaveV2Delegation');
-    const data = SpenderAaveV2Delegation__factory.createInterface().encodeFunctionData('borrow', [
+    const service = new Service(this.chainId, this.provider);
+    const to = await service.getLendingPoolAddress();
+    const data = LendingPool__factory.createInterface().encodeFunctionData('borrow', [
       output.token.address,
       output.amountWei,
       interestRateMode,
+      referralCode,
+      account,
     ]);
 
     return core.newLogic({ to, data });

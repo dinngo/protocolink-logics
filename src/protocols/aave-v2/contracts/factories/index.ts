@@ -7,4 +7,3 @@ export { FlashLoanCallbackAaveV2__factory } from './FlashLoanCallbackAaveV2__fac
 export { LendingPool__factory } from './LendingPool__factory';
 export { LendingPoolAddressesProvider__factory } from './LendingPoolAddressesProvider__factory';
 export { ProtocolDataProvider__factory } from './ProtocolDataProvider__factory';
-export { SpenderAaveV2Delegation__factory } from './SpenderAaveV2Delegation__factory';
