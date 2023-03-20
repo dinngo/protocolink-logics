@@ -27,7 +27,7 @@ export class DepositLogic extends core.Logic implements core.LogicTokenListInter
     invariant(!input.token.isNative, 'tokenIn should not be native token');
     const output = new common.TokenAmount(tokenOut, input.amount);
 
-    return output;
+    return { input, output };
   }
 
   async getLogic(fields: DepositLogicFields, options: DepositLogicOptions) {

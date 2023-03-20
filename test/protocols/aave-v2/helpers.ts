@@ -1,6 +1,7 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { approve } from '@composable-router/test-helpers';
 import * as common from '@composable-router/common';
+import * as core from '@composable-router/core';
 import { expect } from 'chai';
 import hre from 'hardhat';
 import * as protocols from 'src/protocols';
@@ -20,21 +21,17 @@ export async function approveDelegation(
   assetAmount: common.TokenAmount,
   interestRateMode: protocols.aavev2.InterestRateMode
 ) {
-  const delegateeAddress = protocols.aavev2.getContractAddress(chainId, 'SpenderAaveV2Delegation');
+  const userAgent = core.calcAccountAgent(chainId, user.address);
 
   const aaveV2Service = new protocols.aavev2.Service(chainId, hre.ethers.provider);
   const isDelegationApproved = await aaveV2Service.isDelegationApproved(
     user.address,
-    delegateeAddress,
+    userAgent,
     assetAmount,
     interestRateMode
   );
   if (!isDelegationApproved) {
-    const tx = await aaveV2Service.buildApproveDelegationTransactionRequest(
-      delegateeAddress,
-      assetAmount,
-      interestRateMode
-    );
+    const tx = await aaveV2Service.buildApproveDelegationTransactionRequest(userAgent, assetAmount, interestRateMode);
     await expect(user.sendTransaction(tx)).to.not.be.reverted;
   }
 }

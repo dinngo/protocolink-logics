@@ -1,5 +1,5 @@
-import { IAllowanceTransfer } from './contracts/SpenderPermit2ERC20';
-import { SpenderPermit2ERC20__factory } from './contracts';
+import { IAllowanceTransfer } from './contracts/Permit2';
+import { Permit2__factory } from './contracts';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
 import { getContractAddress } from './config';
@@ -21,20 +21,27 @@ export class PullTokenLogic extends core.Logic {
   async getLogic(fields: PullTokenLogicFields, options: PullTokenLogicOptions) {
     const { inputs } = fields;
     const { account } = options;
+    const userAgent = core.calcAccountAgent(this.chainId, account);
 
-    const to = getContractAddress(this.chainId, 'SpenderPermit2ERC20');
-    const iface = SpenderPermit2ERC20__factory.createInterface();
+    const to = getContractAddress(this.chainId, 'Permit2');
+    const iface = Permit2__factory.createInterface();
     let data: string;
     if (inputs.length === 1) {
-      data = iface.encodeFunctionData('pullToken', inputs.at(0).toValues());
+      const input = inputs.at(0);
+      data = iface.encodeFunctionData('transferFrom(address,address,uint160,address)', [
+        account,
+        userAgent,
+        input.amountWei,
+        input.token.address,
+      ]);
     } else {
       const details: IAllowanceTransfer.AllowanceTransferDetailsStruct[] = inputs.map((input) => ({
         from: account,
-        to: core.calcAccountAgent(this.chainId, account),
-        token: input.token.address,
+        to: userAgent,
         amount: input.amountWei,
+        token: input.token.address,
       }));
-      data = iface.encodeFunctionData('pullTokens', [details]);
+      data = iface.encodeFunctionData('transferFrom((address,address,uint160,address)[])', [details]);
     }
 
     return core.newLogic({ to, data });

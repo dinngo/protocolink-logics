@@ -4,23 +4,27 @@ import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
 import { toCToken, underlyingTokens } from './tokens';
 
-export type RepayLogicFields = core.TokenInFields<{ borrower: string }>;
+export type RepayLogicParams = core.RepayParams;
+
+export type RepayLogicFields = core.RepayFields;
 
 @core.LogicDefinitionDecorator()
-export class RepayLogic extends core.Logic implements core.LogicTokenListInterface {
+export class RepayLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicOracleInterface {
   static readonly supportedChainIds = [common.ChainId.mainnet];
 
   getTokenList() {
     return Object.values(underlyingTokens);
   }
 
-  async getDebt(borrower: string, underlyingToken: common.Token) {
-    const cToken = toCToken(underlyingToken);
+  async quote(params: RepayLogicParams) {
+    const { borrower, tokenIn } = params;
+
+    const cToken = toCToken(tokenIn);
     const cTokenContract = CErc20__factory.connect(cToken.address, this.provider);
     const borrowBalanceWei = await cTokenContract.callStatic.borrowBalanceCurrent(borrower);
-    const debt = new common.TokenAmount(underlyingToken).setWei(borrowBalanceWei);
+    const input = new common.TokenAmount(tokenIn).setWei(borrowBalanceWei);
 
-    return debt;
+    return { borrower, input };
   }
 
   async getLogic(fields: RepayLogicFields) {

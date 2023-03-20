@@ -27,7 +27,7 @@ export class WithdrawLogic extends core.Logic implements core.LogicTokenListInte
     invariant(!tokenOut.isNative, 'tokenOut should not be native token');
     const output = new common.TokenAmount(tokenOut, input.amount);
 
-    return output;
+    return { input, output };
   }
 
   async getLogic(fields: WithdrawLogicFields, options: WithdrawLogicOptions) {

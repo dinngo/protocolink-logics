@@ -1,13 +1,13 @@
-import { AllowanceTransfer, MaxUint160, PermitBatch, PermitBatchData, PermitDetails } from '@uniswap/permit2-sdk';
+import { AllowanceTransfer, MaxUint160, PermitBatch, PermitDetails, PermitSingle } from '@uniswap/permit2-sdk';
 import { PERMIT_EXPIRATION, PERMIT_SIG_DEADLINE } from './constants';
 import { Permit2__factory } from './contracts';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
 import { getContractAddress } from './config';
-import { getDeadline } from './utils';
+import { getDeadline, isPermitSingle } from './utils';
 
 export interface PermitTokenLogicFields {
-  permit: PermitBatch;
+  permit: PermitSingle | PermitBatch;
   sig: string;
 }
 
@@ -23,13 +23,17 @@ export class PermitTokenLogic extends core.Logic {
     common.ChainId.avalanche,
   ];
 
-  async getPermitDetails(account: string, erc20Funds: common.TokenAmounts, spender: string) {
+  async getPermitData(account: string, erc20Funds: common.TokenAmounts) {
     const details: PermitDetails[] = [];
     if (!erc20Funds.isEmpty) {
       const iface = Permit2__factory.createInterface();
       const calls: common.Multicall2.CallStruct[] = erc20Funds.map((fund) => ({
         target: getContractAddress(this.chainId, 'Permit2'),
-        callData: iface.encodeFunctionData('allowance', [account, fund.token.address, spender]),
+        callData: iface.encodeFunctionData('allowance', [
+          account,
+          fund.token.address,
+          core.calcAccountAgent(this.chainId, account),
+        ]),
       }));
       const { returnData } = await this.multicall2.callStatic.aggregate(calls);
 
@@ -45,20 +49,18 @@ export class PermitTokenLogic extends core.Logic {
         }
       });
     }
+    if (details.length === 0) return;
 
-    return details;
-  }
+    let permit: PermitSingle | PermitBatch;
+    const spender = core.calcAccountAgent(this.chainId, account);
+    const sigDeadline = getDeadline(PERMIT_SIG_DEADLINE);
+    if (details.length === 1) {
+      permit = { details: details[0], spender, sigDeadline };
+    } else {
+      permit = { details: details, spender, sigDeadline };
+    }
 
-  getPermit(details: PermitDetails[], spender: string): PermitBatch {
-    return { details, spender, sigDeadline: getDeadline(PERMIT_SIG_DEADLINE) };
-  }
-
-  getPermitData(permit: PermitBatch): PermitBatchData {
-    return AllowanceTransfer.getPermitData(
-      permit,
-      getContractAddress(this.chainId, 'Permit2'),
-      this.chainId
-    ) as PermitBatchData;
+    return AllowanceTransfer.getPermitData(permit, getContractAddress(this.chainId, 'Permit2'), this.chainId);
   }
 
   async getLogic(fields: PermitTokenLogicFields, options: PermitTokenLogicOptions) {
@@ -66,10 +68,18 @@ export class PermitTokenLogic extends core.Logic {
     const { account } = options;
 
     const to = getContractAddress(this.chainId, 'Permit2');
-    const data = Permit2__factory.createInterface().encodeFunctionData(
-      'permit(address,((address,uint160,uint48,uint48)[],address,uint256),bytes)',
-      [account, permit, sig]
-    );
+    let data: string;
+    if (isPermitSingle(permit)) {
+      data = Permit2__factory.createInterface().encodeFunctionData(
+        'permit(address,((address,uint160,uint48,uint48),address,uint256),bytes)',
+        [account, permit, sig]
+      );
+    } else {
+      data = Permit2__factory.createInterface().encodeFunctionData(
+        'permit(address,((address,uint160,uint48,uint48)[],address,uint256),bytes)',
+        [account, permit, sig]
+      );
+    }
 
     return core.newLogic({ to, data });
   }

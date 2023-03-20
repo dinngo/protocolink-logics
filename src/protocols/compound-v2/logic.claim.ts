@@ -4,29 +4,31 @@ import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
 import { getContractAddress } from './config';
 
-export type ClaimCOMPLogicFields = core.ClaimTokenFields;
+export type ClaimLogicParams = core.ClaimParams;
+
+export type ClaimLogicFields = core.ClaimFields;
 
 @core.LogicDefinitionDecorator()
-export class ClaimCOMPLogic extends core.Logic implements core.LogicTokenListInterface {
+export class ClaimLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicOracleInterface {
   static readonly supportedChainIds = [common.ChainId.mainnet];
 
   getTokenList() {
     return [COMP];
   }
 
-  async getReward(owner: string) {
+  async quote(params: ClaimLogicParams) {
     const compoundLens = CompoundLens__factory.connect(getContractAddress('CompoundLens'), this.provider);
     const metadata = await compoundLens.callStatic.getCompBalanceMetadataExt(
       COMP.address,
       getContractAddress('Comptroller'),
-      owner
+      params.owner
     );
     const output = new common.TokenAmount(COMP).setWei(metadata.allocated);
 
-    return output;
+    return { output };
   }
 
-  async getLogic(fields: ClaimCOMPLogicFields) {
+  async getLogic(fields: ClaimLogicFields) {
     const { owner } = fields;
 
     const to = getContractAddress('Comptroller');

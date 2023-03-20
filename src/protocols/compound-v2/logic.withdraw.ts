@@ -24,7 +24,7 @@ export class WithdrawLogic extends core.Logic implements core.LogicTokenListInte
     const amountOutWei = input.amountWei.mul(exchangeRateCurrent).div(BigNumber.from(10).pow(18));
     const output = new common.TokenAmount(tokenOut).setWei(amountOutWei);
 
-    return output;
+    return { input, output };
   }
 
   async getLogic(fields: WithdrawLogicFields) {

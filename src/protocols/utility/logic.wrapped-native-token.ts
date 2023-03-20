@@ -30,7 +30,8 @@ export class WrappedNativeTokenLogic
   quote(params: WrappedNativeTokenLogicParams) {
     const { input, tokenOut } = params;
     const output = new common.TokenAmount(tokenOut, input.amount);
-    return output;
+
+    return { input, output };
   }
 
   async getLogic(fields: WrappedNativeTokenLogicFields) {

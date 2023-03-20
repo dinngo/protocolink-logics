@@ -24,7 +24,7 @@ export class SupplyLogic extends core.Logic implements core.LogicTokenListInterf
     const amountOutWei = input.amountWei.mul(BigNumber.from(10).pow(18)).div(exchangeRateCurrent);
     const output = new common.TokenAmount(tokenOut).setWei(amountOutWei);
 
-    return output;
+    return { input, output };
   }
 
   async getLogic(fields: SupplyLogicFields) {

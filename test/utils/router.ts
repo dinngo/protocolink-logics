@@ -18,23 +18,24 @@ export async function getPermitAndPullTokenRouterLogics(
 ) {
   const routerLogics: core.IParam.LogicStruct[] = [];
   if (!erc20Funds.isEmpty) {
-    const permit2Address = protocols.router.getContractAddress(chainId, 'Permit2');
-    const erc20SpenderAddress = protocols.router.getContractAddress(chainId, 'SpenderPermit2ERC20');
+    const permit2Address = protocols.permit2.getContractAddress(chainId, 'Permit2');
 
     // 1. user approve permit2 to spend fund erc20 tokens
     await approves(user, permit2Address, erc20Funds);
 
-    // 2. get permit token logic
-    const routerPermitTokenLogic = new protocols.router.PermitTokenLogic(chainId, hre.ethers.provider);
-    const permitDetails = await routerPermitTokenLogic.getPermitDetails(user.address, erc20Funds, erc20SpenderAddress);
-    const permit = routerPermitTokenLogic.getPermit(permitDetails, erc20SpenderAddress);
-    const permitData = routerPermitTokenLogic.getPermitData(permit);
-    const permitSig = await user._signTypedData(permitData.domain, permitData.types, permitData.values);
-    routerLogics.push(await routerPermitTokenLogic.getLogic({ permit, sig: permitSig }, { account: user.address }));
+    // 2. get permit2 permit token logic
+    const permit2PermitTokenLogic = new protocols.permit2.PermitTokenLogic(chainId, hre.ethers.provider);
+    const permitData = await permit2PermitTokenLogic.getPermitData(user.address, erc20Funds);
+    if (permitData) {
+      const permitSig = await user._signTypedData(permitData.domain, permitData.types, permitData.values);
+      routerLogics.push(
+        await permit2PermitTokenLogic.getLogic({ permit: permitData.values, sig: permitSig }, { account: user.address })
+      );
+    }
 
-    // 3. get pull token logic
-    const routerPullTokenLogic = new protocols.router.PullTokenLogic(chainId, hre.ethers.provider);
-    routerLogics.push(await routerPullTokenLogic.getLogic({ inputs: erc20Funds }, { account: user.address }));
+    // 3. get permit2 pull token logic
+    const permit2PullTokenLogic = new protocols.permit2.PullTokenLogic(chainId, hre.ethers.provider);
+    routerLogics.push(await permit2PullTokenLogic.getLogic({ inputs: erc20Funds }, { account: user.address }));
   }
 
   return routerLogics;

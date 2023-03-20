@@ -39,7 +39,7 @@ export class SwapTokenLogic extends core.Logic implements core.LogicOracleInterf
     });
     const output = new common.TokenAmount(tokenOut, destAmount);
 
-    return output;
+    return { input, output };
   }
 
   async getLogic(fields: SwapTokenLogicFields, options: SwapTokenLogicOptions) {

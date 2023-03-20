@@ -29,7 +29,7 @@ describe('Test Utility WrappedNativeToken Logic', function () {
     it(`case ${i + 1}`, async function () {
       // 1. get output
       const utilityWrappedNativeTokenLogic = new protocols.utility.WrappedNativeTokenLogic(chainId);
-      const output = utilityWrappedNativeTokenLogic.quote({ input, tokenOut });
+      const { output } = utilityWrappedNativeTokenLogic.quote({ input, tokenOut });
 
       // 2. build funds, tokensReturn
       const tokensReturn = [output.token.elasticAddress];

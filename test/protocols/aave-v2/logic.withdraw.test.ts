@@ -48,7 +48,7 @@ describe('Test AaveV2 Withdraw Logic', function () {
 
       // 2. get output
       const aaveV2Withdraw = new protocols.aavev2.WithdrawLogic(chainId);
-      const output = await aaveV2Withdraw.quote({ input, tokenOut });
+      const { output } = await aaveV2Withdraw.quote({ input, tokenOut });
 
       // 3. build funds, tokensReturn
       const tokensReturn = [output.token.elasticAddress];

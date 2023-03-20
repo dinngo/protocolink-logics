@@ -40,36 +40,16 @@ describe('Test UniswapV3 SwapToken Logic', function () {
       // 1. get input or output
       const uniswapV3SwapToken = new protocols.uniswapv3.SwapTokenLogic(chainId);
       const quotation = await uniswapV3SwapToken.quote(params);
-
-      let fields: protocols.uniswapv3.SwapTokenLogicFields;
-      if (core.isTokenToTokenExactInParams(params)) {
-        fields = {
-          tradeType: core.TradeType.exactIn,
-          input: params.input,
-          output: new common.TokenAmount(params.tokenOut, quotation.amount),
-          ...(protocols.uniswapv3.isSwapTokenLogicSingleHopQuotation(quotation)
-            ? { fee: quotation.fee }
-            : { path: quotation.path }),
-        };
-      } else {
-        fields = {
-          tradeType: core.TradeType.exactOut,
-          input: new common.TokenAmount(params.tokenIn, quotation.amount),
-          output: params.output,
-          ...(protocols.uniswapv3.isSwapTokenLogicSingleHopQuotation(quotation)
-            ? { fee: quotation.fee }
-            : { path: quotation.path }),
-        };
-      }
+      const { tradeType, input, output } = quotation;
 
       // 2. build funds, tokensReturn
-      const funds = new common.TokenAmounts(fields.input);
-      const tokensReturn = [fields.output.token.elasticAddress];
+      const funds = new common.TokenAmounts(input);
+      const tokensReturn = [output.token.elasticAddress];
 
       // 3. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
-      routerLogics.push(await uniswapV3SwapToken.getLogic(fields, { account: user.address, slippage }));
+      routerLogics.push(await uniswapV3SwapToken.getLogic(quotation, { account: user.address, slippage }));
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({
@@ -79,12 +59,12 @@ describe('Test UniswapV3 SwapToken Logic', function () {
         value: funds.native?.amountWei ?? 0,
       });
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
-      if (fields.tradeType === core.TradeType.exactIn) {
-        await expect(user.address).to.changeBalance(fields.input.token, -fields.input.amount);
-        await expect(user.address).to.changeBalance(fields.output.token, fields.output.amount, 100);
+      if (tradeType === core.TradeType.exactIn) {
+        await expect(user.address).to.changeBalance(input.token, -input.amount);
+        await expect(user.address).to.changeBalance(output.token, output.amount, 100);
       } else {
-        await expect(user.address).to.changeBalance(fields.input.token, -fields.input.amount, 100);
-        await expect(user.address).to.changeBalance(fields.output.token, fields.output.amount);
+        await expect(user.address).to.changeBalance(input.token, -input.amount, 100);
+        await expect(user.address).to.changeBalance(output.token, output.amount);
       }
     });
   });

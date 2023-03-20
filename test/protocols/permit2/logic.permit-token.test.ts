@@ -9,19 +9,19 @@ import hre from 'hardhat';
 import * as protocols from 'src/protocols';
 import sinon from 'sinon';
 
-describe('Test Router PermitToken Logic', function () {
+describe('Test Permit2 PermitToken Logic', function () {
   let chainId: number;
-  let permit2: protocols.router.Permit2;
-  let erc20SpenderAaddress: string;
+  let permit2: protocols.permit2.Permit2;
   let user: SignerWithAddress;
+  let userAgent: string;
   let clock: sinon.SinonFakeTimers;
 
   before(async function () {
     chainId = await getChainId();
     [, user] = await hre.ethers.getSigners();
-    const permit2Address = protocols.router.getContractAddress(chainId, 'Permit2');
-    permit2 = protocols.router.Permit2__factory.connect(permit2Address, hre.ethers.provider);
-    erc20SpenderAaddress = protocols.router.getContractAddress(chainId, 'SpenderPermit2ERC20');
+    const permit2Address = protocols.permit2.getContractAddress(chainId, 'Permit2');
+    permit2 = protocols.permit2.Permit2__factory.connect(permit2Address, hre.ethers.provider);
+    userAgent = core.calcAccountAgent(chainId, user.address);
     await claimToken(chainId, user.address, mainnetTokens.USDC, '100');
     await claimToken(chainId, user.address, mainnetTokens.WETH, '100');
   });
@@ -50,45 +50,58 @@ describe('Test Router PermitToken Logic', function () {
         await expect(erc20.approve(permit2.address, constants.MaxUint256)).to.not.be.reverted;
 
         // 2. check erc20 fund allowance
-        const allowance = await permit2.allowance(user.address, token.address, erc20SpenderAaddress);
+        const allowance = await permit2.allowance(user.address, token.address, userAgent);
         expect(allowance.amount).to.eq(0);
         expect(allowance.expiration).to.eq(0);
         expect(allowance.nonce).to.eq(0);
       }
 
       // 3. get user permit sig
-      const routerPermitTokenLogic = new protocols.router.PermitTokenLogic(chainId, hre.ethers.provider);
-      let permitDetails = await routerPermitTokenLogic.getPermitDetails(user.address, erc20Funds, erc20SpenderAaddress);
-      expect(permitDetails.length).to.eq(erc20Funds.length);
-      const permit = routerPermitTokenLogic.getPermit(permitDetails, erc20SpenderAaddress);
-      const permitData = routerPermitTokenLogic.getPermitData(permit);
-      const permitSig = await user._signTypedData(permitData.domain, permitData.types, permitData.values);
+      const permit2PermitTokenLogic = new protocols.permit2.PermitTokenLogic(chainId, hre.ethers.provider);
+      let permitData = await permit2PermitTokenLogic.getPermitData(user.address, erc20Funds);
+      expect(permitData).to.not.be.undefined;
+      let permit = permitData!.values;
+      const permitSig = await user._signTypedData(permitData!.domain, permitData!.types, permitData!.values);
 
       // 4. build router logics
       const routerLogics: core.IParam.LogicStruct[] = [];
-      routerLogics.push(await routerPermitTokenLogic.getLogic({ permit, sig: permitSig }, { account: user.address }));
+      routerLogics.push(await permit2PermitTokenLogic.getLogic({ permit, sig: permitSig }, { account: user.address }));
 
       // 5. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics });
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
 
       // 6. check erc20 funds allowance
-      for (let i = 0; i < erc20Tokens.length; i++) {
-        const token = erc20Tokens[i];
-        const allowance = await permit2.allowance(user.address, token.address, erc20SpenderAaddress);
+      if (protocols.permit2.isPermitSingle(permit)) {
+        const token = erc20Tokens[0];
+        const allowance = await permit2.allowance(user.address, token.address, userAgent);
         expect(allowance.amount).to.eq(MaxUint160);
-        expect(allowance.expiration).to.eq(permitDetails[i].expiration);
-        expect(allowance.nonce).to.eq(BigNumber.from(permitDetails[i].nonce).add(1));
+        expect(allowance.expiration).to.eq(permit.details.expiration);
+        expect(allowance.nonce).to.eq(BigNumber.from(permit.details.nonce).add(1));
+      } else {
+        for (let i = 0; i < erc20Tokens.length; i++) {
+          const token = erc20Tokens[i];
+          const allowance = await permit2.allowance(user.address, token.address, userAgent);
+          expect(allowance.amount).to.eq(MaxUint160);
+          expect(allowance.expiration).to.eq(permit.details[i].expiration);
+          expect(allowance.nonce).to.eq(BigNumber.from(permit.details[i].nonce).add(1));
+        }
       }
 
       // 7. get permit details again, and should be empty.
-      permitDetails = await routerPermitTokenLogic.getPermitDetails(user.address, erc20Funds, erc20SpenderAaddress);
-      expect(permitDetails.length).to.eq(0);
+      permitData = await permit2PermitTokenLogic.getPermitData(user.address, erc20Funds);
+      expect(permitData).to.be.undefined;
 
       // 8. get permit details again after 30d, and should be permit again.
       clock.tick(30 * 86400 * 1000);
-      permitDetails = await routerPermitTokenLogic.getPermitDetails(user.address, erc20Funds, erc20SpenderAaddress);
-      expect(permitDetails.length).to.eq(erc20Funds.length);
+      permitData = await permit2PermitTokenLogic.getPermitData(user.address, erc20Funds);
+      expect(permitData).to.not.be.undefined;
+      permit = permitData!.values;
+      if (protocols.permit2.isPermitSingle(permit)) {
+        expect(erc20Funds.length).to.eq(1);
+      } else {
+        expect(permit.details.length).to.eq(erc20Funds.length);
+      }
     });
   });
 });
