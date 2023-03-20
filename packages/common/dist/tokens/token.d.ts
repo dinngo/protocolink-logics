@@ -15,9 +15,9 @@ export declare class Token {
     constructor(tokenObject: TokenObject);
     static from(token: TokenTypes): Token;
     static isNative(chainId: number, address: string): boolean;
-    static isNative(tokenObject: TokenObject): boolean;
+    static isNative(token: TokenTypes): boolean;
     static isWrapped(chainId: number, address: string): boolean;
-    static isWrapped(tokenObject: TokenObject): boolean;
+    static isWrapped(token: TokenTypes): boolean;
     static getAddress(tokenOrAddress: TokenOrAddress): string;
     get wrapped(): Token;
     is(token: TokenTypes): boolean;
