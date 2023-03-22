@@ -45,10 +45,10 @@ describe('Test CompoundV3 Withdraw Base Logic', function () {
 
   testCases.forEach(({ marketId, input, tokenOut, amountBps }, i) => {
     it(`case ${i + 1}`, async function () {
-      // 1. supply and allow first
+      // 1. supply first
       const supply = new common.TokenAmount(tokenOut, '3');
       await helpers.supply(chainId, user, marketId, supply);
-      await expect(user.address).to.changeBalance(input.token, supply.amount, 1);
+      await expect(user.address).to.changeBalance(supply.token, supply.amount, 1);
 
       // 2. get quotation
       const compoundV3WithdrawBaseLogic = new protocols.compoundv3.WithdrawBaseLogic(chainId, hre.ethers.provider);

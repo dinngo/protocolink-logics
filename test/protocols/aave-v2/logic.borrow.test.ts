@@ -58,7 +58,6 @@ describe('Test AaveV2 Borrow Logic', function () {
 
       // 3. build router logics
       const routerLogics: core.IParam.LogicStruct[] = [];
-
       const aaveV2Borrow = new protocols.aavev2.BorrowLogic(chainId);
       routerLogics.push(await aaveV2Borrow.getLogic({ output, interestRateMode }, { account: user.address }));
 

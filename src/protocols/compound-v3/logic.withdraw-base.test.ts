@@ -61,7 +61,7 @@ describe('CompoundV3 WithdrawBaseLogic', function () {
     ];
 
     testCases.forEach(({ fields }) => {
-      it(`withdraw ${fields.input.token.symbol} to ${fields.marketId} market${
+      it(`withdraw ${fields.input.token.symbol} from ${fields.marketId} market${
         fields.amountBps ? ' with amountBps' : ''
       }`, async function () {
         const routerLogic = await compoundV3WithdrawBaseLogic.getLogic(fields, { account });

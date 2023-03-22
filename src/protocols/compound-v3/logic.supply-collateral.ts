@@ -6,8 +6,6 @@ import * as core from '@composable-router/core';
 import { encodeSupplyNativeTokenAction } from './utils';
 import { getMarket, getMarkets } from './config';
 
-export type SupplyCollateralLogicParams = core.TokenInParams<{ marketId: string }>;
-
 export type SupplyCollateralLogicFields = core.TokenInFields<{ marketId: string }>;
 
 export type SupplyCollateralLogicOptions = Pick<core.GlobalOptions, 'account'>;
