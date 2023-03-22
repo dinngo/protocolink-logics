@@ -3,11 +3,12 @@ import { claimToken, getChainId } from '@composable-router/test-helpers';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
 import { expect } from 'chai';
+import * as helpers from './helpers';
 import hre from 'hardhat';
 import * as protocols from 'src/protocols';
 import * as utils from 'test/utils';
 
-describe('Test CompoundV3 Supply Base Logic', function () {
+describe('Test CompoundV3 Withdraw Base Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
 
@@ -20,35 +21,40 @@ describe('Test CompoundV3 Supply Base Logic', function () {
   const testCases = [
     {
       marketId: 'USDC',
-      input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.USDC, '1'),
-      tokenOut: protocols.compoundv3.mainnetTokens.cUSDCv3,
+      input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.cUSDCv3, '1'),
+      tokenOut: protocols.compoundv3.mainnetTokens.USDC,
     },
     {
       marketId: 'USDC',
-      input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.USDC, '1'),
-      tokenOut: protocols.compoundv3.mainnetTokens.cUSDCv3,
+      input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.cUSDCv3, '1'),
+      tokenOut: protocols.compoundv3.mainnetTokens.USDC,
       amountBps: 5000,
     },
     {
       marketId: 'ETH',
-      input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.ETH, '1'),
-      tokenOut: protocols.compoundv3.mainnetTokens.cWETHv3,
+      input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.cWETHv3, '1'),
+      tokenOut: protocols.compoundv3.mainnetTokens.ETH,
     },
     {
       marketId: 'ETH',
-      input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.ETH, '1'),
-      tokenOut: protocols.compoundv3.mainnetTokens.cWETHv3,
+      input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.cWETHv3, '1'),
+      tokenOut: protocols.compoundv3.mainnetTokens.ETH,
       amountBps: 5000,
     },
   ];
 
   testCases.forEach(({ marketId, input, tokenOut, amountBps }, i) => {
     it(`case ${i + 1}`, async function () {
-      // 1. get quotation
-      const compoundV3SupplyBaseLogic = new protocols.compoundv3.SupplyBaseLogic(chainId, hre.ethers.provider);
-      const { output } = await compoundV3SupplyBaseLogic.quote({ marketId, input, tokenOut });
+      // 1. supply and allow first
+      const supply = new common.TokenAmount(tokenOut, '3');
+      await helpers.supply(chainId, user, marketId, supply);
+      await expect(user.address).to.changeBalance(input.token, supply.amount, 1);
 
-      // 2. build funds, tokensReturn
+      // 2. get quotation
+      const compoundV3WithdrawBaseLogic = new protocols.compoundv3.WithdrawBaseLogic(chainId, hre.ethers.provider);
+      const { output } = await compoundV3WithdrawBaseLogic.quote({ marketId, input, tokenOut });
+
+      // 3. build funds, tokensReturn
       const tokensReturn = [output.token.elasticAddress];
       const funds = new common.TokenAmounts();
       if (amountBps) {
@@ -58,14 +64,14 @@ describe('Test CompoundV3 Supply Base Logic', function () {
         funds.add(input);
       }
 
-      // 3. build router logics
+      // 4. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
       routerLogics.push(
-        await compoundV3SupplyBaseLogic.getLogic({ marketId, input, output, amountBps }, { account: user.address })
+        await compoundV3WithdrawBaseLogic.getLogic({ marketId, input, output, amountBps }, { account: user.address })
       );
 
-      // 4. send router tx
+      // 5. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({
         chainId,
         routerLogics,
@@ -73,6 +79,7 @@ describe('Test CompoundV3 Supply Base Logic', function () {
         value: funds.native?.amountWei ?? 0,
       });
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
+      await expect(user.address).to.changeBalance(input.token, -input.amount, 1);
       await expect(user.address).to.changeBalance(output.token, output.amount, 1);
     });
   });

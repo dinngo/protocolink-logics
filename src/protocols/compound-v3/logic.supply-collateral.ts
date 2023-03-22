@@ -3,6 +3,7 @@ import { Comet__factory } from './contracts';
 import { Service } from './service';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
+import { encodeSupplyNativeTokenAction } from './utils';
 import { getMarket, getMarkets } from './config';
 
 export type SupplyCollateralLogicParams = core.TokenInParams<{ marketId: string }>;
@@ -21,7 +22,7 @@ export class SupplyCollateralLogic extends core.Logic implements core.LogicToken
     const service = new Service(this.chainId, this.provider);
     const markets = getMarkets(this.chainId);
     for (const market of markets) {
-      const collaterals = await service.getCollaterals(market.cTokenAddress);
+      const collaterals = await service.getCollaterals(market.id);
       tokenList[market.id] = collaterals;
     }
 
@@ -39,16 +40,13 @@ export class SupplyCollateralLogic extends core.Logic implements core.LogicToken
     let amountOffset: BigNumberish | undefined;
     if (input.token.isNative) {
       to = market.bulker.address;
-
-      const actions = [market.bulker.actions.supplyNativeToken];
-      const datas = [
-        utils.defaultAbiCoder.encode(['address', 'address', 'uint'], [market.cTokenAddress, account, input.amountWei]),
-      ];
-      data = new utils.Interface(market.bulker.abi).encodeFunctionData('invoke', [actions, datas]);
-
+      data = new utils.Interface(market.bulker.abi).encodeFunctionData('invoke', [
+        [market.bulker.actions.supplyNativeToken],
+        [encodeSupplyNativeTokenAction(market.cometAddress, account, input.amountWei)],
+      ]);
       if (amountBps) amountOffset = constants.MaxUint256;
     } else {
-      to = market.cTokenAddress;
+      to = market.cometAddress;
       data = Comet__factory.createInterface().encodeFunctionData('supplyTo', [
         account,
         input.token.address,

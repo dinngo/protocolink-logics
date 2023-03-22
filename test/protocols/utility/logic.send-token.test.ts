@@ -32,7 +32,7 @@ describe('Test Utility SendToken Logic', function () {
       const tokensReturn = [];
       const funds = new common.TokenAmounts();
       if (amountBps) {
-        funds.add(utils.calcRequiredFundByAmountBps(input, amountBps));
+        funds.add(utils.calcRequiredAmountByAmountBps(input, amountBps));
         tokensReturn.push(input.token.elasticAddress);
       } else {
         funds.add(input);

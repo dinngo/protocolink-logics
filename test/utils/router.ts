@@ -5,10 +5,16 @@ import * as core from '@composable-router/core';
 import hre from 'hardhat';
 import * as protocols from 'src/protocols';
 
-export function calcRequiredFundByAmountBps(input: common.TokenAmount, amountBps: number) {
-  const requiredAmountWei = input.amountWei.mul(common.BPS_BASE).div(amountBps);
-  const requiredFund = new common.TokenAmount(input.token).setWei(requiredAmountWei);
-  return requiredFund;
+export function calcRequiredAmountByAmountBps(input: common.TokenAmount, amountBps?: number) {
+  let required: common.TokenAmount;
+  if (amountBps) {
+    const requiredAmountWei = input.amountWei.mul(common.BPS_BASE).div(amountBps);
+    required = new common.TokenAmount(input.token).setWei(requiredAmountWei);
+  } else {
+    required = input.clone();
+  }
+
+  return required;
 }
 
 export async function getPermitAndPullTokenRouterLogics(

@@ -92,7 +92,7 @@ describe('Test AaveV2 Repay Logic', function () {
       // 3. build funds and tokensReturn
       const funds = new common.TokenAmounts();
       if (amountBps) {
-        funds.add(utils.calcRequiredFundByAmountBps(input, amountBps));
+        funds.add(utils.calcRequiredAmountByAmountBps(input, amountBps));
       } else {
         funds.add(input);
       }

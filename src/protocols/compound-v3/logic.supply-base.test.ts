@@ -66,7 +66,7 @@ describe('CompoundV3 SupplyBaseLogic', function () {
       }`, async function () {
         const routerLogic = await compoundV3SupplyBaseLogic.getLogic(fields, { account });
         const sig = routerLogic.data.substring(0, 10);
-        const { marketId, input, output, amountBps } = fields;
+        const { marketId, input, amountBps } = fields;
         const market = getMarket(chainId, marketId);
         const ifaceBulker = new utils.Interface(market.bulker.abi);
 
@@ -75,7 +75,7 @@ describe('CompoundV3 SupplyBaseLogic', function () {
           expect(sig).to.eq(ifaceBulker.getSighash('invoke'));
           expect(routerLogic.inputs[0].token).to.eq(common.ELASTIC_ADDRESS);
         } else {
-          expect(routerLogic.to).to.eq(output.token.address);
+          expect(routerLogic.to).to.eq(market.cometAddress);
           expect(sig).to.eq(ifaceComet.getSighash('supply'));
         }
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;

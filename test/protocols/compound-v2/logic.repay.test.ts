@@ -56,7 +56,7 @@ describe('Test CompoundV2 Repay Logic', function () {
       // 3. build input, funds, tokensReturn
       const funds = new common.TokenAmounts();
       if (amountBps) {
-        funds.add(utils.calcRequiredFundByAmountBps(input, amountBps));
+        funds.add(utils.calcRequiredAmountByAmountBps(input, amountBps));
       } else {
         funds.add(input);
       }
