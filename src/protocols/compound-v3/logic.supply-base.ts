@@ -30,11 +30,11 @@ export class SupplyBaseLogic extends core.Logic implements core.LogicTokenListIn
   }
 
   async quote(params: SupplyBaseLogicParams) {
-    const { input, tokenOut } = params;
+    const { marketId, input, tokenOut } = params;
 
     const output = new common.TokenAmount(tokenOut, input.amount);
 
-    return { input, output };
+    return { marketId, input, output };
   }
 
   async getLogic(fields: SupplyBaseLogicFields, options: SupplyBaseLogicOptions) {

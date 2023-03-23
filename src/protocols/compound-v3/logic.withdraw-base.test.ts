@@ -1,18 +1,18 @@
 import { Comet__factory } from './contracts';
 import { LogicTestCase } from 'test/types';
+import { MarketId, getMarket } from './config';
 import { WithdrawBaseLogic, WithdrawBaseLogicFields } from './logic.withdraw-base';
 import * as common from '@composable-router/common';
 import { constants, utils } from 'ethers';
 import { expect } from 'chai';
-import { getMarket } from './config';
 import { mainnetTokens } from './tokens';
 
 describe('CompoundV3 WithdrawBaseLogic', function () {
   context('Test getTokenList', async function () {
     WithdrawBaseLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.getNetworkId(chainId)}`, async function () {
-        const withdrawBaseLogic = new WithdrawBaseLogic(chainId);
-        const tokenList = await withdrawBaseLogic.getTokenList();
+        const compoundV3WithdrawBaseLogic = new WithdrawBaseLogic(chainId);
+        const tokenList = await compoundV3WithdrawBaseLogic.getTokenList();
         expect(Object.keys(tokenList).length).to.be.gt(0);
         for (const marketId of Object.keys(tokenList)) {
           expect(tokenList[marketId].length).to.eq(2);
@@ -30,14 +30,14 @@ describe('CompoundV3 WithdrawBaseLogic', function () {
     const testCases: LogicTestCase<WithdrawBaseLogicFields>[] = [
       {
         fields: {
-          marketId: 'USDC',
+          marketId: MarketId.USDC,
           input: new common.TokenAmount(mainnetTokens.cUSDCv3, '1'),
           output: new common.TokenAmount(mainnetTokens.USDC, '0'),
         },
       },
       {
         fields: {
-          marketId: 'USDC',
+          marketId: MarketId.USDC,
           input: new common.TokenAmount(mainnetTokens.cUSDCv3, '1'),
           output: new common.TokenAmount(mainnetTokens.USDC, '0'),
           amountBps: 5000,
@@ -45,14 +45,14 @@ describe('CompoundV3 WithdrawBaseLogic', function () {
       },
       {
         fields: {
-          marketId: 'ETH',
+          marketId: MarketId.ETH,
           input: new common.TokenAmount(mainnetTokens.cWETHv3, '1'),
           output: new common.TokenAmount(mainnetTokens.ETH, '0'),
         },
       },
       {
         fields: {
-          marketId: 'ETH',
+          marketId: MarketId.ETH,
           input: new common.TokenAmount(mainnetTokens.cWETHv3, '1'),
           output: new common.TokenAmount(mainnetTokens.ETH, '0'),
           amountBps: 5000,

@@ -30,11 +30,11 @@ export class WithdrawBaseLogic extends core.Logic implements core.LogicTokenList
   }
 
   async quote(params: WithdrawBaseLogicParams) {
-    const { input, tokenOut } = params;
+    const { marketId, input, tokenOut } = params;
 
     const output = new common.TokenAmount(tokenOut, input.amount);
 
-    return { input, output };
+    return { marketId, input, output };
   }
 
   async getLogic(fields: WithdrawBaseLogicFields, options: WithdrawBaseLogicOptions) {

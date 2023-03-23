@@ -26,19 +26,19 @@ describe('Test CompoundV3 Withdraw Collateral Logic', function () {
 
   const testCases = [
     {
-      marketId: 'USDC',
+      marketId: protocols.compoundv3.MarketId.USDC,
       output: new common.TokenAmount(protocols.compoundv3.mainnetTokens.ETH.wrapped, '1'),
     },
     {
-      marketId: 'USDC',
+      marketId: protocols.compoundv3.MarketId.USDC,
       output: new common.TokenAmount(protocols.compoundv3.mainnetTokens.WBTC, '1'),
     },
     {
-      marketId: 'ETH',
+      marketId: protocols.compoundv3.MarketId.ETH,
       output: new common.TokenAmount(protocols.compoundv3.mainnetTokens.cbETH, '1'),
     },
     {
-      marketId: 'ETH',
+      marketId: protocols.compoundv3.MarketId.ETH,
       output: new common.TokenAmount(protocols.compoundv3.mainnetTokens.wstETH, '1'),
     },
   ];

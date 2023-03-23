@@ -24,25 +24,25 @@ describe('Test CompoundV3 Repay Logic', function () {
 
   const testCases = [
     {
-      marketId: 'USDC',
+      marketId: protocols.compoundv3.MarketId.USDC,
       supply: new common.TokenAmount(protocols.compoundv3.mainnetTokens.ETH, '1'),
       borrow: new common.TokenAmount(protocols.compoundv3.mainnetTokens.USDC, '100'),
       repay: { tokenIn: protocols.compoundv3.mainnetTokens.USDC, repayAll: false },
     },
     {
-      marketId: 'USDC',
+      marketId: protocols.compoundv3.MarketId.USDC,
       supply: new common.TokenAmount(protocols.compoundv3.mainnetTokens.ETH, '1'),
       borrow: new common.TokenAmount(protocols.compoundv3.mainnetTokens.USDC, '100'),
       repay: { tokenIn: protocols.compoundv3.mainnetTokens.USDC, repayAll: true },
     },
     {
-      marketId: 'ETH',
+      marketId: protocols.compoundv3.MarketId.ETH,
       supply: new common.TokenAmount(protocols.compoundv3.mainnetTokens.cbETH, '3'),
       borrow: new common.TokenAmount(protocols.compoundv3.mainnetTokens.ETH.wrapped, '1'),
       repay: { tokenIn: protocols.compoundv3.mainnetTokens.ETH.wrapped, repayAll: false },
     },
     {
-      marketId: 'ETH',
+      marketId: protocols.compoundv3.MarketId.ETH,
       supply: new common.TokenAmount(protocols.compoundv3.mainnetTokens.cbETH, '3'),
       borrow: new common.TokenAmount(protocols.compoundv3.mainnetTokens.ETH.wrapped, '1'),
       repay: { tokenIn: protocols.compoundv3.mainnetTokens.ETH.wrapped, repayAll: true },

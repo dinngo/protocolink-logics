@@ -25,22 +25,22 @@ describe('Test CompoundV3 Borrow Logic', function () {
 
   const testCases = [
     {
-      marketId: 'USDC',
+      marketId: protocols.compoundv3.MarketId.USDC,
       supply: new common.TokenAmount(protocols.compoundv3.mainnetTokens.ETH, '1'),
       borrow: new common.TokenAmount(protocols.compoundv3.mainnetTokens.USDC, '100'),
     },
     {
-      marketId: 'USDC',
+      marketId: protocols.compoundv3.MarketId.USDC,
       supply: new common.TokenAmount(protocols.compoundv3.mainnetTokens.WBTC, '1'),
       borrow: new common.TokenAmount(protocols.compoundv3.mainnetTokens.USDC, '100'),
     },
     {
-      marketId: 'ETH',
+      marketId: protocols.compoundv3.MarketId.ETH,
       supply: new common.TokenAmount(protocols.compoundv3.mainnetTokens.cbETH, '3'),
       borrow: new common.TokenAmount(protocols.compoundv3.mainnetTokens.ETH.wrapped, '1'),
     },
     {
-      marketId: 'ETH',
+      marketId: protocols.compoundv3.MarketId.ETH,
       supply: new common.TokenAmount(protocols.compoundv3.mainnetTokens.wstETH, '3'),
       borrow: new common.TokenAmount(protocols.compoundv3.mainnetTokens.ETH.wrapped, '1'),
     },

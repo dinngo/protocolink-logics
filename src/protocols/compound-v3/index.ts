@@ -1,6 +1,7 @@
 export * from './config';
 export * from './contracts';
 export * from './logic.borrow';
+export * from './logic.claim';
 export * from './logic.repay';
 export * from './logic.supply-base';
 export * from './logic.supply-collateral';

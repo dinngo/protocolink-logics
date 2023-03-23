@@ -19,23 +19,23 @@ describe('Test CompoundV3 Supply Base Logic', function () {
 
   const testCases = [
     {
-      marketId: 'USDC',
+      marketId: protocols.compoundv3.MarketId.USDC,
       input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.USDC, '1'),
       tokenOut: protocols.compoundv3.mainnetTokens.cUSDCv3,
     },
     {
-      marketId: 'USDC',
+      marketId: protocols.compoundv3.MarketId.USDC,
       input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.USDC, '1'),
       tokenOut: protocols.compoundv3.mainnetTokens.cUSDCv3,
       amountBps: 5000,
     },
     {
-      marketId: 'ETH',
+      marketId: protocols.compoundv3.MarketId.ETH,
       input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.ETH, '1'),
       tokenOut: protocols.compoundv3.mainnetTokens.cWETHv3,
     },
     {
-      marketId: 'ETH',
+      marketId: protocols.compoundv3.MarketId.ETH,
       input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.ETH, '1'),
       tokenOut: protocols.compoundv3.mainnetTokens.cWETHv3,
       amountBps: 5000,

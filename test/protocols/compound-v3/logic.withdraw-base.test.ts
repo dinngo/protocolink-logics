@@ -20,23 +20,23 @@ describe('Test CompoundV3 Withdraw Base Logic', function () {
 
   const testCases = [
     {
-      marketId: 'USDC',
+      marketId: protocols.compoundv3.MarketId.USDC,
       input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.cUSDCv3, '1'),
       tokenOut: protocols.compoundv3.mainnetTokens.USDC,
     },
     {
-      marketId: 'USDC',
+      marketId: protocols.compoundv3.MarketId.USDC,
       input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.cUSDCv3, '1'),
       tokenOut: protocols.compoundv3.mainnetTokens.USDC,
       amountBps: 5000,
     },
     {
-      marketId: 'ETH',
+      marketId: protocols.compoundv3.MarketId.ETH,
       input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.cWETHv3, '1'),
       tokenOut: protocols.compoundv3.mainnetTokens.ETH,
     },
     {
-      marketId: 'ETH',
+      marketId: protocols.compoundv3.MarketId.ETH,
       input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.cWETHv3, '1'),
       tokenOut: protocols.compoundv3.mainnetTokens.ETH,
       amountBps: 5000,

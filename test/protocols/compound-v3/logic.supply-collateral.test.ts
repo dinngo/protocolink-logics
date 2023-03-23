@@ -3,7 +3,6 @@ import { claimToken, getChainId } from '@composable-router/test-helpers';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
 import { expect } from 'chai';
-import * as helpers from './helpers';
 import hre from 'hardhat';
 import * as protocols from 'src/protocols';
 import * as utils from 'test/utils';
@@ -11,10 +10,12 @@ import * as utils from 'test/utils';
 describe('Test CompoundV3 Supply Collateral Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
+  let compoundV3Service: protocols.compoundv3.Service;
 
   before(async function () {
     chainId = await getChainId();
     [, user] = await hre.ethers.getSigners();
+    compoundV3Service = new protocols.compoundv3.Service(chainId, hre.ethers.provider);
     await claimToken(chainId, user.address, protocols.compoundv3.mainnetTokens.WBTC, '10');
     await claimToken(chainId, user.address, protocols.compoundv3.mainnetTokens.cbETH, '10');
     await claimToken(chainId, user.address, protocols.compoundv3.mainnetTokens.wstETH, '10');
@@ -22,38 +23,38 @@ describe('Test CompoundV3 Supply Collateral Logic', function () {
 
   const testCases = [
     {
-      marketId: 'USDC',
+      marketId: protocols.compoundv3.MarketId.USDC,
       input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.ETH, '1'),
     },
     {
-      marketId: 'USDC',
+      marketId: protocols.compoundv3.MarketId.USDC,
       input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.ETH, '1'),
       amountBps: 5000,
     },
     {
-      marketId: 'USDC',
+      marketId: protocols.compoundv3.MarketId.USDC,
       input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.WBTC, '1'),
     },
     {
-      marketId: 'USDC',
+      marketId: protocols.compoundv3.MarketId.USDC,
       input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.WBTC, '1'),
       amountBps: 5000,
     },
     {
-      marketId: 'ETH',
+      marketId: protocols.compoundv3.MarketId.ETH,
       input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.cbETH, '1'),
     },
     {
-      marketId: 'ETH',
+      marketId: protocols.compoundv3.MarketId.ETH,
       input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.cbETH, '1'),
       amountBps: 5000,
     },
     {
-      marketId: 'ETH',
+      marketId: protocols.compoundv3.MarketId.ETH,
       input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.wstETH, '1'),
     },
     {
-      marketId: 'ETH',
+      marketId: protocols.compoundv3.MarketId.ETH,
       input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.wstETH, '1'),
       amountBps: 5000,
     },
@@ -90,7 +91,7 @@ describe('Test CompoundV3 Supply Collateral Logic', function () {
         value: funds.native?.amountWei ?? 0,
       });
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
-      const collateralBalance = await helpers.getCollateralBalance(chainId, user.address, marketId, input.token);
+      const collateralBalance = await compoundV3Service.getCollateralBalance(user.address, marketId, input.token);
       expect(collateralBalance.amountWei).to.eq(input.amountWei);
     });
   });

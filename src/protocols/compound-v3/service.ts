@@ -1,6 +1,7 @@
-import { Comet__factory } from './contracts';
+import { COMP } from './tokens';
+import { CometRewards__factory, Comet__factory } from './contracts';
 import * as common from '@composable-router/common';
-import { getMarket } from './config';
+import { getContractAddress, getMarket } from './config';
 
 export class Service extends common.Web3Toolkit {
   async getCToken(marketId: string) {
@@ -54,11 +55,7 @@ export class Service extends common.Web3Toolkit {
     return isAllowed;
   }
 
-  async buildAllowTransactionRequest(
-    marketId: string,
-    manager: string,
-    isAllowed: boolean
-  ): Promise<common.TransactionRequest> {
+  buildAllowTransactionRequest(marketId: string, manager: string, isAllowed: boolean): common.TransactionRequest {
     const market = getMarket(this.chainId, marketId);
     const to = market.cometAddress;
     const iface = Comet__factory.createInterface();
@@ -91,5 +88,16 @@ export class Service extends common.Web3Toolkit {
     const userBasic = await contractComet.userBasic(account);
 
     return new common.TokenAmount(baseToken).setWei(userBasic.principal);
+  }
+
+  async getRewardOwed(marketId: string, owner: string) {
+    const market = getMarket(this.chainId, marketId);
+    const contractCometRewards = CometRewards__factory.connect(
+      getContractAddress(this.chainId, 'CometRewards'),
+      this.provider
+    );
+    const { owed } = await contractCometRewards.callStatic.getRewardOwed(market.cometAddress, owner);
+
+    return new common.TokenAmount(COMP(this.chainId)).setWei(owed);
   }
 }

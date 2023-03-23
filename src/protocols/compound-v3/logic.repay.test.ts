@@ -1,18 +1,18 @@
 import { Comet__factory } from './contracts';
 import { LogicTestCase } from 'test/types';
+import { MarketId, getMarket } from './config';
 import { RepayLogic, RepayLogicFields } from './logic.repay';
 import * as common from '@composable-router/common';
 import { constants, utils } from 'ethers';
 import { expect } from 'chai';
-import { getMarket } from './config';
 import { mainnetTokens } from './tokens';
 
 describe('CompoundV3 RepayLogic', function () {
   context('Test getTokenList', async function () {
     RepayLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.getNetworkId(chainId)}`, async function () {
-        const withdrawCollateralLogic = new RepayLogic(chainId);
-        const tokenList = await withdrawCollateralLogic.getTokenList();
+        const compoundV3RepayLogic = new RepayLogic(chainId);
+        const tokenList = await compoundV3RepayLogic.getTokenList();
         expect(Object.keys(tokenList).length).to.be.gt(0);
       });
     });
@@ -25,18 +25,8 @@ describe('CompoundV3 RepayLogic', function () {
     const account = '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa';
 
     const testCases: LogicTestCase<RepayLogicFields>[] = [
-      {
-        fields: {
-          marketId: 'USDC',
-          input: new common.TokenAmount(mainnetTokens.USDC, '1'),
-        },
-      },
-      {
-        fields: {
-          marketId: 'ETH',
-          input: new common.TokenAmount(mainnetTokens.ETH.wrapped, '1'),
-        },
-      },
+      { fields: { marketId: MarketId.USDC, input: new common.TokenAmount(mainnetTokens.USDC, '1') } },
+      { fields: { marketId: MarketId.ETH, input: new common.TokenAmount(mainnetTokens.ETH.wrapped, '1') } },
     ];
 
     testCases.forEach(({ fields }) => {

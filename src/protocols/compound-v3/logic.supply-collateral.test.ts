@@ -1,18 +1,18 @@
 import { Comet__factory } from './contracts';
 import { LogicTestCase } from 'test/types';
+import { MarketId, getMarket } from './config';
 import { SupplyCollateralLogic, SupplyCollateralLogicFields } from './logic.supply-collateral';
 import * as common from '@composable-router/common';
 import { constants, utils } from 'ethers';
 import { expect } from 'chai';
-import { getMarket } from './config';
 import { mainnetTokens } from './tokens';
 
 describe('CompoundV3 SupplyCollateralLogic', function () {
   context('Test getTokenList', async function () {
     SupplyCollateralLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.getNetworkId(chainId)}`, async function () {
-        const supplyCollateralLogic = new SupplyCollateralLogic(chainId);
-        const tokenList = await supplyCollateralLogic.getTokenList();
+        const compoundV3SupplyCollateralLogic = new SupplyCollateralLogic(chainId);
+        const tokenList = await compoundV3SupplyCollateralLogic.getTokenList();
         expect(Object.keys(tokenList).length).to.be.gt(0);
         for (const marketId of Object.keys(tokenList)) {
           expect(tokenList[marketId].length).to.gt(0);
@@ -28,58 +28,14 @@ describe('CompoundV3 SupplyCollateralLogic', function () {
     const account = '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa';
 
     const testCases: LogicTestCase<SupplyCollateralLogicFields>[] = [
-      {
-        fields: {
-          marketId: 'USDC',
-          input: new common.TokenAmount(mainnetTokens.ETH, '1'),
-        },
-      },
-      {
-        fields: {
-          marketId: 'USDC',
-          input: new common.TokenAmount(mainnetTokens.ETH, '1'),
-          amountBps: 5000,
-        },
-      },
-      {
-        fields: {
-          marketId: 'USDC',
-          input: new common.TokenAmount(mainnetTokens.WBTC, '1'),
-        },
-      },
-      {
-        fields: {
-          marketId: 'USDC',
-          input: new common.TokenAmount(mainnetTokens.WBTC, '1'),
-          amountBps: 5000,
-        },
-      },
-      {
-        fields: {
-          marketId: 'ETH',
-          input: new common.TokenAmount(mainnetTokens.cbETH, '1'),
-        },
-      },
-      {
-        fields: {
-          marketId: 'ETH',
-          input: new common.TokenAmount(mainnetTokens.cbETH, '1'),
-          amountBps: 5000,
-        },
-      },
-      {
-        fields: {
-          marketId: 'ETH',
-          input: new common.TokenAmount(mainnetTokens.wstETH, '1'),
-        },
-      },
-      {
-        fields: {
-          marketId: 'ETH',
-          input: new common.TokenAmount(mainnetTokens.wstETH, '1'),
-          amountBps: 5000,
-        },
-      },
+      { fields: { marketId: MarketId.USDC, input: new common.TokenAmount(mainnetTokens.ETH, '1') } },
+      { fields: { marketId: MarketId.USDC, input: new common.TokenAmount(mainnetTokens.ETH, '1'), amountBps: 5000 } },
+      { fields: { marketId: MarketId.USDC, input: new common.TokenAmount(mainnetTokens.WBTC, '1') } },
+      { fields: { marketId: MarketId.USDC, input: new common.TokenAmount(mainnetTokens.WBTC, '1'), amountBps: 5000 } },
+      { fields: { marketId: MarketId.ETH, input: new common.TokenAmount(mainnetTokens.cbETH, '1') } },
+      { fields: { marketId: MarketId.ETH, input: new common.TokenAmount(mainnetTokens.cbETH, '1'), amountBps: 5000 } },
+      { fields: { marketId: MarketId.ETH, input: new common.TokenAmount(mainnetTokens.wstETH, '1') } },
+      { fields: { marketId: MarketId.ETH, input: new common.TokenAmount(mainnetTokens.wstETH, '1'), amountBps: 5000 } },
     ];
 
     testCases.forEach(({ fields }) => {

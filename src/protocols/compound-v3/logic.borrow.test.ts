@@ -1,18 +1,18 @@
 import { BorrowLogic, BorrowLogicFields } from './logic.borrow';
 import { Comet__factory } from './contracts';
 import { LogicTestCase } from 'test/types';
+import { MarketId, getMarket } from './config';
 import * as common from '@composable-router/common';
 import { constants, utils } from 'ethers';
 import { expect } from 'chai';
-import { getMarket } from './config';
 import { mainnetTokens } from './tokens';
 
 describe('CompoundV3 BorrowLogic', function () {
   context('Test getTokenList', async function () {
     BorrowLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.getNetworkId(chainId)}`, async function () {
-        const withdrawCollateralLogic = new BorrowLogic(chainId);
-        const tokenList = await withdrawCollateralLogic.getTokenList();
+        const compoundV3BorrowLogic = new BorrowLogic(chainId);
+        const tokenList = await compoundV3BorrowLogic.getTokenList();
         expect(Object.keys(tokenList).length).to.be.gt(0);
       });
     });
@@ -25,18 +25,8 @@ describe('CompoundV3 BorrowLogic', function () {
     const account = '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa';
 
     const testCases: LogicTestCase<BorrowLogicFields>[] = [
-      {
-        fields: {
-          marketId: 'USDC',
-          output: new common.TokenAmount(mainnetTokens.USDC, '1'),
-        },
-      },
-      {
-        fields: {
-          marketId: 'ETH',
-          output: new common.TokenAmount(mainnetTokens.ETH.wrapped, '1'),
-        },
-      },
+      { fields: { marketId: MarketId.USDC, output: new common.TokenAmount(mainnetTokens.USDC, '1') } },
+      { fields: { marketId: MarketId.ETH, output: new common.TokenAmount(mainnetTokens.ETH.wrapped, '1') } },
     ];
 
     testCases.forEach(({ fields }) => {
