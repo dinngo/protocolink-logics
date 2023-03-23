@@ -66,4 +66,30 @@ export class Service extends common.Web3Toolkit {
 
     return { to, data };
   }
+
+  async getCollateralBalance(account: string, marketId: string, asset: common.Token) {
+    const market = getMarket(this.chainId, marketId);
+    const contractComet = Comet__factory.connect(market.cometAddress, this.provider);
+    const collateralBalance = await contractComet.collateralBalanceOf(account, asset.wrapped.address);
+
+    return new common.TokenAmount(asset).setWei(collateralBalance);
+  }
+
+  async getBorrowBalance(account: string, marketId: string) {
+    const market = getMarket(this.chainId, marketId);
+    const baseToken = await this.getBaseToken(market.id);
+    const contractComet = Comet__factory.connect(market.cometAddress, this.provider);
+    const collateralBalance = await contractComet.borrowBalanceOf(account);
+
+    return new common.TokenAmount(baseToken).setWei(collateralBalance);
+  }
+
+  async getUserPrincipal(account: string, marketId: string) {
+    const market = getMarket(this.chainId, marketId);
+    const baseToken = await this.getBaseToken(market.id);
+    const contractComet = Comet__factory.connect(market.cometAddress, this.provider);
+    const userBasic = await contractComet.userBasic(account);
+
+    return new common.TokenAmount(baseToken).setWei(userBasic.principal);
+  }
 }

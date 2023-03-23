@@ -29,18 +29,18 @@ describe('Test CompoundV3 Withdraw Collateral Logic', function () {
       marketId: 'USDC',
       output: new common.TokenAmount(protocols.compoundv3.mainnetTokens.ETH.wrapped, '1'),
     },
-    // {
-    //   marketId: 'USDC',
-    //   output: new common.TokenAmount(protocols.compoundv3.mainnetTokens.WBTC, '1'),
-    // },
-    // {
-    //   marketId: 'ETH',
-    //   output: new common.TokenAmount(protocols.compoundv3.mainnetTokens.cbETH, '1'),
-    // },
-    // {
-    //   marketId: 'ETH',
-    //   output: new common.TokenAmount(protocols.compoundv3.mainnetTokens.wstETH, '1'),
-    // },
+    {
+      marketId: 'USDC',
+      output: new common.TokenAmount(protocols.compoundv3.mainnetTokens.WBTC, '1'),
+    },
+    {
+      marketId: 'ETH',
+      output: new common.TokenAmount(protocols.compoundv3.mainnetTokens.cbETH, '1'),
+    },
+    {
+      marketId: 'ETH',
+      output: new common.TokenAmount(protocols.compoundv3.mainnetTokens.wstETH, '1'),
+    },
   ];
 
   testCases.forEach(({ marketId, output }, i) => {
@@ -76,7 +76,7 @@ describe('Test CompoundV3 Withdraw Collateral Logic', function () {
         value: funds.native?.amountWei ?? 0,
       });
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
-      const collateralBalance = await helpers.getCollateralBalance(chainId, user.address, marketId, output.token);
+      const collateralBalance = await compoundV3Service.getCollateralBalance(user.address, marketId, output.token);
       expect(supply.sub(collateralBalance).amountWei).to.eq(output.amountWei);
       await expect(user.address).to.changeBalance(output.token, output.amount);
     });
