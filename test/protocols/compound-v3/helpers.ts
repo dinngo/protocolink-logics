@@ -41,3 +41,13 @@ export async function getCollateralBalance(chainId: number, account: string, mar
 
   return new common.TokenAmount(asset).setWei(collateralBalance);
 }
+
+export async function getBorrowBalance(chainId: number, account: string, marketId: string) {
+  const market = protocols.compoundv3.getMarket(chainId, marketId);
+  const compoundV3Service = new protocols.compoundv3.Service(chainId, hre.ethers.provider);
+  const baseToken = await compoundV3Service.getBaseToken(market.id);
+  const contractComet = protocols.compoundv3.Comet__factory.connect(market.cometAddress, hre.ethers.provider);
+  const collateralBalance = await contractComet.borrowBalanceOf(account);
+
+  return new common.TokenAmount(baseToken).setWei(collateralBalance);
+}
