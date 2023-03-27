@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { claimToken, getChainId, mainnetTokens } from '@composable-router/test-helpers';
+import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@composable-router/test-helpers';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
 import { expect } from 'chai';
@@ -23,6 +23,8 @@ describe('Test AaveV2 FlashLoan Logic', function () {
     const aaveV2Service = new protocols.aavev2.Service(chainId, hre.ethers.provider);
     flashLoanPremiumTotal = await aaveV2Service.getFlashLoanPremiumTotal();
   });
+
+  snapshotAndRevertEach();
 
   const testCases = [
     {

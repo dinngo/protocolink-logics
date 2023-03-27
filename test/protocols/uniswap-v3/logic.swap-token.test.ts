@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { claimToken, getChainId, mainnetTokens } from '@composable-router/test-helpers';
+import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@composable-router/test-helpers';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
 import { expect } from 'chai';
@@ -16,6 +16,8 @@ describe('Test UniswapV3 SwapToken Logic', function () {
     [, user] = await hre.ethers.getSigners();
     await claimToken(chainId, user.address, mainnetTokens.USDC, '5000');
   });
+
+  snapshotAndRevertEach();
 
   const testCases = [
     {

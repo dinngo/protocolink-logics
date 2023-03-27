@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { claimToken, getChainId } from '@composable-router/test-helpers';
+import { claimToken, getChainId, snapshotAndRevertEach } from '@composable-router/test-helpers';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
 import { expect } from 'chai';
@@ -18,6 +18,8 @@ describe('Test CompoundV3 Claim Logic', function () {
     users = [user1, user2];
     await claimToken(chainId, user1.address, protocols.compoundv3.mainnetTokens.USDC, '1000');
   });
+
+  snapshotAndRevertEach();
 
   const testCases = [
     {

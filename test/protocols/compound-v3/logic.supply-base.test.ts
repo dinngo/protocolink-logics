@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { claimToken, getChainId } from '@composable-router/test-helpers';
+import { claimToken, getChainId, snapshotAndRevertEach } from '@composable-router/test-helpers';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
 import { expect } from 'chai';
@@ -16,6 +16,8 @@ describe('Test CompoundV3 Supply Base Logic', function () {
     [, user] = await hre.ethers.getSigners();
     await claimToken(chainId, user.address, protocols.compoundv3.mainnetTokens.USDC, '1000');
   });
+
+  snapshotAndRevertEach();
 
   const testCases = [
     {

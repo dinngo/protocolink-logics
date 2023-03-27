@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { claimToken, getChainId, mainnetTokens } from '@composable-router/test-helpers';
+import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@composable-router/test-helpers';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
 import { expect } from 'chai';
@@ -18,6 +18,8 @@ describe('Test CompoundV2 Claim Logic', function () {
     users = [user1, user2];
     await claimToken(chainId, user1.address, mainnetTokens.USDC, '5000');
   });
+
+  snapshotAndRevertEach();
 
   // https://app.compound.finance/markets?market=1_Compound+V2_0x3d9819210A31b4961b30EF54bE2aeD79B9c9Cd3B
   const testCases = [
@@ -65,7 +67,7 @@ describe('Test CompoundV2 Claim Logic', function () {
 
       // 3. build router logics
       const routerLogics: core.IParam.LogicStruct[] = [];
-      routerLogics.push(await compoundV2ClaimLogic.getLogic({ owner: owner.address }));
+      routerLogics.push(await compoundV2ClaimLogic.getLogic({ owner: owner.address, output }));
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics });

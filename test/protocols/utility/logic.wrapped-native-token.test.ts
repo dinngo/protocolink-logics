@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { claimToken, getChainId, mainnetTokens } from '@composable-router/test-helpers';
+import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@composable-router/test-helpers';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
 import { expect } from 'chai';
@@ -17,6 +17,8 @@ describe('Test Utility WrappedNativeToken Logic', function () {
     await claimToken(chainId, user.address, mainnetTokens.ETH, '100');
     await claimToken(chainId, user.address, mainnetTokens.WETH, '100');
   });
+
+  snapshotAndRevertEach();
 
   const testCases = [
     { input: new common.TokenAmount(mainnetTokens.ETH, '1'), tokenOut: mainnetTokens.WETH },

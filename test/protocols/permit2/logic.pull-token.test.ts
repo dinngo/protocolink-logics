@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { claimToken, getChainId, mainnetTokens } from '@composable-router/test-helpers';
+import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@composable-router/test-helpers';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
 import { expect } from 'chai';
@@ -16,6 +16,8 @@ describe('Test Permit2 PullToken Logic', function () {
     await claimToken(chainId, user.address, mainnetTokens.USDC, '100');
     await claimToken(chainId, user.address, mainnetTokens.WETH, '100');
   });
+
+  snapshotAndRevertEach();
 
   const testCases = [
     { funds: new common.TokenAmounts([mainnetTokens.ETH, '1']) },

@@ -1,7 +1,7 @@
 import '@nomicfoundation/hardhat-chai-matchers';
+import '@composable-router/test-helpers';
 
 import { HardhatUserConfig } from 'hardhat/config';
-import { revert, snapshot } from '@composable-router/test-helpers';
 import { setup } from 'test/hooks';
 
 const config: HardhatUserConfig = {
@@ -23,7 +23,7 @@ const config: HardhatUserConfig = {
   mocha: {
     timeout: 1200000,
     retries: 3,
-    rootHooks: { beforeAll: [setup], beforeEach: [snapshot], afterEach: [revert] },
+    rootHooks: { beforeAll: [setup] },
   },
 };
 

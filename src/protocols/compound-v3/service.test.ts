@@ -12,7 +12,7 @@ describe('CompoundV3 Service', function () {
         const markets = getMarkets(chainId);
         const service = new Service(chainId);
         for (const market of markets) {
-          const collaterals = await service.getCollaterals(market.cometAddress);
+          const collaterals = await service.getCollaterals(market.id);
           expect(collaterals.length).to.gt(0);
         }
       });
