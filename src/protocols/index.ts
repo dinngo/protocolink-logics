@@ -1,4 +1,5 @@
 export * as aavev2 from './aave-v2';
+export * as aavev3 from './aave-v3';
 export * as balancerv2 from './balancer-v2';
 export * as compoundv2 from './compound-v2';
 export * as paraswapv5 from './paraswap-v5';

@@ -1,0 +1,156 @@
+{
+  "USDT": {
+    "chainId": 1,
+    "address": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+    "decimals": 6,
+    "symbol": "USDT",
+    "name": "Tether USD"
+  },
+  "aETHUSDT": {
+    "chainId": 1,
+    "address": "0x23878914EFE38d27C4D67Ab83ed1b93A74D4086a",
+    "decimals": 6,
+    "symbol": "aETHUSDT",
+    "name": "Aave Ethereum USDT"
+  },
+  "WBTC": {
+    "chainId": 1,
+    "address": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+    "decimals": 8,
+    "symbol": "WBTC",
+    "name": "Wrapped BTC"
+  },
+  "aEthWBTC": {
+    "chainId": 1,
+    "address": "0x5Ee5bf7ae06D1Be5997A1A72006FE6C607eC6DE8",
+    "decimals": 8,
+    "symbol": "aEthWBTC",
+    "name": "Aave Ethereum WBTC"
+  },
+  "WETH": {
+    "chainId": 1,
+    "address": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+    "decimals": 18,
+    "symbol": "WETH",
+    "name": "Wrapped Ether"
+  },
+  "aEthWETH": {
+    "chainId": 1,
+    "address": "0x4d5F47FA6A74757f35C14fD3a6Ef8E3C9BC514E8",
+    "decimals": 18,
+    "symbol": "aEthWETH",
+    "name": "Aave Ethereum WETH"
+  },
+  "AAVE": {
+    "chainId": 1,
+    "address": "0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9",
+    "decimals": 18,
+    "symbol": "AAVE",
+    "name": "Aave Token"
+  },
+  "aEthAAVE": {
+    "chainId": 1,
+    "address": "0xA700b4eB416Be35b2911fd5Dee80678ff64fF6C9",
+    "decimals": 18,
+    "symbol": "aEthAAVE",
+    "name": "Aave Ethereum AAVE"
+  },
+  "DAI": {
+    "chainId": 1,
+    "address": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+    "decimals": 18,
+    "symbol": "DAI",
+    "name": "Dai Stablecoin"
+  },
+  "aEthDAI": {
+    "chainId": 1,
+    "address": "0x018008bfb33d285247A21d44E50697654f754e63",
+    "decimals": 18,
+    "symbol": "aEthDAI",
+    "name": "Aave Ethereum DAI"
+  },
+  "LINK": {
+    "chainId": 1,
+    "address": "0x514910771AF9Ca656af840dff83E8264EcF986CA",
+    "decimals": 18,
+    "symbol": "LINK",
+    "name": "ChainLink Token"
+  },
+  "aEthLINK": {
+    "chainId": 1,
+    "address": "0x5E8C8A7243651DB1384C0dDfDbE39761E8e7E51a",
+    "decimals": 18,
+    "symbol": "aEthLINK",
+    "name": "Aave Ethereum LINK"
+  },
+  "USDC": {
+    "chainId": 1,
+    "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+    "decimals": 6,
+    "symbol": "USDC",
+    "name": "USD Coin"
+  },
+  "aEthUSDC": {
+    "chainId": 1,
+    "address": "0x98C23E9d8f34FEFb1B7BD6a91B7FF122F4e16F5c",
+    "decimals": 6,
+    "symbol": "aEthUSDC",
+    "name": "Aave Ethereum USDC"
+  },
+  "CRV": {
+    "chainId": 1,
+    "address": "0xD533a949740bb3306d119CC777fa900bA034cd52",
+    "decimals": 18,
+    "symbol": "CRV",
+    "name": "Curve DAO Token"
+  },
+  "aEthCRV": {
+    "chainId": 1,
+    "address": "0x7B95Ec873268a6BFC6427e7a28e396Db9D0ebc65",
+    "decimals": 18,
+    "symbol": "aEthCRV",
+    "name": "Aave Ethereum CRV"
+  },
+  "LUSD": {
+    "chainId": 1,
+    "address": "0x5f98805A4E8be255a32880FDeC7F6728C6568bA0",
+    "decimals": 18,
+    "symbol": "LUSD",
+    "name": "LUSD Stablecoin"
+  },
+  "aEthLUSD": {
+    "chainId": 1,
+    "address": "0x3Fe6a295459FAe07DF8A0ceCC36F37160FE86AA9",
+    "decimals": 18,
+    "symbol": "aEthLUSD",
+    "name": "Aave Ethereum LUSD"
+  },
+  "cbETH": {
+    "chainId": 1,
+    "address": "0xBe9895146f7AF43049ca1c1AE358B0541Ea49704",
+    "decimals": 18,
+    "symbol": "cbETH",
+    "name": "Coinbase Wrapped Staked ETH"
+  },
+  "aEthcbETH": {
+    "chainId": 1,
+    "address": "0x977b6fc5dE62598B08C85AC8Cf2b745874E8b78c",
+    "decimals": 18,
+    "symbol": "aEthcbETH",
+    "name": "Aave Ethereum cbETH"
+  },
+  "rETH": {
+    "chainId": 1,
+    "address": "0xae78736Cd615f374D3085123A210448E74Fc6393",
+    "decimals": 18,
+    "symbol": "rETH",
+    "name": "Rocket Pool ETH"
+  },
+  "aEthrETH": {
+    "chainId": 1,
+    "address": "0xCc9EE9483f662091a1de4795249E24aC0aC2630f",
+    "decimals": 18,
+    "symbol": "aEthrETH",
+    "name": "Aave Ethereum rETH"
+  }
+}
