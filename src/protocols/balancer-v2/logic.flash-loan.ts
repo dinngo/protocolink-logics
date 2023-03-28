@@ -8,7 +8,12 @@ export type FlashLoanLogicFields = core.FlashLoanFields;
 
 @core.LogicDefinitionDecorator()
 export class FlashLoanLogic extends core.Logic {
-  static readonly supportedChainIds = [common.ChainId.mainnet];
+  static readonly supportedChainIds = [
+    common.ChainId.mainnet,
+    common.ChainId.polygon,
+    common.ChainId.arbitrum,
+    common.ChainId.optimism,
+  ];
 
   async getLogic(fields: FlashLoanLogicFields) {
     const { outputs, params } = fields;

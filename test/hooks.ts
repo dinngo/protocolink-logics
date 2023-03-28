@@ -1,14 +1,19 @@
+import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
 import { getChainId } from '@composable-router/test-helpers';
 import * as protocols from 'src/protocols';
 
-export async function deployContracts() {
+export async function setup() {
   const hre = await import('hardhat');
   const [deployer] = await hre.ethers.getSigners();
   const chainId = await getChainId();
 
   // deploy Router
-  const router = await (await new core.Router__factory().connect(deployer).deploy()).deployed();
+  const router = await (
+    await new core.Router__factory()
+      .connect(deployer)
+      .deploy(common.getWrappedNativeToken(chainId).address, deployer.address, deployer.address)
+  ).deployed();
   core.setContractAddress(chainId, 'Router', router.address);
   const agentImplementation = await router.agentImplementation();
   core.setContractAddress(chainId, 'AgentImplementation', agentImplementation);

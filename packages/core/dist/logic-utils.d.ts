@@ -11,6 +11,7 @@ export interface NewLogicOptions {
     to: string;
     data: string;
     inputs?: IParam.InputStruct[];
+    wrapMode?: number;
     approveTo?: string;
     callback?: string;
 }
@@ -18,6 +19,7 @@ export declare function newLogic(options: NewLogicOptions): {
     to: string;
     data: string;
     inputs: IParam.InputStruct[];
+    wrapMode: number;
     approveTo: string;
     callback: string;
 };

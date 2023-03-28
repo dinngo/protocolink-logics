@@ -19,10 +19,11 @@ export declare class Token {
     static isWrapped(chainId: number, address: string): boolean;
     static isWrapped(token: TokenTypes): boolean;
     static getAddress(tokenOrAddress: TokenOrAddress): string;
-    get wrapped(): Token;
     is(token: TokenTypes): boolean;
     get isNative(): boolean;
     get isWrapped(): boolean;
+    get wrapped(): Token;
+    get unwrapped(): Token;
     get elasticAddress(): string;
     sortsBefore(token: TokenTypes): boolean;
     toObject(): TokenObject;

@@ -6,6 +6,11 @@ export interface GlobalOptions {
     readonly balances: common.TokenAmounts;
     readonly slippage: number;
 }
+export declare enum WrapMode {
+    none = 0,
+    wrapBefore = 1,
+    unwrapAfter = 2
+}
 export declare enum TradeType {
     exactIn = "exactIn",
     exactOut = "exactOut"
@@ -65,9 +70,9 @@ export type RepayFields<T = object> = TokenInFields<{
 export type ClaimParams<T = object> = {
     owner: string;
 } & T;
-export type ClaimFields<T = object> = {
+export type ClaimFields<T = object> = TokenOutFields<{
     owner: string;
-} & T;
+}> & T;
 export type FlashLoanFields<T = object> = TokensOutFields<{
     params: string;
 }> & T;

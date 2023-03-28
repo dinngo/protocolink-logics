@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.newLogic = exports.newLogicInput = void 0;
 const tslib_1 = require("tslib");
 const ethers_1 = require("ethers");
+const logic_types_1 = require("./logic-types");
 const common = tslib_1.__importStar(require("@composable-router/common"));
 const tiny_invariant_1 = tslib_1.__importDefault(require("tiny-invariant"));
 function newLogicInput(options) {
@@ -22,8 +23,8 @@ function newLogicInput(options) {
 }
 exports.newLogicInput = newLogicInput;
 function newLogic(options) {
-    const { to, data, inputs = [], approveTo = ethers_1.constants.AddressZero, callback = ethers_1.constants.AddressZero } = options;
-    return { to, data, inputs, approveTo, callback };
+    const { to, data, inputs = [], wrapMode = logic_types_1.WrapMode.none, approveTo = ethers_1.constants.AddressZero, callback = ethers_1.constants.AddressZero, } = options;
+    return { to, data, inputs, wrapMode, approveTo, callback };
 }
 exports.newLogic = newLogic;
 //# sourceMappingURL=logic-utils.js.map
