@@ -8,7 +8,7 @@ import hre from 'hardhat';
 import * as protocols from 'src/protocols';
 import * as utils from 'test/utils';
 
-describe('Test AaveV2 Withdraw Logic', function () {
+describe('Test AaveV3 Withdraw Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
 

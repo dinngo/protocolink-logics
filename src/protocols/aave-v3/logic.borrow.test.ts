@@ -8,7 +8,7 @@ import { constants, utils } from 'ethers';
 import { expect } from 'chai';
 import { mainnetTokens } from './tokens';
 
-describe('AaveV2 BorrowLogic', function () {
+describe('AaveV3 BorrowLogic', function () {
   context('Test getTokenList', async function () {
     BorrowLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.getNetworkId(chainId)}`, async function () {
@@ -21,7 +21,7 @@ describe('AaveV2 BorrowLogic', function () {
 
   context('Test getLogic', function () {
     const chainId = common.ChainId.mainnet;
-    const aaveV2BorrowLogic = new BorrowLogic(chainId);
+    const aaveV3BorrowLogic = new BorrowLogic(chainId);
     let poolAddress: string;
     const poolIface = Pool__factory.createInterface();
     const account = '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa';
@@ -48,7 +48,7 @@ describe('AaveV2 BorrowLogic', function () {
 
     testCases.forEach(({ fields }) => {
       it(`borrow ${fields.output.token.symbol}`, async function () {
-        const routerLogic = await aaveV2BorrowLogic.getLogic(fields, { account });
+        const routerLogic = await aaveV3BorrowLogic.getLogic(fields, { account });
         const sig = routerLogic.data.substring(0, 10);
 
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;

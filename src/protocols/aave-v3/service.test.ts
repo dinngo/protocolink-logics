@@ -3,7 +3,7 @@ import * as common from '@composable-router/common';
 import { expect } from 'chai';
 import { mainnetTokens } from './tokens';
 
-describe('AaveV2 Service', function () {
+describe('AaveV3 Service', function () {
   const chainIds = [common.ChainId.mainnet];
 
   context('Test getReserveTokensAddresses', function () {

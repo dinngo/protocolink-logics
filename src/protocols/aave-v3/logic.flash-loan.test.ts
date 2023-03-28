@@ -8,7 +8,7 @@ import { expect } from 'chai';
 import { getContractAddress } from './config';
 import { mainnetTokens } from './tokens';
 
-describe('AaveV2 FlashLoanLogic', function () {
+describe('AaveV3 FlashLoanLogic', function () {
   context('Test getTokenList', async function () {
     FlashLoanLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.getNetworkId(chainId)}`, async function () {
@@ -21,7 +21,7 @@ describe('AaveV2 FlashLoanLogic', function () {
 
   context('Test getLogic', function () {
     const chainId = common.ChainId.mainnet;
-    const aaveV2FlashLoanLogic = new FlashLoanLogic(chainId);
+    const aaveV3FlashLoanLogic = new FlashLoanLogic(chainId);
     let poolAddress: string;
     const poolIface = Pool__factory.createInterface();
 
@@ -41,7 +41,7 @@ describe('AaveV2 FlashLoanLogic', function () {
 
     testCases.forEach(({ fields }) => {
       it(`flash loan ${fields.outputs.map((output) => output.token.symbol).join(',')}`, async function () {
-        const routerLogic = await aaveV2FlashLoanLogic.getLogic(fields);
+        const routerLogic = await aaveV3FlashLoanLogic.getLogic(fields);
         const sig = routerLogic.data.substring(0, 10);
 
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;

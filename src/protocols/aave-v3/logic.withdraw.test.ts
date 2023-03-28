@@ -7,7 +7,7 @@ import { constants, utils } from 'ethers';
 import { expect } from 'chai';
 import { mainnetTokens } from './tokens';
 
-describe('AaveV2 WithdrawLogic', function () {
+describe('AaveV3 WithdrawLogic', function () {
   context('Test getTokenList', async function () {
     WithdrawLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.getNetworkId(chainId)}`, async function () {
@@ -20,7 +20,7 @@ describe('AaveV2 WithdrawLogic', function () {
 
   context('Test getLogic', function () {
     const chainId = common.ChainId.mainnet;
-    const aaveV2WithdrawLogic = new WithdrawLogic(chainId);
+    const aaveV3WithdrawLogic = new WithdrawLogic(chainId);
     let poolAddress: string;
     const poolIface = Pool__factory.createInterface();
     const account = '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa';
@@ -61,7 +61,7 @@ describe('AaveV2 WithdrawLogic', function () {
 
     testCases.forEach(({ fields }) => {
       it(`withdraw ${fields.input.token.symbol}${fields.amountBps ? ' with amountBps' : ''}`, async function () {
-        const routerLogic = await aaveV2WithdrawLogic.getLogic(fields, { account });
+        const routerLogic = await aaveV3WithdrawLogic.getLogic(fields, { account });
         const sig = routerLogic.data.substring(0, 10);
         const { input, amountBps } = fields;
 
