@@ -59,8 +59,8 @@ describe('AaveV2 BorrowLogic', function () {
         const sig = routerLogic.data.substring(0, 10);
         const { output } = fields;
 
-        expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(routerLogic.to).to.eq(lendingPoolAddress);
+        expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(sig).to.eq(lendingPoolIface.getSighash('borrow'));
         expect(routerLogic.inputs).to.deep.eq([]);
         expect(routerLogic.wrapMode).to.eq(output.token.isNative ? core.WrapMode.unwrapAfter : core.WrapMode.none);

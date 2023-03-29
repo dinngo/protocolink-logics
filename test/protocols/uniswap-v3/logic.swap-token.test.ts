@@ -32,12 +32,27 @@ describe('Test UniswapV3 SwapToken Logic', function () {
       params: { input: new common.TokenAmount(mainnetTokens.USDC, '1000'), tokenOut: mainnetTokens.DAI },
       slippage: 100,
     },
+    {
+      params: { input: new common.TokenAmount(mainnetTokens.ETH, '1'), tokenOut: mainnetTokens.USDC },
+      amountBps: 5000,
+      slippage: 100,
+    },
+    {
+      params: { input: new common.TokenAmount(mainnetTokens.USDC, '1000'), tokenOut: mainnetTokens.ETH },
+      amountBps: 5000,
+      slippage: 100,
+    },
+    {
+      params: { input: new common.TokenAmount(mainnetTokens.USDC, '1000'), tokenOut: mainnetTokens.DAI },
+      amountBps: 5000,
+      slippage: 100,
+    },
     { params: { tokenIn: mainnetTokens.ETH, output: new common.TokenAmount(mainnetTokens.USDC, '1000') } },
     { params: { tokenIn: mainnetTokens.USDC, output: new common.TokenAmount(mainnetTokens.ETH, '1') } },
     { params: { tokenIn: mainnetTokens.USDC, output: new common.TokenAmount(mainnetTokens.DAI, '1000') } },
   ];
 
-  testCases.forEach(({ params, slippage }, i) => {
+  testCases.forEach(({ params, amountBps, slippage }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. get input or output
       const uniswapV3SwapToken = new protocols.uniswapv3.SwapTokenLogic(chainId);
@@ -45,8 +60,14 @@ describe('Test UniswapV3 SwapToken Logic', function () {
       const { tradeType, input, output } = quotation;
 
       // 2. build funds, tokensReturn
-      const funds = new common.TokenAmounts(input);
       const tokensReturn = [output.token.elasticAddress];
+      const funds = new common.TokenAmounts();
+      if (amountBps) {
+        funds.add(utils.calcRequiredAmountByAmountBps(input, amountBps));
+        tokensReturn.push(input.token.elasticAddress);
+      } else {
+        funds.add(input);
+      }
 
       // 3. build router logics
       const erc20Funds = funds.erc20;

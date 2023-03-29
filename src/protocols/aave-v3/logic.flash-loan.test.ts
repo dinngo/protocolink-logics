@@ -44,8 +44,8 @@ describe('AaveV3 FlashLoanLogic', function () {
         const routerLogic = await aaveV3FlashLoanLogic.getLogic(fields);
         const sig = routerLogic.data.substring(0, 10);
 
-        expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(routerLogic.to).to.eq(poolAddress);
+        expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(sig).to.eq(poolIface.getSighash('flashLoan'));
         expect(routerLogic.inputs).to.deep.eq([]);
         expect(routerLogic.approveTo).to.eq(constants.AddressZero);

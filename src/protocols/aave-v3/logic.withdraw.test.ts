@@ -79,8 +79,8 @@ describe('AaveV3 WithdrawLogic', function () {
         const sig = routerLogic.data.substring(0, 10);
         const { input, output, amountBps } = fields;
 
-        expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(routerLogic.to).to.eq(poolAddress);
+        expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(sig).to.eq(poolIface.getSighash('withdraw'));
         expect(routerLogic.inputs[0].token).to.eq(input.token.address);
         if (amountBps) {

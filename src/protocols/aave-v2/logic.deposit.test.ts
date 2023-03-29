@@ -79,8 +79,8 @@ describe('AaveV2 DepositLogic', function () {
         const sig = routerLogic.data.substring(0, 10);
         const { input, amountBps } = fields;
 
-        expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(routerLogic.to).to.eq(lendingPoolAddress);
+        expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(sig).to.eq(lendingPoolIface.getSighash('deposit'));
         expect(routerLogic.inputs[0].token).to.eq(input.token.wrapped.address);
         if (amountBps) {

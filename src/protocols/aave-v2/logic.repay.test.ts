@@ -85,8 +85,8 @@ describe('AaveV2 RepayLogic', function () {
         const sig = routerLogic.data.substring(0, 10);
         const { input, amountBps } = fields;
 
-        expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(routerLogic.to).to.eq(lendingPoolAddress);
+        expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(sig).to.eq(lendingPoolIface.getSighash('repay'));
         if (amountBps) {
           expect(routerLogic.inputs[0].amountBps).to.eq(amountBps);
