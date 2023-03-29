@@ -14,12 +14,15 @@ describe('Test AaveV3 Supply Logic', function () {
   before(async function () {
     chainId = await getChainId();
     [, user] = await hre.ethers.getSigners();
-    await claimToken(chainId, user.address, mainnetTokens.ETH, '100');
     await claimToken(chainId, user.address, mainnetTokens.USDC, '100');
     await claimToken(chainId, user.address, mainnetTokens.WETH, '100');
   });
 
   const testCases = [
+    {
+      input: new common.TokenAmount(protocols.aavev3.mainnetTokens.ETH, '1'),
+      tokenOut: protocols.aavev3.mainnetTokens.aEthWETH,
+    },
     {
       input: new common.TokenAmount(protocols.aavev3.mainnetTokens.WETH, '1'),
       tokenOut: protocols.aavev3.mainnetTokens.aEthWETH,
@@ -27,6 +30,11 @@ describe('Test AaveV3 Supply Logic', function () {
     {
       input: new common.TokenAmount(protocols.aavev3.mainnetTokens.USDC, '1'),
       tokenOut: protocols.aavev3.mainnetTokens.aEthUSDC,
+    },
+    {
+      input: new common.TokenAmount(protocols.aavev3.mainnetTokens.ETH, '1'),
+      tokenOut: protocols.aavev3.mainnetTokens.aEthWETH,
+      amountBps: 5000,
     },
     {
       input: new common.TokenAmount(protocols.aavev3.mainnetTokens.WETH, '1'),
@@ -50,7 +58,7 @@ describe('Test AaveV3 Supply Logic', function () {
       const tokensReturn = [output.token.elasticAddress];
       const funds = new common.TokenAmounts();
       if (amountBps) {
-        funds.add(utils.calcRequiredFundByAmountBps(input, amountBps));
+        funds.add(utils.calcRequiredAmountByAmountBps(input, amountBps));
         tokensReturn.push(input.token.elasticAddress);
       } else {
         funds.add(input);
@@ -62,7 +70,12 @@ describe('Test AaveV3 Supply Logic', function () {
       routerLogics.push(await aavev3Supply.getLogic({ input, output, amountBps }, { account: user.address }));
 
       // 4. send router tx
-      const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics, tokensReturn });
+      const transactionRequest = core.newRouterExecuteTransactionRequest({
+        chainId,
+        routerLogics,
+        tokensReturn,
+        value: funds.native?.amountWei ?? 0,
+      });
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
       await expect(user.address).to.changeBalance(input.token, -input.amount);
       await expect(user.address).to.changeBalance(output.token, output.amount, 1);

@@ -20,31 +20,24 @@ describe('Test AaveV3 Borrow Logic', function () {
   });
 
   const testCases = [
-    // Only support variable interest rate mode right now
     {
       userIndex: 0,
       supply: new common.TokenAmount(protocols.aavev3.mainnetTokens.USDC, '5000'),
       output: new common.TokenAmount(protocols.aavev3.mainnetTokens.WETH, '1'),
       interestRateMode: protocols.aavev3.InterestRateMode.variable,
     },
-    // {
-    //   userIndex: 0,
-    //   supply: new common.TokenAmount(protocols.aavev3.mainnetTokens.USDC, '5000'),
-    //   output: new common.TokenAmount(protocols.aavev3.mainnetTokens.WETH, '1'),
-    //   interestRateMode: protocols.aavev3.InterestRateMode.stable,
-    // },
+    {
+      userIndex: 0,
+      supply: new common.TokenAmount(protocols.aavev3.mainnetTokens.USDC, '5000'),
+      output: new common.TokenAmount(protocols.aavev3.mainnetTokens.ETH, '1'),
+      interestRateMode: protocols.aavev3.InterestRateMode.variable,
+    },
     {
       userIndex: 1,
       supply: new common.TokenAmount(protocols.aavev3.mainnetTokens.WETH, '1'),
       output: new common.TokenAmount(protocols.aavev3.mainnetTokens.USDC, '1'),
       interestRateMode: protocols.aavev3.InterestRateMode.variable,
     },
-    // {
-    //   userIndex: 1,
-    //   supply: new common.TokenAmount(protocols.aavev3.mainnetTokens.WETH, '1'),
-    //   output: new common.TokenAmount(protocols.aavev3.mainnetTokens.USDC, '1'),
-    //   interestRateMode: protocols.aavev3.InterestRateMode.stable,
-    // },
   ];
 
   testCases.forEach(({ userIndex, supply, output, interestRateMode }, i) => {
@@ -55,7 +48,7 @@ describe('Test AaveV3 Borrow Logic', function () {
       await helpers.approveDelegation(chainId, user, output, interestRateMode);
 
       // 2. build tokensReturn
-      const tokensReturn = [output.token.address];
+      const tokensReturn = [output.token.elasticAddress];
 
       // 3. build router logics
       const routerLogics: core.IParam.LogicStruct[] = [];

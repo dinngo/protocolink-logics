@@ -1,10 +1,11 @@
 import { BorrowLogic, BorrowLogicFields } from './logic.borrow';
 import { InterestRateMode } from './types';
-import { Pool__factory } from './contracts';
 import { LogicTestCase } from 'test/types';
+import { Pool__factory } from './contracts';
 import { Service } from './service';
 import * as common from '@composable-router/common';
 import { constants, utils } from 'ethers';
+import * as core from '@composable-router/core';
 import { expect } from 'chai';
 import { mainnetTokens } from './tokens';
 
@@ -34,6 +35,12 @@ describe('AaveV3 BorrowLogic', function () {
     const testCases: LogicTestCase<BorrowLogicFields>[] = [
       {
         fields: {
+          output: new common.TokenAmount(mainnetTokens.ETH, '1'),
+          interestRateMode: InterestRateMode.variable,
+        },
+      },
+      {
+        fields: {
           output: new common.TokenAmount(mainnetTokens.WETH, '1'),
           interestRateMode: InterestRateMode.variable,
         },
@@ -50,11 +57,13 @@ describe('AaveV3 BorrowLogic', function () {
       it(`borrow ${fields.output.token.symbol}`, async function () {
         const routerLogic = await aaveV3BorrowLogic.getLogic(fields, { account });
         const sig = routerLogic.data.substring(0, 10);
+        const { output } = fields;
 
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(routerLogic.to).to.eq(poolAddress);
         expect(sig).to.eq(poolIface.getSighash('borrow'));
         expect(routerLogic.inputs).to.deep.eq([]);
+        expect(routerLogic.wrapMode).to.eq(output.token.isNative ? core.WrapMode.unwrapAfter : core.WrapMode.none);
         expect(routerLogic.approveTo).to.eq(constants.AddressZero);
         expect(routerLogic.callback).to.eq(constants.AddressZero);
       });

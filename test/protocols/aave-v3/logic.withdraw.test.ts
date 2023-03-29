@@ -22,11 +22,20 @@ describe('Test AaveV3 Withdraw Logic', function () {
   const testCases = [
     {
       input: new common.TokenAmount(protocols.aavev3.mainnetTokens.aEthWETH, '1'),
+      tokenOut: protocols.aavev3.mainnetTokens.ETH,
+    },
+    {
+      input: new common.TokenAmount(protocols.aavev3.mainnetTokens.aEthWETH, '1'),
       tokenOut: protocols.aavev3.mainnetTokens.WETH,
     },
     {
       input: new common.TokenAmount(protocols.aavev3.mainnetTokens.aEthUSDC, '1'),
       tokenOut: protocols.aavev3.mainnetTokens.USDC,
+    },
+    {
+      input: new common.TokenAmount(protocols.aavev3.mainnetTokens.aEthWETH, '1'),
+      tokenOut: protocols.aavev3.mainnetTokens.ETH,
+      amountBps: 5000,
     },
     {
       input: new common.TokenAmount(protocols.aavev3.mainnetTokens.aEthWETH, '1'),
@@ -54,7 +63,7 @@ describe('Test AaveV3 Withdraw Logic', function () {
       const tokensReturn = [output.token.elasticAddress];
       const funds = new common.TokenAmounts();
       if (amountBps) {
-        funds.add(utils.calcRequiredFundByAmountBps(input, amountBps));
+        funds.add(utils.calcRequiredAmountByAmountBps(input, amountBps));
         tokensReturn.push(input.token.elasticAddress);
       } else {
         funds.add(input);

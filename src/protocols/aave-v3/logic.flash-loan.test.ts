@@ -1,6 +1,6 @@
 import { FlashLoanLogic, FlashLoanLogicFields } from './logic.flash-loan';
-import { Pool__factory } from './contracts';
 import { LogicTestCase } from 'test/types';
+import { Pool__factory } from './contracts';
 import { Service } from './service';
 import * as common from '@composable-router/common';
 import { constants, utils } from 'ethers';

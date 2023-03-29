@@ -7,6 +7,8 @@ import hre from 'hardhat';
 import * as protocols from 'src/protocols';
 
 export async function supply(chainId: number, user: SignerWithAddress, assetAmount: common.TokenAmount) {
+  assetAmount = new common.TokenAmount(assetAmount.token.wrapped, assetAmount.amount);
+
   const aaveV3Service = new protocols.aavev3.Service(chainId, hre.ethers.provider);
   const lendingPoolAddress = await aaveV3Service.getPoolAddress();
   await approve(user, lendingPoolAddress, assetAmount);
@@ -42,6 +44,13 @@ export async function borrow(
   assetAmount: common.TokenAmount,
   interestRateMode: protocols.aavev3.InterestRateMode
 ) {
+  if (assetAmount.token.isNative) {
+    const wrappedToken = assetAmount.token.wrapped;
+    const contractWETH = common.WETH__factory.connect(wrappedToken.address, user);
+    await expect(contractWETH.deposit({ value: assetAmount.amountWei })).to.not.be.reverted;
+    assetAmount = new common.TokenAmount(wrappedToken, assetAmount.amount);
+  }
+
   const aaveV3Service = new protocols.aavev3.Service(chainId, hre.ethers.provider);
   const lendingPoolAddress = await aaveV3Service.getPoolAddress();
   await approve(user, lendingPoolAddress, assetAmount);

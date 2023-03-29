@@ -2,8 +2,8 @@ import {
   AToken__factory,
   DebtTokenBase__factory,
   PoolAddressesProvider__factory,
-  Pool__factory,
   PoolDataProvider__factory,
+  Pool__factory,
 } from './contracts';
 import { InterestRateMode, ReserveTokens, ReserveTokensAddress } from './types';
 import * as common from '@composable-router/common';
@@ -152,7 +152,7 @@ export class Service extends common.Web3Toolkit {
 
   async getDebtTokenAddress(asset: common.Token, interestRateMode: InterestRateMode) {
     const { stableDebtTokenAddress, variableDebtTokenAddress } = await this.poolDataProvider.getReserveTokensAddresses(
-      asset.address
+      asset.wrapped.address
     );
 
     return interestRateMode === InterestRateMode.variable ? variableDebtTokenAddress : stableDebtTokenAddress;

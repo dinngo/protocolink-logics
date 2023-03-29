@@ -10,7 +10,13 @@ export type FlashLoanLogicFields = core.FlashLoanFields<{ referralCode?: number 
 
 @core.LogicDefinitionDecorator()
 export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInterface {
-  static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon, common.ChainId.avalanche];
+  static readonly supportedChainIds = [
+    common.ChainId.mainnet,
+    common.ChainId.polygon,
+    common.ChainId.arbitrum,
+    common.ChainId.optimism,
+    common.ChainId.avalanche,
+  ];
 
   async getTokenList() {
     const service = new Service(this.chainId, this.provider);

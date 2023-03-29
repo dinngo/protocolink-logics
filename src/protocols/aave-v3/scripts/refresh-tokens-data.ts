@@ -11,6 +11,10 @@ export default async function () {
     const reserveTokens = await service.getReserveTokens();
 
     const tokenMap = reserveTokens.reduce((accumulator, reserveToken) => {
+      if (reserveToken.asset.isWrapped) {
+        const unwrapped = reserveToken.asset.unwrapped;
+        accumulator[unwrapped.symbol] = unwrapped;
+      }
       accumulator[reserveToken.asset.symbol] = reserveToken.asset;
       accumulator[reserveToken.aToken.symbol] = reserveToken.aToken;
       return accumulator;
