@@ -5,6 +5,7 @@ import { RepayLogic, RepayLogicFields } from './logic.repay';
 import { Service } from './service';
 import * as common from '@composable-router/common';
 import { constants, utils } from 'ethers';
+import * as core from '@composable-router/core';
 import { expect } from 'chai';
 import { mainnetTokens } from './tokens';
 
@@ -33,6 +34,13 @@ describe('AaveV2 RepayLogic', function () {
     const testCases: LogicTestCase<RepayLogicFields>[] = [
       {
         fields: {
+          input: new common.TokenAmount(mainnetTokens.ETH, '1'),
+          interestRateMode: InterestRateMode.variable,
+          borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
+        },
+      },
+      {
+        fields: {
           input: new common.TokenAmount(mainnetTokens.WETH, '1'),
           interestRateMode: InterestRateMode.variable,
           borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
@@ -43,6 +51,14 @@ describe('AaveV2 RepayLogic', function () {
           input: new common.TokenAmount(mainnetTokens.USDC, '1'),
           interestRateMode: InterestRateMode.variable,
           borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
+        },
+      },
+      {
+        fields: {
+          input: new common.TokenAmount(mainnetTokens.ETH, '1'),
+          interestRateMode: InterestRateMode.variable,
+          borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
+          amountBps: 5000,
         },
       },
       {
@@ -79,6 +95,7 @@ describe('AaveV2 RepayLogic', function () {
           expect(routerLogic.inputs[0].amountBps).to.eq(constants.MaxUint256);
           expect(routerLogic.inputs[0].amountOrOffset).eq(input.amountWei);
         }
+        expect(routerLogic.wrapMode).to.eq(input.token.isNative ? core.WrapMode.wrapBefore : core.WrapMode.none);
         expect(routerLogic.approveTo).to.eq(constants.AddressZero);
         expect(routerLogic.callback).to.eq(constants.AddressZero);
       });

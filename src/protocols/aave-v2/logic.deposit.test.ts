@@ -4,6 +4,7 @@ import { LogicTestCase } from 'test/types';
 import { Service } from './service';
 import * as common from '@composable-router/common';
 import { constants, utils } from 'ethers';
+import * as core from '@composable-router/core';
 import { expect } from 'chai';
 import { mainnetTokens } from './tokens';
 
@@ -33,6 +34,12 @@ describe('AaveV2 DepositLogic', function () {
     const testCases: LogicTestCase<DepositLogicFields>[] = [
       {
         fields: {
+          input: new common.TokenAmount(mainnetTokens.ETH, '1'),
+          output: new common.TokenAmount(mainnetTokens.aWETH, '1'),
+        },
+      },
+      {
+        fields: {
           input: new common.TokenAmount(mainnetTokens.WETH, '1'),
           output: new common.TokenAmount(mainnetTokens.aWETH, '1'),
         },
@@ -41,6 +48,13 @@ describe('AaveV2 DepositLogic', function () {
         fields: {
           input: new common.TokenAmount(mainnetTokens.USDC, '1'),
           output: new common.TokenAmount(mainnetTokens.aUSDC, '1'),
+        },
+      },
+      {
+        fields: {
+          input: new common.TokenAmount(mainnetTokens.ETH, '1'),
+          output: new common.TokenAmount(mainnetTokens.aWETH, '1'),
+          amountBps: 5000,
         },
       },
       {
@@ -68,6 +82,7 @@ describe('AaveV2 DepositLogic', function () {
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(routerLogic.to).to.eq(lendingPoolAddress);
         expect(sig).to.eq(lendingPoolIface.getSighash('deposit'));
+        expect(routerLogic.inputs[0].token).to.eq(input.token.wrapped.address);
         if (amountBps) {
           expect(routerLogic.inputs[0].amountBps).to.eq(amountBps);
           expect(routerLogic.inputs[0].amountOrOffset).to.eq(common.getParamOffset(1));
@@ -75,6 +90,7 @@ describe('AaveV2 DepositLogic', function () {
           expect(routerLogic.inputs[0].amountBps).to.eq(constants.MaxUint256);
           expect(routerLogic.inputs[0].amountOrOffset).eq(input.amountWei);
         }
+        expect(routerLogic.wrapMode).to.eq(input.token.isNative ? core.WrapMode.wrapBefore : core.WrapMode.none);
         expect(routerLogic.approveTo).to.eq(constants.AddressZero);
         expect(routerLogic.callback).to.eq(constants.AddressZero);
       });

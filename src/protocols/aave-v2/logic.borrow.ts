@@ -3,7 +3,6 @@ import { LendingPool__factory } from './contracts';
 import { Service } from './service';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
-import invariant from 'tiny-invariant';
 
 export type BorrowLogicFields = core.TokenOutFields<{ interestRateMode: InterestRateMode; referralCode?: number }>;
 
@@ -17,24 +16,34 @@ export class BorrowLogic extends core.Logic implements core.LogicTokenListInterf
     const service = new Service(this.chainId, this.provider);
     const tokens = await service.getAssets();
 
-    return tokens;
+    const tokenList: common.Token[] = [];
+    for (const token of tokens) {
+      if (token.isWrapped) {
+        tokenList.push(token.unwrapped);
+      }
+      tokenList.push(token);
+    }
+
+    return tokenList;
   }
 
   async getLogic(fields: BorrowLogicFields, options: BorrowLogicOptions) {
     const { output, interestRateMode, referralCode = 0 } = fields;
-    invariant(!output.token.isNative, 'tokenOut should not be native token');
     const { account } = options;
+
+    const tokenOut = output.token.wrapped;
 
     const service = new Service(this.chainId, this.provider);
     const to = await service.getLendingPoolAddress();
     const data = LendingPool__factory.createInterface().encodeFunctionData('borrow', [
-      output.token.address,
+      tokenOut.address,
       output.amountWei,
       interestRateMode,
       referralCode,
       account,
     ]);
+    const wrapMode = output.token.isNative ? core.WrapMode.unwrapAfter : core.WrapMode.none;
 
-    return core.newLogic({ to, data });
+    return core.newLogic({ to, data, wrapMode });
   }
 }

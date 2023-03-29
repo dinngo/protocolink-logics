@@ -15,7 +15,7 @@ describe('Test AaveV2 Borrow Logic', function () {
     chainId = await getChainId();
     const [, user1, user2] = await hre.ethers.getSigners();
     users = [user1, user2];
-    await claimToken(chainId, user1.address, mainnetTokens.USDC, '10000');
+    await claimToken(chainId, user1.address, mainnetTokens.USDC, '20000');
     await claimToken(chainId, user2.address, mainnetTokens.WETH, '100');
   });
 
@@ -31,7 +31,19 @@ describe('Test AaveV2 Borrow Logic', function () {
     {
       userIndex: 0,
       deposit: new common.TokenAmount(protocols.aavev2.mainnetTokens.USDC, '5000'),
+      output: new common.TokenAmount(protocols.aavev2.mainnetTokens.ETH, '1'),
+      interestRateMode: protocols.aavev2.InterestRateMode.variable,
+    },
+    {
+      userIndex: 0,
+      deposit: new common.TokenAmount(protocols.aavev2.mainnetTokens.USDC, '5000'),
       output: new common.TokenAmount(protocols.aavev2.mainnetTokens.WETH, '1'),
+      interestRateMode: protocols.aavev2.InterestRateMode.stable,
+    },
+    {
+      userIndex: 0,
+      deposit: new common.TokenAmount(protocols.aavev2.mainnetTokens.USDC, '5000'),
+      output: new common.TokenAmount(protocols.aavev2.mainnetTokens.ETH, '1'),
       interestRateMode: protocols.aavev2.InterestRateMode.stable,
     },
     {
@@ -56,7 +68,7 @@ describe('Test AaveV2 Borrow Logic', function () {
       await helpers.approveDelegation(chainId, user, output, interestRateMode);
 
       // 2. build tokensReturn
-      const tokensReturn = [output.token.address];
+      const tokensReturn = [output.token.elasticAddress];
 
       // 3. build router logics
       const routerLogics: core.IParam.LogicStruct[] = [];

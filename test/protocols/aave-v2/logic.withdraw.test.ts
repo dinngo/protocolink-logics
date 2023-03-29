@@ -24,11 +24,20 @@ describe('Test AaveV2 Withdraw Logic', function () {
   const testCases = [
     {
       input: new common.TokenAmount(protocols.aavev2.mainnetTokens.aWETH, '1'),
+      tokenOut: protocols.aavev2.mainnetTokens.ETH,
+    },
+    {
+      input: new common.TokenAmount(protocols.aavev2.mainnetTokens.aWETH, '1'),
       tokenOut: protocols.aavev2.mainnetTokens.WETH,
     },
     {
       input: new common.TokenAmount(protocols.aavev2.mainnetTokens.aUSDC, '1'),
       tokenOut: protocols.aavev2.mainnetTokens.USDC,
+    },
+    {
+      input: new common.TokenAmount(protocols.aavev2.mainnetTokens.aWETH, '1'),
+      tokenOut: protocols.aavev2.mainnetTokens.ETH,
+      amountBps: 5000,
     },
     {
       input: new common.TokenAmount(protocols.aavev2.mainnetTokens.aWETH, '1'),

@@ -16,7 +16,7 @@ describe('Test AaveV2 Repay Logic', function () {
     chainId = await getChainId();
     const [, user1, user2, user3] = await hre.ethers.getSigners();
     users = [user1, user2, user3];
-    await claimToken(chainId, user1.address, mainnetTokens.USDC, '20000');
+    await claimToken(chainId, user1.address, mainnetTokens.USDC, '40000');
     await claimToken(chainId, user1.address, mainnetTokens.WETH, '100');
     await claimToken(chainId, user2.address, mainnetTokens.USDC, '100');
     await claimToken(chainId, user2.address, mainnetTokens.WETH, '100');
@@ -28,6 +28,18 @@ describe('Test AaveV2 Repay Logic', function () {
     {
       userIndex: 0,
       deposit: new common.TokenAmount(protocols.aavev2.mainnetTokens.USDC, '5000'),
+      borrow: new common.TokenAmount(protocols.aavev2.mainnetTokens.ETH, '1'),
+      interestRateMode: protocols.aavev2.InterestRateMode.variable,
+    },
+    {
+      userIndex: 0,
+      deposit: new common.TokenAmount(protocols.aavev2.mainnetTokens.USDC, '5000'),
+      borrow: new common.TokenAmount(protocols.aavev2.mainnetTokens.ETH, '1'),
+      interestRateMode: protocols.aavev2.InterestRateMode.stable,
+    },
+    {
+      userIndex: 0,
+      deposit: new common.TokenAmount(protocols.aavev2.mainnetTokens.USDC, '5000'),
       borrow: new common.TokenAmount(protocols.aavev2.mainnetTokens.WETH, '1'),
       interestRateMode: protocols.aavev2.InterestRateMode.variable,
     },
@@ -48,6 +60,20 @@ describe('Test AaveV2 Repay Logic', function () {
       deposit: new common.TokenAmount(protocols.aavev2.mainnetTokens.WETH, '1'),
       borrow: new common.TokenAmount(protocols.aavev2.mainnetTokens.USDC, '1'),
       interestRateMode: protocols.aavev2.InterestRateMode.stable,
+    },
+    {
+      userIndex: 0,
+      deposit: new common.TokenAmount(protocols.aavev2.mainnetTokens.USDC, '5000'),
+      borrow: new common.TokenAmount(protocols.aavev2.mainnetTokens.ETH, '1'),
+      interestRateMode: protocols.aavev2.InterestRateMode.variable,
+      amountBps: 5000,
+    },
+    {
+      userIndex: 0,
+      deposit: new common.TokenAmount(protocols.aavev2.mainnetTokens.USDC, '5000'),
+      borrow: new common.TokenAmount(protocols.aavev2.mainnetTokens.ETH, '1'),
+      interestRateMode: protocols.aavev2.InterestRateMode.stable,
+      amountBps: 5000,
     },
     {
       userIndex: 0,
@@ -107,9 +133,14 @@ describe('Test AaveV2 Repay Logic', function () {
       routerLogics.push(await aaveV2Repay.getLogic({ input, interestRateMode, borrower: user.address, amountBps }));
 
       // 5. send router tx
-      const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics, tokensReturn });
+      const transactionRequest = core.newRouterExecuteTransactionRequest({
+        chainId,
+        routerLogics,
+        tokensReturn,
+        value: funds.native?.amountWei ?? 0,
+      });
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
-      await expect(user.address).to.changeBalance(input.token, -input.amount, 100);
+      await expect(user.address).to.changeBalance(input.token, -input.amount, 200);
 
       // 6. check user's debt should be zero
       quotation = await aaveV2Repay.quote({ borrower: user.address, tokenIn: borrow.token, interestRateMode });
