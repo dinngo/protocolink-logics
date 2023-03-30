@@ -39,9 +39,10 @@ describe('Test BalancerV2 FlashLoan Logic', function () {
       // 2. build router logics
       const routerLogics: core.IParam.LogicStruct[] = [];
 
-      const userData = core.Router__factory.createInterface().encodeFunctionData('execute', [
+      const userData = core.Agent__factory.createInterface().encodeFunctionData('execute', [
         flashLoanRouterLogics,
         [],
+        true,
       ]);
       const balancerV2FlashLoan = new protocols.balancerv2.FlashLoanLogic(chainId);
       routerLogics.push(await balancerV2FlashLoan.getLogic({ outputs, params: userData }));

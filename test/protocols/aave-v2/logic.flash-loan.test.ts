@@ -63,7 +63,11 @@ describe('Test AaveV2 FlashLoan Logic', function () {
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
 
-      const params = core.Router__factory.createInterface().encodeFunctionData('execute', [flashLoanRouterLogics, []]);
+      const params = core.Agent__factory.createInterface().encodeFunctionData('execute', [
+        flashLoanRouterLogics,
+        [],
+        true,
+      ]);
       const aaveV2FlashLoan = new protocols.aavev2.FlashLoanLogic(chainId);
       routerLogics.push(await aaveV2FlashLoan.getLogic({ outputs, params }));
 

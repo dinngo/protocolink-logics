@@ -31,7 +31,6 @@ describe('CompoundV3 Service', function () {
     testCases.forEach(({ marketId, supply }, i) => {
       it(`case ${i + 1}`, async function () {
         const canSupply = await service.canSupply(marketId, supply);
-        console.log('canSupply :>> ', canSupply);
         expect(canSupply).is.a('boolean');
       });
     });

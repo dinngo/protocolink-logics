@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { claimToken, getChainId, mainnetTokens } from '@composable-router/test-helpers';
+import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@composable-router/test-helpers';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
 import { expect } from 'chai';
@@ -23,6 +23,8 @@ describe('Test AaveV3 FlashLoan Logic', function () {
     const aaveV3Service = new protocols.aavev3.Service(chainId, hre.ethers.provider);
     flashLoanPremiumTotal = await aaveV3Service.getFlashLoanPremiumTotal();
   });
+
+  snapshotAndRevertEach();
 
   const testCases = [
     {
@@ -61,7 +63,11 @@ describe('Test AaveV3 FlashLoan Logic', function () {
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
 
-      const params = core.Router__factory.createInterface().encodeFunctionData('execute', [flashLoanRouterLogics, []]);
+      const params = core.Agent__factory.createInterface().encodeFunctionData('execute', [
+        flashLoanRouterLogics,
+        [],
+        true,
+      ]);
       const aaveV3FlashLoan = new protocols.aavev3.FlashLoanLogic(chainId);
       routerLogics.push(await aaveV3FlashLoan.getLogic({ outputs, params }));
 

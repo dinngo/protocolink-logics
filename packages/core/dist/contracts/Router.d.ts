@@ -40,13 +40,13 @@ export declare namespace IParam {
 }
 export interface RouterInterface extends utils.Interface {
     functions: {
-        'addSigner(address,uint256)': FunctionFragment;
+        'addSigner(address)': FunctionFragment;
         'agentImplementation()': FunctionFragment;
         'agents(address)': FunctionFragment;
         'calcAgent(address)': FunctionFragment;
         'domainSeparator()': FunctionFragment;
-        'execute((address,bytes,(address,uint256,uint256)[],uint8,address,address)[],address[])': FunctionFragment;
-        'executeWithSignature(((address,bytes,(address,uint256,uint256)[],uint8,address,address)[],uint256),address,bytes,address[])': FunctionFragment;
+        'execute((address,bytes,(address,uint256,uint256)[],uint8,address,address)[],address[],uint256)': FunctionFragment;
+        'executeWithSignature(((address,bytes,(address,uint256,uint256)[],uint8,address,address)[],uint256),address,bytes,address[],uint256)': FunctionFragment;
         'feeCalculators(bytes4)': FunctionFragment;
         'feeCollector()': FunctionFragment;
         'getAgent()': FunctionFragment;
@@ -65,18 +65,24 @@ export interface RouterInterface extends utils.Interface {
         'setFeeCalculators(bytes4[],address[])': FunctionFragment;
         'setFeeCollector(address)': FunctionFragment;
         'setPauser(address)': FunctionFragment;
-        'signerReferrals(address)': FunctionFragment;
+        'signers(address)': FunctionFragment;
         'transferOwnership(address)': FunctionFragment;
         'user()': FunctionFragment;
     };
-    getFunction(nameOrSignatureOrTopic: 'addSigner' | 'agentImplementation' | 'agents' | 'calcAgent' | 'domainSeparator' | 'execute' | 'executeWithSignature' | 'feeCalculators' | 'feeCollector' | 'getAgent()' | 'getAgent(address)' | 'getLogicsWithFee' | 'getUserAgent' | 'newAgent(address)' | 'newAgent()' | 'owner' | 'pause' | 'paused' | 'pauser' | 'removeSigner' | 'renounceOwnership' | 'resume' | 'setFeeCalculators' | 'setFeeCollector' | 'setPauser' | 'signerReferrals' | 'transferOwnership' | 'user'): FunctionFragment;
-    encodeFunctionData(functionFragment: 'addSigner', values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]): string;
+    getFunction(nameOrSignatureOrTopic: 'addSigner' | 'agentImplementation' | 'agents' | 'calcAgent' | 'domainSeparator' | 'execute' | 'executeWithSignature' | 'feeCalculators' | 'feeCollector' | 'getAgent()' | 'getAgent(address)' | 'getLogicsWithFee' | 'getUserAgent' | 'newAgent(address)' | 'newAgent()' | 'owner' | 'pause' | 'paused' | 'pauser' | 'removeSigner' | 'renounceOwnership' | 'resume' | 'setFeeCalculators' | 'setFeeCollector' | 'setPauser' | 'signers' | 'transferOwnership' | 'user'): FunctionFragment;
+    encodeFunctionData(functionFragment: 'addSigner', values: [PromiseOrValue<string>]): string;
     encodeFunctionData(functionFragment: 'agentImplementation', values?: undefined): string;
     encodeFunctionData(functionFragment: 'agents', values: [PromiseOrValue<string>]): string;
     encodeFunctionData(functionFragment: 'calcAgent', values: [PromiseOrValue<string>]): string;
     encodeFunctionData(functionFragment: 'domainSeparator', values?: undefined): string;
-    encodeFunctionData(functionFragment: 'execute', values: [IParam.LogicStruct[], PromiseOrValue<string>[]]): string;
-    encodeFunctionData(functionFragment: 'executeWithSignature', values: [IParam.LogicBatchStruct, PromiseOrValue<string>, PromiseOrValue<BytesLike>, PromiseOrValue<string>[]]): string;
+    encodeFunctionData(functionFragment: 'execute', values: [IParam.LogicStruct[], PromiseOrValue<string>[], PromiseOrValue<BigNumberish>]): string;
+    encodeFunctionData(functionFragment: 'executeWithSignature', values: [
+        IParam.LogicBatchStruct,
+        PromiseOrValue<string>,
+        PromiseOrValue<BytesLike>,
+        PromiseOrValue<string>[],
+        PromiseOrValue<BigNumberish>
+    ]): string;
     encodeFunctionData(functionFragment: 'feeCalculators', values: [PromiseOrValue<BytesLike>]): string;
     encodeFunctionData(functionFragment: 'feeCollector', values?: undefined): string;
     encodeFunctionData(functionFragment: 'getAgent()', values?: undefined): string;
@@ -95,7 +101,7 @@ export interface RouterInterface extends utils.Interface {
     encodeFunctionData(functionFragment: 'setFeeCalculators', values: [PromiseOrValue<BytesLike>[], PromiseOrValue<string>[]]): string;
     encodeFunctionData(functionFragment: 'setFeeCollector', values: [PromiseOrValue<string>]): string;
     encodeFunctionData(functionFragment: 'setPauser', values: [PromiseOrValue<string>]): string;
-    encodeFunctionData(functionFragment: 'signerReferrals', values: [PromiseOrValue<string>]): string;
+    encodeFunctionData(functionFragment: 'signers', values: [PromiseOrValue<string>]): string;
     encodeFunctionData(functionFragment: 'transferOwnership', values: [PromiseOrValue<string>]): string;
     encodeFunctionData(functionFragment: 'user', values?: undefined): string;
     decodeFunctionResult(functionFragment: 'addSigner', data: BytesLike): Result;
@@ -123,7 +129,7 @@ export interface RouterInterface extends utils.Interface {
     decodeFunctionResult(functionFragment: 'setFeeCalculators', data: BytesLike): Result;
     decodeFunctionResult(functionFragment: 'setFeeCollector', data: BytesLike): Result;
     decodeFunctionResult(functionFragment: 'setPauser', data: BytesLike): Result;
-    decodeFunctionResult(functionFragment: 'signerReferrals', data: BytesLike): Result;
+    decodeFunctionResult(functionFragment: 'signers', data: BytesLike): Result;
     decodeFunctionResult(functionFragment: 'transferOwnership', data: BytesLike): Result;
     decodeFunctionResult(functionFragment: 'user', data: BytesLike): Result;
     events: {
@@ -133,7 +139,7 @@ export interface RouterInterface extends utils.Interface {
         'Paused()': EventFragment;
         'PauserSet(address)': EventFragment;
         'Resumed()': EventFragment;
-        'SignerAdded(address,uint256)': EventFragment;
+        'SignerAdded(address)': EventFragment;
         'SignerRemoved(address)': EventFragment;
     };
     getEvent(nameOrSignatureOrTopic: 'FeeCalculatorSet'): EventFragment;
@@ -177,9 +183,8 @@ export type ResumedEvent = TypedEvent<[], ResumedEventObject>;
 export type ResumedEventFilter = TypedEventFilter<ResumedEvent>;
 export interface SignerAddedEventObject {
     signer: string;
-    referral: BigNumber;
 }
-export type SignerAddedEvent = TypedEvent<[string, BigNumber], SignerAddedEventObject>;
+export type SignerAddedEvent = TypedEvent<[string], SignerAddedEventObject>;
 export type SignerAddedEventFilter = TypedEventFilter<SignerAddedEvent>;
 export interface SignerRemovedEventObject {
     signer: string;
@@ -201,7 +206,7 @@ export interface Router extends BaseContract {
     once: OnEvent<this>;
     removeListener: OnEvent<this>;
     functions: {
-        addSigner(signer: PromiseOrValue<string>, referral: PromiseOrValue<BigNumberish>, overrides?: Overrides & {
+        addSigner(signer: PromiseOrValue<string>, overrides?: Overrides & {
             from?: PromiseOrValue<string>;
         }): Promise<ContractTransaction>;
         agentImplementation(overrides?: CallOverrides): Promise<[string]>;
@@ -210,10 +215,10 @@ export interface Router extends BaseContract {
         }>;
         calcAgent(owner_: PromiseOrValue<string>, overrides?: CallOverrides): Promise<[string]>;
         domainSeparator(overrides?: CallOverrides): Promise<[string]>;
-        execute(logics: IParam.LogicStruct[], tokensReturn: PromiseOrValue<string>[], overrides?: PayableOverrides & {
+        execute(logics: IParam.LogicStruct[], tokensReturn: PromiseOrValue<string>[], referral: PromiseOrValue<BigNumberish>, overrides?: PayableOverrides & {
             from?: PromiseOrValue<string>;
         }): Promise<ContractTransaction>;
-        executeWithSignature(logicBatch: IParam.LogicBatchStruct, signer: PromiseOrValue<string>, signature: PromiseOrValue<BytesLike>, tokensReturn: PromiseOrValue<string>[], overrides?: PayableOverrides & {
+        executeWithSignature(logicBatch: IParam.LogicBatchStruct, signer: PromiseOrValue<string>, signature: PromiseOrValue<BytesLike>, tokensReturn: PromiseOrValue<string>[], referral: PromiseOrValue<BigNumberish>, overrides?: PayableOverrides & {
             from?: PromiseOrValue<string>;
         }): Promise<ContractTransaction>;
         feeCalculators(selector: PromiseOrValue<BytesLike>, overrides?: CallOverrides): Promise<[string] & {
@@ -254,25 +259,25 @@ export interface Router extends BaseContract {
         setPauser(pauser_: PromiseOrValue<string>, overrides?: Overrides & {
             from?: PromiseOrValue<string>;
         }): Promise<ContractTransaction>;
-        signerReferrals(signer: PromiseOrValue<string>, overrides?: CallOverrides): Promise<[BigNumber] & {
-            referral: BigNumber;
+        signers(signer: PromiseOrValue<string>, overrides?: CallOverrides): Promise<[boolean] & {
+            valid: boolean;
         }>;
         transferOwnership(newOwner: PromiseOrValue<string>, overrides?: Overrides & {
             from?: PromiseOrValue<string>;
         }): Promise<ContractTransaction>;
         user(overrides?: CallOverrides): Promise<[string]>;
     };
-    addSigner(signer: PromiseOrValue<string>, referral: PromiseOrValue<BigNumberish>, overrides?: Overrides & {
+    addSigner(signer: PromiseOrValue<string>, overrides?: Overrides & {
         from?: PromiseOrValue<string>;
     }): Promise<ContractTransaction>;
     agentImplementation(overrides?: CallOverrides): Promise<string>;
     agents(owner: PromiseOrValue<string>, overrides?: CallOverrides): Promise<string>;
     calcAgent(owner_: PromiseOrValue<string>, overrides?: CallOverrides): Promise<string>;
     domainSeparator(overrides?: CallOverrides): Promise<string>;
-    execute(logics: IParam.LogicStruct[], tokensReturn: PromiseOrValue<string>[], overrides?: PayableOverrides & {
+    execute(logics: IParam.LogicStruct[], tokensReturn: PromiseOrValue<string>[], referral: PromiseOrValue<BigNumberish>, overrides?: PayableOverrides & {
         from?: PromiseOrValue<string>;
     }): Promise<ContractTransaction>;
-    executeWithSignature(logicBatch: IParam.LogicBatchStruct, signer: PromiseOrValue<string>, signature: PromiseOrValue<BytesLike>, tokensReturn: PromiseOrValue<string>[], overrides?: PayableOverrides & {
+    executeWithSignature(logicBatch: IParam.LogicBatchStruct, signer: PromiseOrValue<string>, signature: PromiseOrValue<BytesLike>, tokensReturn: PromiseOrValue<string>[], referral: PromiseOrValue<BigNumberish>, overrides?: PayableOverrides & {
         from?: PromiseOrValue<string>;
     }): Promise<ContractTransaction>;
     feeCalculators(selector: PromiseOrValue<BytesLike>, overrides?: CallOverrides): Promise<string>;
@@ -311,19 +316,19 @@ export interface Router extends BaseContract {
     setPauser(pauser_: PromiseOrValue<string>, overrides?: Overrides & {
         from?: PromiseOrValue<string>;
     }): Promise<ContractTransaction>;
-    signerReferrals(signer: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    signers(signer: PromiseOrValue<string>, overrides?: CallOverrides): Promise<boolean>;
     transferOwnership(newOwner: PromiseOrValue<string>, overrides?: Overrides & {
         from?: PromiseOrValue<string>;
     }): Promise<ContractTransaction>;
     user(overrides?: CallOverrides): Promise<string>;
     callStatic: {
-        addSigner(signer: PromiseOrValue<string>, referral: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<void>;
+        addSigner(signer: PromiseOrValue<string>, overrides?: CallOverrides): Promise<void>;
         agentImplementation(overrides?: CallOverrides): Promise<string>;
         agents(owner: PromiseOrValue<string>, overrides?: CallOverrides): Promise<string>;
         calcAgent(owner_: PromiseOrValue<string>, overrides?: CallOverrides): Promise<string>;
         domainSeparator(overrides?: CallOverrides): Promise<string>;
-        execute(logics: IParam.LogicStruct[], tokensReturn: PromiseOrValue<string>[], overrides?: CallOverrides): Promise<void>;
-        executeWithSignature(logicBatch: IParam.LogicBatchStruct, signer: PromiseOrValue<string>, signature: PromiseOrValue<BytesLike>, tokensReturn: PromiseOrValue<string>[], overrides?: CallOverrides): Promise<void>;
+        execute(logics: IParam.LogicStruct[], tokensReturn: PromiseOrValue<string>[], referral: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<void>;
+        executeWithSignature(logicBatch: IParam.LogicBatchStruct, signer: PromiseOrValue<string>, signature: PromiseOrValue<BytesLike>, tokensReturn: PromiseOrValue<string>[], referral: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<void>;
         feeCalculators(selector: PromiseOrValue<BytesLike>, overrides?: CallOverrides): Promise<string>;
         feeCollector(overrides?: CallOverrides): Promise<string>;
         'getAgent()'(overrides?: CallOverrides): Promise<string>;
@@ -342,7 +347,7 @@ export interface Router extends BaseContract {
         setFeeCalculators(selectors: PromiseOrValue<BytesLike>[], feeCalculators_: PromiseOrValue<string>[], overrides?: CallOverrides): Promise<void>;
         setFeeCollector(feeCollector_: PromiseOrValue<string>, overrides?: CallOverrides): Promise<void>;
         setPauser(pauser_: PromiseOrValue<string>, overrides?: CallOverrides): Promise<void>;
-        signerReferrals(signer: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+        signers(signer: PromiseOrValue<string>, overrides?: CallOverrides): Promise<boolean>;
         transferOwnership(newOwner: PromiseOrValue<string>, overrides?: CallOverrides): Promise<void>;
         user(overrides?: CallOverrides): Promise<string>;
     };
@@ -359,23 +364,23 @@ export interface Router extends BaseContract {
         PauserSet(pauser?: PromiseOrValue<string> | null): PauserSetEventFilter;
         'Resumed()'(): ResumedEventFilter;
         Resumed(): ResumedEventFilter;
-        'SignerAdded(address,uint256)'(signer?: PromiseOrValue<string> | null, referral?: null): SignerAddedEventFilter;
-        SignerAdded(signer?: PromiseOrValue<string> | null, referral?: null): SignerAddedEventFilter;
+        'SignerAdded(address)'(signer?: PromiseOrValue<string> | null): SignerAddedEventFilter;
+        SignerAdded(signer?: PromiseOrValue<string> | null): SignerAddedEventFilter;
         'SignerRemoved(address)'(signer?: PromiseOrValue<string> | null): SignerRemovedEventFilter;
         SignerRemoved(signer?: PromiseOrValue<string> | null): SignerRemovedEventFilter;
     };
     estimateGas: {
-        addSigner(signer: PromiseOrValue<string>, referral: PromiseOrValue<BigNumberish>, overrides?: Overrides & {
+        addSigner(signer: PromiseOrValue<string>, overrides?: Overrides & {
             from?: PromiseOrValue<string>;
         }): Promise<BigNumber>;
         agentImplementation(overrides?: CallOverrides): Promise<BigNumber>;
         agents(owner: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
         calcAgent(owner_: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
         domainSeparator(overrides?: CallOverrides): Promise<BigNumber>;
-        execute(logics: IParam.LogicStruct[], tokensReturn: PromiseOrValue<string>[], overrides?: PayableOverrides & {
+        execute(logics: IParam.LogicStruct[], tokensReturn: PromiseOrValue<string>[], referral: PromiseOrValue<BigNumberish>, overrides?: PayableOverrides & {
             from?: PromiseOrValue<string>;
         }): Promise<BigNumber>;
-        executeWithSignature(logicBatch: IParam.LogicBatchStruct, signer: PromiseOrValue<string>, signature: PromiseOrValue<BytesLike>, tokensReturn: PromiseOrValue<string>[], overrides?: PayableOverrides & {
+        executeWithSignature(logicBatch: IParam.LogicBatchStruct, signer: PromiseOrValue<string>, signature: PromiseOrValue<BytesLike>, tokensReturn: PromiseOrValue<string>[], referral: PromiseOrValue<BigNumberish>, overrides?: PayableOverrides & {
             from?: PromiseOrValue<string>;
         }): Promise<BigNumber>;
         feeCalculators(selector: PromiseOrValue<BytesLike>, overrides?: CallOverrides): Promise<BigNumber>;
@@ -414,24 +419,24 @@ export interface Router extends BaseContract {
         setPauser(pauser_: PromiseOrValue<string>, overrides?: Overrides & {
             from?: PromiseOrValue<string>;
         }): Promise<BigNumber>;
-        signerReferrals(signer: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+        signers(signer: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
         transferOwnership(newOwner: PromiseOrValue<string>, overrides?: Overrides & {
             from?: PromiseOrValue<string>;
         }): Promise<BigNumber>;
         user(overrides?: CallOverrides): Promise<BigNumber>;
     };
     populateTransaction: {
-        addSigner(signer: PromiseOrValue<string>, referral: PromiseOrValue<BigNumberish>, overrides?: Overrides & {
+        addSigner(signer: PromiseOrValue<string>, overrides?: Overrides & {
             from?: PromiseOrValue<string>;
         }): Promise<PopulatedTransaction>;
         agentImplementation(overrides?: CallOverrides): Promise<PopulatedTransaction>;
         agents(owner: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
         calcAgent(owner_: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
         domainSeparator(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-        execute(logics: IParam.LogicStruct[], tokensReturn: PromiseOrValue<string>[], overrides?: PayableOverrides & {
+        execute(logics: IParam.LogicStruct[], tokensReturn: PromiseOrValue<string>[], referral: PromiseOrValue<BigNumberish>, overrides?: PayableOverrides & {
             from?: PromiseOrValue<string>;
         }): Promise<PopulatedTransaction>;
-        executeWithSignature(logicBatch: IParam.LogicBatchStruct, signer: PromiseOrValue<string>, signature: PromiseOrValue<BytesLike>, tokensReturn: PromiseOrValue<string>[], overrides?: PayableOverrides & {
+        executeWithSignature(logicBatch: IParam.LogicBatchStruct, signer: PromiseOrValue<string>, signature: PromiseOrValue<BytesLike>, tokensReturn: PromiseOrValue<string>[], referral: PromiseOrValue<BigNumberish>, overrides?: PayableOverrides & {
             from?: PromiseOrValue<string>;
         }): Promise<PopulatedTransaction>;
         feeCalculators(selector: PromiseOrValue<BytesLike>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -470,7 +475,7 @@ export interface Router extends BaseContract {
         setPauser(pauser_: PromiseOrValue<string>, overrides?: Overrides & {
             from?: PromiseOrValue<string>;
         }): Promise<PopulatedTransaction>;
-        signerReferrals(signer: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+        signers(signer: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
         transferOwnership(newOwner: PromiseOrValue<string>, overrides?: Overrides & {
             from?: PromiseOrValue<string>;
         }): Promise<PopulatedTransaction>;
