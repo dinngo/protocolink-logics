@@ -18,8 +18,8 @@ describe('Test CompoundV3 Repay Logic', function () {
     [, user] = await hre.ethers.getSigners();
     compoundV3Service = new protocols.compoundv3.Service(chainId, hre.ethers.provider);
     await claimToken(chainId, user.address, protocols.compoundv3.mainnetTokens.USDC, '10');
-    await claimToken(chainId, user.address, protocols.compoundv3.mainnetTokens.ETH.wrapped, '10');
-    await claimToken(chainId, user.address, protocols.compoundv3.mainnetTokens.cbETH, '10');
+    await claimToken(chainId, user.address, protocols.compoundv3.mainnetTokens.WETH, '10');
+    await claimToken(chainId, user.address, protocols.compoundv3.mainnetTokens.wstETH, '20');
   });
 
   snapshotAndRevertEach();
@@ -27,43 +27,59 @@ describe('Test CompoundV3 Repay Logic', function () {
   const testCases = [
     {
       marketId: protocols.compoundv3.MarketId.USDC,
-      supply: new common.TokenAmount(protocols.compoundv3.mainnetTokens.ETH, '1'),
+      supply: new common.TokenAmount(protocols.compoundv3.mainnetTokens.WETH, '1'),
       borrow: new common.TokenAmount(protocols.compoundv3.mainnetTokens.USDC, '100'),
       repay: { tokenIn: protocols.compoundv3.mainnetTokens.USDC, repayAll: false },
     },
     {
       marketId: protocols.compoundv3.MarketId.USDC,
-      supply: new common.TokenAmount(protocols.compoundv3.mainnetTokens.ETH, '1'),
+      supply: new common.TokenAmount(protocols.compoundv3.mainnetTokens.WETH, '1'),
       borrow: new common.TokenAmount(protocols.compoundv3.mainnetTokens.USDC, '100'),
       repay: { tokenIn: protocols.compoundv3.mainnetTokens.USDC, repayAll: true },
     },
     {
       marketId: protocols.compoundv3.MarketId.ETH,
-      supply: new common.TokenAmount(protocols.compoundv3.mainnetTokens.cbETH, '3'),
-      borrow: new common.TokenAmount(protocols.compoundv3.mainnetTokens.ETH.wrapped, '1'),
-      repay: { tokenIn: protocols.compoundv3.mainnetTokens.ETH.wrapped, repayAll: false },
+      supply: new common.TokenAmount(protocols.compoundv3.mainnetTokens.wstETH, '3'),
+      borrow: new common.TokenAmount(protocols.compoundv3.mainnetTokens.WETH, '1'),
+      repay: { tokenIn: protocols.compoundv3.mainnetTokens.ETH, repayAll: false },
     },
     {
       marketId: protocols.compoundv3.MarketId.ETH,
-      supply: new common.TokenAmount(protocols.compoundv3.mainnetTokens.cbETH, '3'),
-      borrow: new common.TokenAmount(protocols.compoundv3.mainnetTokens.ETH.wrapped, '1'),
-      repay: { tokenIn: protocols.compoundv3.mainnetTokens.ETH.wrapped, repayAll: true },
+      supply: new common.TokenAmount(protocols.compoundv3.mainnetTokens.wstETH, '3'),
+      borrow: new common.TokenAmount(protocols.compoundv3.mainnetTokens.WETH, '1'),
+      repay: { tokenIn: protocols.compoundv3.mainnetTokens.ETH, repayAll: true },
+    },
+    {
+      marketId: protocols.compoundv3.MarketId.ETH,
+      supply: new common.TokenAmount(protocols.compoundv3.mainnetTokens.wstETH, '3'),
+      borrow: new common.TokenAmount(protocols.compoundv3.mainnetTokens.WETH, '1'),
+      repay: { tokenIn: protocols.compoundv3.mainnetTokens.WETH, repayAll: false },
+    },
+    {
+      marketId: protocols.compoundv3.MarketId.ETH,
+      supply: new common.TokenAmount(protocols.compoundv3.mainnetTokens.wstETH, '3'),
+      borrow: new common.TokenAmount(protocols.compoundv3.mainnetTokens.WETH, '1'),
+      repay: { tokenIn: protocols.compoundv3.mainnetTokens.WETH, repayAll: true },
     },
   ];
 
   testCases.forEach(({ marketId, supply, borrow, repay }, i) => {
     it(`case ${i + 1}`, async function () {
-      // 1. supply and borrow first
+      // 1. check can supply or not
+      const canSupply = await compoundV3Service.canSupply(marketId, supply);
+      if (!canSupply) return;
+
+      // 2. supply and borrow first
       await helpers.supply(chainId, user, marketId, supply);
       await helpers.borrow(chainId, user, marketId, borrow);
 
-      // 2. build funds, tokensReturn
+      // 3. build funds, tokensReturn
       const repayAmount = repay.repayAll ? common.calcSlippage(borrow.amountWei, -100) : borrow.amountWei.div(2);
       const input = new common.TokenAmount(repay.tokenIn).setWei(repayAmount);
       const tokensReturn = [input.token.elasticAddress];
       const funds = new common.TokenAmounts(input);
 
-      // 3. build router logics
+      // 4. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
 
@@ -72,7 +88,7 @@ describe('Test CompoundV3 Repay Logic', function () {
         await compoundV3RepayLogic.getLogic({ marketId, input, repayAll: repay.repayAll }, { account: user.address })
       );
 
-      // 4. send router tx
+      // 5. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({
         chainId,
         routerLogics,

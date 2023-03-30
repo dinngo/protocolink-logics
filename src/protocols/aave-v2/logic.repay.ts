@@ -1,4 +1,3 @@
-import { BigNumberish } from 'ethers';
 import { InterestRateMode } from './types';
 import { LendingPool__factory } from './contracts';
 import { Service } from './service';
@@ -56,8 +55,7 @@ export class RepayLogic extends core.Logic implements core.LogicTokenListInterfa
       interestRateMode,
       borrower,
     ]);
-    let amountOffset: BigNumberish | undefined;
-    if (amountBps) amountOffset = common.getParamOffset(1);
+    const amountOffset = amountBps ? common.getParamOffset(1) : undefined;
     const inputs = [
       core.newLogicInput({ input: new common.TokenAmount(tokenIn, input.amount), amountBps, amountOffset }),
     ];

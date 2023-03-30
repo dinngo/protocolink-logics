@@ -4,6 +4,7 @@ import { MarketId, getMarket } from './config';
 import { WithdrawCollateralLogic, WithdrawCollateralLogicFields } from './logic.withdraw-collateral';
 import * as common from '@composable-router/common';
 import { constants, utils } from 'ethers';
+import * as core from '@composable-router/core';
 import { expect } from 'chai';
 import { mainnetTokens } from './tokens';
 
@@ -28,7 +29,8 @@ describe('CompoundV3 WithdrawCollateralLogic', function () {
     const account = '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa';
 
     const testCases: LogicTestCase<WithdrawCollateralLogicFields>[] = [
-      { fields: { marketId: MarketId.USDC, output: new common.TokenAmount(mainnetTokens.ETH.wrapped, '1') } },
+      { fields: { marketId: MarketId.USDC, output: new common.TokenAmount(mainnetTokens.ETH, '1') } },
+      { fields: { marketId: MarketId.USDC, output: new common.TokenAmount(mainnetTokens.WETH, '1') } },
       { fields: { marketId: MarketId.USDC, output: new common.TokenAmount(mainnetTokens.WBTC, '1') } },
       { fields: { marketId: MarketId.ETH, output: new common.TokenAmount(mainnetTokens.cbETH, '1') } },
       { fields: { marketId: MarketId.ETH, output: new common.TokenAmount(mainnetTokens.wstETH, '1') } },
@@ -38,13 +40,14 @@ describe('CompoundV3 WithdrawCollateralLogic', function () {
       it(`withdraw ${fields.output.token.symbol} from ${fields.marketId} market`, async function () {
         const routerLogic = await compoundV3WithdrawCollateralLogic.getLogic(fields, { account });
         const sig = routerLogic.data.substring(0, 10);
-        const { marketId } = fields;
+        const { marketId, output } = fields;
         const market = getMarket(chainId, marketId);
 
         expect(routerLogic.to).to.eq(market.cometAddress);
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(sig).to.eq(ifaceComet.getSighash('withdrawFrom'));
         expect(routerLogic.inputs).to.deep.eq([]);
+        expect(routerLogic.wrapMode).to.eq(output.token.isNative ? core.WrapMode.unwrapAfter : core.WrapMode.none);
         expect(routerLogic.approveTo).to.eq(constants.AddressZero);
         expect(routerLogic.callback).to.eq(constants.AddressZero);
       });

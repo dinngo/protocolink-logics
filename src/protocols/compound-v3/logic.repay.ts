@@ -14,13 +14,17 @@ export class RepayLogic extends core.Logic implements core.LogicTokenListInterfa
   static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon];
 
   async getTokenList() {
-    const tokenList: Record<string, common.Token> = {};
+    const tokenList: Record<string, common.Token[]> = {};
 
     const markets = getMarkets(this.chainId);
     const service = new Service(this.chainId, this.provider);
     for (const market of markets) {
       const baseToken = await service.getBaseToken(market.id);
-      tokenList[market.id] = baseToken;
+      tokenList[market.id] = [];
+      if (baseToken.isWrapped) {
+        tokenList[market.id].push(baseToken.unwrapped);
+      }
+      tokenList[market.id].push(baseToken);
     }
 
     return tokenList;
@@ -31,15 +35,17 @@ export class RepayLogic extends core.Logic implements core.LogicTokenListInterfa
     const { account } = options;
 
     const market = getMarket(this.chainId, marketId);
+    const tokenIn = input.token.wrapped;
 
     const to = market.cometAddress;
     const data = Comet__factory.createInterface().encodeFunctionData('supplyTo', [
       account,
-      input.token.address,
+      tokenIn.address,
       repayAll ? constants.MaxUint256 : input.amountWei,
     ]);
-    const inputs = [core.newLogicInput({ input })];
+    const inputs = [core.newLogicInput({ input: new common.TokenAmount(tokenIn, input.amount) })];
+    const wrapMode = input.token.isNative ? core.WrapMode.wrapBefore : core.WrapMode.none;
 
-    return core.newLogic({ to, data, inputs });
+    return core.newLogic({ to, data, inputs, wrapMode });
   }
 }

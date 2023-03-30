@@ -31,15 +31,17 @@ export class WithdrawCollateralLogic extends core.Logic implements core.LogicTok
 
     const market = getMarket(this.chainId, marketId);
     const userAgent = core.calcAccountAgent(this.chainId, account);
+    const tokenOut = output.token.wrapped;
 
     const to = market.cometAddress;
     const data = Comet__factory.createInterface().encodeFunctionData('withdrawFrom', [
       account,
       userAgent,
-      output.token.address,
+      tokenOut.address,
       output.amountWei,
     ]);
+    const wrapMode = output.token.isNative ? core.WrapMode.unwrapAfter : core.WrapMode.none;
 
-    return core.newLogic({ to, data });
+    return core.newLogic({ to, data, wrapMode });
   }
 }

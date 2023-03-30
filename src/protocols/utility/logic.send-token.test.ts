@@ -10,8 +10,8 @@ describe('Utility SendTokenLogic', function () {
     SendTokenLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.getNetworkId(chainId)}`, async function () {
         const sendTokenLogic = new SendTokenLogic(chainId);
-        const tokens = await sendTokenLogic.getTokenList();
-        expect(tokens.length).to.be.gt(0);
+        const tokenList = await sendTokenLogic.getTokenList();
+        expect(tokenList).to.have.lengthOf.above(0);
       });
     });
   });

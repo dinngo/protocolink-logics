@@ -146,7 +146,7 @@ export class SwapTokenLogic extends core.Logic implements core.LogicTokenListInt
           sqrtPriceLimitX96: 0,
         };
         data = iface.encodeFunctionData('exactInputSingle', [params]);
-        amountOffset = common.getParamOffset(5);
+        if (amountBps) amountOffset = common.getParamOffset(5);
       } else {
         const params: ISwapRouter.ExactOutputSingleParamsStruct = {
           tokenIn,
@@ -154,7 +154,7 @@ export class SwapTokenLogic extends core.Logic implements core.LogicTokenListInt
           fee: fields.fee,
           recipient,
           deadline,
-          amountOut: output.amountWei,
+          amountOut,
           amountInMaximum: amountIn,
           sqrtPriceLimitX96: 0,
         };
@@ -170,7 +170,7 @@ export class SwapTokenLogic extends core.Logic implements core.LogicTokenListInt
           amountOutMinimum: amountOut,
         };
         data = iface.encodeFunctionData('exactInput', [params]);
-        amountOffset = common.getParamOffset(3);
+        if (amountBps) amountOffset = common.getParamOffset(3);
       } else {
         const params: ISwapRouter.ExactOutputParamsStruct = {
           path: fields.path,

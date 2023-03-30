@@ -7,7 +7,7 @@ import hre from 'hardhat';
 import * as protocols from 'src/protocols';
 import * as utils from 'test/utils';
 
-describe('Test CompoundV3 Supply Collateral Logic', function () {
+describe('Test CompoundV3 SupplyCollateral Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
   let compoundV3Service: protocols.compoundv3.Service;
@@ -16,6 +16,7 @@ describe('Test CompoundV3 Supply Collateral Logic', function () {
     chainId = await getChainId();
     [, user] = await hre.ethers.getSigners();
     compoundV3Service = new protocols.compoundv3.Service(chainId, hre.ethers.provider);
+    await claimToken(chainId, user.address, protocols.compoundv3.mainnetTokens.WETH, '10');
     await claimToken(chainId, user.address, protocols.compoundv3.mainnetTokens.WBTC, '10');
     await claimToken(chainId, user.address, protocols.compoundv3.mainnetTokens.cbETH, '10');
     await claimToken(chainId, user.address, protocols.compoundv3.mainnetTokens.wstETH, '10');
@@ -31,6 +32,15 @@ describe('Test CompoundV3 Supply Collateral Logic', function () {
     {
       marketId: protocols.compoundv3.MarketId.USDC,
       input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.ETH, '1'),
+      amountBps: 5000,
+    },
+    {
+      marketId: protocols.compoundv3.MarketId.USDC,
+      input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.WETH, '1'),
+    },
+    {
+      marketId: protocols.compoundv3.MarketId.USDC,
+      input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.WETH, '1'),
       amountBps: 5000,
     },
     {
@@ -64,7 +74,11 @@ describe('Test CompoundV3 Supply Collateral Logic', function () {
 
   testCases.forEach(({ marketId, input, amountBps }, i) => {
     it(`case ${i + 1}`, async function () {
-      // 1. build funds, tokensReturn
+      // 1. check can supply or not
+      const canSupply = await compoundV3Service.canSupply(marketId, input);
+      if (!canSupply) return;
+
+      // 2. build funds, tokensReturn
       const tokensReturn = [];
       const funds = new common.TokenAmounts();
       if (amountBps) {
@@ -74,7 +88,7 @@ describe('Test CompoundV3 Supply Collateral Logic', function () {
         funds.add(input);
       }
 
-      // 2. build router logics
+      // 3. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
       const compoundV3SupplyCollateralLogic = new protocols.compoundv3.SupplyCollateralLogic(
@@ -85,7 +99,7 @@ describe('Test CompoundV3 Supply Collateral Logic', function () {
         await compoundV3SupplyCollateralLogic.getLogic({ marketId, input, amountBps }, { account: user.address })
       );
 
-      // 3. send router tx
+      // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({
         chainId,
         routerLogics,
@@ -93,6 +107,7 @@ describe('Test CompoundV3 Supply Collateral Logic', function () {
         value: funds.native?.amountWei ?? 0,
       });
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
+      await expect(user.address).to.changeBalance(input.token, -input.amount, 1);
       const collateralBalance = await compoundV3Service.getCollateralBalance(user.address, marketId, input.token);
       expect(collateralBalance.amountWei).to.eq(input.amountWei);
     });

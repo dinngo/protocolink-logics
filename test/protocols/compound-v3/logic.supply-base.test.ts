@@ -7,7 +7,7 @@ import hre from 'hardhat';
 import * as protocols from 'src/protocols';
 import * as utils from 'test/utils';
 
-describe('Test CompoundV3 Supply Base Logic', function () {
+describe('Test CompoundV3 SupplyBase Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
 
@@ -15,6 +15,7 @@ describe('Test CompoundV3 Supply Base Logic', function () {
     chainId = await getChainId();
     [, user] = await hre.ethers.getSigners();
     await claimToken(chainId, user.address, protocols.compoundv3.mainnetTokens.USDC, '1000');
+    await claimToken(chainId, user.address, protocols.compoundv3.mainnetTokens.WETH, '10');
   });
 
   snapshotAndRevertEach();
@@ -42,6 +43,17 @@ describe('Test CompoundV3 Supply Base Logic', function () {
       tokenOut: protocols.compoundv3.mainnetTokens.cWETHv3,
       amountBps: 5000,
     },
+    {
+      marketId: protocols.compoundv3.MarketId.ETH,
+      input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.WETH, '1'),
+      tokenOut: protocols.compoundv3.mainnetTokens.cWETHv3,
+    },
+    {
+      marketId: protocols.compoundv3.MarketId.ETH,
+      input: new common.TokenAmount(protocols.compoundv3.mainnetTokens.WETH, '1'),
+      tokenOut: protocols.compoundv3.mainnetTokens.cWETHv3,
+      amountBps: 5000,
+    },
   ];
 
   testCases.forEach(({ marketId, input, tokenOut, amountBps }, i) => {
@@ -63,9 +75,7 @@ describe('Test CompoundV3 Supply Base Logic', function () {
       // 3. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
-      routerLogics.push(
-        await compoundV3SupplyBaseLogic.getLogic({ marketId, input, output, amountBps }, { account: user.address })
-      );
+      routerLogics.push(await compoundV3SupplyBaseLogic.getLogic({ marketId, input, output, amountBps }));
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({
@@ -75,6 +85,7 @@ describe('Test CompoundV3 Supply Base Logic', function () {
         value: funds.native?.amountWei ?? 0,
       });
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
+      await expect(user.address).to.changeBalance(input.token, -input.amount);
       await expect(user.address).to.changeBalance(output.token, output.amount, 1);
     });
   });

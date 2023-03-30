@@ -18,8 +18,8 @@ describe('UniswapV3 SwapTokenLogic', function () {
     SwapTokenLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.getNetworkId(chainId)}`, async function () {
         const swapTokenLogic = new SwapTokenLogic(chainId);
-        const tokens = await swapTokenLogic.getTokenList();
-        expect(tokens.length).to.be.gt(0);
+        const tokenList = await swapTokenLogic.getTokenList();
+        expect(tokenList).to.have.lengthOf.above(0);
       });
     });
   });

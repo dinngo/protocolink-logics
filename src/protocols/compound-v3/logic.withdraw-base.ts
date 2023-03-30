@@ -1,9 +1,8 @@
-import { BigNumberish, constants, utils } from 'ethers';
 import { Comet__factory } from './contracts';
 import { Service } from './service';
 import * as common from '@composable-router/common';
+import { constants } from 'ethers';
 import * as core from '@composable-router/core';
-import { encodeWithdrawNativeTokenAction } from './utils';
 import { getMarket, getMarkets } from './config';
 
 export type WithdrawBaseLogicParams = core.TokenToTokenExactInParams<{ marketId: string }>;
@@ -17,13 +16,17 @@ export class WithdrawBaseLogic extends core.Logic implements core.LogicTokenList
   static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon];
 
   async getTokenList() {
-    const tokenList: Record<string, [common.Token, common.Token]> = {};
+    const tokenList: Record<string, [common.Token, common.Token][]> = {};
 
     const markets = getMarkets(this.chainId);
     const service = new Service(this.chainId, this.provider);
     for (const market of markets) {
       const { cToken, baseToken } = await service.getCometTokens(market.id);
-      tokenList[market.id] = [cToken, baseToken.unwrapped];
+      tokenList[market.id] = [];
+      if (baseToken.isWrapped) {
+        tokenList[market.id].push([cToken, baseToken.unwrapped]);
+      }
+      tokenList[market.id].push([cToken, baseToken]);
     }
 
     return tokenList;
@@ -31,37 +34,24 @@ export class WithdrawBaseLogic extends core.Logic implements core.LogicTokenList
 
   async quote(params: WithdrawBaseLogicParams) {
     const { marketId, input, tokenOut } = params;
-
     const output = new common.TokenAmount(tokenOut, input.amount);
 
     return { marketId, input, output };
   }
 
-  async getLogic(fields: WithdrawBaseLogicFields, options: WithdrawBaseLogicOptions) {
+  async getLogic(fields: WithdrawBaseLogicFields) {
     const { marketId, input, output, amountBps } = fields;
 
     const market = getMarket(this.chainId, marketId);
+    const tokenOut = output.token.wrapped;
     const amountWei = amountBps ? input.amountWei : constants.MaxUint256;
 
-    let to: string;
-    let data: string;
-    let amountOffset: BigNumberish | undefined;
-    if (output.token.isNative) {
-      const userAgent = core.calcAccountAgent(this.chainId, options.account);
-
-      to = market.bulker.address;
-      data = new utils.Interface(market.bulker.abi).encodeFunctionData('invoke', [
-        [market.bulker.actions.withdrawNativeToken],
-        [encodeWithdrawNativeTokenAction(market.cometAddress, userAgent, amountWei)],
-      ]);
-      if (amountBps) amountOffset = common.getParamOffset(9);
-    } else {
-      to = market.cometAddress;
-      data = Comet__factory.createInterface().encodeFunctionData('withdraw', [output.token.address, amountWei]);
-      if (amountBps) amountOffset = common.getParamOffset(1);
-    }
+    const to = market.cometAddress;
+    const data = Comet__factory.createInterface().encodeFunctionData('withdraw', [tokenOut.address, amountWei]);
+    const amountOffset = amountBps ? common.getParamOffset(1) : undefined;
     const inputs = [core.newLogicInput({ input, amountBps, amountOffset })];
+    const wrapMode = output.token.isNative ? core.WrapMode.unwrapAfter : core.WrapMode.none;
 
-    return core.newLogic({ to, data, inputs });
+    return core.newLogic({ to, data, inputs, wrapMode });
   }
 }

@@ -14,8 +14,8 @@ describe('AaveV2 RepayLogic', function () {
     RepayLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.getNetworkId(chainId)}`, async function () {
         const repayLogic = new RepayLogic(chainId);
-        const tokens = await repayLogic.getTokenList();
-        expect(tokens.length).to.be.gt(0);
+        const tokenList = await repayLogic.getTokenList();
+        expect(tokenList).to.have.lengthOf.above(0);
       });
     });
   });

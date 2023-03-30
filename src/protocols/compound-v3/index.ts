@@ -9,4 +9,3 @@ export * from './logic.withdraw-base';
 export * from './logic.withdraw-collateral';
 export * from './service';
 export * from './tokens';
-export * from './utils';

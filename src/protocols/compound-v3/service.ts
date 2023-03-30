@@ -37,10 +37,13 @@ export class Service extends common.Web3Toolkit {
     }
     const { returnData } = await this.multicall2.callStatic.aggregate(calls);
 
-    const collateralAddresses = [];
+    const collateralAddresses: string[] = [];
     for (let i = 0; i < numAssets; i++) {
       const [{ asset }] = ifaceComet.decodeFunctionResult('getAssetInfo', returnData[i]);
-      collateralAddresses.push(common.Token.isWrapped(this.chainId, asset) ? this.nativeToken.address : asset);
+      if (asset === this.wrappedNativeToken.address) {
+        collateralAddresses.push(this.nativeToken.address);
+      }
+      collateralAddresses.push(asset);
     }
     const collaterals = await this.getTokens(collateralAddresses);
 
@@ -99,5 +102,28 @@ export class Service extends common.Web3Toolkit {
     const { owed } = await contractCometRewards.callStatic.getRewardOwed(market.cometAddress, owner);
 
     return new common.TokenAmount(COMP(this.chainId)).setWei(owed);
+  }
+
+  async canSupply(marketId: string, supply: common.TokenAmount) {
+    const market = getMarket(this.chainId, marketId);
+    const asset = supply.token.wrapped.address;
+
+    const ifaceComet = Comet__factory.createInterface();
+    const calls: common.Multicall2.CallStruct[] = [
+      {
+        target: market.cometAddress,
+        callData: ifaceComet.encodeFunctionData('getAssetInfoByAddress', [asset]),
+      },
+      {
+        target: market.cometAddress,
+        callData: ifaceComet.encodeFunctionData('totalsCollateral', [asset]),
+      },
+    ];
+    const { returnData } = await this.multicall2.callStatic.aggregate(calls);
+
+    const [{ supplyCap }] = ifaceComet.decodeFunctionResult('getAssetInfoByAddress', returnData[0]);
+    const [totalSupplyAsset] = ifaceComet.decodeFunctionResult('totalsCollateral', returnData[1]);
+
+    return supplyCap.gt(totalSupplyAsset.add(supply.amountWei));
   }
 }

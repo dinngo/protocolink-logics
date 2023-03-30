@@ -11,11 +11,14 @@ import * as protocols from 'src/protocols';
 describe('Test CompoundV3 Claim Logic', function () {
   let chainId: number;
   let users: SignerWithAddress[];
+  let compoundV3Service: protocols.compoundv3.Service;
 
   before(async function () {
     chainId = await getChainId();
     const [, user1, user2] = await hre.ethers.getSigners();
     users = [user1, user2];
+    compoundV3Service = new protocols.compoundv3.Service(chainId, hre.ethers.provider);
+    await claimToken(chainId, user1.address, protocols.compoundv3.mainnetTokens.WETH, '100');
     await claimToken(chainId, user1.address, protocols.compoundv3.mainnetTokens.USDC, '1000');
   });
 
@@ -26,27 +29,27 @@ describe('Test CompoundV3 Claim Logic', function () {
       ownerIndex: 0,
       claimerIndex: 0,
       marketId: protocols.compoundv3.MarketId.USDC,
-      supply: new common.TokenAmount(protocols.compoundv3.mainnetTokens.ETH, '1'),
+      supply: new common.TokenAmount(protocols.compoundv3.mainnetTokens.WETH, '1'),
       borrow: new common.TokenAmount(protocols.compoundv3.mainnetTokens.USDC, '100'),
     },
     {
       ownerIndex: 0,
       claimerIndex: 1,
       marketId: protocols.compoundv3.MarketId.USDC,
-      supply: new common.TokenAmount(protocols.compoundv3.mainnetTokens.ETH, '1'),
+      supply: new common.TokenAmount(protocols.compoundv3.mainnetTokens.WETH, '1'),
       borrow: new common.TokenAmount(protocols.compoundv3.mainnetTokens.USDC, '100'),
     },
     {
       ownerIndex: 0,
       claimerIndex: 0,
       marketId: protocols.compoundv3.MarketId.ETH,
-      supply: new common.TokenAmount(protocols.compoundv3.mainnetTokens.ETH, '1000'),
+      supply: new common.TokenAmount(protocols.compoundv3.mainnetTokens.WETH, '10'),
     },
     {
       ownerIndex: 0,
       claimerIndex: 1,
       marketId: protocols.compoundv3.MarketId.ETH,
-      supply: new common.TokenAmount(protocols.compoundv3.mainnetTokens.ETH, '1000'),
+      supply: new common.TokenAmount(protocols.compoundv3.mainnetTokens.WETH, '10'),
     },
   ];
 
@@ -67,12 +70,24 @@ describe('Test CompoundV3 Claim Logic', function () {
       const { output } = await compoundV3ClaimLogic.quote({ marketId, owner: owner.address });
       expect(output.amountWei).to.be.gt(0);
 
-      // 3. build router logics
-      const routerLogics: core.IParam.LogicStruct[] = [];
-      routerLogics.push(await compoundV3ClaimLogic.getLogic({ marketId, owner: owner.address, output }));
+      // 2. allow userAgent help user to claim
+      const tokensReturn = [];
+      if (claimer.address === owner.address) {
+        await helpers.allow(chainId, claimer, marketId);
+        const userAgent = core.calcAccountAgent(chainId, claimer.address);
+        const isAllowed = await compoundV3Service.isAllowed(marketId, claimer.address, userAgent);
+        expect(isAllowed).to.be.true;
+        tokensReturn.push(output.token.elasticAddress);
+      }
 
-      // 4. send router tx
-      const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics });
+      // 4. build router logics
+      const routerLogics: core.IParam.LogicStruct[] = [];
+      routerLogics.push(
+        await compoundV3ClaimLogic.getLogic({ marketId, owner: owner.address, output }, { account: claimer.address })
+      );
+
+      // 5. send router tx
+      const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics, tokensReturn });
       await expect(claimer.sendTransaction(transactionRequest)).to.not.be.reverted;
       await expect(owner.address).to.changeBalance(output.token, output.amount, 1);
     });

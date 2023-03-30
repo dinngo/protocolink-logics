@@ -1,9 +1,7 @@
-import { BigNumberish, constants, utils } from 'ethers';
 import { Comet__factory } from './contracts';
 import { Service } from './service';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
-import { encodeSupplyNativeTokenAction } from './utils';
 import { getMarket, getMarkets } from './config';
 
 export type SupplyCollateralLogicFields = core.TokenInFields<{ marketId: string }>;
@@ -32,28 +30,20 @@ export class SupplyCollateralLogic extends core.Logic implements core.LogicToken
     const { account } = options;
 
     const market = getMarket(this.chainId, marketId);
+    const tokenIn = input.token.wrapped;
 
-    let to: string;
-    let data: string;
-    let amountOffset: BigNumberish | undefined;
-    if (input.token.isNative) {
-      to = market.bulker.address;
-      data = new utils.Interface(market.bulker.abi).encodeFunctionData('invoke', [
-        [market.bulker.actions.supplyNativeToken],
-        [encodeSupplyNativeTokenAction(market.cometAddress, account, input.amountWei)],
-      ]);
-      if (amountBps) amountOffset = constants.MaxUint256;
-    } else {
-      to = market.cometAddress;
-      data = Comet__factory.createInterface().encodeFunctionData('supplyTo', [
-        account,
-        input.token.address,
-        input.amountWei,
-      ]);
-      if (amountBps) amountOffset = common.getParamOffset(2);
-    }
-    const inputs = [core.newLogicInput({ input, amountBps, amountOffset })];
+    const to = market.cometAddress;
+    const data = Comet__factory.createInterface().encodeFunctionData('supplyTo', [
+      account,
+      tokenIn.address,
+      input.amountWei,
+    ]);
+    const amountOffset = amountBps ? common.getParamOffset(2) : undefined;
+    const inputs = [
+      core.newLogicInput({ input: new common.TokenAmount(tokenIn, input.amount), amountBps, amountOffset }),
+    ];
+    const wrapMode = input.token.isNative ? core.WrapMode.wrapBefore : core.WrapMode.none;
 
-    return core.newLogic({ to, data, inputs });
+    return core.newLogic({ to, data, inputs, wrapMode });
   }
 }

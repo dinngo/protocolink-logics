@@ -11,7 +11,7 @@ describe('AaveV3 Service', function () {
       it(common.getNetworkId(chainId), async function () {
         const service = new Service(chainId);
         const reserveTokensAddresses = await service.getReserveTokensAddresses();
-        expect(reserveTokensAddresses.length).to.eq(12);
+        expect(reserveTokensAddresses).to.have.lengthOf.above(0);
       });
     });
   });

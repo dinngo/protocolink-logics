@@ -1,4 +1,3 @@
-import { BigNumberish } from 'ethers';
 import { Pool__factory } from './contracts';
 import { Service } from './service';
 import * as common from '@composable-router/common';
@@ -55,8 +54,7 @@ export class WithdrawLogic extends core.Logic implements core.LogicTokenListInte
       input.amountWei,
       core.calcAccountAgent(this.chainId, account),
     ]);
-    let amountOffset: BigNumberish | undefined;
-    if (amountBps) amountOffset = common.getParamOffset(1);
+    const amountOffset = amountBps ? common.getParamOffset(1) : undefined;
     const inputs = [core.newLogicInput({ input, amountBps, amountOffset })];
     const wrapMode = output.token.isNative ? core.WrapMode.unwrapAfter : core.WrapMode.none;
 

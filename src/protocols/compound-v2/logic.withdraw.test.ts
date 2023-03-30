@@ -11,8 +11,8 @@ describe('CompoundV2 WithdrawLogic', function () {
     WithdrawLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.getNetworkId(chainId)}`, async function () {
         const withdrawLogic = new WithdrawLogic(chainId);
-        const tokens = await withdrawLogic.getTokenList();
-        expect(tokens.length).to.be.gt(0);
+        const tokenList = await withdrawLogic.getTokenList();
+        expect(tokenList).to.have.lengthOf.above(0);
       });
     });
   });

@@ -14,8 +14,8 @@ describe('AaveV2 BorrowLogic', function () {
     BorrowLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.getNetworkId(chainId)}`, async function () {
         const borrowLogic = new BorrowLogic(chainId);
-        const tokens = await borrowLogic.getTokenList();
-        expect(tokens.length).to.be.gt(0);
+        const tokenList = await borrowLogic.getTokenList();
+        expect(tokenList).to.have.lengthOf.above(0);
       });
     });
   });

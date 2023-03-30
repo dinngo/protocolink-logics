@@ -11,8 +11,8 @@ describe('CompoundV2 SupplyLogic', function () {
     SupplyLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.getNetworkId(chainId)}`, async function () {
         const supplyLogic = new SupplyLogic(chainId);
-        const tokens = await supplyLogic.getTokenList();
-        expect(tokens.length).to.be.gt(0);
+        const tokenList = await supplyLogic.getTokenList();
+        expect(tokenList).to.have.lengthOf.above(0);
       });
     });
   });

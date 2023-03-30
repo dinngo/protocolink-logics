@@ -9,6 +9,8 @@ export type ClaimLogicParams = core.ClaimParams<{ marketId: string }>;
 
 export type ClaimLogicFields = core.ClaimFields<{ marketId: string }>;
 
+export type ClaimLogicOptions = Pick<core.GlobalOptions, 'account'>;
+
 @core.LogicDefinitionDecorator()
 export class ClaimLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicOracleInterface {
   static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon];
@@ -26,17 +28,25 @@ export class ClaimLogic extends core.Logic implements core.LogicTokenListInterfa
     return { marketId, owner, output };
   }
 
-  async getLogic(fields: ClaimLogicFields) {
+  async getLogic(fields: ClaimLogicFields, options: ClaimLogicOptions) {
     const { marketId, owner } = fields;
+    const { account } = options;
 
     const market = getMarket(this.chainId, marketId);
 
     const to = getContractAddress(this.chainId, 'CometRewards');
-    const data = CometRewards__factory.createInterface().encodeFunctionData('claim', [
-      market.cometAddress,
-      owner,
-      true,
-    ]);
+    let data: string;
+    if (owner === account) {
+      const userAgent = core.calcAccountAgent(this.chainId, account);
+      data = CometRewards__factory.createInterface().encodeFunctionData('claimTo', [
+        market.cometAddress,
+        owner,
+        userAgent,
+        true,
+      ]);
+    } else {
+      data = CometRewards__factory.createInterface().encodeFunctionData('claim', [market.cometAddress, owner, true]);
+    }
 
     return core.newLogic({ to, data });
   }

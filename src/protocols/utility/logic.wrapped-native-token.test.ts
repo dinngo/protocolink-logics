@@ -10,8 +10,8 @@ describe('Utility WrappedNativeTokenLogic', function () {
     WrappedNativeTokenLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.getNetworkId(chainId)}`, async function () {
         const wrappedNativeTokenLogic = new WrappedNativeTokenLogic(chainId);
-        const tokens = wrappedNativeTokenLogic.getTokenList();
-        expect(tokens.length).to.be.gt(0);
+        const tokenList = wrappedNativeTokenLogic.getTokenList();
+        expect(tokenList).to.have.lengthOf.above(0);
       });
     });
   });

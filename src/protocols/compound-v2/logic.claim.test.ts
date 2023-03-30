@@ -12,8 +12,8 @@ describe('CompoundV2 ClaimLogic', function () {
     ClaimLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.getNetworkId(chainId)}`, async function () {
         const claimCOMPLogic = new ClaimLogic(chainId);
-        const tokens = await claimCOMPLogic.getTokenList();
-        expect(tokens.length).to.be.gt(0);
+        const tokenList = await claimCOMPLogic.getTokenList();
+        expect(tokenList).to.have.lengthOf.above(0);
       });
     });
   });

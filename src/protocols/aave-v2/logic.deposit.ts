@@ -1,4 +1,3 @@
-import { BigNumberish } from 'ethers';
 import { LendingPool__factory } from './contracts';
 import { Service } from './service';
 import * as common from '@composable-router/common';
@@ -50,8 +49,7 @@ export class DepositLogic extends core.Logic implements core.LogicTokenListInter
       core.calcAccountAgent(this.chainId, account),
       referralCode,
     ]);
-    let amountOffset: BigNumberish | undefined;
-    if (amountBps) amountOffset = common.getParamOffset(1);
+    const amountOffset = amountBps ? common.getParamOffset(1) : undefined;
     const inputs = [
       core.newLogicInput({ input: new common.TokenAmount(tokenIn, input.amount), amountBps, amountOffset }),
     ];
