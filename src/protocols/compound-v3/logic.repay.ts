@@ -5,9 +5,9 @@ import { constants } from 'ethers';
 import * as core from '@composable-router/core';
 import { getMarket, getMarkets } from './config';
 
-export type RepayLogicFields = Omit<core.TokenInFields<{ marketId: string; repayAll?: boolean }>, 'amountBps'>;
+export type RepayLogicParams = core.RepayParams<{ marketId: string }>;
 
-export type RepayLogicOptions = Pick<core.GlobalOptions, 'account'>;
+export type RepayLogicFields = core.RepayFields<{ marketId: string }>;
 
 @core.LogicDefinitionDecorator()
 export class RepayLogic extends core.Logic implements core.LogicTokenListInterface {
@@ -30,20 +30,39 @@ export class RepayLogic extends core.Logic implements core.LogicTokenListInterfa
     return tokenList;
   }
 
-  async getLogic(fields: RepayLogicFields, options: RepayLogicOptions) {
-    const { marketId, input, repayAll } = fields;
-    const { account } = options;
+  async quote(params: RepayLogicParams) {
+    const { marketId, borrower, tokenIn } = params;
+
+    const service = new Service(this.chainId, this.provider);
+    const debt = await service.getDebt(marketId, borrower);
+    const amountWei = common.calcSlippage(debt, -100); // slightly higher than the current borrowed amount
+    const input = new common.TokenAmount(tokenIn).setWei(amountWei);
+
+    return { marketId, borrower, input };
+  }
+
+  async getLogic(fields: RepayLogicFields) {
+    const { marketId, borrower, input, amountBps } = fields;
 
     const market = getMarket(this.chainId, marketId);
     const tokenIn = input.token.wrapped;
+    const quotation = await this.quote({ marketId, borrower, tokenIn: input.token });
+    const repayAll = amountBps === common.BPS_BASE || input.amountWei.gte(quotation.input.amountWei);
 
     const to = market.cometAddress;
     const data = Comet__factory.createInterface().encodeFunctionData('supplyTo', [
-      account,
+      borrower,
       tokenIn.address,
       repayAll ? constants.MaxUint256 : input.amountWei,
     ]);
-    const inputs = [core.newLogicInput({ input: new common.TokenAmount(tokenIn, input.amount) })];
+
+    const options: core.NewLogicInputOptions = { input: new common.TokenAmount(tokenIn, input.amount) };
+    if (amountBps && !repayAll) {
+      options.amountBps = amountBps;
+      options.amountOffset = common.getParamOffset(2);
+    }
+    const inputs = [core.newLogicInput(options)];
+
     const wrapMode = input.token.isNative ? core.WrapMode.wrapBefore : core.WrapMode.none;
 
     return core.newLogic({ to, data, inputs, wrapMode });

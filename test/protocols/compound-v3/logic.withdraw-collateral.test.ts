@@ -80,7 +80,7 @@ describe('Test CompoundV3 WithdrawCollateral Logic', function () {
       // 6. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics, tokensReturn });
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
-      const collateralBalance = await compoundV3Service.getCollateralBalance(user.address, marketId, output.token);
+      const collateralBalance = await compoundV3Service.getCollateralBalance(marketId, user.address, output.token);
       expect(supply.amountWei.sub(collateralBalance.amountWei)).to.eq(output.amountWei);
       await expect(user.address).to.changeBalance(output.token, output.amount);
     });

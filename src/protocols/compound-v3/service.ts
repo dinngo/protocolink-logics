@@ -67,7 +67,7 @@ export class Service extends common.Web3Toolkit {
     return { to, data };
   }
 
-  async getCollateralBalance(account: string, marketId: string, asset: common.Token) {
+  async getCollateralBalance(marketId: string, account: string, asset: common.Token) {
     const market = getMarket(this.chainId, marketId);
     const contractComet = Comet__factory.connect(market.cometAddress, this.provider);
     const collateralBalance = await contractComet.collateralBalanceOf(account, asset.wrapped.address);
@@ -75,16 +75,15 @@ export class Service extends common.Web3Toolkit {
     return new common.TokenAmount(asset).setWei(collateralBalance);
   }
 
-  async getBorrowBalance(account: string, marketId: string) {
+  async getDebt(marketId: string, borrower: string) {
     const market = getMarket(this.chainId, marketId);
-    const baseToken = await this.getBaseToken(market.id);
     const contractComet = Comet__factory.connect(market.cometAddress, this.provider);
-    const collateralBalance = await contractComet.borrowBalanceOf(account);
+    const debt = await contractComet.borrowBalanceOf(borrower);
 
-    return new common.TokenAmount(baseToken).setWei(collateralBalance);
+    return debt;
   }
 
-  async getUserPrincipal(account: string, marketId: string) {
+  async getUserPrincipal(marketId: string, account: string) {
     const market = getMarket(this.chainId, marketId);
     const baseToken = await this.getBaseToken(market.id);
     const contractComet = Comet__factory.connect(market.cometAddress, this.provider);

@@ -108,7 +108,7 @@ describe('Test CompoundV3 SupplyCollateral Logic', function () {
       });
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
       await expect(user.address).to.changeBalance(input.token, -input.amount, 1);
-      const collateralBalance = await compoundV3Service.getCollateralBalance(user.address, marketId, input.token);
+      const collateralBalance = await compoundV3Service.getCollateralBalance(marketId, user.address, input.token);
       expect(collateralBalance.amountWei).to.eq(input.amountWei);
     });
   });

@@ -14,8 +14,8 @@ describe('Test AaveV2 Repay Logic', function () {
 
   before(async function () {
     chainId = await getChainId();
-    const [, user1, user2, user3] = await hre.ethers.getSigners();
-    users = [user1, user2, user3];
+    const [, user1, user2] = await hre.ethers.getSigners();
+    users = [user1, user2];
     await claimToken(chainId, user1.address, mainnetTokens.USDC, '40000');
     await claimToken(chainId, user1.address, mainnetTokens.WETH, '100');
     await claimToken(chainId, user2.address, mainnetTokens.USDC, '100');
