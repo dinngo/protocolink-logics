@@ -1,9 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.tokenOrAddressToToken = exports.sortByAddress = exports.getWrappedNativeToken = exports.getNativeToken = exports.toTokenMap = void 0;
+exports.sortByAddress = exports.getWrappedNativeToken = exports.getNativeToken = exports.toTokenMap = void 0;
 const tslib_1 = require("tslib");
 const token_1 = require("./token");
-const web3_toolkit_1 = require("../web3-toolkit");
 const networks_1 = require("../networks");
 const sortBy_1 = tslib_1.__importDefault(require("lodash/sortBy"));
 function toTokenMap(tokenObjectMap) {
@@ -28,19 +27,4 @@ function sortByAddress(tokenOrAmounts) {
     });
 }
 exports.sortByAddress = sortByAddress;
-async function tokenOrAddressToToken(chainId, tokenOrAddress, provider) {
-    let token;
-    if (typeof tokenOrAddress === 'string') {
-        const web3Toolkit = new web3_toolkit_1.Web3Toolkit(chainId, provider);
-        token = await web3Toolkit.getToken(tokenOrAddress);
-    }
-    else if ((0, token_1.isTokenObject)(tokenOrAddress)) {
-        token = token_1.Token.from(tokenOrAddress);
-    }
-    else {
-        token = tokenOrAddress;
-    }
-    return token;
-}
-exports.tokenOrAddressToToken = tokenOrAddressToToken;
 //# sourceMappingURL=utils.js.map

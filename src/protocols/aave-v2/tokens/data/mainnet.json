@@ -27,6 +27,13 @@
     "symbol": "aWBTC",
     "name": "Aave interest bearing WBTC"
   },
+  "ETH": {
+    "chainId": 1,
+    "address": "0x0000000000000000000000000000000000000000",
+    "decimals": 18,
+    "symbol": "ETH",
+    "name": "Ethereum"
+  },
   "WETH": {
     "chainId": 1,
     "address": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
@@ -208,20 +215,6 @@
     "decimals": 18,
     "symbol": "aUSDP",
     "name": "Aave interest bearing USDP"
-  },
-  "DPI": {
-    "chainId": 1,
-    "address": "0x1494CA1F11D487c2bBe4543E90080AeBa4BA3C2b",
-    "decimals": 18,
-    "symbol": "DPI",
-    "name": "DefiPulse Index"
-  },
-  "aDPI": {
-    "chainId": 1,
-    "address": "0x6F634c6135D2EBD550000ac92F494F9CB8183dAe",
-    "decimals": 18,
-    "symbol": "aDPI",
-    "name": "Aave interest bearing DPI"
   },
   "FRAX": {
     "chainId": 1,

@@ -157,7 +157,7 @@ export class Service extends common.Web3Toolkit {
 
   async getDebtTokenAddress(asset: common.Token, interestRateMode: InterestRateMode) {
     const { stableDebtTokenAddress, variableDebtTokenAddress } =
-      await this.protocolDataProvider.getReserveTokensAddresses(asset.address);
+      await this.protocolDataProvider.getReserveTokensAddresses(asset.wrapped.address);
 
     return interestRateMode === InterestRateMode.variable ? variableDebtTokenAddress : stableDebtTokenAddress;
   }

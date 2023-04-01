@@ -1,9 +1,10 @@
-import { SupplyLogic, SupplyLogicFields } from './logic.supply';
-import { Pool__factory } from './contracts';
 import { LogicTestCase } from 'test/types';
+import { Pool__factory } from './contracts';
 import { Service } from './service';
+import { SupplyLogic, SupplyLogicFields } from './logic.supply';
 import * as common from '@composable-router/common';
 import { constants, utils } from 'ethers';
+import * as core from '@composable-router/core';
 import { expect } from 'chai';
 import { mainnetTokens } from './tokens';
 
@@ -12,8 +13,8 @@ describe('AaveV3 SupplyLogic', function () {
     SupplyLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.getNetworkId(chainId)}`, async function () {
         const supplyLogic = new SupplyLogic(chainId);
-        const tokens = await supplyLogic.getTokenList();
-        expect(tokens.length).to.be.gt(0);
+        const tokenList = await supplyLogic.getTokenList();
+        expect(tokenList).to.have.lengthOf.above(0);
       });
     });
   });
@@ -33,6 +34,12 @@ describe('AaveV3 SupplyLogic', function () {
     const testCases: LogicTestCase<SupplyLogicFields>[] = [
       {
         fields: {
+          input: new common.TokenAmount(mainnetTokens.ETH, '1'),
+          output: new common.TokenAmount(mainnetTokens.aEthWETH, '1'),
+        },
+      },
+      {
+        fields: {
           input: new common.TokenAmount(mainnetTokens.WETH, '1'),
           output: new common.TokenAmount(mainnetTokens.aEthWETH, '1'),
         },
@@ -41,6 +48,13 @@ describe('AaveV3 SupplyLogic', function () {
         fields: {
           input: new common.TokenAmount(mainnetTokens.USDC, '1'),
           output: new common.TokenAmount(mainnetTokens.aEthUSDC, '1'),
+        },
+      },
+      {
+        fields: {
+          input: new common.TokenAmount(mainnetTokens.ETH, '1'),
+          output: new common.TokenAmount(mainnetTokens.aEthWETH, '1'),
+          amountBps: 5000,
         },
       },
       {
@@ -65,9 +79,10 @@ describe('AaveV3 SupplyLogic', function () {
         const sig = routerLogic.data.substring(0, 10);
         const { input, amountBps } = fields;
 
-        expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(routerLogic.to).to.eq(poolAddress);
+        expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(sig).to.eq(poolIface.getSighash('supply'));
+        expect(routerLogic.inputs[0].token).to.eq(input.token.wrapped.address);
         if (amountBps) {
           expect(routerLogic.inputs[0].amountBps).to.eq(amountBps);
           expect(routerLogic.inputs[0].amountOrOffset).to.eq(common.getParamOffset(1));
@@ -75,6 +90,7 @@ describe('AaveV3 SupplyLogic', function () {
           expect(routerLogic.inputs[0].amountBps).to.eq(constants.MaxUint256);
           expect(routerLogic.inputs[0].amountOrOffset).eq(input.amountWei);
         }
+        expect(routerLogic.wrapMode).to.eq(input.token.isNative ? core.WrapMode.wrapBefore : core.WrapMode.none);
         expect(routerLogic.approveTo).to.eq(constants.AddressZero);
         expect(routerLogic.callback).to.eq(constants.AddressZero);
       });

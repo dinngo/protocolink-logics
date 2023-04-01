@@ -1,5 +1,5 @@
 import { BigNumber, providers } from 'ethers';
-import { Token, TokenOrAddress } from './tokens';
+import { Token, TokenAmount, TokenOrAddress } from './tokens';
 import { Multicall2 } from './contracts';
 import { Network } from './networks';
 export declare class Web3Toolkit {
@@ -10,8 +10,9 @@ export declare class Web3Toolkit {
     readonly wrappedNativeToken: Token;
     constructor(chainId: number, provider?: providers.Provider);
     get multicall2(): Multicall2;
-    getToken(tokenAddress: string): Promise<Token>;
+    getToken(tokenOrAddress: TokenOrAddress): Promise<Token>;
     getTokens(tokenAddresses: string[]): Promise<Token[]>;
+    getBalance(account: string, tokenOrAddress: TokenOrAddress, blockTag?: providers.BlockTag): Promise<TokenAmount>;
     getAllowance(account: string, tokenOrAddress: TokenOrAddress, spender: string): Promise<BigNumber>;
     getAllowances(account: string, tokenOrAddresses: TokenOrAddress[], spender: string): Promise<BigNumber[]>;
 }

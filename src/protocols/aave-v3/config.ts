@@ -12,8 +12,16 @@ export const contractAddressMap: Record<number, { [k in ContractNames]: string }
     PoolDataProvider: '0x69FA688f1Dc47d4B5d8029D5a35FB7a548310654',
     FlashLoanCallbackAaveV3: '',
   },
+  [common.ChainId.arbitrum]: {
+    PoolDataProvider: '0x69FA688f1Dc47d4B5d8029D5a35FB7a548310654',
+    FlashLoanCallbackAaveV3: '',
+  },
+  [common.ChainId.optimism]: {
+    PoolDataProvider: '0x69FA688f1Dc47d4B5d8029D5a35FB7a548310654',
+    FlashLoanCallbackAaveV3: '',
+  },
   [common.ChainId.avalanche]: {
-    PoolDataProvider: '0x69fa688f1dc47d4b5d8029d5a35fb7a548310654',
+    PoolDataProvider: '0x69FA688f1Dc47d4B5d8029D5a35FB7a548310654',
     FlashLoanCallbackAaveV3: '',
   },
 };

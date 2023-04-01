@@ -1,9 +1,7 @@
-import { BigNumberish } from 'ethers';
 import { LendingPool__factory } from './contracts';
 import { Service } from './service';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
-import invariant from 'tiny-invariant';
 
 export type DepositLogicParams = core.TokenToTokenExactInParams;
 
@@ -19,12 +17,19 @@ export class DepositLogic extends core.Logic implements core.LogicTokenListInter
     const service = new Service(this.chainId, this.provider);
     const reserveTokens = await service.getReserveTokens();
 
-    return reserveTokens.map((reserveToken) => [reserveToken.asset, reserveToken.aToken]);
+    const tokenList: [common.Token, common.Token][] = [];
+    for (const reserveToken of reserveTokens) {
+      if (reserveToken.asset.isWrapped) {
+        tokenList.push([reserveToken.asset.unwrapped, reserveToken.aToken]);
+      }
+      tokenList.push([reserveToken.asset, reserveToken.aToken]);
+    }
+
+    return tokenList;
   }
 
   async quote(params: DepositLogicParams) {
     const { input, tokenOut } = params;
-    invariant(!input.token.isNative, 'tokenIn should not be native token');
     const output = new common.TokenAmount(tokenOut, input.amount);
 
     return { input, output };
@@ -32,21 +37,24 @@ export class DepositLogic extends core.Logic implements core.LogicTokenListInter
 
   async getLogic(fields: DepositLogicFields, options: DepositLogicOptions) {
     const { input, amountBps, referralCode = 0 } = fields;
-    invariant(!input.token.isNative, 'tokenIn should not be native token');
     const { account } = options;
+
+    const tokenIn = input.token.wrapped;
 
     const service = new Service(this.chainId, this.provider);
     const to = await service.getLendingPoolAddress();
     const data = LendingPool__factory.createInterface().encodeFunctionData('deposit', [
-      input.token.address,
+      tokenIn.address,
       input.amountWei,
       core.calcAccountAgent(this.chainId, account),
       referralCode,
     ]);
-    let amountOffset: BigNumberish | undefined;
-    if (amountBps) amountOffset = common.getParamOffset(1);
-    const inputs = [core.newLogicInput({ input, amountBps, amountOffset })];
+    const amountOffset = amountBps ? common.getParamOffset(1) : undefined;
+    const inputs = [
+      core.newLogicInput({ input: new common.TokenAmount(tokenIn, input.amount), amountBps, amountOffset }),
+    ];
+    const wrapMode = input.token.isNative ? core.WrapMode.wrapBefore : core.WrapMode.none;
 
-    return core.newLogic({ to, data, inputs });
+    return core.newLogic({ to, data, inputs, wrapMode });
   }
 }

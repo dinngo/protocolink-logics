@@ -1,3 +1,4 @@
+import { COMP } from './tokens';
 import { ClaimLogic, ClaimLogicFields } from './logic.claim';
 import { Comptroller__factory } from './contracts';
 import { LogicTestCase } from 'test/types';
@@ -11,8 +12,8 @@ describe('CompoundV2 ClaimLogic', function () {
     ClaimLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.getNetworkId(chainId)}`, async function () {
         const claimCOMPLogic = new ClaimLogic(chainId);
-        const tokens = await claimCOMPLogic.getTokenList();
-        expect(tokens.length).to.be.gt(0);
+        const tokenList = await claimCOMPLogic.getTokenList();
+        expect(tokenList).to.have.lengthOf.above(0);
       });
     });
   });
@@ -23,7 +24,7 @@ describe('CompoundV2 ClaimLogic', function () {
     const comptroller = Comptroller__factory.createInterface();
 
     const testCases: LogicTestCase<ClaimLogicFields>[] = [
-      { fields: { owner: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa' } },
+      { fields: { owner: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa', output: new common.TokenAmount(COMP, '1') } },
     ];
 
     testCases.forEach(({ fields }, i) => {

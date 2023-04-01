@@ -7,7 +7,7 @@ const bignumber_js_1 = tslib_1.__importDefault(require("bignumber.js"));
 function toSmallUnit(amount, decimals) {
     return Number(amount) === 0
         ? ethers_1.BigNumber.from(0)
-        : ethers_1.utils.parseUnits((0, bignumber_js_1.default)(amount).decimalPlaces(decimals, bignumber_js_1.default.ROUND_DOWN).toString(), decimals);
+        : ethers_1.utils.parseUnits((0, bignumber_js_1.default)(amount).decimalPlaces(decimals, bignumber_js_1.default.ROUND_DOWN).toFixed(), decimals);
 }
 exports.toSmallUnit = toSmallUnit;
 function toBigUnit(amountWei, decimals, options = {}) {

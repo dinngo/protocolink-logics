@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { claimToken, getChainId, mainnetTokens } from '@composable-router/test-helpers';
+import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@composable-router/test-helpers';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
 import { expect } from 'chai';
@@ -17,6 +17,8 @@ describe('Test CompoundV2 Withdraw Logic', function () {
     [, user] = await hre.ethers.getSigners();
     await claimToken(chainId, user.address, mainnetTokens.WBTC, '10');
   });
+
+  snapshotAndRevertEach();
 
   const testCases = [
     {
@@ -54,7 +56,7 @@ describe('Test CompoundV2 Withdraw Logic', function () {
       const tokensReturn = [output.token.elasticAddress];
       const funds = new common.TokenAmounts();
       if (amountBps) {
-        funds.add(utils.calcRequiredFundByAmountBps(input, amountBps));
+        funds.add(utils.calcRequiredAmountByAmountBps(input, amountBps));
         tokensReturn.push(input.token.elasticAddress);
       } else {
         funds.add(input);

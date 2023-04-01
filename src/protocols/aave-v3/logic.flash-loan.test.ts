@@ -1,6 +1,6 @@
 import { FlashLoanLogic, FlashLoanLogicFields } from './logic.flash-loan';
-import { Pool__factory } from './contracts';
 import { LogicTestCase } from 'test/types';
+import { Pool__factory } from './contracts';
 import { Service } from './service';
 import * as common from '@composable-router/common';
 import { constants, utils } from 'ethers';
@@ -13,8 +13,8 @@ describe('AaveV3 FlashLoanLogic', function () {
     FlashLoanLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.getNetworkId(chainId)}`, async function () {
         const flashLoanLogic = new FlashLoanLogic(chainId);
-        const tokens = await flashLoanLogic.getTokenList();
-        expect(tokens.length).to.be.gt(0);
+        const tokenList = await flashLoanLogic.getTokenList();
+        expect(tokenList).to.have.lengthOf.above(0);
       });
     });
   });
@@ -44,8 +44,8 @@ describe('AaveV3 FlashLoanLogic', function () {
         const routerLogic = await aaveV3FlashLoanLogic.getLogic(fields);
         const sig = routerLogic.data.substring(0, 10);
 
-        expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(routerLogic.to).to.eq(poolAddress);
+        expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(sig).to.eq(poolIface.getSighash('flashLoan'));
         expect(routerLogic.inputs).to.deep.eq([]);
         expect(routerLogic.approveTo).to.eq(constants.AddressZero);

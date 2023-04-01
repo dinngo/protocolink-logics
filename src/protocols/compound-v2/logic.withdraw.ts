@@ -1,4 +1,4 @@
-import { BigNumber, BigNumberish } from 'ethers';
+import { BigNumber } from 'ethers';
 import { CErc20__factory } from './contracts';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
@@ -32,8 +32,7 @@ export class WithdrawLogic extends core.Logic implements core.LogicTokenListInte
 
     const to = input.token.address;
     const data = CErc20__factory.createInterface().encodeFunctionData('redeem', [input.amountWei]);
-    let amountOffset: BigNumberish | undefined;
-    if (amountBps) amountOffset = common.getParamOffset(0);
+    const amountOffset = amountBps ? common.getParamOffset(0) : undefined;
     const inputs = [core.newLogicInput({ input, amountBps, amountOffset })];
 
     return core.newLogic({ to, data, inputs });

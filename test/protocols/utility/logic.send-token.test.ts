@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { claimToken, getChainId, mainnetTokens } from '@composable-router/test-helpers';
+import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@composable-router/test-helpers';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
 import { expect } from 'chai';
@@ -19,6 +19,8 @@ describe('Test Utility SendToken Logic', function () {
     await claimToken(chainId, user1.address, mainnetTokens.USDC, '100');
   });
 
+  snapshotAndRevertEach();
+
   const testCases = [
     { input: new common.TokenAmount(mainnetTokens.WETH, '1') },
     { input: new common.TokenAmount(mainnetTokens.USDC, '1') },
@@ -32,7 +34,7 @@ describe('Test Utility SendToken Logic', function () {
       const tokensReturn = [];
       const funds = new common.TokenAmounts();
       if (amountBps) {
-        funds.add(utils.calcRequiredFundByAmountBps(input, amountBps));
+        funds.add(utils.calcRequiredAmountByAmountBps(input, amountBps));
         tokensReturn.push(input.token.elasticAddress);
       } else {
         funds.add(input);

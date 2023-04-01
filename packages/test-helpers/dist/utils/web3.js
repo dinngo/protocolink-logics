@@ -9,11 +9,8 @@ const network_1 = require("./network");
 async function getBalance(account, tokenOrAddress, blockTag) {
     const hre = await Promise.resolve().then(() => tslib_1.__importStar(require('hardhat')));
     const chainId = await (0, network_1.getChainId)();
-    const token = await common.tokenOrAddressToToken(chainId, tokenOrAddress, hre.ethers.provider);
-    const balanceWei = token.isNative
-        ? await hre.ethers.provider.getBalance(account, blockTag)
-        : await common.ERC20__factory.connect(token.address, hre.ethers.provider).balanceOf(account, { blockTag });
-    const balance = new common.TokenAmount(token).setWei(balanceWei);
+    const web3Toolkit = new common.Web3Toolkit(chainId, hre.ethers.provider);
+    const balance = await web3Toolkit.getBalance(account, tokenOrAddress, blockTag);
     return balance;
 }
 exports.getBalance = getBalance;

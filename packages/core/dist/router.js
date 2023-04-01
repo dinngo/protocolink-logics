@@ -10,9 +10,9 @@ function calcAccountAgent(chainId, account) {
 }
 exports.calcAccountAgent = calcAccountAgent;
 function newRouterExecuteTransactionRequest(options) {
-    const { chainId, routerLogics, tokensReturn = [], value = 0 } = options;
+    const { chainId, routerLogics, tokensReturn = [], value = 0, referralCode = 0 } = options;
     const iface = contracts_1.Router__factory.createInterface();
-    const data = iface.encodeFunctionData('execute', [routerLogics, tokensReturn]);
+    const data = iface.encodeFunctionData('execute', [routerLogics, tokensReturn, referralCode]);
     return { to: (0, config_1.getContractAddress)(chainId, 'Router'), data, value };
 }
 exports.newRouterExecuteTransactionRequest = newRouterExecuteTransactionRequest;
