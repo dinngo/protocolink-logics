@@ -37,7 +37,7 @@ export class SwapTokenLogic extends core.Logic implements core.LogicOracleInterf
       destToken: tokenOut.elasticAddress,
       destDecimals: tokenOut.decimals,
     });
-    const output = new common.TokenAmount(tokenOut, destAmount);
+    const output = new common.TokenAmount(tokenOut).setWei(destAmount);
 
     return { input, output };
   }
