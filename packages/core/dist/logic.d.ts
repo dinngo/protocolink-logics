@@ -4,7 +4,7 @@ export declare abstract class Logic extends common.Web3Toolkit {
     static id: string;
     static protocol: string;
     static get rid(): string;
-    abstract getLogic(fields: any, options?: any): Promise<IParam.LogicStruct>;
+    abstract build(fields: any, options?: any): Promise<IParam.LogicStruct>;
 }
 export interface LogicTokenListInterface {
     getTokenList(): any;

@@ -1,11 +1,11 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
+import * as aavev2 from 'src/aave-v2';
 import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@composable-router/test-helpers';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
 import { expect } from 'chai';
 import * as helpers from './helpers';
 import hre from 'hardhat';
-import * as protocols from 'src/protocols';
 import * as utils from 'test/utils';
 
 describe('Test AaveV2 Repay Logic', function () {
@@ -27,80 +27,80 @@ describe('Test AaveV2 Repay Logic', function () {
   const testCases = [
     {
       userIndex: 0,
-      deposit: new common.TokenAmount(protocols.aavev2.mainnetTokens.USDC, '5000'),
-      borrow: new common.TokenAmount(protocols.aavev2.mainnetTokens.ETH, '1'),
-      interestRateMode: protocols.aavev2.InterestRateMode.variable,
+      deposit: new common.TokenAmount(aavev2.mainnetTokens.USDC, '5000'),
+      borrow: new common.TokenAmount(aavev2.mainnetTokens.ETH, '1'),
+      interestRateMode: aavev2.InterestRateMode.variable,
     },
     {
       userIndex: 0,
-      deposit: new common.TokenAmount(protocols.aavev2.mainnetTokens.USDC, '5000'),
-      borrow: new common.TokenAmount(protocols.aavev2.mainnetTokens.ETH, '1'),
-      interestRateMode: protocols.aavev2.InterestRateMode.stable,
+      deposit: new common.TokenAmount(aavev2.mainnetTokens.USDC, '5000'),
+      borrow: new common.TokenAmount(aavev2.mainnetTokens.ETH, '1'),
+      interestRateMode: aavev2.InterestRateMode.stable,
     },
     {
       userIndex: 0,
-      deposit: new common.TokenAmount(protocols.aavev2.mainnetTokens.USDC, '5000'),
-      borrow: new common.TokenAmount(protocols.aavev2.mainnetTokens.WETH, '1'),
-      interestRateMode: protocols.aavev2.InterestRateMode.variable,
+      deposit: new common.TokenAmount(aavev2.mainnetTokens.USDC, '5000'),
+      borrow: new common.TokenAmount(aavev2.mainnetTokens.WETH, '1'),
+      interestRateMode: aavev2.InterestRateMode.variable,
     },
     {
       userIndex: 0,
-      deposit: new common.TokenAmount(protocols.aavev2.mainnetTokens.USDC, '5000'),
-      borrow: new common.TokenAmount(protocols.aavev2.mainnetTokens.WETH, '1'),
-      interestRateMode: protocols.aavev2.InterestRateMode.stable,
+      deposit: new common.TokenAmount(aavev2.mainnetTokens.USDC, '5000'),
+      borrow: new common.TokenAmount(aavev2.mainnetTokens.WETH, '1'),
+      interestRateMode: aavev2.InterestRateMode.stable,
     },
     {
       userIndex: 1,
-      deposit: new common.TokenAmount(protocols.aavev2.mainnetTokens.WETH, '1'),
-      borrow: new common.TokenAmount(protocols.aavev2.mainnetTokens.USDC, '1'),
-      interestRateMode: protocols.aavev2.InterestRateMode.variable,
+      deposit: new common.TokenAmount(aavev2.mainnetTokens.WETH, '1'),
+      borrow: new common.TokenAmount(aavev2.mainnetTokens.USDC, '1'),
+      interestRateMode: aavev2.InterestRateMode.variable,
     },
     {
       userIndex: 1,
-      deposit: new common.TokenAmount(protocols.aavev2.mainnetTokens.WETH, '1'),
-      borrow: new common.TokenAmount(protocols.aavev2.mainnetTokens.USDC, '1'),
-      interestRateMode: protocols.aavev2.InterestRateMode.stable,
+      deposit: new common.TokenAmount(aavev2.mainnetTokens.WETH, '1'),
+      borrow: new common.TokenAmount(aavev2.mainnetTokens.USDC, '1'),
+      interestRateMode: aavev2.InterestRateMode.stable,
     },
     {
       userIndex: 0,
-      deposit: new common.TokenAmount(protocols.aavev2.mainnetTokens.USDC, '5000'),
-      borrow: new common.TokenAmount(protocols.aavev2.mainnetTokens.ETH, '1'),
-      interestRateMode: protocols.aavev2.InterestRateMode.variable,
+      deposit: new common.TokenAmount(aavev2.mainnetTokens.USDC, '5000'),
+      borrow: new common.TokenAmount(aavev2.mainnetTokens.ETH, '1'),
+      interestRateMode: aavev2.InterestRateMode.variable,
       amountBps: 5000,
     },
     {
       userIndex: 0,
-      deposit: new common.TokenAmount(protocols.aavev2.mainnetTokens.USDC, '5000'),
-      borrow: new common.TokenAmount(protocols.aavev2.mainnetTokens.ETH, '1'),
-      interestRateMode: protocols.aavev2.InterestRateMode.stable,
+      deposit: new common.TokenAmount(aavev2.mainnetTokens.USDC, '5000'),
+      borrow: new common.TokenAmount(aavev2.mainnetTokens.ETH, '1'),
+      interestRateMode: aavev2.InterestRateMode.stable,
       amountBps: 5000,
     },
     {
       userIndex: 0,
-      deposit: new common.TokenAmount(protocols.aavev2.mainnetTokens.USDC, '5000'),
-      borrow: new common.TokenAmount(protocols.aavev2.mainnetTokens.WETH, '1'),
-      interestRateMode: protocols.aavev2.InterestRateMode.variable,
+      deposit: new common.TokenAmount(aavev2.mainnetTokens.USDC, '5000'),
+      borrow: new common.TokenAmount(aavev2.mainnetTokens.WETH, '1'),
+      interestRateMode: aavev2.InterestRateMode.variable,
       amountBps: 5000,
     },
     {
       userIndex: 0,
-      deposit: new common.TokenAmount(protocols.aavev2.mainnetTokens.USDC, '5000'),
-      borrow: new common.TokenAmount(protocols.aavev2.mainnetTokens.WETH, '1'),
-      interestRateMode: protocols.aavev2.InterestRateMode.stable,
-      amountBps: 5000,
-    },
-    {
-      userIndex: 1,
-      deposit: new common.TokenAmount(protocols.aavev2.mainnetTokens.WETH, '1'),
-      borrow: new common.TokenAmount(protocols.aavev2.mainnetTokens.USDC, '1'),
-      interestRateMode: protocols.aavev2.InterestRateMode.variable,
+      deposit: new common.TokenAmount(aavev2.mainnetTokens.USDC, '5000'),
+      borrow: new common.TokenAmount(aavev2.mainnetTokens.WETH, '1'),
+      interestRateMode: aavev2.InterestRateMode.stable,
       amountBps: 5000,
     },
     {
       userIndex: 1,
-      deposit: new common.TokenAmount(protocols.aavev2.mainnetTokens.WETH, '1'),
-      borrow: new common.TokenAmount(protocols.aavev2.mainnetTokens.USDC, '1'),
-      interestRateMode: protocols.aavev2.InterestRateMode.stable,
+      deposit: new common.TokenAmount(aavev2.mainnetTokens.WETH, '1'),
+      borrow: new common.TokenAmount(aavev2.mainnetTokens.USDC, '1'),
+      interestRateMode: aavev2.InterestRateMode.variable,
+      amountBps: 5000,
+    },
+    {
+      userIndex: 1,
+      deposit: new common.TokenAmount(aavev2.mainnetTokens.WETH, '1'),
+      borrow: new common.TokenAmount(aavev2.mainnetTokens.USDC, '1'),
+      interestRateMode: aavev2.InterestRateMode.stable,
       amountBps: 5000,
     },
   ];
@@ -113,8 +113,8 @@ describe('Test AaveV2 Repay Logic', function () {
       await helpers.borrow(chainId, user, borrow, interestRateMode);
 
       // 2. get user debt
-      const aaveV2Repay = new protocols.aavev2.RepayLogic(chainId, hre.ethers.provider);
-      let quotation = await aaveV2Repay.quote({ borrower: user.address, tokenIn: borrow.token, interestRateMode });
+      const logicAaveV2Repay = new aavev2.RepayLogic(chainId, hre.ethers.provider);
+      let quotation = await logicAaveV2Repay.quote({ borrower: user.address, tokenIn: borrow.token, interestRateMode });
       const { input } = quotation;
 
       // 3. build funds and tokensReturn
@@ -130,7 +130,7 @@ describe('Test AaveV2 Repay Logic', function () {
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
 
-      routerLogics.push(await aaveV2Repay.getLogic({ input, interestRateMode, borrower: user.address, amountBps }));
+      routerLogics.push(await logicAaveV2Repay.build({ input, interestRateMode, borrower: user.address, amountBps }));
 
       // 5. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({
@@ -143,7 +143,7 @@ describe('Test AaveV2 Repay Logic', function () {
       await expect(user.address).to.changeBalance(input.token, -input.amount, 200);
 
       // 6. check user's debt should be zero
-      quotation = await aaveV2Repay.quote({ borrower: user.address, tokenIn: borrow.token, interestRateMode });
+      quotation = await logicAaveV2Repay.quote({ borrower: user.address, tokenIn: borrow.token, interestRateMode });
       expect(quotation.input.amountWei).to.eq(0);
     });
   });

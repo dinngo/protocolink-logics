@@ -4,7 +4,7 @@ import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
 import { expect } from 'chai';
 import hre from 'hardhat';
-import * as protocols from 'src/protocols';
+import * as utility from 'src/utility';
 import * as utils from 'test/utils';
 
 describe('Test Utility SendToken Logic', function () {
@@ -44,8 +44,8 @@ describe('Test Utility SendToken Logic', function () {
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user1, erc20Funds);
 
-      const utilitySendTokenLogic = new protocols.utility.SendTokenLogic(chainId);
-      routerLogics.push(await utilitySendTokenLogic.getLogic({ input, recipient: user2.address }));
+      const logicUtilitySendToken = new utility.SendTokenLogic(chainId);
+      routerLogics.push(await logicUtilitySendToken.build({ input, recipient: user2.address }));
 
       // 3. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({

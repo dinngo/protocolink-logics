@@ -4,7 +4,7 @@ import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
 import { expect } from 'chai';
 import hre from 'hardhat';
-import * as protocols from 'src/protocols';
+import * as utility from 'src/utility';
 import * as utils from 'test/utils';
 
 describe('Test Utility WrappedNativeToken Logic', function () {
@@ -30,8 +30,8 @@ describe('Test Utility WrappedNativeToken Logic', function () {
   testCases.forEach(({ input, tokenOut, amountBps }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. get output
-      const utilityWrappedNativeTokenLogic = new protocols.utility.WrappedNativeTokenLogic(chainId);
-      const { output } = utilityWrappedNativeTokenLogic.quote({ input, tokenOut });
+      const logicUtilityWrappedNativeToken = new utility.WrappedNativeTokenLogic(chainId);
+      const { output } = logicUtilityWrappedNativeToken.quote({ input, tokenOut });
 
       // 2. build funds, tokensReturn
       const tokensReturn = [output.token.elasticAddress];
@@ -47,7 +47,7 @@ describe('Test Utility WrappedNativeToken Logic', function () {
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
 
-      routerLogics.push(await utilityWrappedNativeTokenLogic.getLogic({ input, output, amountBps }));
+      routerLogics.push(await logicUtilityWrappedNativeToken.build({ input, output, amountBps }));
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({

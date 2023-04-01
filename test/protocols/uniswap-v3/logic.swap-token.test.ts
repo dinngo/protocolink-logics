@@ -4,7 +4,7 @@ import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
 import { expect } from 'chai';
 import hre from 'hardhat';
-import * as protocols from 'src/protocols';
+import * as uniswapv3 from 'src/uniswap-v3';
 import * as utils from 'test/utils';
 
 describe('Test UniswapV3 SwapToken Logic', function () {
@@ -55,8 +55,8 @@ describe('Test UniswapV3 SwapToken Logic', function () {
   testCases.forEach(({ params, amountBps, slippage }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. get input or output
-      const uniswapV3SwapToken = new protocols.uniswapv3.SwapTokenLogic(chainId);
-      const quotation = await uniswapV3SwapToken.quote(params);
+      const logicUniswapV3SwapToken = new uniswapv3.SwapTokenLogic(chainId);
+      const quotation = await logicUniswapV3SwapToken.quote(params);
       const { tradeType, input, output } = quotation;
 
       // 2. build funds, tokensReturn
@@ -72,7 +72,7 @@ describe('Test UniswapV3 SwapToken Logic', function () {
       // 3. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
-      routerLogics.push(await uniswapV3SwapToken.getLogic(quotation, { account: user.address, slippage }));
+      routerLogics.push(await logicUniswapV3SwapToken.build(quotation, { account: user.address, slippage }));
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({

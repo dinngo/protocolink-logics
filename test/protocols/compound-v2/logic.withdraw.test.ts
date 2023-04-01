@@ -1,11 +1,11 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@composable-router/test-helpers';
 import * as common from '@composable-router/common';
+import * as compoundv2 from 'src/compound-v2';
 import * as core from '@composable-router/core';
 import { expect } from 'chai';
 import * as helpers from './helpers';
 import hre from 'hardhat';
-import * as protocols from 'src/protocols';
 import * as utils from 'test/utils';
 
 describe('Test CompoundV2 Withdraw Logic', function () {
@@ -22,21 +22,21 @@ describe('Test CompoundV2 Withdraw Logic', function () {
 
   const testCases = [
     {
-      input: new common.TokenAmount(protocols.compoundv2.cTokens.cETH, '50'),
-      tokenOut: protocols.compoundv2.underlyingTokens.ETH,
+      input: new common.TokenAmount(compoundv2.cTokens.cETH, '50'),
+      tokenOut: compoundv2.underlyingTokens.ETH,
     },
     {
-      input: new common.TokenAmount(protocols.compoundv2.cTokens.cWBTC, '50'),
-      tokenOut: protocols.compoundv2.underlyingTokens.WBTC,
+      input: new common.TokenAmount(compoundv2.cTokens.cWBTC, '50'),
+      tokenOut: compoundv2.underlyingTokens.WBTC,
     },
     {
-      input: new common.TokenAmount(protocols.compoundv2.cTokens.cETH, '50'),
-      tokenOut: protocols.compoundv2.underlyingTokens.ETH,
+      input: new common.TokenAmount(compoundv2.cTokens.cETH, '50'),
+      tokenOut: compoundv2.underlyingTokens.ETH,
       amountBps: 5000,
     },
     {
-      input: new common.TokenAmount(protocols.compoundv2.cTokens.cWBTC, '50'),
-      tokenOut: protocols.compoundv2.underlyingTokens.WBTC,
+      input: new common.TokenAmount(compoundv2.cTokens.cWBTC, '50'),
+      tokenOut: compoundv2.underlyingTokens.WBTC,
       amountBps: 5000,
     },
   ];
@@ -44,8 +44,8 @@ describe('Test CompoundV2 Withdraw Logic', function () {
   testCases.forEach(({ input, tokenOut, amountBps }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. get output
-      const compoundV2Withdraw = new protocols.compoundv2.WithdrawLogic(chainId, hre.ethers.provider);
-      const { output } = await compoundV2Withdraw.quote({ input, tokenOut });
+      const logicCompoundV2Withdraw = new compoundv2.WithdrawLogic(chainId, hre.ethers.provider);
+      const { output } = await logicCompoundV2Withdraw.quote({ input, tokenOut });
 
       // 2. supply
       const underlyingToken = output.token;
@@ -65,7 +65,7 @@ describe('Test CompoundV2 Withdraw Logic', function () {
       // 4. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
-      routerLogics.push(await compoundV2Withdraw.getLogic({ input, output, amountBps }));
+      routerLogics.push(await logicCompoundV2Withdraw.build({ input, output, amountBps }));
 
       // 5. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics, tokensReturn });

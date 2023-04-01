@@ -3,7 +3,7 @@ import { approves } from '@composable-router/test-helpers';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
 import hre from 'hardhat';
-import * as protocols from 'src/protocols';
+import * as permit2 from 'src/permit2';
 
 export function calcRequiredAmountByAmountBps(input: common.TokenAmount, amountBps?: number) {
   let required: common.TokenAmount;
@@ -24,24 +24,24 @@ export async function getPermitAndPullTokenRouterLogics(
 ) {
   const routerLogics: core.IParam.LogicStruct[] = [];
   if (!erc20Funds.isEmpty) {
-    const permit2Address = protocols.permit2.getContractAddress(chainId, 'Permit2');
+    const permit2Address = permit2.getContractAddress(chainId, 'Permit2');
 
     // 1. user approve permit2 to spend fund erc20 tokens
     await approves(user, permit2Address, erc20Funds);
 
     // 2. get permit2 permit token logic
-    const permit2PermitTokenLogic = new protocols.permit2.PermitTokenLogic(chainId, hre.ethers.provider);
-    const permitData = await permit2PermitTokenLogic.getPermitData(user.address, erc20Funds);
+    const logicPermit2PermitToken = new permit2.PermitTokenLogic(chainId, hre.ethers.provider);
+    const permitData = await logicPermit2PermitToken.getPermitData(user.address, erc20Funds);
     if (permitData) {
       const permitSig = await user._signTypedData(permitData.domain, permitData.types, permitData.values);
       routerLogics.push(
-        await permit2PermitTokenLogic.getLogic({ permit: permitData.values, sig: permitSig }, { account: user.address })
+        await logicPermit2PermitToken.build({ permit: permitData.values, sig: permitSig }, { account: user.address })
       );
     }
 
     // 3. get permit2 pull token logic
-    const permit2PullTokenLogic = new protocols.permit2.PullTokenLogic(chainId, hre.ethers.provider);
-    routerLogics.push(await permit2PullTokenLogic.getLogic({ inputs: erc20Funds }, { account: user.address }));
+    const logicPermit2PullToken = new permit2.PullTokenLogic(chainId, hre.ethers.provider);
+    routerLogics.push(await logicPermit2PullToken.build({ inputs: erc20Funds }, { account: user.address }));
   }
 
   return routerLogics;

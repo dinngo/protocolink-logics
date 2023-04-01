@@ -13,7 +13,7 @@ const outDir = 'contracts';
 export async function handler() {
   // 1. get paths
   const { protocol } = await prompts.protocolPrompt();
-  const rootPath = path.join(process.cwd(), 'src', 'protocols', protocol);
+  const rootPath = path.join(process.cwd(), 'src', protocol);
   const contractsPath = path.join(rootPath, outDir);
 
   // 2. remove old contracts dir

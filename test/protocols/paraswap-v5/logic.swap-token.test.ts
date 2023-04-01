@@ -4,7 +4,7 @@ import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
 import { expect } from 'chai';
 import hre from 'hardhat';
-import * as protocols from 'src/protocols';
+import * as paraswapv5 from 'src/paraswap-v5';
 import * as utils from 'test/utils';
 
 describe('Test ParaswapV5 SwapToken Logic', function () {
@@ -29,8 +29,8 @@ describe('Test ParaswapV5 SwapToken Logic', function () {
   testCases.forEach(({ input, tokenOut, slippage }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. get output
-      const paraswapV5SwapToken = new protocols.paraswapv5.SwapTokenLogic(chainId);
-      const { output } = await paraswapV5SwapToken.quote({ input, tokenOut });
+      const logicParaswapV5SwapToken = new paraswapv5.SwapTokenLogic(chainId);
+      const { output } = await logicParaswapV5SwapToken.quote({ input, tokenOut });
 
       // 2. build funds, tokensReturn
       const funds = new common.TokenAmounts(input);
@@ -39,7 +39,7 @@ describe('Test ParaswapV5 SwapToken Logic', function () {
       // 3. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
-      routerLogics.push(await paraswapV5SwapToken.getLogic({ input, output }, { account: user.address, slippage }));
+      routerLogics.push(await logicParaswapV5SwapToken.build({ input, output }, { account: user.address, slippage }));
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({

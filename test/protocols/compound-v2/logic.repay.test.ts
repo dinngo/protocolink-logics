@@ -1,12 +1,12 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@composable-router/test-helpers';
 import * as common from '@composable-router/common';
+import * as compoundv2 from 'src/compound-v2';
 import * as core from '@composable-router/core';
 import { expect } from 'chai';
 import * as helpers from './helpers';
 import hre from 'hardhat';
 import * as hrehelpers from '@nomicfoundation/hardhat-network-helpers';
-import * as protocols from 'src/protocols';
 import * as utils from 'test/utils';
 
 describe('Test CompoundV2 Repay Logic', function () {
@@ -23,21 +23,21 @@ describe('Test CompoundV2 Repay Logic', function () {
 
   const testCases = [
     {
-      supply: new common.TokenAmount(protocols.compoundv2.underlyingTokens.ETH, '100'),
-      borrow: new common.TokenAmount(protocols.compoundv2.underlyingTokens.WBTC, '1'),
+      supply: new common.TokenAmount(compoundv2.underlyingTokens.ETH, '100'),
+      borrow: new common.TokenAmount(compoundv2.underlyingTokens.WBTC, '1'),
     },
     {
-      supply: new common.TokenAmount(protocols.compoundv2.underlyingTokens.WBTC, '1'),
-      borrow: new common.TokenAmount(protocols.compoundv2.underlyingTokens.ETH, '1'),
+      supply: new common.TokenAmount(compoundv2.underlyingTokens.WBTC, '1'),
+      borrow: new common.TokenAmount(compoundv2.underlyingTokens.ETH, '1'),
     },
     {
-      supply: new common.TokenAmount(protocols.compoundv2.underlyingTokens.ETH, '100'),
-      borrow: new common.TokenAmount(protocols.compoundv2.underlyingTokens.WBTC, '1'),
+      supply: new common.TokenAmount(compoundv2.underlyingTokens.ETH, '100'),
+      borrow: new common.TokenAmount(compoundv2.underlyingTokens.WBTC, '1'),
       amountBps: 5000,
     },
     {
-      supply: new common.TokenAmount(protocols.compoundv2.underlyingTokens.WBTC, '1'),
-      borrow: new common.TokenAmount(protocols.compoundv2.underlyingTokens.ETH, '1'),
+      supply: new common.TokenAmount(compoundv2.underlyingTokens.WBTC, '1'),
+      borrow: new common.TokenAmount(compoundv2.underlyingTokens.ETH, '1'),
       amountBps: 5000,
     },
   ];
@@ -51,8 +51,8 @@ describe('Test CompoundV2 Repay Logic', function () {
 
       // 2. get borrow balance after 1000 blocks
       await hrehelpers.mine(1000);
-      const compoundV2Repay = new protocols.compoundv2.RepayLogic(chainId, hre.ethers.provider);
-      const { input } = await compoundV2Repay.quote({ borrower: user.address, tokenIn: borrow.token });
+      const logicCompoundV2Repay = new compoundv2.RepayLogic(chainId, hre.ethers.provider);
+      const { input } = await logicCompoundV2Repay.quote({ borrower: user.address, tokenIn: borrow.token });
       expect(input.amountWei).to.be.gt(borrow.amountWei);
 
       // 3. build input, funds, tokensReturn
@@ -67,7 +67,7 @@ describe('Test CompoundV2 Repay Logic', function () {
       // 4. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
-      routerLogics.push(await compoundV2Repay.getLogic({ input, amountBps, borrower: user.address }));
+      routerLogics.push(await logicCompoundV2Repay.build({ input, amountBps, borrower: user.address }));
 
       // 5. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({

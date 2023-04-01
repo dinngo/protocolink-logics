@@ -1,10 +1,11 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
+import * as aavev2 from 'src/aave-v2';
 import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@composable-router/test-helpers';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
 import { expect } from 'chai';
 import hre from 'hardhat';
-import * as protocols from 'src/protocols';
+import * as utility from 'src/utility';
 import * as utils from 'test/utils';
 
 describe('Test AaveV2 FlashLoan Logic', function () {
@@ -20,25 +21,15 @@ describe('Test AaveV2 FlashLoan Logic', function () {
     await claimToken(chainId, user.address, mainnetTokens.USDT, '2');
     await claimToken(chainId, user.address, mainnetTokens.DAI, '2');
 
-    const aaveV2Service = new protocols.aavev2.Service(chainId, hre.ethers.provider);
-    flashLoanPremiumTotal = await aaveV2Service.getFlashLoanPremiumTotal();
+    const service = new aavev2.Service(chainId, hre.ethers.provider);
+    flashLoanPremiumTotal = await service.getFlashLoanPremiumTotal();
   });
 
   snapshotAndRevertEach();
 
   const testCases = [
-    {
-      outputs: new common.TokenAmounts(
-        [protocols.aavev2.mainnetTokens.WETH, '1'],
-        [protocols.aavev2.mainnetTokens.USDC, '1']
-      ),
-    },
-    {
-      outputs: new common.TokenAmounts(
-        [protocols.aavev2.mainnetTokens.USDT, '1'],
-        [protocols.aavev2.mainnetTokens.DAI, '1']
-      ),
-    },
+    { outputs: new common.TokenAmounts([aavev2.mainnetTokens.WETH, '1'], [aavev2.mainnetTokens.USDC, '1']) },
+    { outputs: new common.TokenAmounts([aavev2.mainnetTokens.USDT, '1'], [aavev2.mainnetTokens.DAI, '1']) },
   ];
 
   testCases.forEach(({ outputs }, i) => {
@@ -46,15 +37,15 @@ describe('Test AaveV2 FlashLoan Logic', function () {
       // 1. build funds and router logics for flash loan by flash loan fee
       const funds = new common.TokenAmounts();
       const flashLoanRouterLogics: core.IParam.LogicStruct[] = [];
-      const utilitySendTokenLogic = new protocols.utility.SendTokenLogic(chainId);
+      const utilitySendTokenLogic = new utility.SendTokenLogic(chainId);
       for (const output of outputs.toArray()) {
         const feeWei = common.calcFee(output.amountWei, flashLoanPremiumTotal);
         const fund = new common.TokenAmount(output.token).addWei(feeWei);
         funds.add(fund);
         flashLoanRouterLogics.push(
-          await utilitySendTokenLogic.getLogic({
+          await utilitySendTokenLogic.build({
             input: output.clone().addWei(feeWei),
-            recipient: protocols.aavev2.getContractAddress(chainId, 'FlashLoanCallbackAaveV2'),
+            recipient: aavev2.getContractAddress(chainId, 'FlashLoanCallbackAaveV2'),
           })
         );
       }
@@ -68,8 +59,8 @@ describe('Test AaveV2 FlashLoan Logic', function () {
         [],
         true,
       ]);
-      const aaveV2FlashLoan = new protocols.aavev2.FlashLoanLogic(chainId);
-      routerLogics.push(await aaveV2FlashLoan.getLogic({ outputs, params }));
+      const logicAaveV2FlashLoan = new aavev2.FlashLoanLogic(chainId);
+      routerLogics.push(await logicAaveV2FlashLoan.build({ outputs, params }));
 
       // 3. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics });

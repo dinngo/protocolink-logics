@@ -1,11 +1,11 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
+import * as aavev3 from 'src/aave-v3';
 import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@composable-router/test-helpers';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
 import { expect } from 'chai';
 import * as helpers from './helpers';
 import hre from 'hardhat';
-import * as protocols from 'src/protocols';
 import * as utils from 'test/utils';
 
 describe('Test AaveV3 Withdraw Logic', function () {
@@ -23,30 +23,30 @@ describe('Test AaveV3 Withdraw Logic', function () {
 
   const testCases = [
     {
-      input: new common.TokenAmount(protocols.aavev3.mainnetTokens.aEthWETH, '1'),
-      tokenOut: protocols.aavev3.mainnetTokens.ETH,
+      input: new common.TokenAmount(aavev3.mainnetTokens.aEthWETH, '1'),
+      tokenOut: aavev3.mainnetTokens.ETH,
     },
     {
-      input: new common.TokenAmount(protocols.aavev3.mainnetTokens.aEthWETH, '1'),
-      tokenOut: protocols.aavev3.mainnetTokens.WETH,
+      input: new common.TokenAmount(aavev3.mainnetTokens.aEthWETH, '1'),
+      tokenOut: aavev3.mainnetTokens.WETH,
     },
     {
-      input: new common.TokenAmount(protocols.aavev3.mainnetTokens.aEthUSDC, '1'),
-      tokenOut: protocols.aavev3.mainnetTokens.USDC,
+      input: new common.TokenAmount(aavev3.mainnetTokens.aEthUSDC, '1'),
+      tokenOut: aavev3.mainnetTokens.USDC,
     },
     {
-      input: new common.TokenAmount(protocols.aavev3.mainnetTokens.aEthWETH, '1'),
-      tokenOut: protocols.aavev3.mainnetTokens.ETH,
+      input: new common.TokenAmount(aavev3.mainnetTokens.aEthWETH, '1'),
+      tokenOut: aavev3.mainnetTokens.ETH,
       amountBps: 5000,
     },
     {
-      input: new common.TokenAmount(protocols.aavev3.mainnetTokens.aEthWETH, '1'),
-      tokenOut: protocols.aavev3.mainnetTokens.WETH,
+      input: new common.TokenAmount(aavev3.mainnetTokens.aEthWETH, '1'),
+      tokenOut: aavev3.mainnetTokens.WETH,
       amountBps: 5000,
     },
     {
-      input: new common.TokenAmount(protocols.aavev3.mainnetTokens.aEthUSDC, '1'),
-      tokenOut: protocols.aavev3.mainnetTokens.USDC,
+      input: new common.TokenAmount(aavev3.mainnetTokens.aEthUSDC, '1'),
+      tokenOut: aavev3.mainnetTokens.USDC,
       amountBps: 5000,
     },
   ];
@@ -58,8 +58,8 @@ describe('Test AaveV3 Withdraw Logic', function () {
       await helpers.supply(chainId, user, assetsAmount);
 
       // 2. get output
-      const aaveV3Withdraw = new protocols.aavev3.WithdrawLogic(chainId);
-      const { output } = await aaveV3Withdraw.quote({ input, tokenOut });
+      const logicAaveV3Withdraw = new aavev3.WithdrawLogic(chainId);
+      const { output } = await logicAaveV3Withdraw.quote({ input, tokenOut });
 
       // 3. build funds, tokensReturn
       const tokensReturn = [output.token.elasticAddress];
@@ -74,7 +74,7 @@ describe('Test AaveV3 Withdraw Logic', function () {
       // 4. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
-      routerLogics.push(await aaveV3Withdraw.getLogic({ input, output, amountBps }, { account: user.address }));
+      routerLogics.push(await logicAaveV3Withdraw.build({ input, output, amountBps }, { account: user.address }));
 
       // 5. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics, tokensReturn });

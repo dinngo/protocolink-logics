@@ -1,12 +1,12 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@composable-router/test-helpers';
 import * as common from '@composable-router/common';
+import * as compoundv2 from 'src/compound-v2';
 import * as core from '@composable-router/core';
 import { expect } from 'chai';
 import * as helpers from './helpers';
 import hre from 'hardhat';
 import * as hrehelpers from '@nomicfoundation/hardhat-network-helpers';
-import * as protocols from 'src/protocols';
 
 describe('Test CompoundV2 Claim Logic', function () {
   let chainId: number;
@@ -26,26 +26,26 @@ describe('Test CompoundV2 Claim Logic', function () {
     {
       ownerIndex: 0,
       claimerIndex: 0,
-      supply: new common.TokenAmount(protocols.compoundv2.underlyingTokens.ETH, '1'),
-      borrow: new common.TokenAmount(protocols.compoundv2.underlyingTokens.USDC, '100'),
+      supply: new common.TokenAmount(compoundv2.underlyingTokens.ETH, '1'),
+      borrow: new common.TokenAmount(compoundv2.underlyingTokens.USDC, '100'),
     },
     {
       ownerIndex: 0,
       claimerIndex: 0,
-      supply: new common.TokenAmount(protocols.compoundv2.underlyingTokens.USDC, '3000'),
-      borrow: new common.TokenAmount(protocols.compoundv2.underlyingTokens.ETH, '1'),
+      supply: new common.TokenAmount(compoundv2.underlyingTokens.USDC, '3000'),
+      borrow: new common.TokenAmount(compoundv2.underlyingTokens.ETH, '1'),
     },
     {
       ownerIndex: 0,
       claimerIndex: 1,
-      supply: new common.TokenAmount(protocols.compoundv2.underlyingTokens.ETH, '1'),
-      borrow: new common.TokenAmount(protocols.compoundv2.underlyingTokens.USDC, '100'),
+      supply: new common.TokenAmount(compoundv2.underlyingTokens.ETH, '1'),
+      borrow: new common.TokenAmount(compoundv2.underlyingTokens.USDC, '100'),
     },
     {
       ownerIndex: 0,
       claimerIndex: 1,
-      supply: new common.TokenAmount(protocols.compoundv2.underlyingTokens.USDC, '3000'),
-      borrow: new common.TokenAmount(protocols.compoundv2.underlyingTokens.ETH, '1'),
+      supply: new common.TokenAmount(compoundv2.underlyingTokens.USDC, '3000'),
+      borrow: new common.TokenAmount(compoundv2.underlyingTokens.ETH, '1'),
     },
   ];
 
@@ -61,13 +61,13 @@ describe('Test CompoundV2 Claim Logic', function () {
 
       // 2. get allocated COMP amount after 1000 blocks
       await hrehelpers.mine(1000);
-      const compoundV2ClaimLogic = new protocols.compoundv2.ClaimLogic(chainId, hre.ethers.provider);
-      const { output } = await compoundV2ClaimLogic.quote({ owner: owner.address });
+      const logicCompoundV2Claim = new compoundv2.ClaimLogic(chainId, hre.ethers.provider);
+      const { output } = await logicCompoundV2Claim.quote({ owner: owner.address });
       expect(output.amountWei).to.be.gt(0);
 
       // 3. build router logics
       const routerLogics: core.IParam.LogicStruct[] = [];
-      routerLogics.push(await compoundV2ClaimLogic.getLogic({ owner: owner.address, output }));
+      routerLogics.push(await logicCompoundV2Claim.build({ owner: owner.address, output }));
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics });

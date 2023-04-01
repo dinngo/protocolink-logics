@@ -10,7 +10,7 @@ export const describe = "Run core or protocol's tests";
 export const handler = async () => {
   // 1. get root path
   const { protocol } = await prompts.protocolPrompt();
-  const rootPath = path.join('src', 'protocols', protocol);
+  const rootPath = path.join('src', protocol);
 
   // 2. run test
   const mocha = new Mocha({ timeout: 30000 });

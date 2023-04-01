@@ -10,7 +10,7 @@ export const describe = "Execute core or protocol's script";
 export async function handler() {
   // 1. get paths
   const { protocol } = await prompts.protocolPrompt();
-  const scriptsPath = path.join(process.cwd(), 'src', 'protocols', protocol, 'scripts');
+  const scriptsPath = path.join(process.cwd(), 'src', protocol, 'scripts');
 
   // 2. get scripts
   const scriptFiles = glob.sync('*.ts', { cwd: scriptsPath, dot: true });

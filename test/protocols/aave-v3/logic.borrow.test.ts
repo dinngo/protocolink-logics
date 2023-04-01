@@ -1,11 +1,11 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
+import * as aavev3 from 'src/aave-v3';
 import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@composable-router/test-helpers';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
 import { expect } from 'chai';
 import * as helpers from './helpers';
 import hre from 'hardhat';
-import * as protocols from 'src/protocols';
 
 describe('Test AaveV3 Borrow Logic', function () {
   let chainId: number;
@@ -24,21 +24,21 @@ describe('Test AaveV3 Borrow Logic', function () {
   const testCases = [
     {
       userIndex: 0,
-      supply: new common.TokenAmount(protocols.aavev3.mainnetTokens.USDC, '5000'),
-      output: new common.TokenAmount(protocols.aavev3.mainnetTokens.WETH, '1'),
-      interestRateMode: protocols.aavev3.InterestRateMode.variable,
+      supply: new common.TokenAmount(aavev3.mainnetTokens.USDC, '5000'),
+      output: new common.TokenAmount(aavev3.mainnetTokens.WETH, '1'),
+      interestRateMode: aavev3.InterestRateMode.variable,
     },
     {
       userIndex: 0,
-      supply: new common.TokenAmount(protocols.aavev3.mainnetTokens.USDC, '5000'),
-      output: new common.TokenAmount(protocols.aavev3.mainnetTokens.ETH, '1'),
-      interestRateMode: protocols.aavev3.InterestRateMode.variable,
+      supply: new common.TokenAmount(aavev3.mainnetTokens.USDC, '5000'),
+      output: new common.TokenAmount(aavev3.mainnetTokens.ETH, '1'),
+      interestRateMode: aavev3.InterestRateMode.variable,
     },
     {
       userIndex: 1,
-      supply: new common.TokenAmount(protocols.aavev3.mainnetTokens.WETH, '1'),
-      output: new common.TokenAmount(protocols.aavev3.mainnetTokens.USDC, '1'),
-      interestRateMode: protocols.aavev3.InterestRateMode.variable,
+      supply: new common.TokenAmount(aavev3.mainnetTokens.WETH, '1'),
+      output: new common.TokenAmount(aavev3.mainnetTokens.USDC, '1'),
+      interestRateMode: aavev3.InterestRateMode.variable,
     },
   ];
 
@@ -55,8 +55,8 @@ describe('Test AaveV3 Borrow Logic', function () {
       // 3. build router logics
       const routerLogics: core.IParam.LogicStruct[] = [];
 
-      const aaveV3Borrow = new protocols.aavev3.BorrowLogic(chainId);
-      routerLogics.push(await aaveV3Borrow.getLogic({ output, interestRateMode }, { account: user.address }));
+      const logicAaveV3Borrow = new aavev3.BorrowLogic(chainId);
+      routerLogics.push(await logicAaveV3Borrow.build({ output, interestRateMode }, { account: user.address }));
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics, tokensReturn });

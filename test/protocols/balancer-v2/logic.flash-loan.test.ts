@@ -1,10 +1,11 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
+import * as balancerv2 from 'src/balancer-v2';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
 import { expect } from 'chai';
 import { getChainId, mainnetTokens, snapshotAndRevertEach } from '@composable-router/test-helpers';
 import hre from 'hardhat';
-import * as protocols from 'src/protocols';
+import * as utility from 'src/utility';
 
 describe('Test BalancerV2 FlashLoan Logic', function () {
   let chainId: number;
@@ -26,12 +27,12 @@ describe('Test BalancerV2 FlashLoan Logic', function () {
     it(`case ${i + 1}`, async function () {
       // 1. build funds and router logics for flash loan
       const flashLoanRouterLogics: core.IParam.LogicStruct[] = [];
-      const utilitySendTokenLogic = new protocols.utility.SendTokenLogic(chainId);
+      const logicUtilitySendToken = new utility.SendTokenLogic(chainId);
       for (const output of outputs.toArray()) {
         flashLoanRouterLogics.push(
-          await utilitySendTokenLogic.getLogic({
+          await logicUtilitySendToken.build({
             input: output,
-            recipient: protocols.balancerv2.getContractAddress(chainId, 'FlashLoanCallbackBalancerV2'),
+            recipient: balancerv2.getContractAddress(chainId, 'FlashLoanCallbackBalancerV2'),
           })
         );
       }
@@ -44,8 +45,8 @@ describe('Test BalancerV2 FlashLoan Logic', function () {
         [],
         true,
       ]);
-      const balancerV2FlashLoan = new protocols.balancerv2.FlashLoanLogic(chainId);
-      routerLogics.push(await balancerV2FlashLoan.getLogic({ outputs, params: userData }));
+      const logicBalancerV2FlashLoan = new balancerv2.FlashLoanLogic(chainId);
+      routerLogics.push(await logicBalancerV2FlashLoan.build({ outputs, params: userData }));
 
       // 3. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics });
