@@ -303,8 +303,8 @@ describe('Test CompoundV3 Repay Logic', function () {
       });
       await expect(repayer.sendTransaction(transactionRequest)).to.not.be.reverted;
       if (amountBps === common.BPS_BASE || repay.amountWei.gte(quotation.input.amountWei)) {
-        const debt = await service.getDebt(marketId, borrower.address);
-        expect(debt).to.eq(0);
+        const borrowBalance = await service.getBorrowBalance(marketId, borrower.address);
+        expect(borrowBalance.amountWei).to.eq(0);
         await expect(repayer.address).to.changeBalance(repay.token, -borrow.amount, 1);
       } else {
         await expect(repayer.address).to.changeBalance(repay.token, -repay.amount);

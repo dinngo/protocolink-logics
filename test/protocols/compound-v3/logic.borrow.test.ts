@@ -91,8 +91,8 @@ describe('Test CompoundV3 Borrow Logic', function () {
         value: funds.native?.amountWei ?? 0,
       });
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
-      const debt = await service.getDebt(marketId, user.address);
-      expect(debt).to.eq(output.amountWei);
+      const borrowBalance = await service.getBorrowBalance(marketId, user.address);
+      expect(borrowBalance.amountWei).to.eq(output.amountWei);
       await expect(user.address).to.changeBalance(output.token, output.amount);
     });
   });

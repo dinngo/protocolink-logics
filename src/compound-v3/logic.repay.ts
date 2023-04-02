@@ -34,11 +34,10 @@ export class RepayLogic extends core.Logic implements core.LogicTokenListInterfa
     const { marketId, borrower, tokenIn } = params;
 
     const service = new Service(this.chainId, this.provider);
-    const debt = await service.getDebt(marketId, borrower);
-    const amountWei = common.calcSlippage(debt, -100); // slightly higher than the current borrowed amount
-    const input = new common.TokenAmount(tokenIn).setWei(amountWei);
+    const borrowBalance = await service.getBorrowBalance(marketId, borrower, tokenIn);
+    borrowBalance.setWei(common.calcSlippage(borrowBalance.amountWei, -100)); // slightly higher than borrowed amount
 
-    return { marketId, borrower, input };
+    return { marketId, borrower, input: borrowBalance };
   }
 
   async build(fields: RepayLogicFields) {
