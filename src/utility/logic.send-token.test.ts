@@ -25,6 +25,12 @@ describe('Utility SendTokenLogic', function () {
     const testCases: LogicTestCase<SendTokenLogicFields>[] = [
       {
         fields: {
+          input: new common.TokenAmount(mainnetTokens.ETH, '1'),
+          recipient: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
+        },
+      },
+      {
+        fields: {
           input: new common.TokenAmount(mainnetTokens.WETH, '1'),
           recipient: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
         },
@@ -33,6 +39,13 @@ describe('Utility SendTokenLogic', function () {
         fields: {
           input: new common.TokenAmount(mainnetTokens.USDC, '1'),
           recipient: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
+        },
+      },
+      {
+        fields: {
+          input: new common.TokenAmount(mainnetTokens.ETH, '1'),
+          recipient: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
+          amountBps: 5000,
         },
       },
       {
@@ -57,16 +70,23 @@ describe('Utility SendTokenLogic', function () {
       }`, async function () {
         const routerLogic = await logic.build(fields);
         const sig = routerLogic.data.substring(0, 10);
-        const { input, amountBps } = fields;
+        const { input, recipient, amountBps } = fields;
 
-        expect(routerLogic.to).to.eq(input.token.address);
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;
-        expect(sig).to.eq(iface.getSighash('transfer'));
+        if (input.token.isNative) {
+          expect(routerLogic.to).to.eq(recipient);
+          expect(routerLogic.data).to.eq('0x');
+          expect(routerLogic.inputs[0].token).to.eq(common.ELASTIC_ADDRESS);
+        } else {
+          expect(routerLogic.to).to.eq(input.token.address);
+          expect(sig).to.eq(iface.getSighash('transfer'));
+        }
         if (amountBps) {
           expect(routerLogic.inputs[0].amountBps).to.eq(amountBps);
-          expect(routerLogic.inputs[0].amountOrOffset).to.eq(32);
+          expect(routerLogic.inputs[0].amountOrOffset).to.eq(input.token.isNative ? constants.MaxUint256 : 32);
         } else {
-          expect(routerLogic.inputs).to.deep.eq([]);
+          expect(routerLogic.inputs[0].amountBps).to.eq(constants.MaxUint256);
+          expect(routerLogic.inputs[0].amountOrOffset).to.eq(input.amountWei);
         }
         expect(routerLogic.approveTo).to.eq(constants.AddressZero);
         expect(routerLogic.callback).to.eq(constants.AddressZero);

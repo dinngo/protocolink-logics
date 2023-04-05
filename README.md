@@ -11,8 +11,8 @@ SDK that build protocol logics for Composable Router
 - Generate protocol's abi TypeScript classes
 
   ```sh
-  # - abi files: src/protocols/{protocol}/abis/*.json
-  # - contracts dir: src/protocols/{protocol}/contracts
+  # - abi files: src/{protocol}/abis/*.json
+  # - contracts dir: src/{protocol}/contracts
   yarn cli typechain
   ```
 

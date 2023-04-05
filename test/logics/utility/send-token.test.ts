@@ -22,8 +22,10 @@ describe('Test Utility SendToken Logic', function () {
   snapshotAndRevertEach();
 
   const testCases = [
+    { input: new common.TokenAmount(mainnetTokens.ETH, '1') },
     { input: new common.TokenAmount(mainnetTokens.WETH, '1') },
     { input: new common.TokenAmount(mainnetTokens.USDC, '1') },
+    { input: new common.TokenAmount(mainnetTokens.ETH, '1'), amountBps: 5000 },
     { input: new common.TokenAmount(mainnetTokens.WETH, '1'), amountBps: 5000 },
     { input: new common.TokenAmount(mainnetTokens.USDC, '1'), amountBps: 5000 },
   ];

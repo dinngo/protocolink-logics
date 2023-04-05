@@ -1,8 +1,8 @@
+import { BigNumberish, constants, utils } from 'ethers';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
-import { utils } from 'ethers';
 
 axiosRetry(axios, { retries: 5, retryDelay: axiosRetry.exponentialDelay });
 
@@ -38,12 +38,19 @@ export class SendTokenLogic extends core.Logic implements core.LogicTokenListInt
   async build(fields: SendTokenLogicFields) {
     const { input, recipient, amountBps } = fields;
 
-    const to = input.token.address;
-    const data = common.ERC20__factory.createInterface().encodeFunctionData('transfer', [recipient, input.amountWei]);
-    const inputs = [];
-    if (amountBps) {
-      inputs.push(core.newLogicInput({ input, amountBps, amountOffset: common.getParamOffset(1) }));
+    let to: string;
+    let data: string;
+    let amountOffset: BigNumberish | undefined;
+    if (input.token.isNative) {
+      to = recipient;
+      data = '0x';
+      if (amountBps) amountOffset = constants.MaxUint256;
+    } else {
+      to = input.token.address;
+      data = common.ERC20__factory.createInterface().encodeFunctionData('transfer', [recipient, input.amountWei]);
+      if (amountBps) amountOffset = common.getParamOffset(1);
     }
+    const inputs = [core.newLogicInput({ input, amountBps, amountOffset })];
 
     return core.newLogic({ to, data, inputs });
   }
