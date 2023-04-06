@@ -1,9 +1,10 @@
 import { BuildSwapTxInput, constructSimpleSDK } from '@paraswap/sdk';
+import { TokenList } from '@uniswap/token-lists';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
 import * as common from '@composable-router/common';
 import * as core from '@composable-router/core';
-import { getContractAddress } from './config';
+import { getContractAddress, tokenListUrlsMap } from './config';
 
 axiosRetry(axios, { retries: 5, retryDelay: axiosRetry.exponentialDelay });
 
@@ -25,6 +26,31 @@ export class SwapTokenLogic extends core.Logic implements core.LogicOracleInterf
 
   get sdk() {
     return constructSimpleSDK({ chainId: this.chainId, axios });
+  }
+
+  async getTokenList() {
+    const tokenListUrls = tokenListUrlsMap[this.chainId];
+    const tokenLists = await Promise.all(tokenListUrls.map((tokenListUrl) => axios.get<TokenList>(tokenListUrl)));
+
+    const tmp: Record<string, boolean> = { [this.nativeToken.address]: true };
+    const tokenList: common.TokenTypes[] = [this.nativeToken];
+    for (const { data } of tokenLists) {
+      for (const token of data.tokens) {
+        if (tmp[token.address] || token.chainId !== this.chainId || !token.name || !token.symbol || !token.decimals) {
+          continue;
+        }
+        tokenList.push({
+          chainId: token.chainId,
+          address: token.address,
+          decimals: token.decimals,
+          symbol: token.symbol,
+          name: token.name,
+        });
+        tmp[token.address] = true;
+      }
+    }
+
+    return tokenList;
   }
 
   async quote(params: SwapTokenLogicParams) {

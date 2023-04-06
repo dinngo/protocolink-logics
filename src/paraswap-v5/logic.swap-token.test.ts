@@ -7,10 +7,20 @@ import { getContractAddress } from './config';
 import { mainnetTokens } from '@composable-router/test-helpers';
 
 describe('ParaswapV5 SwapTokenLogic', function () {
-  const chainId = common.ChainId.mainnet;
-  const logic = new SwapTokenLogic(chainId);
+  context('Test getTokenList', async function () {
+    SwapTokenLogic.supportedChainIds.forEach((chainId) => {
+      it(`network: ${common.getNetworkId(chainId)}`, async function () {
+        const logic = new SwapTokenLogic(chainId);
+        const tokenList = await logic.getTokenList();
+        expect(tokenList).to.have.lengthOf.above(0);
+      });
+    });
+  });
 
   context('Test build', function () {
+    const chainId = common.ChainId.mainnet;
+    const logic = new SwapTokenLogic(chainId);
+
     const testCases: LogicTestCase<SwapTokenLogicFields, SwapTokenLogicOptions>[] = [
       {
         fields: {
