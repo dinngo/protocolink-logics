@@ -8,10 +8,19 @@ import { getContractAddress } from './config';
 import { mainnetTokens } from '@composable-router/test-helpers';
 
 describe('BalancerV2 FlashLoanLogic', function () {
-  const chainId = common.ChainId.mainnet;
-  const logic = new FlashLoanLogic(chainId);
+  context('Test getTokenList', async function () {
+    FlashLoanLogic.supportedChainIds.forEach((chainId) => {
+      it(`network: ${common.getNetworkId(chainId)}`, async function () {
+        const logic = new FlashLoanLogic(chainId);
+        const tokenList = await logic.getTokenList();
+        expect(tokenList).to.have.lengthOf.above(0);
+      });
+    });
+  });
 
   context('Test build', function () {
+    const chainId = common.ChainId.mainnet;
+    const logic = new FlashLoanLogic(chainId);
     const iface = Vault__factory.createInterface();
 
     const testCases: LogicTestCase<FlashLoanLogicFields>[] = [
