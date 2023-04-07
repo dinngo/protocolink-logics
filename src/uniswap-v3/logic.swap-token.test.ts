@@ -7,11 +7,11 @@ import {
   SwapTokenLogicOptions,
   isSwapTokenLogicSingleHopFields,
 } from './logic.swap-token';
-import * as common from '@composable-router/common';
+import * as common from '@furucombo/composable-router-common';
 import { constants, utils } from 'ethers';
-import * as core from '@composable-router/core';
+import * as core from '@furucombo/composable-router-core';
 import { expect } from 'chai';
-import { mainnetTokens } from '@composable-router/test-helpers';
+import { mainnetTokens } from '@furucombo/composable-router-test-helpers';
 
 describe('UniswapV3 SwapTokenLogic', function () {
   context('Test getTokenList', async function () {

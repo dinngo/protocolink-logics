@@ -9,25 +9,6 @@
   dependencies:
     regenerator-runtime "^0.13.11"
 
-"@composable-router/common@file:./packages/common":
-  version "0.1.0"
-  dependencies:
-    "@types/lodash" "^4.14.191"
-    bignumber.js "^9.1.1"
-    ethers "^5.7.2"
-    lodash "^4.17.21"
-    tiny-invariant "^1.3.1"
-    type-fest "^3.6.0"
-
-"@composable-router/core@file:./packages/core":
-  version "0.1.0"
-  dependencies:
-    ethers "^5.7.2"
-    tiny-invariant "^1.3.1"
-
-"@composable-router/test-helpers@file:./packages/test-helpers":
-  version "0.1.0"
-
 "@cspotcode/source-map-support@^0.8.0":
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/@cspotcode/source-map-support/-/source-map-support-0.8.1.tgz#00629c35a688e05a88b1cda684fb9d5e73f000a1"
@@ -391,6 +372,43 @@
     "@ethersproject/logger" "^5.7.0"
     "@ethersproject/properties" "^5.7.0"
     "@ethersproject/strings" "^5.7.0"
+
+"@furucombo/composable-router-common@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@furucombo/composable-router-common/-/composable-router-common-0.1.0.tgz#ed61623b5d24568482a9a05abd991f776aa9e010"
+  integrity sha512-81+1Z3P1Kmv6H3NIlM1sLVRY/guaZHo4C1HaE+XqfjFKfo1CbttRQ/utsi5N0/MMlPRoMFilvj4Ci5GcRNiufQ==
+  dependencies:
+    "@types/lodash" "^4.14.191"
+    bignumber.js "^9.1.1"
+    ethers "^5.7.2"
+    lodash "^4.17.21"
+    tiny-invariant "^1.3.1"
+    type-fest "^3.6.0"
+
+"@furucombo/composable-router-core@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@furucombo/composable-router-core/-/composable-router-core-0.1.0.tgz#4ebd878b5aa55d123d19c913c3f5a6f61a85e1e5"
+  integrity sha512-Tj2nYUCPrUUfS/OxiU7nYcnOIG4atHQ7/3tbWKuwY5gE1phAqPSS9aIxFyqkhgBYm+kHP1+rfjoZAzl7rsxXow==
+  dependencies:
+    "@furucombo/composable-router-common" "^0.1.0"
+    ethers "^5.7.2"
+    tiny-invariant "^1.3.1"
+
+"@furucombo/composable-router-test-helpers@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@furucombo/composable-router-test-helpers/-/composable-router-test-helpers-0.1.0.tgz#54d76094622b14807ca06856c16830d5baa47b75"
+  integrity sha512-uCGPcNFKbKljiMFy8TZn7pTzYIJQss4kpKBaztWtotZDFbrkHCZ6thvsMX4FAXvRWCkohd8wYUi9rNC2Zhm5PA==
+  dependencies:
+    "@furucombo/composable-router-common" "^0.1.0"
+    "@nomicfoundation/hardhat-chai-matchers" "^1.0.6"
+    "@nomicfoundation/hardhat-network-helpers" "^1.0.8"
+    "@nomiclabs/hardhat-ethers" "^2.2.2"
+    "@types/chai" "^4.3.4"
+    "@types/mocha" "^10.0.1"
+    chai "^4.3.7"
+    ethers "^5.7.2"
+    hardhat "^2.12.7"
+    mocha "^10.2.0"
 
 "@humanwhocodes/config-array@^0.11.8":
   version "0.11.8"

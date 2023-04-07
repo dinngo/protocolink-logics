@@ -1,7 +1,7 @@
 import { COMP } from './tokens';
 import { CompoundLens__factory, Comptroller__factory } from './contracts';
-import * as common from '@composable-router/common';
-import * as core from '@composable-router/core';
+import * as common from '@furucombo/composable-router-common';
+import * as core from '@furucombo/composable-router-core';
 import { getContractAddress } from './config';
 
 export type ClaimLogicParams = core.ClaimParams;

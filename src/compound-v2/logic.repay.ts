@@ -1,7 +1,7 @@
 import { BigNumberish, constants } from 'ethers';
 import { CErc20__factory, CEther__factory } from './contracts';
-import * as common from '@composable-router/common';
-import * as core from '@composable-router/core';
+import * as common from '@furucombo/composable-router-common';
+import * as core from '@furucombo/composable-router-core';
 import { toCToken, underlyingTokens } from './tokens';
 
 export type RepayLogicParams = core.RepayParams;

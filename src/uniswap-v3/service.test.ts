@@ -2,7 +2,7 @@ import { Currency, CurrencyAmount, TradeType } from '@uniswap/sdk-core';
 import JSBI from 'jsbi';
 import { Service } from './service';
 import { WRAPPED_NATIVE_CURRENCY, mainnetTokens } from './constants';
-import * as common from '@composable-router/common';
+import * as common from '@furucombo/composable-router-common';
 import { expect } from 'chai';
 
 function newTestCaseTitle(

@@ -6,7 +6,7 @@ import {
   ProtocolDataProvider__factory,
 } from './contracts';
 import { InterestRateMode, ReserveTokens, ReserveTokensAddress } from './types';
-import * as common from '@composable-router/common';
+import * as common from '@furucombo/composable-router-common';
 import { constants } from 'ethers';
 import { getContractAddress } from './config';
 

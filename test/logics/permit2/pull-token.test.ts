@@ -1,7 +1,12 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@composable-router/test-helpers';
-import * as common from '@composable-router/common';
-import * as core from '@composable-router/core';
+import {
+  claimToken,
+  getChainId,
+  mainnetTokens,
+  snapshotAndRevertEach,
+} from '@furucombo/composable-router-test-helpers';
+import * as common from '@furucombo/composable-router-common';
+import * as core from '@furucombo/composable-router-core';
 import { expect } from 'chai';
 import hre from 'hardhat';
 import * as utils from 'test/utils';

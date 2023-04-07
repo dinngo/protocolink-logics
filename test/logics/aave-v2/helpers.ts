@@ -1,8 +1,8 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import * as aavev2 from 'src/aave-v2';
-import { approve } from '@composable-router/test-helpers';
-import * as common from '@composable-router/common';
-import * as core from '@composable-router/core';
+import { approve } from '@furucombo/composable-router-test-helpers';
+import * as common from '@furucombo/composable-router-common';
+import * as core from '@furucombo/composable-router-core';
 import { expect } from 'chai';
 import hre from 'hardhat';
 

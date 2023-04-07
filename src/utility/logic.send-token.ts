@@ -1,8 +1,8 @@
 import { BigNumberish, constants, utils } from 'ethers';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
-import * as common from '@composable-router/common';
-import * as core from '@composable-router/core';
+import * as common from '@furucombo/composable-router-common';
+import * as core from '@furucombo/composable-router-core';
 
 axiosRetry(axios, { retries: 5, retryDelay: axiosRetry.exponentialDelay });
 

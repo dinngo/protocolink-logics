@@ -2,7 +2,7 @@ import { CErc20__factory, CEther__factory } from './contracts';
 import { LogicTestCase } from 'test/types';
 import { SupplyLogic, SupplyLogicFields } from './logic.supply';
 import { cTokens, underlyingTokens } from './tokens';
-import * as common from '@composable-router/common';
+import * as common from '@furucombo/composable-router-common';
 import { constants, utils } from 'ethers';
 import { expect } from 'chai';
 

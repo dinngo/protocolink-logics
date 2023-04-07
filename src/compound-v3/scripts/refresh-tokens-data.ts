@@ -1,5 +1,5 @@
 import { Service } from '../service';
-import * as common from '@composable-router/common';
+import * as common from '@furucombo/composable-router-common';
 import fs from 'fs-extra';
 import { getMarkets } from '../config';
 import { resolve } from 'path';

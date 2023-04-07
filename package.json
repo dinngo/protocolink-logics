@@ -1,11 +1,12 @@
 {
-  "name": "@composable-router/protocol-logics",
+  "name": "@furucombo/composable-router-logics",
   "version": "0.1.0",
   "description": "An SDK that build protocol logics for composable router",
   "keywords": [
+    "furucombo",
     "composable-router"
   ],
-  "repository": "https://github.com/dinngodev/protocol-logics.git",
+  "repository": "https://github.com/dinngo/composable-router-logics.git",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -23,6 +24,8 @@
     "test:unit": "mocha --recursive src"
   },
   "dependencies": {
+    "@furucombo/composable-router-common": "^0.1.0",
+    "@furucombo/composable-router-core": "^0.1.0",
     "@paraswap/sdk": "^6.1.2",
     "@types/lodash": "^4.14.191",
     "@uniswap/permit2-sdk": "^1.2.0",
@@ -38,9 +41,7 @@
     "type-fest": "^3.6.0"
   },
   "devDependencies": {
-    "@composable-router/common": "file:./packages/common",
-    "@composable-router/core": "file:./packages/core",
-    "@composable-router/test-helpers": "file:./packages/test-helpers",
+    "@furucombo/composable-router-test-helpers": "^0.1.0",
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.6",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.8",
     "@nomiclabs/hardhat-ethers": "^2.2.2",

@@ -2,7 +2,7 @@ import { CErc20__factory } from './contracts';
 import { LogicTestCase } from 'test/types';
 import { WithdrawLogic, WithdrawLogicFields } from './logic.withdraw';
 import { cTokens, underlyingTokens } from './tokens';
-import * as common from '@composable-router/common';
+import * as common from '@furucombo/composable-router-common';
 import { constants, utils } from 'ethers';
 import { expect } from 'chai';
 

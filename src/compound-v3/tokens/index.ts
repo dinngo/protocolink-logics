@@ -1,4 +1,4 @@
-import * as common from '@composable-router/common';
+import * as common from '@furucombo/composable-router-common';
 import mainnetTokensJSON from './data/mainnet.json';
 import polygonTokensJSON from './data/polygon.json';
 

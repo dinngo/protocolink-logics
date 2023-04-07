@@ -1,9 +1,9 @@
 import { LogicTestCase } from 'test/types';
 import { WrappedNativeTokenLogic, WrappedNativeTokenLogicFields } from './logic.wrapped-native-token';
-import * as common from '@composable-router/common';
+import * as common from '@furucombo/composable-router-common';
 import { constants, utils } from 'ethers';
 import { expect } from 'chai';
-import { mainnetTokens } from '@composable-router/test-helpers';
+import { mainnetTokens } from '@furucombo/composable-router-test-helpers';
 
 describe('Utility WrappedNativeTokenLogic', function () {
   context('Test getTokenList', async function () {

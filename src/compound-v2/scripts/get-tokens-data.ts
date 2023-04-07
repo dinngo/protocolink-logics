@@ -1,5 +1,5 @@
 import { CErc20__factory } from '../contracts';
-import * as common from '@composable-router/common';
+import * as common from '@furucombo/composable-router-common';
 import fs from 'fs-extra';
 import { resolve } from 'path';
 

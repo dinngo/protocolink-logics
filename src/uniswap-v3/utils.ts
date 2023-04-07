@@ -7,7 +7,7 @@ import {
 } from './constants';
 import { Currency, Token } from '@uniswap/sdk-core';
 import { FeeAmount, Pool, Route } from '@uniswap/v3-sdk';
-import * as common from '@composable-router/common';
+import * as common from '@furucombo/composable-router-common';
 
 // https://github.com/Uniswap/interface/blob/v4.204.5/src/hooks/useAllCurrencyCombinations.ts#L6
 export function getAllCurrencyCombinations(chainId: number, currencyA: Currency, currencyB: Currency) {

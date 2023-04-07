@@ -1,8 +1,8 @@
 import { AllowanceTransfer, MaxUint160, PermitBatch, PermitDetails, PermitSingle } from '@uniswap/permit2-sdk';
 import { PERMIT_EXPIRATION, PERMIT_SIG_DEADLINE } from './constants';
 import { Permit2__factory } from './contracts';
-import * as common from '@composable-router/common';
-import * as core from '@composable-router/core';
+import * as common from '@furucombo/composable-router-common';
+import * as core from '@furucombo/composable-router-core';
 import { getContractAddress } from './config';
 import { getDeadline, isPermitSingle } from './utils';
 

@@ -1,6 +1,6 @@
 import { Token, WETH9 } from '@uniswap/sdk-core';
 import arbitrumTokensJSON from './data/arbitrum.json';
-import * as common from '@composable-router/common';
+import * as common from '@furucombo/composable-router-common';
 import mainnetTokensJSON from './data/mainnet.json';
 import optimismTokensJSON from './data/optimism.json';
 import polygonTokensJSON from './data/polygon.json';

@@ -3,7 +3,7 @@ import { FACTORY_ADDRESS, FeeAmount, Pool, Route, SwapQuoter, computePoolAddress
 import JSBI from 'jsbi';
 import { QUOTER_ADDRESS } from './constants';
 import { UniswapV3Pool__factory } from './contracts';
-import * as common from '@composable-router/common';
+import * as common from '@furucombo/composable-router-common';
 import { computeAllRoutes, getAllCurrencyCombinationsWithAllFees } from './utils';
 import invariant from 'tiny-invariant';
 

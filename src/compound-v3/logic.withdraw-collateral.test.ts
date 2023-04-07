@@ -2,9 +2,9 @@ import { Comet__factory } from './contracts';
 import { LogicTestCase } from 'test/types';
 import { MarketId, getMarket } from './config';
 import { WithdrawCollateralLogic, WithdrawCollateralLogicFields } from './logic.withdraw-collateral';
-import * as common from '@composable-router/common';
+import * as common from '@furucombo/composable-router-common';
 import { constants, utils } from 'ethers';
-import * as core from '@composable-router/core';
+import * as core from '@furucombo/composable-router-core';
 import { expect } from 'chai';
 import { mainnetTokens } from './tokens';
 

@@ -2,7 +2,7 @@ import { COMP } from './tokens';
 import { ClaimLogic, ClaimLogicFields } from './logic.claim';
 import { Comptroller__factory } from './contracts';
 import { LogicTestCase } from 'test/types';
-import * as common from '@composable-router/common';
+import * as common from '@furucombo/composable-router-common';
 import { constants, utils } from 'ethers';
 import { expect } from 'chai';
 import { getContractAddress } from './config';

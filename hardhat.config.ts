@@ -1,5 +1,5 @@
 import '@nomicfoundation/hardhat-chai-matchers';
-import '@composable-router/test-helpers';
+import '@furucombo/composable-router-test-helpers';
 
 import { HardhatUserConfig } from 'hardhat/config';
 import { setup } from 'test/hooks';

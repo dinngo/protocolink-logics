@@ -1,7 +1,7 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { approves } from '@composable-router/test-helpers';
-import * as common from '@composable-router/common';
-import * as core from '@composable-router/core';
+import { approves } from '@furucombo/composable-router-test-helpers';
+import * as common from '@furucombo/composable-router-common';
+import * as core from '@furucombo/composable-router-core';
 import hre from 'hardhat';
 import * as permit2 from 'src/permit2';
 

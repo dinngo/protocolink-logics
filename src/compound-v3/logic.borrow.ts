@@ -1,7 +1,7 @@
 import { Comet__factory } from './contracts';
 import { Service } from './service';
-import * as common from '@composable-router/common';
-import * as core from '@composable-router/core';
+import * as common from '@furucombo/composable-router-common';
+import * as core from '@furucombo/composable-router-core';
 import { getMarket, getMarkets } from './config';
 
 export type BorrowLogicFields = core.TokenOutFields<{ marketId: string }>;

@@ -1,6 +1,6 @@
 import { Token, WETH9 } from '@uniswap/sdk-core';
 import { WRAPPED_NATIVE_CURRENCY, arbitrumTokens, mainnetTokens, optimismTokens, polygonTokens } from './tokens';
-import * as common from '@composable-router/common';
+import * as common from '@furucombo/composable-router-common';
 
 type ChainTokenList = {
   readonly [chainId: number]: Token[];

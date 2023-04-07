@@ -8,8 +8,8 @@ import { SwapRouter__factory } from './contracts';
 import { TokenList } from '@uniswap/token-lists';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
-import * as common from '@composable-router/common';
-import * as core from '@composable-router/core';
+import * as common from '@furucombo/composable-router-common';
+import * as core from '@furucombo/composable-router-core';
 import { encodeRouteToPath } from '@uniswap/v3-sdk';
 import { getDeadline } from './utils';
 

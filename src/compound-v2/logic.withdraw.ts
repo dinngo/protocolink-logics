@@ -1,7 +1,7 @@
 import { BigNumber } from 'ethers';
 import { CErc20__factory } from './contracts';
-import * as common from '@composable-router/common';
-import * as core from '@composable-router/core';
+import * as common from '@furucombo/composable-router-common';
+import * as core from '@furucombo/composable-router-core';
 import { tokenPairs } from './tokens';
 
 export type WithdrawLogicParams = core.TokenToTokenExactInParams;
