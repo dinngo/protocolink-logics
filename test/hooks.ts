@@ -23,22 +23,20 @@ export async function setup() {
   // deploy FlashLoanCallbackAaveV2
   const aaveV2Service = new aavev2.Service(chainId, hre.ethers.provider);
   const aaveV2AddressesProvider = await aaveV2Service.protocolDataProvider.ADDRESSES_PROVIDER();
-
   const flashLoanCallbackAaveV2 = await (
     await new aavev2.FlashLoanCallbackAaveV2__factory()
       .connect(deployer)
-      .deploy(core.getContractAddress(chainId, 'Router'), aaveV2AddressesProvider)
+      .deploy(router.address, aaveV2AddressesProvider)
   ).deployed();
   aavev2.setContractAddress(chainId, 'FlashLoanCallbackAaveV2', flashLoanCallbackAaveV2.address);
 
   // deploy FlashLoanCallbackAaveV3
   const aaveV3Service = new aavev3.Service(chainId, hre.ethers.provider);
   const aaveV3AddressesProvider = await aaveV3Service.poolDataProvider.ADDRESSES_PROVIDER();
-
   const flashLoanCallbackAaveV3 = await (
     await new aavev3.FlashLoanCallbackAaveV3__factory()
       .connect(deployer)
-      .deploy(core.getContractAddress(chainId, 'Router'), aaveV3AddressesProvider)
+      .deploy(router.address, aaveV3AddressesProvider)
   ).deployed();
   aavev3.setContractAddress(chainId, 'FlashLoanCallbackAaveV3', flashLoanCallbackAaveV3.address);
 
@@ -46,7 +44,7 @@ export async function setup() {
   const flashLoanCallbackBalancerV2 = await (
     await new balancerv2.FlashLoanCallbackBalancerV2__factory()
       .connect(deployer)
-      .deploy(core.getContractAddress(chainId, 'Router'), balancerv2.getContractAddress(chainId, 'Vault'))
+      .deploy(router.address, balancerv2.getContractAddress(chainId, 'Vault'))
   ).deployed();
   balancerv2.setContractAddress(chainId, 'FlashLoanCallbackBalancerV2', flashLoanCallbackBalancerV2.address);
 }

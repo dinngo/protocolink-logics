@@ -6,7 +6,7 @@ type ContractNames = 'PoolDataProvider' | 'FlashLoanCallbackAaveV3';
 export const contractAddressMap: Record<number, { [k in ContractNames]: string }> = {
   [common.ChainId.mainnet]: {
     PoolDataProvider: '0x7B4EB56E7CD4b454BA8ff71E4518426369a138a3',
-    FlashLoanCallbackAaveV3: '0xcfaa4D5C152Ac3DAc3e2feAAC9Cd70709f350982',
+    FlashLoanCallbackAaveV3: '0x8400b485e75443806F62A1069AFd8390192dEE4a',
   },
   [common.ChainId.polygon]: {
     PoolDataProvider: '0x69FA688f1Dc47d4B5d8029D5a35FB7a548310654',

@@ -24,8 +24,9 @@
     "test:unit": "mocha --recursive src"
   },
   "dependencies": {
-    "@furucombo/composable-router-common": "^0.1.0",
-    "@furucombo/composable-router-core": "^0.1.0",
+    "@changesets/cli": "^2.26.1",
+    "@furucombo/composable-router-common": "^0.1.1",
+    "@furucombo/composable-router-core": "^0.1.1",
     "@paraswap/sdk": "^6.1.2",
     "@types/lodash": "^4.14.191",
     "@uniswap/permit2-sdk": "^1.2.0",
@@ -41,7 +42,7 @@
     "type-fest": "^3.6.0"
   },
   "devDependencies": {
-    "@furucombo/composable-router-test-helpers": "^0.1.0",
+    "@furucombo/composable-router-test-helpers": "^0.1.1",
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.6",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.8",
     "@nomiclabs/hardhat-ethers": "^2.2.2",

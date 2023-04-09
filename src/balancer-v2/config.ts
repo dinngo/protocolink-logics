@@ -6,7 +6,7 @@ type ContractNames = 'Vault' | 'FlashLoanCallbackBalancerV2';
 export const contractAddressMap: Record<number, { [k in ContractNames]: string }> = {
   [common.ChainId.mainnet]: {
     Vault: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-    FlashLoanCallbackBalancerV2: '0x3AC9d552Dab7b2FF2980F59C6735CAB9F1fF4136',
+    FlashLoanCallbackBalancerV2: '0x6b0C384B0495f8f5d713091a0185E182298eE74A',
   },
   [common.ChainId.polygon]: {
     Vault: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',

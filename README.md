@@ -1,10 +1,10 @@
-# Protocol Logics
+# @furucombo/composable-router-logics
 
 [![Lint](https://github.com/dinngo/composable-router-logics/actions/workflows/lint.yml/badge.svg)](https://github.com/dinngo/composable-router-logics/actions/workflows/lint.yml)
 [![Unit Test](https://github.com/dinngo/composable-router-logics/actions/workflows/unit-test.yml/badge.svg)](https://github.com/dinngo/composable-router-logics/actions/workflows/unit-test.yml)
 [![E2E Test](https://github.com/dinngo/composable-router-logics/actions/workflows/e2e-test.yml/badge.svg)](https://github.com/dinngo/composable-router-logics/actions/workflows/e2e-test.yml)
 
-SDK that build protocol logics for Composable Router
+An SDK that build protocol logics for composable router
 
 ## CLI
 
