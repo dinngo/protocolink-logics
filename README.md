@@ -33,3 +33,17 @@ An SDK that build protocol logics for composable router
 ```sh
 yarn hardhat test [test file]
 ```
+
+## Install
+
+Install the package via `npm`:
+
+```sh
+npm install --save-dev @furucombo/composable-router-logics
+```
+
+or `yarn`:
+
+```sh
+yarn add --dev @furucombo/composable-router-logics
+```
