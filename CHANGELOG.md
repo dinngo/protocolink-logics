@@ -1,5 +1,12 @@
 # @furucombo/composable-router-logics
 
+## 0.1.2
+
+### Patch Changes
+
+- 800aa21: move axios to src/http.ts
+- 3c65eaf: add logics' token list type
+
 ## 0.1.1
 
 ### Patch Changes
