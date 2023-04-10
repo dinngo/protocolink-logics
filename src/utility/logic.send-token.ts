@@ -6,6 +6,8 @@ import * as core from '@furucombo/composable-router-core';
 
 axiosRetry(axios, { retries: 5, retryDelay: axiosRetry.exponentialDelay });
 
+export type SendTokenLogicTokenList = common.Token[];
+
 export type SendTokenLogicFields = core.TokenToUserFields;
 
 @core.LogicDefinitionDecorator()
@@ -23,16 +25,19 @@ export class SendTokenLogic extends core.Logic implements core.LogicTokenListInt
     const { data } = await axios.get<{
       tokens: Record<string, { symbol: string; name: string; decimals: number; address: string }>;
     }>(`https://api.1inch.io/v5.0/${this.chainId}/tokens`);
-    const tokens = Object.keys(data.tokens).map((key) => {
+
+    const tokenList: SendTokenLogicTokenList = [];
+    Object.keys(data.tokens).forEach((key) => {
       const token = data.tokens[key];
       const address = utils.getAddress(token.address);
-      if (address === common.ELASTIC_ADDRESS) return this.nativeToken;
-      return address === common.ELASTIC_ADDRESS
-        ? this.nativeToken
-        : new common.Token(this.chainId, address, token.decimals, token.symbol, token.name);
+      tokenList.push(
+        address === common.ELASTIC_ADDRESS
+          ? this.nativeToken
+          : new common.Token(this.chainId, address, token.decimals, token.symbol, token.name)
+      );
     });
 
-    return tokens;
+    return tokenList;
   }
 
   async build(fields: SendTokenLogicFields) {

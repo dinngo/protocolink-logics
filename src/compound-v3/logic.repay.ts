@@ -5,6 +5,8 @@ import { constants } from 'ethers';
 import * as core from '@furucombo/composable-router-core';
 import { getMarket, getMarkets } from './config';
 
+export type RepayLogicTokenList = Record<string, common.Token[]>;
+
 export type RepayLogicParams = core.RepayParams<{ marketId: string }>;
 
 export type RepayLogicFields = core.RepayFields<{ marketId: string }>;
@@ -14,7 +16,7 @@ export class RepayLogic extends core.Logic implements core.LogicTokenListInterfa
   static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon];
 
   async getTokenList() {
-    const tokenList: Record<string, common.Token[]> = {};
+    const tokenList: RepayLogicTokenList = {};
 
     const markets = getMarkets(this.chainId);
     const service = new Service(this.chainId, this.provider);

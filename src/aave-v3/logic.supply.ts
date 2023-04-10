@@ -3,6 +3,8 @@ import { Service } from './service';
 import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
 
+export type SupplyLogicTokenList = [common.Token, common.Token][];
+
 export type SupplyLogicParams = core.TokenToTokenExactInParams;
 
 export type SupplyLogicFields = core.TokenToTokenExactInFields<{ referralCode?: number }>;
@@ -23,7 +25,7 @@ export class SupplyLogic extends core.Logic implements core.LogicTokenListInterf
     const service = new Service(this.chainId, this.provider);
     const reserveTokens = await service.getReserveTokens();
 
-    const tokenList: [common.Token, common.Token][] = [];
+    const tokenList: SupplyLogicTokenList = [];
     for (const reserveToken of reserveTokens) {
       if (reserveToken.asset.isWrapped) {
         tokenList.push([reserveToken.asset.unwrapped, reserveToken.aToken]);

@@ -3,6 +3,8 @@ import { Service } from './service';
 import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
 
+export type DepositLogicTokenList = [common.Token, common.Token][];
+
 export type DepositLogicParams = core.TokenToTokenExactInParams;
 
 export type DepositLogicFields = core.TokenToTokenExactInFields<{ referralCode?: number }>;
@@ -17,7 +19,7 @@ export class DepositLogic extends core.Logic implements core.LogicTokenListInter
     const service = new Service(this.chainId, this.provider);
     const reserveTokens = await service.getReserveTokens();
 
-    const tokenList: [common.Token, common.Token][] = [];
+    const tokenList: DepositLogicTokenList = [];
     for (const reserveToken of reserveTokens) {
       if (reserveToken.asset.isWrapped) {
         tokenList.push([reserveToken.asset.unwrapped, reserveToken.aToken]);

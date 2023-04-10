@@ -4,6 +4,8 @@ import { Service } from './service';
 import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
 
+export type BorrowLogicTokenList = common.Token[];
+
 export type BorrowLogicFields = core.TokenOutFields<{ interestRateMode: InterestRateMode; referralCode?: number }>;
 
 export type BorrowLogicOptions = Pick<core.GlobalOptions, 'account'>;
@@ -22,7 +24,7 @@ export class BorrowLogic extends core.Logic implements core.LogicTokenListInterf
     const service = new Service(this.chainId, this.provider);
     const tokens = await service.getAssets();
 
-    const tokenList: common.Token[] = [];
+    const tokenList: BorrowLogicTokenList = [];
     for (const token of tokens) {
       if (token.isWrapped) {
         tokenList.push(token.unwrapped);

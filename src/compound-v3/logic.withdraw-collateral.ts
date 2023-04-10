@@ -4,6 +4,8 @@ import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
 import { getMarket, getMarkets } from './config';
 
+export type WithdrawCollateralLogicTokenList = Record<string, common.Token[]>;
+
 export type WithdrawCollateralLogicFields = core.TokenOutFields<{ marketId: string }>;
 
 export type WithdrawCollateralLogicOptions = Pick<core.GlobalOptions, 'account'>;
@@ -13,7 +15,7 @@ export class WithdrawCollateralLogic extends core.Logic implements core.LogicTok
   static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon];
 
   async getTokenList() {
-    const tokenList: Record<string, common.Token[]> = {};
+    const tokenList: WithdrawCollateralLogicTokenList = {};
 
     const service = new Service(this.chainId, this.provider);
     const markets = getMarkets(this.chainId);

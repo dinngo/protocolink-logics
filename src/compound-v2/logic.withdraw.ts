@@ -4,6 +4,8 @@ import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
 import { tokenPairs } from './tokens';
 
+export type WithdrawLogicTokenList = [common.Token, common.Token][];
+
 export type WithdrawLogicParams = core.TokenToTokenExactInParams;
 
 export type WithdrawLogicFields = core.TokenToTokenExactInFields;
@@ -13,7 +15,12 @@ export class WithdrawLogic extends core.Logic implements core.LogicTokenListInte
   static readonly supportedChainIds = [common.ChainId.mainnet];
 
   getTokenList() {
-    return tokenPairs.map((tokenPair) => [tokenPair.cToken, tokenPair.underlyingToken]);
+    const tokenList: WithdrawLogicTokenList = tokenPairs.map(({ underlyingToken, cToken }) => [
+      cToken,
+      underlyingToken,
+    ]);
+
+    return tokenList;
   }
 
   async quote(params: WithdrawLogicParams) {

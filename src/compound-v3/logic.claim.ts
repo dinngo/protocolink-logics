@@ -5,6 +5,8 @@ import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
 import { getContractAddress, getMarket } from './config';
 
+export type ClaimLogicTokenList = [common.Token];
+
 export type ClaimLogicParams = core.ClaimParams<{ marketId: string }>;
 
 export type ClaimLogicFields = core.ClaimFields<{ marketId: string }>;
@@ -16,7 +18,8 @@ export class ClaimLogic extends core.Logic implements core.LogicTokenListInterfa
   static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon];
 
   async getTokenList() {
-    return [COMP(this.chainId)];
+    const tokenList: ClaimLogicTokenList = [COMP(this.chainId)];
+    return tokenList;
   }
 
   async quote(params: ClaimLogicParams) {

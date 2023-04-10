@@ -6,6 +6,8 @@ import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
 import { getContractAddress } from './config';
 
+export type FlashLoanLogicTokenList = common.Token[];
+
 export type FlashLoanLogicFields = core.FlashLoanFields<{ referralCode?: number }>;
 
 @core.LogicDefinitionDecorator()
@@ -14,7 +16,7 @@ export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInt
 
   async getTokenList() {
     const service = new Service(this.chainId, this.provider);
-    const tokens = await service.getAssets();
+    const tokens: FlashLoanLogicTokenList = await service.getAssets();
 
     return tokens;
   }

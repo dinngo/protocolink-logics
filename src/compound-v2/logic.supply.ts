@@ -4,6 +4,8 @@ import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
 import { tokenPairs } from './tokens';
 
+export type SupplyLogicTokenList = [common.Token, common.Token][];
+
 export type SupplyLogicParams = core.TokenToTokenExactInParams;
 
 export type SupplyLogicFields = core.TokenToTokenExactInFields;
@@ -13,7 +15,8 @@ export class SupplyLogic extends core.Logic implements core.LogicTokenListInterf
   static readonly supportedChainIds = [common.ChainId.mainnet];
 
   getTokenList() {
-    return tokenPairs.map((tokenPair) => [tokenPair.underlyingToken, tokenPair.cToken]);
+    const tokenList: SupplyLogicTokenList = tokenPairs.map(({ underlyingToken, cToken }) => [underlyingToken, cToken]);
+    return tokenList;
   }
 
   async quote(params: SupplyLogicParams) {

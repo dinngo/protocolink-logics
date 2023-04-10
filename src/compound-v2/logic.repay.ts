@@ -4,6 +4,8 @@ import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
 import { toCToken, underlyingTokens } from './tokens';
 
+export type RepayLogicTokenList = common.Token[];
+
 export type RepayLogicParams = core.RepayParams;
 
 export type RepayLogicFields = core.RepayFields;
@@ -13,7 +15,8 @@ export class RepayLogic extends core.Logic implements core.LogicTokenListInterfa
   static readonly supportedChainIds = [common.ChainId.mainnet];
 
   getTokenList() {
-    return Object.values(underlyingTokens);
+    const tokenList: RepayLogicTokenList = Object.values(underlyingTokens);
+    return tokenList;
   }
 
   async quote(params: RepayLogicParams) {

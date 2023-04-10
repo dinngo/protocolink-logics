@@ -4,6 +4,8 @@ import { Service } from './service';
 import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
 
+export type RepayLogicTokenList = common.Token[];
+
 export type RepayLogicParams = core.RepayParams<{ interestRateMode: InterestRateMode }>;
 
 export type RepayLogicFields = core.RepayFields<{ interestRateMode: InterestRateMode }>;
@@ -16,7 +18,7 @@ export class RepayLogic extends core.Logic implements core.LogicTokenListInterfa
     const service = new Service(this.chainId, this.provider);
     const tokens = await service.getAssets();
 
-    const tokenList: common.Token[] = [];
+    const tokenList: RepayLogicTokenList = [];
     for (const token of tokens) {
       if (token.isWrapped) {
         tokenList.push(token.unwrapped);

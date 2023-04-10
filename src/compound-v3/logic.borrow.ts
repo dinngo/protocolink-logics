@@ -4,6 +4,8 @@ import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
 import { getMarket, getMarkets } from './config';
 
+export type BorrowLogicTokenList = Record<string, common.Token[]>;
+
 export type BorrowLogicFields = core.TokenOutFields<{ marketId: string }>;
 
 export type BorrowLogicOptions = Pick<core.GlobalOptions, 'account'>;
@@ -13,7 +15,7 @@ export class BorrowLogic extends core.Logic implements core.LogicTokenListInterf
   static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon];
 
   async getTokenList() {
-    const tokenList: Record<string, common.Token[]> = {};
+    const tokenList: BorrowLogicTokenList = {};
 
     const markets = getMarkets(this.chainId);
     const service = new Service(this.chainId, this.provider);

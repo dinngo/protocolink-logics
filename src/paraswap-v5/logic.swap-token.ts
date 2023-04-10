@@ -8,6 +8,8 @@ import { getContractAddress, tokenListUrlsMap } from './config';
 
 axiosRetry(axios, { retries: 5, retryDelay: axiosRetry.exponentialDelay });
 
+export type SwapTokenLogicTokenList = common.Token[];
+
 export type SwapTokenLogicParams = core.TokenToTokenExactInParams;
 
 export type SwapTokenLogicFields = core.TokenToTokenExactInFields<Pick<BuildSwapTxInput, 'partner' | 'partnerAddress'>>;
@@ -33,20 +35,12 @@ export class SwapTokenLogic extends core.Logic implements core.LogicOracleInterf
     const tokenLists = await Promise.all(tokenListUrls.map((tokenListUrl) => axios.get<TokenList>(tokenListUrl)));
 
     const tmp: Record<string, boolean> = { [this.nativeToken.address]: true };
-    const tokenList: common.TokenTypes[] = [this.nativeToken];
+    const tokenList: SwapTokenLogicTokenList = [this.nativeToken];
     for (const { data } of tokenLists) {
-      for (const token of data.tokens) {
-        if (tmp[token.address] || token.chainId !== this.chainId || !token.name || !token.symbol || !token.decimals) {
-          continue;
-        }
-        tokenList.push({
-          chainId: token.chainId,
-          address: token.address,
-          decimals: token.decimals,
-          symbol: token.symbol,
-          name: token.name,
-        });
-        tmp[token.address] = true;
+      for (const { chainId, address, decimals, symbol, name } of data.tokens) {
+        if (tmp[address] || chainId !== this.chainId || !name || !symbol || !decimals) continue;
+        tokenList.push(new common.Token(chainId, address, decimals, symbol, name));
+        tmp[address] = true;
       }
     }
 

@@ -3,6 +3,8 @@ import { Service } from './service';
 import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
 
+export type WithdrawLogicTokenList = [common.Token, common.Token][];
+
 export type WithdrawLogicParams = core.TokenToTokenExactInParams;
 
 export type WithdrawLogicFields = core.TokenToTokenExactInFields;
@@ -23,7 +25,7 @@ export class WithdrawLogic extends core.Logic implements core.LogicTokenListInte
     const service = new Service(this.chainId, this.provider);
     const reserveTokens = await service.getReserveTokens();
 
-    const tokenList: [common.Token, common.Token][] = [];
+    const tokenList: WithdrawLogicTokenList = [];
     for (const reserveToken of reserveTokens) {
       if (reserveToken.asset.isWrapped) {
         tokenList.push([reserveToken.aToken, reserveToken.asset.unwrapped]);

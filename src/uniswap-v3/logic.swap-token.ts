@@ -15,6 +15,8 @@ import { getDeadline } from './utils';
 
 axiosRetry(axios, { retries: 5, retryDelay: axiosRetry.exponentialDelay });
 
+export type SwapTokenLogicTokenList = common.Token[];
+
 export type SwapTokenLogicParams = core.TokenToTokenParams;
 
 export type SwapTokenLogicSingleHopFields = core.TokenToTokenFields<{ fee: number }>;
@@ -42,17 +44,11 @@ export class SwapTokenLogic extends core.Logic implements core.LogicTokenListInt
     const { data } = await axios.get<TokenList>('https://gateway.ipfs.io/ipns/tokens.uniswap.org');
 
     const tmp: Record<string, boolean> = { [this.nativeToken.address]: true };
-    const tokenList: common.TokenTypes[] = [this.nativeToken];
-    for (const token of data.tokens) {
-      if (tmp[token.address] || token.chainId !== this.chainId) continue;
-      tokenList.push({
-        chainId: token.chainId,
-        address: token.address,
-        decimals: token.decimals,
-        symbol: token.symbol,
-        name: token.name,
-      });
-      tmp[token.address] = true;
+    const tokenList: SwapTokenLogicTokenList = [this.nativeToken];
+    for (const { chainId, address, decimals, symbol, name } of data.tokens) {
+      if (tmp[address] || chainId !== this.chainId) continue;
+      tokenList.push(new common.Token(chainId, address, decimals, symbol, name));
+      tmp[address] = true;
     }
 
     return tokenList;

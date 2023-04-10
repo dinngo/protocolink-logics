@@ -2,6 +2,8 @@ import { BigNumberish, constants } from 'ethers';
 import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
 
+export type WrappedNativeTokenLogicTokenList = [common.Token, common.Token][];
+
 export type WrappedNativeTokenLogicParams = core.TokenToTokenExactInParams;
 
 export type WrappedNativeTokenLogicFields = core.TokenToTokenExactInFields;
@@ -21,10 +23,12 @@ export class WrappedNativeTokenLogic
   ];
 
   getTokenList() {
-    return [
+    const tokenList: WrappedNativeTokenLogicTokenList = [
       [this.nativeToken, this.wrappedNativeToken],
       [this.wrappedNativeToken, this.nativeToken],
     ];
+
+    return tokenList;
   }
 
   quote(params: WrappedNativeTokenLogicParams) {
