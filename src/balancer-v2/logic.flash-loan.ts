@@ -1,13 +1,10 @@
 import { BigNumberish } from 'ethers';
 import { TokenList } from '@uniswap/token-lists';
 import { Vault__factory } from './contracts';
-import axios from 'axios';
-import axiosRetry from 'axios-retry';
+import { axios } from 'src/http';
 import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
 import { getContractAddress } from './config';
-
-axiosRetry(axios, { retries: 5, retryDelay: axiosRetry.exponentialDelay });
 
 export type FlashLoanLogicTokenList = common.Token[];
 

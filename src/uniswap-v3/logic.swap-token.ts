@@ -6,14 +6,11 @@ import { Service } from './service';
 import { SetOptional } from 'type-fest';
 import { SwapRouter__factory } from './contracts';
 import { TokenList } from '@uniswap/token-lists';
-import axios from 'axios';
-import axiosRetry from 'axios-retry';
+import { axios } from 'src/http';
 import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
 import { encodeRouteToPath } from '@uniswap/v3-sdk';
 import { getDeadline } from './utils';
-
-axiosRetry(axios, { retries: 5, retryDelay: axiosRetry.exponentialDelay });
 
 export type SwapTokenLogicTokenList = common.Token[];
 
