@@ -5,7 +5,7 @@ import { utils } from 'ethers';
 
 export type MultiSendLogicTokenList = common.Token[];
 
-export type MultiSendLogicFields = core.TokenToUserFields;
+export type MultiSendLogicFields = core.TokenToUserFields[];
 
 @core.LogicDefinitionDecorator()
 export class MultiSendLogic extends core.Logic implements core.LogicTokenListInterface {
