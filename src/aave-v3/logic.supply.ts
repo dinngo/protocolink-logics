@@ -12,7 +12,10 @@ export type SupplyLogicFields = core.TokenToTokenExactInFields<{ referralCode?: 
 export type SupplyLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
 @core.LogicDefinitionDecorator()
-export class SupplyLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicOracleInterface {
+export class SupplyLogic
+  extends core.Logic
+  implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
+{
   static readonly supportedChainIds = [
     common.ChainId.mainnet,
     common.ChainId.polygon,

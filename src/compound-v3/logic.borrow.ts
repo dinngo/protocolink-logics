@@ -11,7 +11,7 @@ export type BorrowLogicFields = core.TokenOutFields<{ marketId: string }>;
 export type BorrowLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
 @core.LogicDefinitionDecorator()
-export class BorrowLogic extends core.Logic implements core.LogicTokenListInterface {
+export class BorrowLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicBuilderInterface {
   static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon];
 
   async getTokenList() {

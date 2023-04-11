@@ -14,7 +14,10 @@ export type WithdrawBaseLogicFields = core.TokenToTokenExactInFields<{ marketId:
 export type WithdrawBaseLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
 @core.LogicDefinitionDecorator()
-export class WithdrawBaseLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicOracleInterface {
+export class WithdrawBaseLogic
+  extends core.Logic
+  implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
+{
   static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon];
 
   async getTokenList() {

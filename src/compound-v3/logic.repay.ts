@@ -12,7 +12,7 @@ export type RepayLogicParams = core.RepayParams<{ marketId: string }>;
 export type RepayLogicFields = core.RepayFields<{ marketId: string }>;
 
 @core.LogicDefinitionDecorator()
-export class RepayLogic extends core.Logic implements core.LogicTokenListInterface {
+export class RepayLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicBuilderInterface {
   static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon];
 
   async getTokenList() {

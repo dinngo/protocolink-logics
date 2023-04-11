@@ -11,7 +11,10 @@ export type RepayLogicParams = core.RepayParams<{ interestRateMode: InterestRate
 export type RepayLogicFields = core.RepayFields<{ interestRateMode: InterestRateMode }>;
 
 @core.LogicDefinitionDecorator()
-export class RepayLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicOracleInterface {
+export class RepayLogic
+  extends core.Logic
+  implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
+{
   static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon, common.ChainId.avalanche];
 
   async getTokenList() {

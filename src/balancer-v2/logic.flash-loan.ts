@@ -11,7 +11,7 @@ export type FlashLoanLogicTokenList = common.Token[];
 export type FlashLoanLogicFields = core.FlashLoanFields;
 
 @core.LogicDefinitionDecorator()
-export class FlashLoanLogic extends core.Logic {
+export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicBuilderInterface {
   static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon, common.ChainId.arbitrum];
 
   async getTokenList() {

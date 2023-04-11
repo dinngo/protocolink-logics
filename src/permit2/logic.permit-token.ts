@@ -14,7 +14,7 @@ export interface PermitTokenLogicFields {
 export type PermitTokenLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
 @core.LogicDefinitionDecorator()
-export class PermitTokenLogic extends core.Logic {
+export class PermitTokenLogic extends core.Logic implements core.LogicBuilderInterface {
   static readonly supportedChainIds = [
     common.ChainId.mainnet,
     common.ChainId.polygon,

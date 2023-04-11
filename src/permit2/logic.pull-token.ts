@@ -9,7 +9,7 @@ export type PullTokenLogicFields = core.TokensInFields;
 export type PullTokenLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
 @core.LogicDefinitionDecorator()
-export class PullTokenLogic extends core.Logic {
+export class PullTokenLogic extends core.Logic implements core.LogicBuilderInterface {
   static readonly supportedChainIds = [
     common.ChainId.mainnet,
     common.ChainId.polygon,

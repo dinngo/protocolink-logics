@@ -11,7 +11,7 @@ export type WrappedNativeTokenLogicFields = core.TokenToTokenExactInFields;
 @core.LogicDefinitionDecorator()
 export class WrappedNativeTokenLogic
   extends core.Logic
-  implements core.LogicTokenListInterface, core.LogicOracleInterface
+  implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
 {
   static readonly supportedChainIds = [
     common.ChainId.mainnet,

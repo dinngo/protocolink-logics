@@ -11,7 +11,10 @@ export type SupplyCollateralLogicFields = core.TokenInFields<{ marketId: string 
 export type SupplyCollateralLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
 @core.LogicDefinitionDecorator()
-export class SupplyCollateralLogic extends core.Logic implements core.LogicTokenListInterface {
+export class SupplyCollateralLogic
+  extends core.Logic
+  implements core.LogicTokenListInterface, core.LogicBuilderInterface
+{
   static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon];
 
   async getTokenList() {

@@ -14,7 +14,10 @@ export type ClaimLogicFields = core.ClaimFields<{ marketId: string }>;
 export type ClaimLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
 @core.LogicDefinitionDecorator()
-export class ClaimLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicOracleInterface {
+export class ClaimLogic
+  extends core.Logic
+  implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
+{
   static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon];
 
   async getTokenList() {

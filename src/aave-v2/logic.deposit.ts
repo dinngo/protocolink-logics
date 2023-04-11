@@ -12,7 +12,10 @@ export type DepositLogicFields = core.TokenToTokenExactInFields<{ referralCode?:
 export type DepositLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
 @core.LogicDefinitionDecorator()
-export class DepositLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicOracleInterface {
+export class DepositLogic
+  extends core.Logic
+  implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
+{
   static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon, common.ChainId.avalanche];
 
   async getTokenList() {

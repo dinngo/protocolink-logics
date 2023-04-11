@@ -11,7 +11,10 @@ export type ClaimLogicParams = core.ClaimParams;
 export type ClaimLogicFields = core.ClaimFields;
 
 @core.LogicDefinitionDecorator()
-export class ClaimLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicOracleInterface {
+export class ClaimLogic
+  extends core.Logic
+  implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
+{
   static readonly supportedChainIds = [common.ChainId.mainnet];
 
   getTokenList() {

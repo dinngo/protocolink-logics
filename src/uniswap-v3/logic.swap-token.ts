@@ -29,7 +29,10 @@ export function isSwapTokenLogicSingleHopFields(v: any): v is SwapTokenLogicSing
 }
 
 @core.LogicDefinitionDecorator()
-export class SwapTokenLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicOracleInterface {
+export class SwapTokenLogic
+  extends core.Logic
+  implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
+{
   static readonly supportedChainIds = [
     common.ChainId.mainnet,
     common.ChainId.polygon,

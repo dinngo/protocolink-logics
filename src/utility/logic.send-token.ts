@@ -8,7 +8,7 @@ export type SendTokenLogicTokenList = common.Token[];
 export type SendTokenLogicFields = core.TokenToUserFields;
 
 @core.LogicDefinitionDecorator()
-export class SendTokenLogic extends core.Logic implements core.LogicTokenListInterface {
+export class SendTokenLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicBuilderInterface {
   static readonly supportedChainIds = [
     common.ChainId.mainnet,
     common.ChainId.polygon,

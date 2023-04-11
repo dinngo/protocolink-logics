@@ -14,7 +14,7 @@ export type SwapTokenLogicFields = core.TokenToTokenExactInFields<Pick<BuildSwap
 export type SwapTokenLogicOptions = Pick<core.GlobalOptions, 'account' | 'slippage'>;
 
 @core.LogicDefinitionDecorator()
-export class SwapTokenLogic extends core.Logic implements core.LogicOracleInterface {
+export class SwapTokenLogic extends core.Logic implements core.LogicOracleInterface, core.LogicBuilderInterface {
   static readonly supportedChainIds = [
     common.ChainId.mainnet,
     common.ChainId.polygon,
