@@ -1,5 +1,12 @@
 # @furucombo/composable-router-logics
 
+## 0.1.3
+
+### Patch Changes
+
+- 4077a18: add utility multi-send logic
+- 1d0fe37: update for core.LogicBuilderInterface
+
 ## 0.1.2
 
 ### Patch Changes
