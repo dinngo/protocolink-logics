@@ -5,7 +5,7 @@ import { constants } from 'ethers';
 import * as core from '@furucombo/composable-router-core';
 import { getMarket, getMarkets } from './config';
 
-export type WithdrawLogicTokenList = Record<string, [common.Token, common.Token][]>;
+export type WithdrawBaseLogicTokenList = Record<string, [common.Token, common.Token][]>;
 
 export type WithdrawBaseLogicParams = core.TokenToTokenExactInParams<{ marketId: string }>;
 
@@ -21,7 +21,7 @@ export class WithdrawBaseLogic
   static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon];
 
   async getTokenList() {
-    const tokenList: WithdrawLogicTokenList = {};
+    const tokenList: WithdrawBaseLogicTokenList = {};
 
     const markets = getMarkets(this.chainId);
     const service = new Service(this.chainId, this.provider);

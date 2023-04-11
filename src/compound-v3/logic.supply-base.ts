@@ -4,7 +4,7 @@ import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
 import { getMarket, getMarkets } from './config';
 
-export type SupplyLogicTokenList = Record<string, [common.Token, common.Token][]>;
+export type SupplyBaseLogicTokenList = Record<string, [common.Token, common.Token][]>;
 
 export type SupplyBaseLogicParams = core.TokenToTokenExactInParams<{ marketId: string }>;
 
@@ -18,7 +18,7 @@ export class SupplyBaseLogic
   static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon];
 
   async getTokenList() {
-    const tokenList: SupplyLogicTokenList = {};
+    const tokenList: SupplyBaseLogicTokenList = {};
 
     const markets = getMarkets(this.chainId);
     const service = new Service(this.chainId, this.provider);
