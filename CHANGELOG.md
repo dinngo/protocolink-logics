@@ -1,5 +1,11 @@
 # @furucombo/composable-router-logics
 
+## 0.1.4
+
+### Patch Changes
+
+- d81e0b1: fix utility MultiSendLogicFields type
+
 ## 0.1.3
 
 ### Patch Changes
