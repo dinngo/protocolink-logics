@@ -1,5 +1,11 @@
 # @furucombo/composable-router-logics
 
+## 0.1.6
+
+### Patch Changes
+
+- b342573: update permitData.values.details.amount to hex string
+
 ## 0.1.5
 
 ### Patch Changes
