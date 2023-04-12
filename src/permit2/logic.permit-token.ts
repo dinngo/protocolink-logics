@@ -42,7 +42,7 @@ export class PermitTokenLogic extends core.Logic implements core.LogicBuilderInt
         if (amount.lt(fund.amountWei) || expiration <= getDeadline(PERMIT_SIG_DEADLINE)) {
           details.push({
             token: fund.token.address,
-            amount: MaxUint160,
+            amount: MaxUint160.toHexString(),
             expiration: getDeadline(PERMIT_EXPIRATION),
             nonce,
           });
