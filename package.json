@@ -1,6 +1,6 @@
 {
   "name": "@furucombo/composable-router-logics",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "An SDK that build protocol logics for composable router",
   "keywords": [
     "furucombo",

@@ -1,5 +1,16 @@
 # @furucombo/composable-router-logics
 
+## 0.1.8
+
+### Patch Changes
+
+- f3a66d5: update slippage to logic itself
+- b1aa6a7: utility custom data logic add 1inch swap token test
+- 93d609e: Updated dependencies
+  - @furucombo/composable-router-common@0.1.5
+  - @furucombo/composable-router-core@0.1.5
+  - type-fest@3.9.0
+
 ## 0.1.7
 
 ### Patch Changes
