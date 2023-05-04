@@ -7,11 +7,13 @@ import { getContractAddress, tokenListUrlsMap } from './config';
 
 export type SwapTokenLogicTokenList = common.Token[];
 
-export type SwapTokenLogicParams = core.TokenToTokenExactInParams;
+export type SwapTokenLogicParams = core.TokenToTokenExactInParams<{ slippage?: number }>;
 
-export type SwapTokenLogicFields = core.TokenToTokenExactInFields<Pick<BuildSwapTxInput, 'partner' | 'partnerAddress'>>;
+export type SwapTokenLogicFields = core.TokenToTokenExactInFields<
+  Pick<BuildSwapTxInput, 'partner' | 'partnerAddress'> & { slippage?: number }
+>;
 
-export type SwapTokenLogicOptions = Pick<core.GlobalOptions, 'account' | 'slippage'>;
+export type SwapTokenLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
 @core.LogicDefinitionDecorator()
 export class SwapTokenLogic extends core.Logic implements core.LogicOracleInterface, core.LogicBuilderInterface {
@@ -45,7 +47,7 @@ export class SwapTokenLogic extends core.Logic implements core.LogicOracleInterf
   }
 
   async quote(params: SwapTokenLogicParams) {
-    const { input, tokenOut } = params;
+    const { input, tokenOut, slippage } = params;
 
     const { destAmount } = await this.sdk.swap.getRate({
       srcToken: input.token.elasticAddress,
@@ -56,12 +58,12 @@ export class SwapTokenLogic extends core.Logic implements core.LogicOracleInterf
     });
     const output = new common.TokenAmount(tokenOut).setWei(destAmount);
 
-    return { input, output };
+    return { input, output, slippage };
   }
 
   async build(fields: SwapTokenLogicFields, options: SwapTokenLogicOptions) {
-    const { input, output, partner, partnerAddress } = fields;
-    const { account, slippage } = options;
+    const { input, output, partner, partnerAddress, slippage } = fields;
+    const { account } = options;
 
     const priceRoute = await this.sdk.swap.getRate({
       srcToken: input.token.elasticAddress,
@@ -81,7 +83,7 @@ export class SwapTokenLogic extends core.Logic implements core.LogicOracleInterf
         userAddress: account,
         partner,
         partnerAddress,
-        slippage,
+        slippage: slippage ?? 0,
         deadline: (Math.floor(Date.now() / 1000) + 1200).toString(),
         priceRoute,
       },

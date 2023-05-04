@@ -26,38 +26,74 @@ describe('Test UniswapV3 SwapToken Logic', function () {
 
   const testCases = [
     {
-      params: { input: new common.TokenAmount(mainnetTokens.ETH, '1'), tokenOut: mainnetTokens.USDC },
-      slippage: 100,
+      params: {
+        input: new common.TokenAmount(mainnetTokens.ETH, '1'),
+        tokenOut: mainnetTokens.USDC,
+        slippage: 100,
+      },
     },
     {
-      params: { input: new common.TokenAmount(mainnetTokens.USDC, '1000'), tokenOut: mainnetTokens.ETH },
-      slippage: 100,
+      params: {
+        input: new common.TokenAmount(mainnetTokens.USDC, '1000'),
+        tokenOut: mainnetTokens.ETH,
+        slippage: 100,
+      },
     },
     {
-      params: { input: new common.TokenAmount(mainnetTokens.USDC, '1000'), tokenOut: mainnetTokens.DAI },
-      slippage: 100,
+      params: {
+        input: new common.TokenAmount(mainnetTokens.USDC, '1000'),
+        tokenOut: mainnetTokens.DAI,
+        slippage: 100,
+      },
     },
     {
-      params: { input: new common.TokenAmount(mainnetTokens.ETH, '1'), tokenOut: mainnetTokens.USDC },
+      params: {
+        input: new common.TokenAmount(mainnetTokens.ETH, '1'),
+        tokenOut: mainnetTokens.USDC,
+        slippage: 100,
+      },
       amountBps: 5000,
-      slippage: 100,
     },
     {
-      params: { input: new common.TokenAmount(mainnetTokens.USDC, '1000'), tokenOut: mainnetTokens.ETH },
+      params: {
+        input: new common.TokenAmount(mainnetTokens.USDC, '1000'),
+        tokenOut: mainnetTokens.ETH,
+        slippage: 100,
+      },
       amountBps: 5000,
-      slippage: 100,
     },
     {
-      params: { input: new common.TokenAmount(mainnetTokens.USDC, '1000'), tokenOut: mainnetTokens.DAI },
+      params: {
+        input: new common.TokenAmount(mainnetTokens.USDC, '1000'),
+        tokenOut: mainnetTokens.DAI,
+        slippage: 100,
+      },
       amountBps: 5000,
-      slippage: 100,
     },
-    { params: { tokenIn: mainnetTokens.ETH, output: new common.TokenAmount(mainnetTokens.USDC, '1000') } },
-    { params: { tokenIn: mainnetTokens.USDC, output: new common.TokenAmount(mainnetTokens.ETH, '1') } },
-    { params: { tokenIn: mainnetTokens.USDC, output: new common.TokenAmount(mainnetTokens.DAI, '1000') } },
+    {
+      params: {
+        tokenIn: mainnetTokens.ETH,
+        output: new common.TokenAmount(mainnetTokens.USDC, '1000'),
+        slippage: 100,
+      },
+    },
+    {
+      params: {
+        tokenIn: mainnetTokens.USDC,
+        output: new common.TokenAmount(mainnetTokens.ETH, '1'),
+        slippage: 100,
+      },
+    },
+    {
+      params: {
+        tokenIn: mainnetTokens.USDC,
+        output: new common.TokenAmount(mainnetTokens.DAI, '1000'),
+        slippage: 100,
+      },
+    },
   ];
 
-  testCases.forEach(({ params, amountBps, slippage }, i) => {
+  testCases.forEach(({ params, amountBps }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. get input or output
       const logicUniswapV3SwapToken = new uniswapv3.SwapTokenLogic(chainId);
@@ -77,7 +113,7 @@ describe('Test UniswapV3 SwapToken Logic', function () {
       // 3. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
-      routerLogics.push(await logicUniswapV3SwapToken.build(quotation, { account: user.address, slippage }));
+      routerLogics.push(await logicUniswapV3SwapToken.build(quotation, { account: user.address }));
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({

@@ -26,22 +26,25 @@ describe('ParaswapV5 SwapTokenLogic', function () {
         fields: {
           input: new common.TokenAmount(mainnetTokens.ETH, '1'),
           output: new common.TokenAmount(mainnetTokens.USDC, '0'),
+          slippage: 500,
         },
-        options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa', slippage: 500 },
+        options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa' },
       },
       {
         fields: {
           input: new common.TokenAmount(mainnetTokens.USDC, '1'),
           output: new common.TokenAmount(mainnetTokens.ETH, '0'),
+          slippage: 500,
         },
-        options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa', slippage: 500 },
+        options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa' },
       },
       {
         fields: {
           input: new common.TokenAmount(mainnetTokens.USDC, '1'),
           output: new common.TokenAmount(mainnetTokens.DAI, '0'),
+          slippage: 500,
         },
-        options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa', slippage: 500 },
+        options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa' },
       },
     ];
 

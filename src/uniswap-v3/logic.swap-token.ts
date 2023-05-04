@@ -3,7 +3,6 @@ import { CurrencyAmount, Token, TradeType } from '@uniswap/sdk-core';
 import { ISwapRouter } from './contracts/SwapRouter';
 import { SWAP_ROUTER_ADDRESS } from './constants';
 import { Service } from './service';
-import { SetOptional } from 'type-fest';
 import { SwapRouter__factory } from './contracts';
 import { TokenList } from '@uniswap/token-lists';
 import { axios } from 'src/http';
@@ -14,15 +13,15 @@ import { getDeadline } from './utils';
 
 export type SwapTokenLogicTokenList = common.Token[];
 
-export type SwapTokenLogicParams = core.TokenToTokenParams;
+export type SwapTokenLogicParams = core.TokenToTokenParams<{ slippage?: number }>;
 
-export type SwapTokenLogicSingleHopFields = core.TokenToTokenFields<{ fee: number }>;
+export type SwapTokenLogicSingleHopFields = core.TokenToTokenFields<{ fee: number; slippage?: number }>;
 
-export type SwapTokenLogicMultiHopFields = core.TokenToTokenFields<{ path: string }>;
+export type SwapTokenLogicMultiHopFields = core.TokenToTokenFields<{ path: string; slippage?: number }>;
 
 export type SwapTokenLogicFields = SwapTokenLogicSingleHopFields | SwapTokenLogicMultiHopFields;
 
-export type SwapTokenLogicOptions = SetOptional<Pick<core.GlobalOptions, 'account' | 'slippage'>, 'slippage'>;
+export type SwapTokenLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
 export function isSwapTokenLogicSingleHopFields(v: any): v is SwapTokenLogicSingleHopFields {
   return !!v.fee;
@@ -91,38 +90,40 @@ export class SwapTokenLogic
   async quote(params: SwapTokenLogicParams) {
     if (core.isTokenToTokenExactInParams(params)) {
       const tradeType = core.TradeType.exactIn;
-      const { input, tokenOut } = params;
+      const { input, tokenOut, slippage } = params;
       const { route, outputAmount } = await this.getExactInBestTrade(input, tokenOut);
       const output = new common.TokenAmount(tokenOut, outputAmount.toExact());
       if (route.pools.length === 1) {
-        return { tradeType, input, output, fee: route.pools[0].fee };
+        return { tradeType, input, output, fee: route.pools[0].fee, slippage };
       } else {
-        return { tradeType, input, output, path: encodeRouteToPath(route, false) };
+        return { tradeType, input, output, path: encodeRouteToPath(route, false), slippage };
       }
     } else {
       const tradeType = core.TradeType.exactOut;
-      const { tokenIn, output } = params;
+      const { tokenIn, output, slippage } = params;
       const { route, inputAmount } = await this.getExactOutBestTrade(tokenIn, output);
-      const amountIn = common.calcSlippage(inputAmount.quotient.toString(), -100); // 1% slippage
+      const amountIn = common.calcSlippage(inputAmount.quotient.toString(), -(slippage ?? 0));
       const input = new common.TokenAmount(tokenIn, common.toBigUnit(amountIn, tokenIn.decimals));
       if (route.pools.length === 1) {
-        return { tradeType, input, output, fee: route.pools[0].fee };
+        return { tradeType, input, output, fee: route.pools[0].fee, slippage };
       } else {
-        return { tradeType, input, output, path: encodeRouteToPath(route, true) };
+        return { tradeType, input, output, path: encodeRouteToPath(route, true), slippage };
       }
     }
   }
 
   // https://github.com/Uniswap/v3-sdk/blob/000fccfbbebadabadfa6d689ebc85a50489d25d4/src/swapRouter.ts#L64
   async build(fields: SwapTokenLogicFields, options: SwapTokenLogicOptions) {
-    const { tradeType, input, output, amountBps } = fields;
-    const { account, slippage = 100 } = options;
+    const { tradeType, input, output, amountBps, slippage } = fields;
+    const { account } = options;
 
     const recipient = core.calcAccountAgent(this.chainId, account);
     const deadline = getDeadline(this.chainId);
     const amountIn = input.amountWei;
     const amountOut =
-      tradeType === core.TradeType.exactIn ? common.calcSlippage(output.amountWei, slippage) : output.amountWei;
+      tradeType === core.TradeType.exactIn && slippage
+        ? common.calcSlippage(output.amountWei, slippage)
+        : output.amountWei;
 
     const iface = SwapRouter__factory.createInterface();
     let data: string;

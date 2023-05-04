@@ -26,16 +26,29 @@ describe('Test ParaswapV5 SwapToken Logic', function () {
   snapshotAndRevertEach();
 
   const testCases = [
-    { input: new common.TokenAmount(mainnetTokens.ETH, '1'), tokenOut: mainnetTokens.USDC, slippage: 500 },
-    { input: new common.TokenAmount(mainnetTokens.USDC, '1'), tokenOut: mainnetTokens.ETH, slippage: 500 },
-    { input: new common.TokenAmount(mainnetTokens.USDC, '1'), tokenOut: mainnetTokens.DAI, slippage: 500 },
+    {
+      input: new common.TokenAmount(mainnetTokens.ETH, '1'),
+      tokenOut: mainnetTokens.USDC,
+      slippage: 500,
+    },
+    {
+      input: new common.TokenAmount(mainnetTokens.USDC, '1'),
+      tokenOut: mainnetTokens.ETH,
+      slippage: 500,
+    },
+    {
+      input: new common.TokenAmount(mainnetTokens.USDC, '1'),
+      tokenOut: mainnetTokens.DAI,
+      slippage: 500,
+    },
   ];
 
   testCases.forEach(({ input, tokenOut, slippage }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. get output
       const logicParaswapV5SwapToken = new paraswapv5.SwapTokenLogic(chainId);
-      const { output } = await logicParaswapV5SwapToken.quote({ input, tokenOut });
+      const quotation = await logicParaswapV5SwapToken.quote({ input, tokenOut, slippage });
+      const { output } = quotation;
 
       // 2. build funds, tokensReturn
       const funds = new common.TokenAmounts(input);
@@ -44,7 +57,7 @@ describe('Test ParaswapV5 SwapToken Logic', function () {
       // 3. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
-      routerLogics.push(await logicParaswapV5SwapToken.build({ input, output }, { account: user.address, slippage }));
+      routerLogics.push(await logicParaswapV5SwapToken.build(quotation, { account: user.address }));
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({
