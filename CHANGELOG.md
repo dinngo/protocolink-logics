@@ -1,5 +1,22 @@
 # @furucombo/composable-router-logics
 
+## 0.2.0
+
+### Minor Changes
+
+- 8f5caef: update for v0.2.0 router
+
+### Patch Changes
+
+- 6572845: regenerate contracts files with @typechain/ethers-v5@11.0.0
+- bf0559d: move all logics folders to src/logics
+- a8ac78e: Updated dependencies
+  - @paraswap/sdk@6.2.1
+  - @types/lodash@4.14.195
+  - @uniswap/sdk-core@3.2.6
+  - axios-retry@3.5.0
+- 05d1493: add univ3 module
+
 ## 0.1.8
 
 ### Patch Changes
