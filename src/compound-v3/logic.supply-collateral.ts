@@ -31,7 +31,7 @@ export class SupplyCollateralLogic
   }
 
   async build(fields: SupplyCollateralLogicFields, options: SupplyCollateralLogicOptions) {
-    const { marketId, input, amountBps } = fields;
+    const { marketId, input, balanceBps } = fields;
     const { account } = options;
 
     const market = getMarket(this.chainId, marketId);
@@ -43,9 +43,9 @@ export class SupplyCollateralLogic
       tokenIn.address,
       input.amountWei,
     ]);
-    const amountOffset = amountBps ? common.getParamOffset(2) : undefined;
+    const amountOffset = balanceBps ? common.getParamOffset(2) : undefined;
     const inputs = [
-      core.newLogicInput({ input: new common.TokenAmount(tokenIn, input.amount), amountBps, amountOffset }),
+      core.newLogicInput({ input: new common.TokenAmount(tokenIn, input.amount), balanceBps, amountOffset }),
     ];
     const wrapMode = input.token.isNative ? core.WrapMode.wrapBefore : core.WrapMode.none;
 

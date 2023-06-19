@@ -2,6 +2,7 @@ import { LogicTestCase } from 'test/types';
 import { SwapTokenLogic, SwapTokenLogicFields, SwapTokenLogicOptions } from './logic.swap-token';
 import * as common from '@furucombo/composable-router-common';
 import { constants, utils } from 'ethers';
+import * as core from '@furucombo/composable-router-core';
 import { expect } from 'chai';
 import { getContractAddress } from './config';
 import { mainnetTokens } from '@furucombo/composable-router-test-helpers';
@@ -58,7 +59,7 @@ describe('ParaswapV5 SwapTokenLogic', function () {
         if (input.token.isNative) {
           expect(routerLogic.inputs[0].token).to.eq(common.ELASTIC_ADDRESS);
         }
-        expect(routerLogic.inputs[0].amountBps).to.eq(constants.MaxUint256);
+        expect(routerLogic.inputs[0].balanceBps).to.eq(core.BPS_NOT_USED);
         expect(routerLogic.inputs[0].amountOrOffset).to.eq(input.amountWei);
         expect(routerLogic.approveTo).to.eq(getContractAddress(chainId, 'TokenTransferProxy'));
         expect(routerLogic.callback).to.eq(constants.AddressZero);

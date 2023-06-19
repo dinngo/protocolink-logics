@@ -30,18 +30,18 @@ describe('Test Utility SendToken Logic', function () {
     { input: new common.TokenAmount(mainnetTokens.ETH, '1') },
     { input: new common.TokenAmount(mainnetTokens.WETH, '1') },
     { input: new common.TokenAmount(mainnetTokens.USDC, '1') },
-    { input: new common.TokenAmount(mainnetTokens.ETH, '1'), amountBps: 5000 },
-    { input: new common.TokenAmount(mainnetTokens.WETH, '1'), amountBps: 5000 },
-    { input: new common.TokenAmount(mainnetTokens.USDC, '1'), amountBps: 5000 },
+    { input: new common.TokenAmount(mainnetTokens.ETH, '1'), balanceBps: 5000 },
+    { input: new common.TokenAmount(mainnetTokens.WETH, '1'), balanceBps: 5000 },
+    { input: new common.TokenAmount(mainnetTokens.USDC, '1'), balanceBps: 5000 },
   ];
 
-  testCases.forEach(({ input, amountBps }, i) => {
+  testCases.forEach(({ input, balanceBps }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. build funds, tokensReturn
       const tokensReturn = [];
       const funds = new common.TokenAmounts();
-      if (amountBps) {
-        funds.add(utils.calcRequiredAmountByAmountBps(input, amountBps));
+      if (balanceBps) {
+        funds.add(utils.calcRequiredAmountByBalanceBps(input, balanceBps));
         tokensReturn.push(input.token.elasticAddress);
       } else {
         funds.add(input);

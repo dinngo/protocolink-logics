@@ -36,16 +36,16 @@ describe('Test CompoundV2 Supply Logic', function () {
     {
       input: new common.TokenAmount(compoundv2.underlyingTokens.ETH, '1'),
       tokenOut: compoundv2.cTokens.cETH,
-      amountBps: 5000,
+      balanceBps: 5000,
     },
     {
       input: new common.TokenAmount(compoundv2.underlyingTokens.WBTC, '1'),
       tokenOut: compoundv2.cTokens.cWBTC,
-      amountBps: 5000,
+      balanceBps: 5000,
     },
   ];
 
-  testCases.forEach(({ input, tokenOut, amountBps }, i) => {
+  testCases.forEach(({ input, tokenOut, balanceBps }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. get output
       const logicCompoundV2Supply = new compoundv2.SupplyLogic(chainId, hre.ethers.provider);
@@ -54,8 +54,8 @@ describe('Test CompoundV2 Supply Logic', function () {
       // 2. build funds, tokensReturn
       const tokensReturn = [output.token.elasticAddress];
       const funds = new common.TokenAmounts();
-      if (amountBps) {
-        funds.add(utils.calcRequiredAmountByAmountBps(input, amountBps));
+      if (balanceBps) {
+        funds.add(utils.calcRequiredAmountByBalanceBps(input, balanceBps));
         tokensReturn.push(input.token.elasticAddress);
       } else {
         funds.add(input);
@@ -64,7 +64,7 @@ describe('Test CompoundV2 Supply Logic', function () {
       // 3. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
-      routerLogics.push(await logicCompoundV2Supply.build({ input, output, amountBps }));
+      routerLogics.push(await logicCompoundV2Supply.build({ input, output, balanceBps }));
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({

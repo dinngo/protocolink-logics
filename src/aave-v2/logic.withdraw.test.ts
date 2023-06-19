@@ -54,40 +54,40 @@ describe('AaveV2 WithdrawLogic', function () {
         fields: {
           input: new common.TokenAmount(mainnetTokens.aWETH, '1'),
           output: new common.TokenAmount(mainnetTokens.ETH, '1'),
-          amountBps: 5000,
+          balanceBps: 5000,
         },
       },
       {
         fields: {
           input: new common.TokenAmount(mainnetTokens.aWETH, '1'),
           output: new common.TokenAmount(mainnetTokens.WETH, '1'),
-          amountBps: 5000,
+          balanceBps: 5000,
         },
       },
       {
         fields: {
           input: new common.TokenAmount(mainnetTokens.aUSDC, '1'),
           output: new common.TokenAmount(mainnetTokens.USDC, '1'),
-          amountBps: 5000,
+          balanceBps: 5000,
         },
       },
     ];
 
     testCases.forEach(({ fields }) => {
-      it(`withdraw ${fields.input.token.symbol}${fields.amountBps ? ' with amountBps' : ''}`, async function () {
+      it(`withdraw ${fields.input.token.symbol}${fields.balanceBps ? ' with balanceBps' : ''}`, async function () {
         const routerLogic = await logic.build(fields, { account });
         const sig = routerLogic.data.substring(0, 10);
-        const { input, output, amountBps } = fields;
+        const { input, output, balanceBps } = fields;
 
         expect(routerLogic.to).to.eq(lendingPoolAddress);
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(sig).to.eq(iface.getSighash('withdraw'));
         expect(routerLogic.inputs[0].token).to.eq(input.token.address);
-        if (amountBps) {
-          expect(routerLogic.inputs[0].amountBps).to.eq(amountBps);
+        if (balanceBps) {
+          expect(routerLogic.inputs[0].balanceBps).to.eq(balanceBps);
           expect(routerLogic.inputs[0].amountOrOffset).to.eq(common.getParamOffset(1));
         } else {
-          expect(routerLogic.inputs[0].amountBps).to.eq(constants.MaxUint256);
+          expect(routerLogic.inputs[0].balanceBps).to.eq(core.BPS_NOT_USED);
           expect(routerLogic.inputs[0].amountOrOffset).eq(input.amountWei);
         }
         expect(routerLogic.wrapMode).to.eq(output.token.isNative ? core.WrapMode.unwrapAfter : core.WrapMode.none);

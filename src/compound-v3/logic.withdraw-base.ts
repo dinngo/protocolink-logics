@@ -45,16 +45,16 @@ export class WithdrawBaseLogic
   }
 
   async build(fields: WithdrawBaseLogicFields) {
-    const { marketId, input, output, amountBps } = fields;
+    const { marketId, input, output, balanceBps } = fields;
 
     const market = getMarket(this.chainId, marketId);
     const tokenOut = output.token.wrapped;
-    const amountWei = amountBps ? input.amountWei : constants.MaxUint256;
+    const amountWei = balanceBps ? input.amountWei : constants.MaxUint256;
 
     const to = market.cometAddress;
     const data = Comet__factory.createInterface().encodeFunctionData('withdraw', [tokenOut.address, amountWei]);
-    const amountOffset = amountBps ? common.getParamOffset(1) : undefined;
-    const inputs = [core.newLogicInput({ input, amountBps, amountOffset })];
+    const amountOffset = balanceBps ? common.getParamOffset(1) : undefined;
+    const inputs = [core.newLogicInput({ input, balanceBps, amountOffset })];
     const wrapMode = output.token.isNative ? core.WrapMode.unwrapAfter : core.WrapMode.none;
 
     return core.newLogic({ to, data, inputs, wrapMode });

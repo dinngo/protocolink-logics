@@ -17,40 +17,41 @@ import type { FunctionFragment, Result } from '@ethersproject/abi';
 import type { Listener, Provider } from '@ethersproject/providers';
 import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent, PromiseOrValue } from './common';
 
-export interface FlashLoanCallbackBalancerV2Interface extends utils.Interface {
+export interface AaveV3FlashLoanCallbackInterface extends utils.Interface {
   functions: {
-    'balancerV2Vault()': FunctionFragment;
-    'receiveFlashLoan(address[],uint256[],uint256[],bytes)': FunctionFragment;
+    'aaveV3Provider()': FunctionFragment;
+    'executeOperation(address[],uint256[],uint256[],address,bytes)': FunctionFragment;
     'router()': FunctionFragment;
   };
 
-  getFunction(nameOrSignatureOrTopic: 'balancerV2Vault' | 'receiveFlashLoan' | 'router'): FunctionFragment;
+  getFunction(nameOrSignatureOrTopic: 'aaveV3Provider' | 'executeOperation' | 'router'): FunctionFragment;
 
-  encodeFunctionData(functionFragment: 'balancerV2Vault', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'aaveV3Provider', values?: undefined): string;
   encodeFunctionData(
-    functionFragment: 'receiveFlashLoan',
+    functionFragment: 'executeOperation',
     values: [
       PromiseOrValue<string>[],
       PromiseOrValue<BigNumberish>[],
       PromiseOrValue<BigNumberish>[],
+      PromiseOrValue<string>,
       PromiseOrValue<BytesLike>
     ]
   ): string;
   encodeFunctionData(functionFragment: 'router', values?: undefined): string;
 
-  decodeFunctionResult(functionFragment: 'balancerV2Vault', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'receiveFlashLoan', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'aaveV3Provider', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'executeOperation', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'router', data: BytesLike): Result;
 
   events: {};
 }
 
-export interface FlashLoanCallbackBalancerV2 extends BaseContract {
+export interface AaveV3FlashLoanCallback extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: FlashLoanCallbackBalancerV2Interface;
+  interface: AaveV3FlashLoanCallbackInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -68,41 +69,44 @@ export interface FlashLoanCallbackBalancerV2 extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    balancerV2Vault(overrides?: CallOverrides): Promise<[string]>;
+    aaveV3Provider(overrides?: CallOverrides): Promise<[string]>;
 
-    receiveFlashLoan(
-      tokens: PromiseOrValue<string>[],
+    executeOperation(
+      assets: PromiseOrValue<string>[],
       amounts: PromiseOrValue<BigNumberish>[],
-      feeAmounts: PromiseOrValue<BigNumberish>[],
-      userData: PromiseOrValue<BytesLike>,
+      premiums: PromiseOrValue<BigNumberish>[],
+      arg3: PromiseOrValue<string>,
+      params: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     router(overrides?: CallOverrides): Promise<[string]>;
   };
 
-  balancerV2Vault(overrides?: CallOverrides): Promise<string>;
+  aaveV3Provider(overrides?: CallOverrides): Promise<string>;
 
-  receiveFlashLoan(
-    tokens: PromiseOrValue<string>[],
+  executeOperation(
+    assets: PromiseOrValue<string>[],
     amounts: PromiseOrValue<BigNumberish>[],
-    feeAmounts: PromiseOrValue<BigNumberish>[],
-    userData: PromiseOrValue<BytesLike>,
+    premiums: PromiseOrValue<BigNumberish>[],
+    arg3: PromiseOrValue<string>,
+    params: PromiseOrValue<BytesLike>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   router(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
-    balancerV2Vault(overrides?: CallOverrides): Promise<string>;
+    aaveV3Provider(overrides?: CallOverrides): Promise<string>;
 
-    receiveFlashLoan(
-      tokens: PromiseOrValue<string>[],
+    executeOperation(
+      assets: PromiseOrValue<string>[],
       amounts: PromiseOrValue<BigNumberish>[],
-      feeAmounts: PromiseOrValue<BigNumberish>[],
-      userData: PromiseOrValue<BytesLike>,
+      premiums: PromiseOrValue<BigNumberish>[],
+      arg3: PromiseOrValue<string>,
+      params: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<boolean>;
 
     router(overrides?: CallOverrides): Promise<string>;
   };
@@ -110,13 +114,14 @@ export interface FlashLoanCallbackBalancerV2 extends BaseContract {
   filters: {};
 
   estimateGas: {
-    balancerV2Vault(overrides?: CallOverrides): Promise<BigNumber>;
+    aaveV3Provider(overrides?: CallOverrides): Promise<BigNumber>;
 
-    receiveFlashLoan(
-      tokens: PromiseOrValue<string>[],
+    executeOperation(
+      assets: PromiseOrValue<string>[],
       amounts: PromiseOrValue<BigNumberish>[],
-      feeAmounts: PromiseOrValue<BigNumberish>[],
-      userData: PromiseOrValue<BytesLike>,
+      premiums: PromiseOrValue<BigNumberish>[],
+      arg3: PromiseOrValue<string>,
+      params: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -124,13 +129,14 @@ export interface FlashLoanCallbackBalancerV2 extends BaseContract {
   };
 
   populateTransaction: {
-    balancerV2Vault(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    aaveV3Provider(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    receiveFlashLoan(
-      tokens: PromiseOrValue<string>[],
+    executeOperation(
+      assets: PromiseOrValue<string>[],
       amounts: PromiseOrValue<BigNumberish>[],
-      feeAmounts: PromiseOrValue<BigNumberish>[],
-      userData: PromiseOrValue<BytesLike>,
+      premiums: PromiseOrValue<BigNumberish>[],
+      arg3: PromiseOrValue<string>,
+      params: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

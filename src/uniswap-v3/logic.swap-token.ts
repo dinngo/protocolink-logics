@@ -114,7 +114,7 @@ export class SwapTokenLogic
 
   // https://github.com/Uniswap/v3-sdk/blob/000fccfbbebadabadfa6d689ebc85a50489d25d4/src/swapRouter.ts#L64
   async build(fields: SwapTokenLogicFields, options: SwapTokenLogicOptions) {
-    const { tradeType, input, output, amountBps, slippage } = fields;
+    const { tradeType, input, output, balanceBps, slippage } = fields;
     const { account } = options;
 
     const recipient = core.calcAccountAgent(this.chainId, account);
@@ -143,7 +143,7 @@ export class SwapTokenLogic
           sqrtPriceLimitX96: 0,
         };
         data = iface.encodeFunctionData('exactInputSingle', [params]);
-        if (amountBps) amountOffset = common.getParamOffset(5);
+        if (balanceBps) amountOffset = common.getParamOffset(5);
       } else {
         const params: ISwapRouter.ExactOutputSingleParamsStruct = {
           tokenIn,
@@ -167,7 +167,7 @@ export class SwapTokenLogic
           amountOutMinimum: amountOut,
         };
         data = iface.encodeFunctionData('exactInput', [params]);
-        if (amountBps) amountOffset = common.getParamOffset(3);
+        if (balanceBps) amountOffset = common.getParamOffset(3);
       } else {
         const params: ISwapRouter.ExactOutputParamsStruct = {
           path: fields.path,
@@ -180,7 +180,11 @@ export class SwapTokenLogic
       }
     }
     const inputs = [
-      core.newLogicInput({ input: new common.TokenAmount(input.token.wrapped, input.amount), amountBps, amountOffset }),
+      core.newLogicInput({
+        input: new common.TokenAmount(input.token.wrapped, input.amount),
+        balanceBps,
+        amountOffset,
+      }),
     ];
     const wrapMode = input.token.isNative
       ? core.WrapMode.wrapBefore

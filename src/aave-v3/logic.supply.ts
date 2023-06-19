@@ -47,7 +47,7 @@ export class SupplyLogic
   }
 
   async build(fields: SupplyLogicFields, options: SupplyLogicOptions) {
-    const { input, amountBps, referralCode = 0 } = fields;
+    const { input, balanceBps, referralCode = 0 } = fields;
     const { account } = options;
 
     const tokenIn = input.token.wrapped;
@@ -60,9 +60,9 @@ export class SupplyLogic
       core.calcAccountAgent(this.chainId, account),
       referralCode,
     ]);
-    const amountOffset = amountBps ? common.getParamOffset(1) : undefined;
+    const amountOffset = balanceBps ? common.getParamOffset(1) : undefined;
     const inputs = [
-      core.newLogicInput({ input: new common.TokenAmount(tokenIn, input.amount), amountBps, amountOffset }),
+      core.newLogicInput({ input: new common.TokenAmount(tokenIn, input.amount), balanceBps, amountOffset }),
     ];
     const wrapMode = input.token.isNative ? core.WrapMode.wrapBefore : core.WrapMode.none;
 

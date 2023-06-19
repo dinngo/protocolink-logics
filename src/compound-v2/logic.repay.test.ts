@@ -3,6 +3,7 @@ import { LogicTestCase } from 'test/types';
 import { RepayLogic, RepayLogicFields } from './logic.repay';
 import * as common from '@furucombo/composable-router-common';
 import { constants, utils } from 'ethers';
+import * as core from '@furucombo/composable-router-core';
 import { expect } from 'chai';
 import { toCToken, underlyingTokens } from './tokens';
 
@@ -40,23 +41,23 @@ describe('CompoundV2 RepayLogic', function () {
         fields: {
           borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
           input: new common.TokenAmount(underlyingTokens.ETH, '1'),
-          amountBps: 5000,
+          balanceBps: 5000,
         },
       },
       {
         fields: {
           borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
           input: new common.TokenAmount(underlyingTokens.USDC, '1'),
-          amountBps: 5000,
+          balanceBps: 5000,
         },
       },
     ];
 
     testCases.forEach(({ fields }) => {
-      it(`repay ${fields.input.token.symbol}${fields.amountBps ? ' with amountBps' : ''}`, async function () {
+      it(`repay ${fields.input.token.symbol}${fields.balanceBps ? ' with balanceBps' : ''}`, async function () {
         const routerLogic = await logic.build(fields);
         const sig = routerLogic.data.substring(0, 10);
-        const { input, amountBps } = fields;
+        const { input, balanceBps } = fields;
 
         expect(routerLogic.to).to.eq(toCToken(input.token).address);
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;
@@ -66,11 +67,11 @@ describe('CompoundV2 RepayLogic', function () {
         } else {
           expect(sig).to.eq(ifaceCErc20.getSighash('repayBorrowBehalf'));
         }
-        if (amountBps) {
-          expect(routerLogic.inputs[0].amountBps).to.eq(amountBps);
-          expect(routerLogic.inputs[0].amountOrOffset).to.eq(input.token.isNative ? constants.MaxUint256 : 32);
+        if (balanceBps) {
+          expect(routerLogic.inputs[0].balanceBps).to.eq(balanceBps);
+          expect(routerLogic.inputs[0].amountOrOffset).to.eq(input.token.isNative ? core.OFFSET_NOT_USED : 32);
         } else {
-          expect(routerLogic.inputs[0].amountBps).to.eq(constants.MaxUint256);
+          expect(routerLogic.inputs[0].balanceBps).to.eq(core.BPS_NOT_USED);
           expect(routerLogic.inputs[0].amountOrOffset).to.eq(input.amountWei);
         }
         expect(routerLogic.approveTo).to.eq(constants.AddressZero);

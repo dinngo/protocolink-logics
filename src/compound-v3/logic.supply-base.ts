@@ -42,16 +42,16 @@ export class SupplyBaseLogic
   }
 
   async build(fields: SupplyBaseLogicFields) {
-    const { marketId, input, amountBps } = fields;
+    const { marketId, input, balanceBps } = fields;
 
     const market = getMarket(this.chainId, marketId);
     const tokenIn = input.token.wrapped;
 
     const to = market.cometAddress;
     const data = Comet__factory.createInterface().encodeFunctionData('supply', [tokenIn.address, input.amountWei]);
-    const amountOffset = amountBps ? common.getParamOffset(1) : undefined;
+    const amountOffset = balanceBps ? common.getParamOffset(1) : undefined;
     const inputs = [
-      core.newLogicInput({ input: new common.TokenAmount(tokenIn, input.amount), amountBps, amountOffset }),
+      core.newLogicInput({ input: new common.TokenAmount(tokenIn, input.amount), balanceBps, amountOffset }),
     ];
     const wrapMode = input.token.isNative ? core.WrapMode.wrapBefore : core.WrapMode.none;
 

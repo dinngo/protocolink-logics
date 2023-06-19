@@ -5,10 +5,10 @@ import * as core from '@furucombo/composable-router-core';
 import hre from 'hardhat';
 import * as permit2 from 'src/permit2';
 
-export function calcRequiredAmountByAmountBps(input: common.TokenAmount, amountBps?: number) {
+export function calcRequiredAmountByBalanceBps(input: common.TokenAmount, balanceBps?: number) {
   let required: common.TokenAmount;
-  if (amountBps) {
-    const requiredAmountWei = input.amountWei.mul(common.BPS_BASE).div(amountBps);
+  if (balanceBps) {
+    const requiredAmountWei = input.amountWei.mul(common.BPS_BASE).div(balanceBps);
     required = new common.TokenAmount(input.token).setWei(requiredAmountWei);
   } else {
     required = input.clone();

@@ -44,7 +44,7 @@ describe('CompoundV3 SupplyBaseLogic', function () {
           marketId: MarketId.USDC,
           input: new common.TokenAmount(mainnetTokens.USDC, '1'),
           output: new common.TokenAmount(mainnetTokens.cUSDCv3, '0'),
-          amountBps: 5000,
+          balanceBps: 5000,
         },
       },
       {
@@ -59,7 +59,7 @@ describe('CompoundV3 SupplyBaseLogic', function () {
           marketId: MarketId.ETH,
           input: new common.TokenAmount(mainnetTokens.ETH, '1'),
           output: new common.TokenAmount(mainnetTokens.cWETHv3, '0'),
-          amountBps: 5000,
+          balanceBps: 5000,
         },
       },
       {
@@ -74,29 +74,29 @@ describe('CompoundV3 SupplyBaseLogic', function () {
           marketId: MarketId.ETH,
           input: new common.TokenAmount(mainnetTokens.WETH, '1'),
           output: new common.TokenAmount(mainnetTokens.cWETHv3, '0'),
-          amountBps: 5000,
+          balanceBps: 5000,
         },
       },
     ];
 
     testCases.forEach(({ fields }) => {
       it(`supply ${fields.input.token.symbol} to ${fields.marketId} market${
-        fields.amountBps ? ' with amountBps' : ''
+        fields.balanceBps ? ' with balanceBps' : ''
       }`, async function () {
         const routerLogic = await logic.build(fields);
         const sig = routerLogic.data.substring(0, 10);
-        const { marketId, input, amountBps } = fields;
+        const { marketId, input, balanceBps } = fields;
         const market = getMarket(chainId, marketId);
 
         expect(routerLogic.to).to.eq(market.cometAddress);
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(sig).to.eq(iface.getSighash('supply'));
         expect(routerLogic.inputs[0].token).to.eq(input.token.wrapped.address);
-        if (amountBps) {
-          expect(routerLogic.inputs[0].amountBps).to.eq(amountBps);
+        if (balanceBps) {
+          expect(routerLogic.inputs[0].balanceBps).to.eq(balanceBps);
           expect(routerLogic.inputs[0].amountOrOffset).to.eq(32);
         } else {
-          expect(routerLogic.inputs[0].amountBps).to.eq(constants.MaxUint256);
+          expect(routerLogic.inputs[0].balanceBps).to.eq(core.BPS_NOT_USED);
           expect(routerLogic.inputs[0].amountOrOffset).to.eq(input.amountWei);
         }
         expect(routerLogic.wrapMode).to.eq(input.token.isNative ? core.WrapMode.wrapBefore : core.WrapMode.none);

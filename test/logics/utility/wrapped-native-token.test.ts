@@ -28,11 +28,11 @@ describe('Test Utility WrappedNativeToken Logic', function () {
   const testCases = [
     { input: new common.TokenAmount(mainnetTokens.ETH, '1'), tokenOut: mainnetTokens.WETH },
     { input: new common.TokenAmount(mainnetTokens.WETH, '1'), tokenOut: mainnetTokens.ETH },
-    { input: new common.TokenAmount(mainnetTokens.ETH, '1'), tokenOut: mainnetTokens.WETH, amountBps: 5000 },
-    { input: new common.TokenAmount(mainnetTokens.WETH, '1'), tokenOut: mainnetTokens.ETH, amountBps: 5000 },
+    { input: new common.TokenAmount(mainnetTokens.ETH, '1'), tokenOut: mainnetTokens.WETH, balanceBps: 5000 },
+    { input: new common.TokenAmount(mainnetTokens.WETH, '1'), tokenOut: mainnetTokens.ETH, balanceBps: 5000 },
   ];
 
-  testCases.forEach(({ input, tokenOut, amountBps }, i) => {
+  testCases.forEach(({ input, tokenOut, balanceBps }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. get output
       const logicUtilityWrappedNativeToken = new utility.WrappedNativeTokenLogic(chainId);
@@ -41,8 +41,8 @@ describe('Test Utility WrappedNativeToken Logic', function () {
       // 2. build funds, tokensReturn
       const tokensReturn = [output.token.elasticAddress];
       const funds = new common.TokenAmounts();
-      if (amountBps) {
-        funds.add(utils.calcRequiredAmountByAmountBps(input, amountBps));
+      if (balanceBps) {
+        funds.add(utils.calcRequiredAmountByBalanceBps(input, balanceBps));
         tokensReturn.push(input.token.elasticAddress);
       } else {
         funds.add(input);
@@ -52,7 +52,7 @@ describe('Test Utility WrappedNativeToken Logic', function () {
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
 
-      routerLogics.push(await logicUtilityWrappedNativeToken.build({ input, output, amountBps }));
+      routerLogics.push(await logicUtilityWrappedNativeToken.build({ input, output, balanceBps }));
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({

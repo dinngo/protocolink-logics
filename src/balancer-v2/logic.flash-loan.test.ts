@@ -42,7 +42,7 @@ describe('BalancerV2 FlashLoanLogic', function () {
         expect(sig).to.eq(iface.getSighash('flashLoan'));
         expect(routerLogic.inputs).to.deep.eq([]);
         expect(routerLogic.approveTo).to.eq(constants.AddressZero);
-        expect(routerLogic.callback).to.eq(getContractAddress(chainId, 'FlashLoanCallbackBalancerV2'));
+        expect(routerLogic.callback).to.eq(getContractAddress(chainId, 'BalancerV2FlashLoanCallback'));
       });
     });
   });

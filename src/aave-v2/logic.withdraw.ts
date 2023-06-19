@@ -41,7 +41,7 @@ export class WithdrawLogic
   }
 
   async build(fields: WithdrawLogicFields, options: WithdrawLogicOptions) {
-    const { input, output, amountBps } = fields;
+    const { input, output, balanceBps } = fields;
     const { account } = options;
 
     const tokenOut = output.token.wrapped;
@@ -53,8 +53,8 @@ export class WithdrawLogic
       input.amountWei,
       core.calcAccountAgent(this.chainId, account),
     ]);
-    const amountOffset = amountBps ? common.getParamOffset(1) : undefined;
-    const inputs = [core.newLogicInput({ input, amountBps, amountOffset })];
+    const amountOffset = balanceBps ? common.getParamOffset(1) : undefined;
+    const inputs = [core.newLogicInput({ input, balanceBps, amountOffset })];
     const wrapMode = output.token.isNative ? core.WrapMode.unwrapAfter : core.WrapMode.none;
 
     return core.newLogic({ to, data, inputs, wrapMode });

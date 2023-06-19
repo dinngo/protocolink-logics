@@ -1,4 +1,4 @@
-import { BigNumberish, constants } from 'ethers';
+import { BigNumberish } from 'ethers';
 import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
 
@@ -39,7 +39,7 @@ export class WrappedNativeTokenLogic
   }
 
   async build(fields: WrappedNativeTokenLogicFields) {
-    const { input, amountBps } = fields;
+    const { input, balanceBps } = fields;
 
     const to = this.wrappedNativeToken.address;
     const iface = common.WETH__factory.createInterface();
@@ -47,12 +47,12 @@ export class WrappedNativeTokenLogic
     let amountOffset: BigNumberish | undefined;
     if (input.token.isNative) {
       data = iface.encodeFunctionData('deposit');
-      if (amountBps) amountOffset = constants.MaxUint256;
+      if (balanceBps) amountOffset = core.OFFSET_NOT_USED;
     } else {
       data = iface.encodeFunctionData('withdraw', [input.amountWei]);
-      if (amountBps) amountOffset = common.getParamOffset(0);
+      if (balanceBps) amountOffset = common.getParamOffset(0);
     }
-    const inputs = [core.newLogicInput({ input, amountBps, amountOffset })];
+    const inputs = [core.newLogicInput({ input, balanceBps, amountOffset })];
 
     return core.newLogic({ to, data, inputs });
   }

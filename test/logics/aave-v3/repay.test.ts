@@ -53,25 +53,25 @@ describe('Test AaveV3 Repay Logic', function () {
       supply: new common.TokenAmount(aavev3.mainnetTokens.USDC, '5000'),
       borrow: new common.TokenAmount(aavev3.mainnetTokens.ETH, '1'),
       interestRateMode: aavev3.InterestRateMode.variable,
-      amountBps: 5000,
+      balanceBps: 5000,
     },
     {
       userIndex: 0,
       supply: new common.TokenAmount(aavev3.mainnetTokens.USDC, '5000'),
       borrow: new common.TokenAmount(aavev3.mainnetTokens.WETH, '1'),
       interestRateMode: aavev3.InterestRateMode.variable,
-      amountBps: 5000,
+      balanceBps: 5000,
     },
     {
       userIndex: 1,
       supply: new common.TokenAmount(aavev3.mainnetTokens.WETH, '1'),
       borrow: new common.TokenAmount(aavev3.mainnetTokens.USDC, '1'),
       interestRateMode: aavev3.InterestRateMode.variable,
-      amountBps: 5000,
+      balanceBps: 5000,
     },
   ];
 
-  testCases.forEach(({ userIndex, supply, borrow, interestRateMode, amountBps }, i) => {
+  testCases.forEach(({ userIndex, supply, borrow, interestRateMode, balanceBps }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. supply and borrow first
       const user = users[userIndex];
@@ -85,8 +85,8 @@ describe('Test AaveV3 Repay Logic', function () {
 
       // 3. build funds and tokensReturn
       const funds = new common.TokenAmounts();
-      if (amountBps) {
-        funds.add(utils.calcRequiredAmountByAmountBps(input, amountBps));
+      if (balanceBps) {
+        funds.add(utils.calcRequiredAmountByBalanceBps(input, balanceBps));
       } else {
         funds.add(input);
       }
@@ -96,7 +96,7 @@ describe('Test AaveV3 Repay Logic', function () {
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
 
-      routerLogics.push(await logicAaveV3Repay.build({ input, interestRateMode, borrower: user.address, amountBps }));
+      routerLogics.push(await logicAaveV3Repay.build({ input, interestRateMode, borrower: user.address, balanceBps }));
 
       // 5. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({

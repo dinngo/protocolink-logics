@@ -48,7 +48,7 @@ export class RepayLogic
   }
 
   async build(fields: RepayLogicFields) {
-    const { input, interestRateMode, borrower, amountBps } = fields;
+    const { input, interestRateMode, borrower, balanceBps } = fields;
 
     const tokenIn = input.token.wrapped;
 
@@ -60,9 +60,9 @@ export class RepayLogic
       interestRateMode,
       borrower,
     ]);
-    const amountOffset = amountBps ? common.getParamOffset(1) : undefined;
+    const amountOffset = balanceBps ? common.getParamOffset(1) : undefined;
     const inputs = [
-      core.newLogicInput({ input: new common.TokenAmount(tokenIn, input.amount), amountBps, amountOffset }),
+      core.newLogicInput({ input: new common.TokenAmount(tokenIn, input.amount), balanceBps, amountOffset }),
     ];
     const wrapMode = input.token.isNative ? core.WrapMode.wrapBefore : core.WrapMode.none;
 

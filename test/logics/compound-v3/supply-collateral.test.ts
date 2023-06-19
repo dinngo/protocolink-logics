@@ -32,7 +32,7 @@ describe('Test CompoundV3 SupplyCollateral Logic', function () {
     {
       marketId: compoundv3.MarketId.USDC,
       input: new common.TokenAmount(compoundv3.mainnetTokens.ETH, '1'),
-      amountBps: 5000,
+      balanceBps: 5000,
     },
     {
       marketId: compoundv3.MarketId.USDC,
@@ -41,7 +41,7 @@ describe('Test CompoundV3 SupplyCollateral Logic', function () {
     {
       marketId: compoundv3.MarketId.USDC,
       input: new common.TokenAmount(compoundv3.mainnetTokens.WETH, '1'),
-      amountBps: 5000,
+      balanceBps: 5000,
     },
     {
       marketId: compoundv3.MarketId.USDC,
@@ -50,7 +50,7 @@ describe('Test CompoundV3 SupplyCollateral Logic', function () {
     {
       marketId: compoundv3.MarketId.USDC,
       input: new common.TokenAmount(compoundv3.mainnetTokens.WBTC, '1'),
-      amountBps: 5000,
+      balanceBps: 5000,
     },
     {
       marketId: compoundv3.MarketId.ETH,
@@ -59,7 +59,7 @@ describe('Test CompoundV3 SupplyCollateral Logic', function () {
     {
       marketId: compoundv3.MarketId.ETH,
       input: new common.TokenAmount(compoundv3.mainnetTokens.cbETH, '1'),
-      amountBps: 5000,
+      balanceBps: 5000,
     },
     {
       marketId: compoundv3.MarketId.ETH,
@@ -68,11 +68,11 @@ describe('Test CompoundV3 SupplyCollateral Logic', function () {
     {
       marketId: compoundv3.MarketId.ETH,
       input: new common.TokenAmount(compoundv3.mainnetTokens.wstETH, '1'),
-      amountBps: 5000,
+      balanceBps: 5000,
     },
   ];
 
-  testCases.forEach(({ marketId, input, amountBps }, i) => {
+  testCases.forEach(({ marketId, input, balanceBps }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. check can supply or not
       const canSupply = await service.canSupply(marketId, input);
@@ -81,8 +81,8 @@ describe('Test CompoundV3 SupplyCollateral Logic', function () {
       // 2. build funds, tokensReturn
       const tokensReturn = [];
       const funds = new common.TokenAmounts();
-      if (amountBps) {
-        funds.add(utils.calcRequiredAmountByAmountBps(input, amountBps));
+      if (balanceBps) {
+        funds.add(utils.calcRequiredAmountByBalanceBps(input, balanceBps));
         tokensReturn.push(input.token.elasticAddress);
       } else {
         funds.add(input);
@@ -93,7 +93,7 @@ describe('Test CompoundV3 SupplyCollateral Logic', function () {
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
       const logicCompoundV3SupplyCollateral = new compoundv3.SupplyCollateralLogic(chainId, hre.ethers.provider);
       routerLogics.push(
-        await logicCompoundV3SupplyCollateral.build({ marketId, input, amountBps }, { account: user.address })
+        await logicCompoundV3SupplyCollateral.build({ marketId, input, balanceBps }, { account: user.address })
       );
 
       // 4. send router tx

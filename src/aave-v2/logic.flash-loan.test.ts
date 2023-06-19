@@ -49,7 +49,7 @@ describe('AaveV2 FlashLoanLogic', function () {
         expect(sig).to.eq(iface.getSighash('flashLoan'));
         expect(routerLogic.inputs).to.deep.eq([]);
         expect(routerLogic.approveTo).to.eq(constants.AddressZero);
-        expect(routerLogic.callback).to.eq(getContractAddress(chainId, 'FlashLoanCallbackAaveV2'));
+        expect(routerLogic.callback).to.eq(getContractAddress(chainId, 'AaveV2FlashLoanCallback'));
       });
     });
   });

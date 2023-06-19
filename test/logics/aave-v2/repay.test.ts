@@ -71,46 +71,46 @@ describe('Test AaveV2 Repay Logic', function () {
       deposit: new common.TokenAmount(aavev2.mainnetTokens.USDC, '5000'),
       borrow: new common.TokenAmount(aavev2.mainnetTokens.ETH, '1'),
       interestRateMode: aavev2.InterestRateMode.variable,
-      amountBps: 5000,
+      balanceBps: 5000,
     },
     {
       userIndex: 0,
       deposit: new common.TokenAmount(aavev2.mainnetTokens.USDC, '5000'),
       borrow: new common.TokenAmount(aavev2.mainnetTokens.ETH, '1'),
       interestRateMode: aavev2.InterestRateMode.stable,
-      amountBps: 5000,
+      balanceBps: 5000,
     },
     {
       userIndex: 0,
       deposit: new common.TokenAmount(aavev2.mainnetTokens.USDC, '5000'),
       borrow: new common.TokenAmount(aavev2.mainnetTokens.WETH, '1'),
       interestRateMode: aavev2.InterestRateMode.variable,
-      amountBps: 5000,
+      balanceBps: 5000,
     },
     {
       userIndex: 0,
       deposit: new common.TokenAmount(aavev2.mainnetTokens.USDC, '5000'),
       borrow: new common.TokenAmount(aavev2.mainnetTokens.WETH, '1'),
       interestRateMode: aavev2.InterestRateMode.stable,
-      amountBps: 5000,
+      balanceBps: 5000,
     },
     {
       userIndex: 1,
       deposit: new common.TokenAmount(aavev2.mainnetTokens.WETH, '1'),
       borrow: new common.TokenAmount(aavev2.mainnetTokens.USDC, '1'),
       interestRateMode: aavev2.InterestRateMode.variable,
-      amountBps: 5000,
+      balanceBps: 5000,
     },
     {
       userIndex: 1,
       deposit: new common.TokenAmount(aavev2.mainnetTokens.WETH, '1'),
       borrow: new common.TokenAmount(aavev2.mainnetTokens.USDC, '1'),
       interestRateMode: aavev2.InterestRateMode.stable,
-      amountBps: 5000,
+      balanceBps: 5000,
     },
   ];
 
-  testCases.forEach(({ userIndex, deposit, borrow, interestRateMode, amountBps }, i) => {
+  testCases.forEach(({ userIndex, deposit, borrow, interestRateMode, balanceBps }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. deposit and borrow first
       const user = users[userIndex];
@@ -124,8 +124,8 @@ describe('Test AaveV2 Repay Logic', function () {
 
       // 3. build funds and tokensReturn
       const funds = new common.TokenAmounts();
-      if (amountBps) {
-        funds.add(utils.calcRequiredAmountByAmountBps(input, amountBps));
+      if (balanceBps) {
+        funds.add(utils.calcRequiredAmountByBalanceBps(input, balanceBps));
       } else {
         funds.add(input);
       }
@@ -135,7 +135,7 @@ describe('Test AaveV2 Repay Logic', function () {
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
 
-      routerLogics.push(await logicAaveV2Repay.build({ input, interestRateMode, borrower: user.address, amountBps }));
+      routerLogics.push(await logicAaveV2Repay.build({ input, interestRateMode, borrower: user.address, balanceBps }));
 
       // 5. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({

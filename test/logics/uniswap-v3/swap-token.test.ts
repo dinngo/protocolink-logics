@@ -52,7 +52,7 @@ describe('Test UniswapV3 SwapToken Logic', function () {
         tokenOut: mainnetTokens.USDC,
         slippage: 100,
       },
-      amountBps: 5000,
+      balanceBps: 5000,
     },
     {
       params: {
@@ -60,7 +60,7 @@ describe('Test UniswapV3 SwapToken Logic', function () {
         tokenOut: mainnetTokens.ETH,
         slippage: 100,
       },
-      amountBps: 5000,
+      balanceBps: 5000,
     },
     {
       params: {
@@ -68,7 +68,7 @@ describe('Test UniswapV3 SwapToken Logic', function () {
         tokenOut: mainnetTokens.DAI,
         slippage: 100,
       },
-      amountBps: 5000,
+      balanceBps: 5000,
     },
     {
       params: {
@@ -93,7 +93,7 @@ describe('Test UniswapV3 SwapToken Logic', function () {
     },
   ];
 
-  testCases.forEach(({ params, amountBps }, i) => {
+  testCases.forEach(({ params, balanceBps }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. get input or output
       const logicUniswapV3SwapToken = new uniswapv3.SwapTokenLogic(chainId);
@@ -103,8 +103,8 @@ describe('Test UniswapV3 SwapToken Logic', function () {
       // 2. build funds, tokensReturn
       const tokensReturn = [output.token.elasticAddress];
       const funds = new common.TokenAmounts();
-      if (amountBps) {
-        funds.add(utils.calcRequiredAmountByAmountBps(input, amountBps));
+      if (balanceBps) {
+        funds.add(utils.calcRequiredAmountByBalanceBps(input, balanceBps));
         tokensReturn.push(input.token.elasticAddress);
       } else {
         funds.add(input);

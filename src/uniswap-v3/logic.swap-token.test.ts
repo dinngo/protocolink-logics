@@ -152,7 +152,7 @@ describe('UniswapV3 SwapTokenLogic', function () {
       }`, async function () {
         const routerLogic = await logic.build(fields, options);
         const sig = routerLogic.data.substring(0, 10);
-        const { tradeType, input, output, amountBps } = fields;
+        const { tradeType, input, output, balanceBps } = fields;
 
         expect(routerLogic.to).to.eq(SWAP_ROUTER_ADDRESS);
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;
@@ -164,11 +164,11 @@ describe('UniswapV3 SwapTokenLogic', function () {
           )
         );
         expect(routerLogic.inputs[0].token).to.eq(input.token.wrapped.address);
-        if (amountBps) {
-          expect(routerLogic.inputs[0].amountBps).to.eq(amountBps);
+        if (balanceBps) {
+          expect(routerLogic.inputs[0].balanceBps).to.eq(balanceBps);
           expect(routerLogic.inputs[0].amountOrOffset).to.eq(common.getParamOffset(1));
         } else {
-          expect(routerLogic.inputs[0].amountBps).to.eq(constants.MaxUint256);
+          expect(routerLogic.inputs[0].balanceBps).to.eq(core.BPS_NOT_USED);
           expect(routerLogic.inputs[0].amountOrOffset).eq(input.amountWei);
         }
         expect(routerLogic.wrapMode).to.eq(

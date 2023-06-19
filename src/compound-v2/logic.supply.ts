@@ -1,4 +1,4 @@
-import { BigNumber, BigNumberish, constants } from 'ethers';
+import { BigNumber, BigNumberish } from 'ethers';
 import { CErc20__factory, CEther__factory } from './contracts';
 import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
@@ -36,19 +36,19 @@ export class SupplyLogic
   }
 
   async build(fields: SupplyLogicFields) {
-    const { input, output, amountBps } = fields;
+    const { input, output, balanceBps } = fields;
 
     const to = output.token.address;
     let data: string;
     let amountOffset: BigNumberish | undefined;
     if (input.token.isNative) {
       data = CEther__factory.createInterface().encodeFunctionData('mint');
-      if (amountBps) amountOffset = constants.MaxUint256;
+      if (balanceBps) amountOffset = core.OFFSET_NOT_USED;
     } else {
       data = CErc20__factory.createInterface().encodeFunctionData('mint', [input.amountWei]);
-      if (amountBps) amountOffset = common.getParamOffset(0);
+      if (balanceBps) amountOffset = common.getParamOffset(0);
     }
-    const inputs = [core.newLogicInput({ input, amountBps, amountOffset })];
+    const inputs = [core.newLogicInput({ input, balanceBps, amountOffset })];
 
     return core.newLogic({ to, data, inputs });
   }

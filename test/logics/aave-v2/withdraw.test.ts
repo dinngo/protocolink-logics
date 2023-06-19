@@ -42,21 +42,21 @@ describe('Test AaveV2 Withdraw Logic', function () {
     {
       input: new common.TokenAmount(aavev2.mainnetTokens.aWETH, '1'),
       tokenOut: aavev2.mainnetTokens.ETH,
-      amountBps: 5000,
+      balanceBps: 5000,
     },
     {
       input: new common.TokenAmount(aavev2.mainnetTokens.aWETH, '1'),
       tokenOut: aavev2.mainnetTokens.WETH,
-      amountBps: 5000,
+      balanceBps: 5000,
     },
     {
       input: new common.TokenAmount(aavev2.mainnetTokens.aUSDC, '1'),
       tokenOut: aavev2.mainnetTokens.USDC,
-      amountBps: 5000,
+      balanceBps: 5000,
     },
   ];
 
-  testCases.forEach(({ input, tokenOut, amountBps }, i) => {
+  testCases.forEach(({ input, tokenOut, balanceBps }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. deposit first
       const assetsAmount = new common.TokenAmount(tokenOut, '3');
@@ -69,8 +69,8 @@ describe('Test AaveV2 Withdraw Logic', function () {
       // 3. build funds, tokensReturn
       const tokensReturn = [output.token.elasticAddress];
       const funds = new common.TokenAmounts();
-      if (amountBps) {
-        funds.add(utils.calcRequiredAmountByAmountBps(input, amountBps));
+      if (balanceBps) {
+        funds.add(utils.calcRequiredAmountByBalanceBps(input, balanceBps));
         tokensReturn.push(input.token.elasticAddress);
       } else {
         funds.add(input);
@@ -79,7 +79,7 @@ describe('Test AaveV2 Withdraw Logic', function () {
       // 4. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
-      routerLogics.push(await logicAaveV2Withdraw.build({ input, output, amountBps }, { account: user.address }));
+      routerLogics.push(await logicAaveV2Withdraw.build({ input, output, balanceBps }, { account: user.address }));
 
       // 5. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics, tokensReturn });

@@ -1,4 +1,4 @@
-import { BigNumberish, constants } from 'ethers';
+import { BigNumberish } from 'ethers';
 import { CErc20__factory, CEther__factory } from './contracts';
 import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
@@ -36,7 +36,7 @@ export class RepayLogic
   }
 
   async build(fields: RepayLogicFields) {
-    const { borrower, input, amountBps } = fields;
+    const { borrower, input, balanceBps } = fields;
     const cToken = toCToken(input.token);
 
     const to = cToken.address;
@@ -44,12 +44,12 @@ export class RepayLogic
     let amountOffset: BigNumberish | undefined;
     if (input.token.isNative) {
       data = CEther__factory.createInterface().encodeFunctionData('repayBorrowBehalf', [borrower]);
-      if (amountBps) amountOffset = constants.MaxUint256;
+      if (balanceBps) amountOffset = core.OFFSET_NOT_USED;
     } else {
       data = CErc20__factory.createInterface().encodeFunctionData('repayBorrowBehalf', [borrower, input.amountWei]);
-      if (amountBps) amountOffset = common.getParamOffset(1);
+      if (balanceBps) amountOffset = common.getParamOffset(1);
     }
-    const inputs = [core.newLogicInput({ input, amountBps, amountOffset })];
+    const inputs = [core.newLogicInput({ input, balanceBps, amountOffset })];
 
     return core.newLogic({ to, data, inputs });
   }

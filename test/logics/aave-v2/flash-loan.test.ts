@@ -50,7 +50,7 @@ describe('Test AaveV2 FlashLoan Logic', function () {
         flashLoanRouterLogics.push(
           await utilitySendTokenLogic.build({
             input: output.clone().addWei(feeWei),
-            recipient: aavev2.getContractAddress(chainId, 'FlashLoanCallbackAaveV2'),
+            recipient: aavev2.getContractAddress(chainId, 'AaveV2FlashLoanCallback'),
           })
         );
       }
@@ -59,11 +59,7 @@ describe('Test AaveV2 FlashLoan Logic', function () {
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
 
-      const params = core.Agent__factory.createInterface().encodeFunctionData('execute', [
-        flashLoanRouterLogics,
-        [],
-        true,
-      ]);
+      const params = core.newCallbackParams(flashLoanRouterLogics);
       const logicAaveV2FlashLoan = new aavev2.FlashLoanLogic(chainId);
       routerLogics.push(await logicAaveV2FlashLoan.build({ outputs, params }));
 

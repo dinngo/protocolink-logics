@@ -17,16 +17,16 @@ import type { FunctionFragment, Result } from '@ethersproject/abi';
 import type { Listener, Provider } from '@ethersproject/providers';
 import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent, PromiseOrValue } from './common';
 
-export interface FlashLoanCallbackAaveV3Interface extends utils.Interface {
+export interface AaveV2FlashLoanCallbackInterface extends utils.Interface {
   functions: {
-    'aaveV3Provider()': FunctionFragment;
+    'aaveV2Provider()': FunctionFragment;
     'executeOperation(address[],uint256[],uint256[],address,bytes)': FunctionFragment;
     'router()': FunctionFragment;
   };
 
-  getFunction(nameOrSignatureOrTopic: 'aaveV3Provider' | 'executeOperation' | 'router'): FunctionFragment;
+  getFunction(nameOrSignatureOrTopic: 'aaveV2Provider' | 'executeOperation' | 'router'): FunctionFragment;
 
-  encodeFunctionData(functionFragment: 'aaveV3Provider', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'aaveV2Provider', values?: undefined): string;
   encodeFunctionData(
     functionFragment: 'executeOperation',
     values: [
@@ -39,19 +39,19 @@ export interface FlashLoanCallbackAaveV3Interface extends utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: 'router', values?: undefined): string;
 
-  decodeFunctionResult(functionFragment: 'aaveV3Provider', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'aaveV2Provider', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'executeOperation', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'router', data: BytesLike): Result;
 
   events: {};
 }
 
-export interface FlashLoanCallbackAaveV3 extends BaseContract {
+export interface AaveV2FlashLoanCallback extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: FlashLoanCallbackAaveV3Interface;
+  interface: AaveV2FlashLoanCallbackInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -69,7 +69,7 @@ export interface FlashLoanCallbackAaveV3 extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    aaveV3Provider(overrides?: CallOverrides): Promise<[string]>;
+    aaveV2Provider(overrides?: CallOverrides): Promise<[string]>;
 
     executeOperation(
       assets: PromiseOrValue<string>[],
@@ -83,7 +83,7 @@ export interface FlashLoanCallbackAaveV3 extends BaseContract {
     router(overrides?: CallOverrides): Promise<[string]>;
   };
 
-  aaveV3Provider(overrides?: CallOverrides): Promise<string>;
+  aaveV2Provider(overrides?: CallOverrides): Promise<string>;
 
   executeOperation(
     assets: PromiseOrValue<string>[],
@@ -97,7 +97,7 @@ export interface FlashLoanCallbackAaveV3 extends BaseContract {
   router(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
-    aaveV3Provider(overrides?: CallOverrides): Promise<string>;
+    aaveV2Provider(overrides?: CallOverrides): Promise<string>;
 
     executeOperation(
       assets: PromiseOrValue<string>[],
@@ -114,7 +114,7 @@ export interface FlashLoanCallbackAaveV3 extends BaseContract {
   filters: {};
 
   estimateGas: {
-    aaveV3Provider(overrides?: CallOverrides): Promise<BigNumber>;
+    aaveV2Provider(overrides?: CallOverrides): Promise<BigNumber>;
 
     executeOperation(
       assets: PromiseOrValue<string>[],
@@ -129,7 +129,7 @@ export interface FlashLoanCallbackAaveV3 extends BaseContract {
   };
 
   populateTransaction: {
-    aaveV3Provider(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    aaveV2Provider(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     executeOperation(
       assets: PromiseOrValue<string>[],

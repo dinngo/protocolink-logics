@@ -31,7 +31,7 @@ describe('Test CompoundV3 WithdrawBase Logic', function () {
       marketId: compoundv3.MarketId.USDC,
       input: new common.TokenAmount(compoundv3.mainnetTokens.cUSDCv3, '1'),
       tokenOut: compoundv3.mainnetTokens.USDC,
-      amountBps: 5000,
+      balanceBps: 5000,
     },
     {
       marketId: compoundv3.MarketId.ETH,
@@ -42,7 +42,7 @@ describe('Test CompoundV3 WithdrawBase Logic', function () {
       marketId: compoundv3.MarketId.ETH,
       input: new common.TokenAmount(compoundv3.mainnetTokens.cWETHv3, '1'),
       tokenOut: compoundv3.mainnetTokens.ETH,
-      amountBps: 5000,
+      balanceBps: 5000,
     },
     {
       marketId: compoundv3.MarketId.ETH,
@@ -53,11 +53,11 @@ describe('Test CompoundV3 WithdrawBase Logic', function () {
       marketId: compoundv3.MarketId.ETH,
       input: new common.TokenAmount(compoundv3.mainnetTokens.cWETHv3, '1'),
       tokenOut: compoundv3.mainnetTokens.WETH,
-      amountBps: 5000,
+      balanceBps: 5000,
     },
   ];
 
-  testCases.forEach(({ marketId, input, tokenOut, amountBps }, i) => {
+  testCases.forEach(({ marketId, input, tokenOut, balanceBps }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. supply first
       const supply = new common.TokenAmount(tokenOut.wrapped, '3');
@@ -71,8 +71,8 @@ describe('Test CompoundV3 WithdrawBase Logic', function () {
       // 3. build funds, tokensReturn
       const tokensReturn = [output.token.elasticAddress];
       const funds = new common.TokenAmounts();
-      if (amountBps) {
-        funds.add(utils.calcRequiredAmountByAmountBps(input, amountBps));
+      if (balanceBps) {
+        funds.add(utils.calcRequiredAmountByBalanceBps(input, balanceBps));
         tokensReturn.push(input.token.elasticAddress);
       } else {
         funds.add(input);
@@ -81,7 +81,7 @@ describe('Test CompoundV3 WithdrawBase Logic', function () {
       // 4. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
-      routerLogics.push(await logicCompoundV3WithdrawBase.build({ marketId, input, output, amountBps }));
+      routerLogics.push(await logicCompoundV3WithdrawBase.build({ marketId, input, output, balanceBps }));
 
       // 5. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({

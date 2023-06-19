@@ -36,7 +36,7 @@ export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInt
       modes.push(InterestRateMode.none);
     });
     const data = LendingPool__factory.createInterface().encodeFunctionData('flashLoan', [
-      getContractAddress(this.chainId, 'FlashLoanCallbackAaveV2'),
+      getContractAddress(this.chainId, 'AaveV2FlashLoanCallback'),
       assets,
       amounts,
       modes,
@@ -45,7 +45,7 @@ export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInt
       referralCode,
     ]);
 
-    const callback = getContractAddress(this.chainId, 'FlashLoanCallbackAaveV2');
+    const callback = getContractAddress(this.chainId, 'AaveV2FlashLoanCallback');
 
     return core.newLogic({ to, data, callback });
   }

@@ -14,37 +14,37 @@ export async function setup() {
   const router = await (
     await new core.Router__factory()
       .connect(deployer)
-      .deploy(common.getWrappedNativeToken(chainId).address, deployer.address, deployer.address)
+      .deploy(common.getWrappedNativeToken(chainId).address, deployer.address, deployer.address, deployer.address)
   ).deployed();
   core.setContractAddress(chainId, 'Router', router.address);
   const agentImplementation = await router.agentImplementation();
   core.setContractAddress(chainId, 'AgentImplementation', agentImplementation);
 
-  // deploy FlashLoanCallbackAaveV2
+  // deploy AaveV2FlashLoanCallback
   const aaveV2Service = new aavev2.Service(chainId, hre.ethers.provider);
   const aaveV2AddressesProvider = await aaveV2Service.protocolDataProvider.ADDRESSES_PROVIDER();
-  const flashLoanCallbackAaveV2 = await (
-    await new aavev2.FlashLoanCallbackAaveV2__factory()
+  const aaveV2FlashLoanCallback = await (
+    await new aavev2.AaveV2FlashLoanCallback__factory()
       .connect(deployer)
       .deploy(router.address, aaveV2AddressesProvider)
   ).deployed();
-  aavev2.setContractAddress(chainId, 'FlashLoanCallbackAaveV2', flashLoanCallbackAaveV2.address);
+  aavev2.setContractAddress(chainId, 'AaveV2FlashLoanCallback', aaveV2FlashLoanCallback.address);
 
-  // deploy FlashLoanCallbackAaveV3
+  // deploy AaveV3FlashLoanCallback
   const aaveV3Service = new aavev3.Service(chainId, hre.ethers.provider);
   const aaveV3AddressesProvider = await aaveV3Service.poolDataProvider.ADDRESSES_PROVIDER();
-  const flashLoanCallbackAaveV3 = await (
-    await new aavev3.FlashLoanCallbackAaveV3__factory()
+  const aaveV3FlashLoanCallback = await (
+    await new aavev3.AaveV3FlashLoanCallback__factory()
       .connect(deployer)
       .deploy(router.address, aaveV3AddressesProvider)
   ).deployed();
-  aavev3.setContractAddress(chainId, 'FlashLoanCallbackAaveV3', flashLoanCallbackAaveV3.address);
+  aavev3.setContractAddress(chainId, 'AaveV3FlashLoanCallback', aaveV3FlashLoanCallback.address);
 
-  // deploy FlashLoanCallbackBalancerV2
-  const flashLoanCallbackBalancerV2 = await (
-    await new balancerv2.FlashLoanCallbackBalancerV2__factory()
+  // deploy BalancerV2FlashLoanCallback
+  const balancerV2FlashLoanCallback = await (
+    await new balancerv2.BalancerV2FlashLoanCallback__factory()
       .connect(deployer)
       .deploy(router.address, balancerv2.getContractAddress(chainId, 'Vault'))
   ).deployed();
-  balancerv2.setContractAddress(chainId, 'FlashLoanCallbackBalancerV2', flashLoanCallbackBalancerV2.address);
+  balancerv2.setContractAddress(chainId, 'BalancerV2FlashLoanCallback', balancerV2FlashLoanCallback.address);
 }

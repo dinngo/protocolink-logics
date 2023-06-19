@@ -55,7 +55,7 @@ describe('CompoundV3 RepayLogic', function () {
           marketId: MarketId.USDC,
           borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
           input: new common.TokenAmount(mainnetTokens.USDC, '1'),
-          amountBps: 10000,
+          balanceBps: 10000,
         },
       },
     ];
@@ -64,18 +64,18 @@ describe('CompoundV3 RepayLogic', function () {
       it(`repay ${fields.input.token.symbol} to ${fields.marketId} market `, async function () {
         const routerLogic = await logic.build(fields);
         const sig = routerLogic.data.substring(0, 10);
-        const { marketId, input, amountBps } = fields;
+        const { marketId, input, balanceBps } = fields;
         const market = getMarket(chainId, marketId);
 
         expect(routerLogic.to).to.eq(market.cometAddress);
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(sig).to.eq(iface.getSighash('supplyTo'));
         expect(routerLogic.inputs[0].token).to.eq(input.token.wrapped.address);
-        if (amountBps && amountBps !== common.BPS_BASE) {
-          expect(routerLogic.inputs[0].amountBps).to.eq(amountBps);
+        if (balanceBps && balanceBps !== common.BPS_BASE) {
+          expect(routerLogic.inputs[0].balanceBps).to.eq(balanceBps);
           expect(routerLogic.inputs[0].amountOrOffset).to.eq(common.getParamOffset(2));
         } else {
-          expect(routerLogic.inputs[0].amountBps).to.eq(constants.MaxUint256);
+          expect(routerLogic.inputs[0].balanceBps).to.eq(core.BPS_NOT_USED);
           expect(routerLogic.inputs[0].amountOrOffset).eq(input.amountWei);
         }
         expect(routerLogic.wrapMode).to.eq(input.token.isNative ? core.WrapMode.wrapBefore : core.WrapMode.none);

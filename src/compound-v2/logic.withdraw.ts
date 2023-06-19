@@ -40,12 +40,12 @@ export class WithdrawLogic
   }
 
   async build(fields: WithdrawLogicFields) {
-    const { input, amountBps } = fields;
+    const { input, balanceBps } = fields;
 
     const to = input.token.address;
     const data = CErc20__factory.createInterface().encodeFunctionData('redeem', [input.amountWei]);
-    const amountOffset = amountBps ? common.getParamOffset(0) : undefined;
-    const inputs = [core.newLogicInput({ input, amountBps, amountOffset })];
+    const amountOffset = balanceBps ? common.getParamOffset(0) : undefined;
+    const inputs = [core.newLogicInput({ input, balanceBps, amountOffset })];
 
     return core.newLogic({ to, data, inputs });
   }

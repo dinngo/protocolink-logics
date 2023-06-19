@@ -32,7 +32,7 @@ describe('Test BalancerV2 FlashLoan Logic', function () {
         flashLoanRouterLogics.push(
           await logicUtilitySendToken.build({
             input: output,
-            recipient: balancerv2.getContractAddress(chainId, 'FlashLoanCallbackBalancerV2'),
+            recipient: balancerv2.getContractAddress(chainId, 'BalancerV2FlashLoanCallback'),
           })
         );
       }
@@ -40,11 +40,7 @@ describe('Test BalancerV2 FlashLoan Logic', function () {
       // 2. build router logics
       const routerLogics: core.IParam.LogicStruct[] = [];
 
-      const userData = core.Agent__factory.createInterface().encodeFunctionData('execute', [
-        flashLoanRouterLogics,
-        [],
-        true,
-      ]);
+      const userData = core.newCallbackParams(flashLoanRouterLogics);
       const logicBalancerV2FlashLoan = new balancerv2.FlashLoanLogic(chainId);
       routerLogics.push(await logicBalancerV2FlashLoan.build({ outputs, params: userData }));
 

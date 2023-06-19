@@ -45,7 +45,7 @@ describe('Test CompoundV3 Repay Logic', function () {
       supply: new common.TokenAmount(compoundv3.mainnetTokens.WETH, '1'),
       borrow: new common.TokenAmount(compoundv3.mainnetTokens.USDC, '100'),
       repay: new common.TokenAmount(compoundv3.mainnetTokens.USDC, '50'),
-      amountBps: 5000,
+      balanceBps: 5000,
     },
     {
       title: 'USDC market: repay 100% amount',
@@ -55,7 +55,7 @@ describe('Test CompoundV3 Repay Logic', function () {
       supply: new common.TokenAmount(compoundv3.mainnetTokens.WETH, '1'),
       borrow: new common.TokenAmount(compoundv3.mainnetTokens.USDC, '100'),
       repay: new common.TokenAmount(compoundv3.mainnetTokens.USDC, '101'),
-      amountBps: 10000,
+      balanceBps: 10000,
     },
     {
       title: 'USDC market: repay more amount',
@@ -83,7 +83,7 @@ describe('Test CompoundV3 Repay Logic', function () {
       supply: new common.TokenAmount(compoundv3.mainnetTokens.wstETH, '5'),
       borrow: new common.TokenAmount(compoundv3.mainnetTokens.WETH, '2'),
       repay: new common.TokenAmount(compoundv3.mainnetTokens.ETH, '1'),
-      amountBps: 5000,
+      balanceBps: 5000,
     },
     {
       title: 'ETH market: repay 100% amount',
@@ -93,7 +93,7 @@ describe('Test CompoundV3 Repay Logic', function () {
       supply: new common.TokenAmount(compoundv3.mainnetTokens.wstETH, '5'),
       borrow: new common.TokenAmount(compoundv3.mainnetTokens.WETH, '2'),
       repay: new common.TokenAmount(compoundv3.mainnetTokens.ETH, '2.01'),
-      amountBps: 10000,
+      balanceBps: 10000,
     },
     {
       title: 'ETH market: repay more amount',
@@ -121,7 +121,7 @@ describe('Test CompoundV3 Repay Logic', function () {
       supply: new common.TokenAmount(compoundv3.mainnetTokens.wstETH, '5'),
       borrow: new common.TokenAmount(compoundv3.mainnetTokens.WETH, '2'),
       repay: new common.TokenAmount(compoundv3.mainnetTokens.WETH, '1'),
-      amountBps: 5000,
+      balanceBps: 5000,
     },
     {
       title: 'ETH market: repay 100% amount with wrapped token',
@@ -131,7 +131,7 @@ describe('Test CompoundV3 Repay Logic', function () {
       supply: new common.TokenAmount(compoundv3.mainnetTokens.wstETH, '5'),
       borrow: new common.TokenAmount(compoundv3.mainnetTokens.WETH, '2'),
       repay: new common.TokenAmount(compoundv3.mainnetTokens.WETH, '2.01'),
-      amountBps: 10000,
+      balanceBps: 10000,
     },
     {
       title: 'ETH market: repay more amount with wrapped token',
@@ -159,7 +159,7 @@ describe('Test CompoundV3 Repay Logic', function () {
       supply: new common.TokenAmount(compoundv3.mainnetTokens.WETH, '1'),
       borrow: new common.TokenAmount(compoundv3.mainnetTokens.USDC, '100'),
       repay: new common.TokenAmount(compoundv3.mainnetTokens.USDC, '50'),
-      amountBps: 5000,
+      balanceBps: 5000,
     },
     {
       title: 'USDC market: help to repay 100% amount',
@@ -169,7 +169,7 @@ describe('Test CompoundV3 Repay Logic', function () {
       supply: new common.TokenAmount(compoundv3.mainnetTokens.WETH, '1'),
       borrow: new common.TokenAmount(compoundv3.mainnetTokens.USDC, '100'),
       repay: new common.TokenAmount(compoundv3.mainnetTokens.USDC, '101'),
-      amountBps: 10000,
+      balanceBps: 10000,
     },
     {
       title: 'USDC market: help to repay more amount',
@@ -197,7 +197,7 @@ describe('Test CompoundV3 Repay Logic', function () {
       supply: new common.TokenAmount(compoundv3.mainnetTokens.wstETH, '5'),
       borrow: new common.TokenAmount(compoundv3.mainnetTokens.WETH, '2'),
       repay: new common.TokenAmount(compoundv3.mainnetTokens.ETH, '1'),
-      amountBps: 5000,
+      balanceBps: 5000,
     },
     {
       title: 'ETH market: help to repay 100% amount',
@@ -207,7 +207,7 @@ describe('Test CompoundV3 Repay Logic', function () {
       supply: new common.TokenAmount(compoundv3.mainnetTokens.wstETH, '5'),
       borrow: new common.TokenAmount(compoundv3.mainnetTokens.WETH, '2'),
       repay: new common.TokenAmount(compoundv3.mainnetTokens.ETH, '2.01'),
-      amountBps: 10000,
+      balanceBps: 10000,
     },
     {
       title: 'ETH market: help to repay more amount',
@@ -235,7 +235,7 @@ describe('Test CompoundV3 Repay Logic', function () {
       supply: new common.TokenAmount(compoundv3.mainnetTokens.wstETH, '5'),
       borrow: new common.TokenAmount(compoundv3.mainnetTokens.WETH, '2'),
       repay: new common.TokenAmount(compoundv3.mainnetTokens.WETH, '1'),
-      amountBps: 5000,
+      balanceBps: 5000,
     },
     {
       title: 'ETH market: help to repay 100% amount with wrapped token',
@@ -245,7 +245,7 @@ describe('Test CompoundV3 Repay Logic', function () {
       supply: new common.TokenAmount(compoundv3.mainnetTokens.wstETH, '5'),
       borrow: new common.TokenAmount(compoundv3.mainnetTokens.WETH, '2'),
       repay: new common.TokenAmount(compoundv3.mainnetTokens.WETH, '2.01'),
-      amountBps: 10000,
+      balanceBps: 10000,
     },
     {
       title: 'ETH market: help to repay more amount with wrapped token',
@@ -258,7 +258,7 @@ describe('Test CompoundV3 Repay Logic', function () {
     },
   ];
 
-  testCases.forEach(({ title, borrowerIndex, repayerIndex, marketId, supply, borrow, repay, amountBps }, i) => {
+  testCases.forEach(({ title, borrowerIndex, repayerIndex, marketId, supply, borrow, repay, balanceBps }, i) => {
     it(`case ${i}: ${title}`, async function () {
       const borrower = users[borrowerIndex];
       const repayer = users[repayerIndex];
@@ -282,8 +282,8 @@ describe('Test CompoundV3 Repay Logic', function () {
       // 3. build funds, tokensReturn
       const tokensReturn = [repay.token.elasticAddress];
       const funds = new common.TokenAmounts();
-      if (amountBps) {
-        funds.add(utils.calcRequiredAmountByAmountBps(repay, amountBps));
+      if (balanceBps) {
+        funds.add(utils.calcRequiredAmountByBalanceBps(repay, balanceBps));
         tokensReturn.push(repay.token.elasticAddress);
       } else {
         funds.add(repay);
@@ -302,7 +302,7 @@ describe('Test CompoundV3 Repay Logic', function () {
         value: funds.native?.amountWei ?? 0,
       });
       await expect(repayer.sendTransaction(transactionRequest)).to.not.be.reverted;
-      if (amountBps === common.BPS_BASE || repay.amountWei.gte(quotation.input.amountWei)) {
+      if (balanceBps === common.BPS_BASE || repay.amountWei.gte(quotation.input.amountWei)) {
         const borrowBalance = await service.getBorrowBalance(marketId, borrower.address);
         expect(borrowBalance.amountWei).to.eq(0);
         await expect(repayer.address).to.changeBalance(repay.token, -borrow.amount, 1);

@@ -43,12 +43,12 @@ export class RepayLogic extends core.Logic implements core.LogicTokenListInterfa
   }
 
   async build(fields: RepayLogicFields) {
-    const { marketId, borrower, input, amountBps } = fields;
+    const { marketId, borrower, input, balanceBps } = fields;
 
     const market = getMarket(this.chainId, marketId);
     const tokenIn = input.token.wrapped;
     const quotation = await this.quote({ marketId, borrower, tokenIn: input.token });
-    const repayAll = amountBps === common.BPS_BASE || input.amountWei.gte(quotation.input.amountWei);
+    const repayAll = balanceBps === common.BPS_BASE || input.amountWei.gte(quotation.input.amountWei);
 
     const to = market.cometAddress;
     const data = Comet__factory.createInterface().encodeFunctionData('supplyTo', [
@@ -58,8 +58,8 @@ export class RepayLogic extends core.Logic implements core.LogicTokenListInterfa
     ]);
 
     const options: core.NewLogicInputOptions = { input: new common.TokenAmount(tokenIn, input.amount) };
-    if (amountBps && !repayAll) {
-      options.amountBps = amountBps;
+    if (balanceBps && !repayAll) {
+      options.balanceBps = balanceBps;
       options.amountOffset = common.getParamOffset(2);
     }
     const inputs = [core.newLogicInput(options)];

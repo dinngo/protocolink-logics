@@ -42,13 +42,13 @@ export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInt
       amounts.push(output.amountWei);
     }
     const data = Vault__factory.createInterface().encodeFunctionData('flashLoan', [
-      getContractAddress(this.chainId, 'FlashLoanCallbackBalancerV2'),
+      getContractAddress(this.chainId, 'BalancerV2FlashLoanCallback'),
       assets,
       amounts,
       params,
     ]);
 
-    const callback = getContractAddress(this.chainId, 'FlashLoanCallbackBalancerV2');
+    const callback = getContractAddress(this.chainId, 'BalancerV2FlashLoanCallback');
 
     return core.newLogic({ to, data, callback });
   }
