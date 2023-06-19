@@ -4,6 +4,7 @@ import * as common from '@furucombo/composable-router-common';
 import mainnetTokensJSON from './data/mainnet.json';
 import optimismTokensJSON from './data/optimism.json';
 import polygonTokensJSON from './data/polygon.json';
+import * as univ3 from 'src/modules/univ3';
 
 export const WRAPPED_NATIVE_CURRENCY: Record<number, Token> = {
   [common.ChainId.mainnet]: WETH9[common.ChainId.mainnet],
@@ -30,26 +31,18 @@ export const WRAPPED_NATIVE_CURRENCY: Record<number, Token> = {
   ),
 };
 
-export function toTokenMap<T extends string>(tokenObjectMap: Record<string, common.TokenObject>): Record<T, Token> {
-  return Object.keys(tokenObjectMap).reduce((accumulator, symbol) => {
-    const token = tokenObjectMap[symbol];
-    accumulator[symbol] = new Token(token.chainId, token.address, token.decimals, token.symbol, token.name);
-    return accumulator;
-  }, {} as Record<string, Token>);
-}
-
 type MainnetTokenSymbols = keyof typeof mainnetTokensJSON;
 
-export const mainnetTokens = toTokenMap<MainnetTokenSymbols>(mainnetTokensJSON);
+export const mainnetTokens = univ3.toTokenMap<MainnetTokenSymbols>(mainnetTokensJSON);
 
 type PolygonTokenSymbols = keyof typeof polygonTokensJSON;
 
-export const polygonTokens = toTokenMap<PolygonTokenSymbols>(polygonTokensJSON);
+export const polygonTokens = univ3.toTokenMap<PolygonTokenSymbols>(polygonTokensJSON);
 
 type ArbitrumTokenSymbols = keyof typeof arbitrumTokensJSON;
 
-export const arbitrumTokens = toTokenMap<ArbitrumTokenSymbols>(arbitrumTokensJSON);
+export const arbitrumTokens = univ3.toTokenMap<ArbitrumTokenSymbols>(arbitrumTokensJSON);
 
 type OptimismTokenSymbols = keyof typeof optimismTokensJSON;
 
-export const optimismTokens = toTokenMap<OptimismTokenSymbols>(optimismTokensJSON);
+export const optimismTokens = univ3.toTokenMap<OptimismTokenSymbols>(optimismTokensJSON);

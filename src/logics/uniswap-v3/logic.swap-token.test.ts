@@ -1,17 +1,12 @@
 import { LogicTestCase } from 'test/types';
-import { SWAP_ROUTER_ADDRESS } from './constants';
-import { SwapRouter__factory } from './contracts';
-import {
-  SwapTokenLogic,
-  SwapTokenLogicFields,
-  SwapTokenLogicOptions,
-  isSwapTokenLogicSingleHopFields,
-} from './logic.swap-token';
+import { SwapTokenLogic, SwapTokenLogicFields, SwapTokenLogicOptions } from './logic.swap-token';
 import * as common from '@furucombo/composable-router-common';
 import { constants, utils } from 'ethers';
 import * as core from '@furucombo/composable-router-core';
 import { expect } from 'chai';
+import { getConfig } from './configs';
 import { mainnetTokens } from '@furucombo/composable-router-test-helpers';
+import * as univ3 from 'src/modules/univ3';
 
 describe('UniswapV3 SwapTokenLogic', function () {
   context('Test getTokenList', async function () {
@@ -26,8 +21,9 @@ describe('UniswapV3 SwapTokenLogic', function () {
 
   context('Test build', function () {
     const chainId = common.ChainId.mainnet;
+    const config = getConfig(chainId);
     const logic = new SwapTokenLogic(chainId);
-    const iface = SwapRouter__factory.createInterface();
+    const iface = univ3.SwapRouter__factory.createInterface();
 
     const testCases: LogicTestCase<SwapTokenLogicFields, SwapTokenLogicOptions>[] = [
       {
@@ -148,18 +144,18 @@ describe('UniswapV3 SwapTokenLogic', function () {
 
     testCases.forEach(({ fields, options }) => {
       it(`${fields.input.token.symbol} to ${fields.output.token.symbol} ${fields.tradeType} ${
-        isSwapTokenLogicSingleHopFields(fields) ? 'Single' : ''
+        univ3.isSwapTokenLogicSingleHopFields(fields) ? 'Single' : ''
       }`, async function () {
         const routerLogic = await logic.build(fields, options);
         const sig = routerLogic.data.substring(0, 10);
         const { tradeType, input, output, balanceBps } = fields;
 
-        expect(routerLogic.to).to.eq(SWAP_ROUTER_ADDRESS);
+        expect(routerLogic.to).to.eq(config.swapRouterAddress);
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(sig).to.eq(
           iface.getSighash(
             `exact${tradeType === core.TradeType.exactIn ? 'Input' : 'Output'}${
-              isSwapTokenLogicSingleHopFields(fields) ? 'Single' : ''
+              univ3.isSwapTokenLogicSingleHopFields(fields) ? 'Single' : ''
             }`
           )
         );
