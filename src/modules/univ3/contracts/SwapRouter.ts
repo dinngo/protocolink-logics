@@ -12,15 +12,10 @@ import type {
   PopulatedTransaction,
   Signer,
   utils,
-} from "ethers";
-import type { FunctionFragment, Result } from "@ethersproject/abi";
-import type { Listener, Provider } from "@ethersproject/providers";
-import type {
-  TypedEventFilter,
-  TypedEvent,
-  TypedListener,
-  OnEvent,
-} from "./common";
+} from 'ethers';
+import type { FunctionFragment, Result } from '@ethersproject/abi';
+import type { Listener, Provider } from '@ethersproject/providers';
+import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from './common';
 
 export declare namespace ISwapRouter {
   export type ExactInputSingleParamsStruct = {
@@ -93,13 +88,7 @@ export declare namespace ISwapRouter {
     amountOutMinimum: BigNumberish;
   };
 
-  export type ExactInputParamsStructOutput = [
-    string,
-    string,
-    BigNumber,
-    BigNumber,
-    BigNumber
-  ] & {
+  export type ExactInputParamsStructOutput = [string, string, BigNumber, BigNumber, BigNumber] & {
     path: string;
     recipient: string;
     deadline: BigNumber;
@@ -115,13 +104,7 @@ export declare namespace ISwapRouter {
     amountInMaximum: BigNumberish;
   };
 
-  export type ExactOutputParamsStructOutput = [
-    string,
-    string,
-    BigNumber,
-    BigNumber,
-    BigNumber
-  ] & {
+  export type ExactOutputParamsStructOutput = [string, string, BigNumber, BigNumber, BigNumber] & {
     path: string;
     recipient: string;
     deadline: BigNumber;
@@ -132,50 +115,28 @@ export declare namespace ISwapRouter {
 
 export interface SwapRouterInterface extends utils.Interface {
   functions: {
-    "exactInputSingle((address,address,uint24,address,uint256,uint256,uint256,uint160))": FunctionFragment;
-    "exactOutputSingle((address,address,uint24,address,uint256,uint256,uint256,uint160))": FunctionFragment;
-    "exactInput((bytes,address,uint256,uint256,uint256))": FunctionFragment;
-    "exactOutput((bytes,address,uint256,uint256,uint256))": FunctionFragment;
+    'exactInputSingle((address,address,uint24,address,uint256,uint256,uint256,uint160))': FunctionFragment;
+    'exactOutputSingle((address,address,uint24,address,uint256,uint256,uint256,uint160))': FunctionFragment;
+    'exactInput((bytes,address,uint256,uint256,uint256))': FunctionFragment;
+    'exactOutput((bytes,address,uint256,uint256,uint256))': FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic:
-      | "exactInputSingle"
-      | "exactOutputSingle"
-      | "exactInput"
-      | "exactOutput"
+    nameOrSignatureOrTopic: 'exactInputSingle' | 'exactOutputSingle' | 'exactInput' | 'exactOutput'
   ): FunctionFragment;
 
+  encodeFunctionData(functionFragment: 'exactInputSingle', values: [ISwapRouter.ExactInputSingleParamsStruct]): string;
   encodeFunctionData(
-    functionFragment: "exactInputSingle",
-    values: [ISwapRouter.ExactInputSingleParamsStruct]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "exactOutputSingle",
+    functionFragment: 'exactOutputSingle',
     values: [ISwapRouter.ExactOutputSingleParamsStruct]
   ): string;
-  encodeFunctionData(
-    functionFragment: "exactInput",
-    values: [ISwapRouter.ExactInputParamsStruct]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "exactOutput",
-    values: [ISwapRouter.ExactOutputParamsStruct]
-  ): string;
+  encodeFunctionData(functionFragment: 'exactInput', values: [ISwapRouter.ExactInputParamsStruct]): string;
+  encodeFunctionData(functionFragment: 'exactOutput', values: [ISwapRouter.ExactOutputParamsStruct]): string;
 
-  decodeFunctionResult(
-    functionFragment: "exactInputSingle",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "exactOutputSingle",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "exactInput", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "exactOutput",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: 'exactInputSingle', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'exactOutputSingle', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'exactInput', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'exactOutput', data: BytesLike): Result;
 
   events: {};
 }
@@ -193,13 +154,9 @@ export interface SwapRouter extends BaseContract {
     toBlock?: string | number | undefined
   ): Promise<Array<TEvent>>;
 
-  listeners<TEvent extends TypedEvent>(
-    eventFilter?: TypedEventFilter<TEvent>
-  ): Array<TypedListener<TEvent>>;
+  listeners<TEvent extends TypedEvent>(eventFilter?: TypedEventFilter<TEvent>): Array<TypedListener<TEvent>>;
   listeners(eventName?: string): Array<Listener>;
-  removeAllListeners<TEvent extends TypedEvent>(
-    eventFilter: TypedEventFilter<TEvent>
-  ): this;
+  removeAllListeners<TEvent extends TypedEvent>(eventFilter: TypedEventFilter<TEvent>): this;
   removeAllListeners(eventName?: string): this;
   off: OnEvent<this>;
   on: OnEvent<this>;
@@ -249,25 +206,13 @@ export interface SwapRouter extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    exactInputSingle(
-      params: ISwapRouter.ExactInputSingleParamsStruct,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    exactInputSingle(params: ISwapRouter.ExactInputSingleParamsStruct, overrides?: CallOverrides): Promise<BigNumber>;
 
-    exactOutputSingle(
-      params: ISwapRouter.ExactOutputSingleParamsStruct,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    exactOutputSingle(params: ISwapRouter.ExactOutputSingleParamsStruct, overrides?: CallOverrides): Promise<BigNumber>;
 
-    exactInput(
-      params: ISwapRouter.ExactInputParamsStruct,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    exactInput(params: ISwapRouter.ExactInputParamsStruct, overrides?: CallOverrides): Promise<BigNumber>;
 
-    exactOutput(
-      params: ISwapRouter.ExactOutputParamsStruct,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    exactOutput(params: ISwapRouter.ExactOutputParamsStruct, overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   filters: {};
