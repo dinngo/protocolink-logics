@@ -1,11 +1,11 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import * as balancerv2 from 'src/balancer-v2';
+import * as balancerv2 from 'src/logics/balancer-v2';
 import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
 import { expect } from 'chai';
 import { getChainId, mainnetTokens, snapshotAndRevertEach } from '@furucombo/composable-router-test-helpers';
 import hre from 'hardhat';
-import * as utility from 'src/utility';
+import * as utility from 'src/logics/utility';
 
 describe('Test BalancerV2 FlashLoan Logic', function () {
   let chainId: number;

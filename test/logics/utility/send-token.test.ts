@@ -9,7 +9,7 @@ import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
 import { expect } from 'chai';
 import hre from 'hardhat';
-import * as utility from 'src/utility';
+import * as utility from 'src/logics/utility';
 import * as utils from 'test/utils';
 
 describe('Test Utility SendToken Logic', function () {

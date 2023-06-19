@@ -5,10 +5,12 @@ import path from 'path';
 
 describe('Protocol Logics', async function () {
   const cwd = process.cwd();
-  const protocols = fs.readdirSync(path.join(cwd, 'src'), { withFileTypes: true }).reduce((accumulator, dir) => {
-    if (dir.isDirectory()) accumulator.push(dir.name);
-    return accumulator;
-  }, [] as string[]);
+  const protocols = fs
+    .readdirSync(path.join(cwd, 'src', 'logics'), { withFileTypes: true })
+    .reduce((accumulator, dir) => {
+      if (dir.isDirectory()) accumulator.push(dir.name);
+      return accumulator;
+    }, [] as string[]);
 
   context('Test logic definition', function () {
     for (const protocol of protocols) {

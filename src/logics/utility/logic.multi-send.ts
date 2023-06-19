@@ -1,4 +1,4 @@
-import { axios } from 'src/http';
+import { axios } from 'src/utils';
 import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
 import { utils } from 'ethers';

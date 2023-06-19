@@ -6,7 +6,7 @@ import {
   snapshotAndRevertEach,
 } from '@furucombo/composable-router-test-helpers';
 import * as common from '@furucombo/composable-router-common';
-import * as compoundv2 from 'src/compound-v2';
+import * as compoundv2 from 'src/logics/compound-v2';
 import * as core from '@furucombo/composable-router-core';
 import { expect } from 'chai';
 import * as helpers from './helpers';

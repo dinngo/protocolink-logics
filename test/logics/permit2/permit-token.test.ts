@@ -11,7 +11,7 @@ import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
 import { expect } from 'chai';
 import hre from 'hardhat';
-import * as permit2 from 'src/permit2';
+import * as permit2 from 'src/logics/permit2';
 import sinon from 'sinon';
 
 describe('Test Permit2 PermitToken Logic', function () {

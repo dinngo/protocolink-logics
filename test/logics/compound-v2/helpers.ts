@@ -1,7 +1,7 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { approve } from '@furucombo/composable-router-test-helpers';
 import * as common from '@furucombo/composable-router-common';
-import * as compoundv2 from 'src/compound-v2';
+import * as compoundv2 from 'src/logics/compound-v2';
 import { expect } from 'chai';
 
 export async function supply(user: SignerWithAddress, supplyAmount: common.TokenAmount) {

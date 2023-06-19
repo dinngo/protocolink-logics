@@ -6,12 +6,12 @@ import {
   mainnetTokens,
   snapshotAndRevertEach,
 } from '@furucombo/composable-router-test-helpers';
-import { axios } from 'src/http';
+import { axios } from 'src/utils/http';
 import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
 import { expect } from 'chai';
 import hre from 'hardhat';
-import * as utility from 'src/utility';
+import * as utility from 'src/logics/utility';
 import * as utils from 'test/utils';
 
 describe('Test Utility CustomData Logic', function () {

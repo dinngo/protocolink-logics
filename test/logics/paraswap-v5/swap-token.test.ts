@@ -9,7 +9,7 @@ import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
 import { expect } from 'chai';
 import hre from 'hardhat';
-import * as paraswapv5 from 'src/paraswap-v5';
+import * as paraswapv5 from 'src/logics/paraswap-v5';
 import * as utils from 'test/utils';
 
 describe('Test ParaswapV5 SwapToken Logic', function () {

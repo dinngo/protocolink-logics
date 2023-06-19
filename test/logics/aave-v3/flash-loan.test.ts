@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import * as aavev3 from 'src/aave-v3';
+import * as aavev3 from 'src/logics/aave-v3';
 import {
   claimToken,
   getChainId,
@@ -10,7 +10,7 @@ import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
 import { expect } from 'chai';
 import hre from 'hardhat';
-import * as utility from 'src/utility';
+import * as utility from 'src/logics/utility';
 import * as utils from 'test/utils';
 
 describe('Test AaveV3 FlashLoan Logic', function () {

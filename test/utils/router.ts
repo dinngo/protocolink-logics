@@ -3,7 +3,7 @@ import { approves } from '@furucombo/composable-router-test-helpers';
 import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
 import hre from 'hardhat';
-import * as permit2 from 'src/permit2';
+import * as permit2 from 'src/logics/permit2';
 
 export function calcRequiredAmountByBalanceBps(input: common.TokenAmount, balanceBps?: number) {
   let required: common.TokenAmount;

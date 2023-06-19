@@ -1,6 +1,6 @@
-import * as aavev2 from 'src/aave-v2';
-import * as aavev3 from 'src/aave-v3';
-import * as balancerv2 from 'src/balancer-v2';
+import * as aavev2 from 'src/logics/aave-v2';
+import * as aavev3 from 'src/logics/aave-v3';
+import * as balancerv2 from 'src/logics/balancer-v2';
 import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
 import { getChainId } from '@furucombo/composable-router-test-helpers';

@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import * as aavev3 from 'src/aave-v3';
+import * as aavev3 from 'src/logics/aave-v3';
 import {
   claimToken,
   getChainId,
