@@ -15,7 +15,7 @@ import type {
 } from 'ethers';
 import type { FunctionFragment, Result } from '@ethersproject/abi';
 import type { Listener, Provider } from '@ethersproject/providers';
-import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent, PromiseOrValue } from './common';
+import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from './common';
 
 export interface AaveV3FlashLoanCallbackInterface extends utils.Interface {
   functions: {
@@ -29,13 +29,7 @@ export interface AaveV3FlashLoanCallbackInterface extends utils.Interface {
   encodeFunctionData(functionFragment: 'aaveV3Provider', values?: undefined): string;
   encodeFunctionData(
     functionFragment: 'executeOperation',
-    values: [
-      PromiseOrValue<string>[],
-      PromiseOrValue<BigNumberish>[],
-      PromiseOrValue<BigNumberish>[],
-      PromiseOrValue<string>,
-      PromiseOrValue<BytesLike>
-    ]
+    values: [string[], BigNumberish[], BigNumberish[], string, BytesLike]
   ): string;
   encodeFunctionData(functionFragment: 'router', values?: undefined): string;
 
@@ -72,12 +66,12 @@ export interface AaveV3FlashLoanCallback extends BaseContract {
     aaveV3Provider(overrides?: CallOverrides): Promise<[string]>;
 
     executeOperation(
-      assets: PromiseOrValue<string>[],
-      amounts: PromiseOrValue<BigNumberish>[],
-      premiums: PromiseOrValue<BigNumberish>[],
-      arg3: PromiseOrValue<string>,
-      params: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      assets: string[],
+      amounts: BigNumberish[],
+      premiums: BigNumberish[],
+      arg3: string,
+      params: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     router(overrides?: CallOverrides): Promise<[string]>;
@@ -86,12 +80,12 @@ export interface AaveV3FlashLoanCallback extends BaseContract {
   aaveV3Provider(overrides?: CallOverrides): Promise<string>;
 
   executeOperation(
-    assets: PromiseOrValue<string>[],
-    amounts: PromiseOrValue<BigNumberish>[],
-    premiums: PromiseOrValue<BigNumberish>[],
-    arg3: PromiseOrValue<string>,
-    params: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    assets: string[],
+    amounts: BigNumberish[],
+    premiums: BigNumberish[],
+    arg3: string,
+    params: BytesLike,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   router(overrides?: CallOverrides): Promise<string>;
@@ -100,11 +94,11 @@ export interface AaveV3FlashLoanCallback extends BaseContract {
     aaveV3Provider(overrides?: CallOverrides): Promise<string>;
 
     executeOperation(
-      assets: PromiseOrValue<string>[],
-      amounts: PromiseOrValue<BigNumberish>[],
-      premiums: PromiseOrValue<BigNumberish>[],
-      arg3: PromiseOrValue<string>,
-      params: PromiseOrValue<BytesLike>,
+      assets: string[],
+      amounts: BigNumberish[],
+      premiums: BigNumberish[],
+      arg3: string,
+      params: BytesLike,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
@@ -117,12 +111,12 @@ export interface AaveV3FlashLoanCallback extends BaseContract {
     aaveV3Provider(overrides?: CallOverrides): Promise<BigNumber>;
 
     executeOperation(
-      assets: PromiseOrValue<string>[],
-      amounts: PromiseOrValue<BigNumberish>[],
-      premiums: PromiseOrValue<BigNumberish>[],
-      arg3: PromiseOrValue<string>,
-      params: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      assets: string[],
+      amounts: BigNumberish[],
+      premiums: BigNumberish[],
+      arg3: string,
+      params: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     router(overrides?: CallOverrides): Promise<BigNumber>;
@@ -132,12 +126,12 @@ export interface AaveV3FlashLoanCallback extends BaseContract {
     aaveV3Provider(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     executeOperation(
-      assets: PromiseOrValue<string>[],
-      amounts: PromiseOrValue<BigNumberish>[],
-      premiums: PromiseOrValue<BigNumberish>[],
-      arg3: PromiseOrValue<string>,
-      params: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      assets: string[],
+      amounts: BigNumberish[],
+      premiums: BigNumberish[],
+      arg3: string,
+      params: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     router(overrides?: CallOverrides): Promise<PopulatedTransaction>;

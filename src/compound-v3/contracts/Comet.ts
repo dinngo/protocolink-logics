@@ -15,18 +15,18 @@ import type {
 } from 'ethers';
 import type { FunctionFragment, Result, EventFragment } from '@ethersproject/abi';
 import type { Listener, Provider } from '@ethersproject/providers';
-import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent, PromiseOrValue } from './common';
+import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from './common';
 
 export declare namespace CometCore {
   export type AssetInfoStruct = {
-    offset: PromiseOrValue<BigNumberish>;
-    asset: PromiseOrValue<string>;
-    priceFeed: PromiseOrValue<string>;
-    scale: PromiseOrValue<BigNumberish>;
-    borrowCollateralFactor: PromiseOrValue<BigNumberish>;
-    liquidateCollateralFactor: PromiseOrValue<BigNumberish>;
-    liquidationFactor: PromiseOrValue<BigNumberish>;
-    supplyCap: PromiseOrValue<BigNumberish>;
+    offset: BigNumberish;
+    asset: string;
+    priceFeed: string;
+    scale: BigNumberish;
+    borrowCollateralFactor: BigNumberish;
+    liquidateCollateralFactor: BigNumberish;
+    liquidationFactor: BigNumberish;
+    supplyCap: BigNumberish;
   };
 
   export type AssetInfoStructOutput = [
@@ -52,14 +52,14 @@ export declare namespace CometCore {
 
 export declare namespace CometStorage {
   export type TotalsBasicStruct = {
-    baseSupplyIndex: PromiseOrValue<BigNumberish>;
-    baseBorrowIndex: PromiseOrValue<BigNumberish>;
-    trackingSupplyIndex: PromiseOrValue<BigNumberish>;
-    trackingBorrowIndex: PromiseOrValue<BigNumberish>;
-    totalSupplyBase: PromiseOrValue<BigNumberish>;
-    totalBorrowBase: PromiseOrValue<BigNumberish>;
-    lastAccrualTime: PromiseOrValue<BigNumberish>;
-    pauseFlags: PromiseOrValue<BigNumberish>;
+    baseSupplyIndex: BigNumberish;
+    baseBorrowIndex: BigNumberish;
+    trackingSupplyIndex: BigNumberish;
+    trackingBorrowIndex: BigNumberish;
+    totalSupplyBase: BigNumberish;
+    totalBorrowBase: BigNumberish;
+    lastAccrualTime: BigNumberish;
+    pauseFlags: BigNumberish;
   };
 
   export type TotalsBasicStructOutput = [
@@ -253,32 +253,17 @@ export interface CometInterface extends utils.Interface {
       | 'withdrawTo'
   ): FunctionFragment;
 
-  encodeFunctionData(functionFragment: 'absorb', values: [PromiseOrValue<string>, PromiseOrValue<string>[]]): string;
-  encodeFunctionData(functionFragment: 'accrueAccount', values: [PromiseOrValue<string>]): string;
-  encodeFunctionData(functionFragment: 'allow', values: [PromiseOrValue<string>, PromiseOrValue<boolean>]): string;
+  encodeFunctionData(functionFragment: 'absorb', values: [string, string[]]): string;
+  encodeFunctionData(functionFragment: 'accrueAccount', values: [string]): string;
+  encodeFunctionData(functionFragment: 'allow', values: [string, boolean]): string;
   encodeFunctionData(
     functionFragment: 'allowBySig',
-    values: [
-      PromiseOrValue<string>,
-      PromiseOrValue<string>,
-      PromiseOrValue<boolean>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BytesLike>,
-      PromiseOrValue<BytesLike>
-    ]
+    values: [string, string, boolean, BigNumberish, BigNumberish, BigNumberish, BytesLike, BytesLike]
   ): string;
-  encodeFunctionData(functionFragment: 'allowance', values: [PromiseOrValue<string>, PromiseOrValue<string>]): string;
-  encodeFunctionData(
-    functionFragment: 'approve',
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: 'approveThis',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(functionFragment: 'balanceOf', values: [PromiseOrValue<string>]): string;
+  encodeFunctionData(functionFragment: 'allowance', values: [string, string]): string;
+  encodeFunctionData(functionFragment: 'approve', values: [string, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'approveThis', values: [string, string, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'balanceOf', values: [string]): string;
   encodeFunctionData(functionFragment: 'baseAccrualScale', values?: undefined): string;
   encodeFunctionData(functionFragment: 'baseBorrowMin', values?: undefined): string;
   encodeFunctionData(functionFragment: 'baseIndexScale', values?: undefined): string;
@@ -286,129 +271,72 @@ export interface CometInterface extends utils.Interface {
   encodeFunctionData(functionFragment: 'baseScale', values?: undefined): string;
   encodeFunctionData(functionFragment: 'baseToken', values?: undefined): string;
   encodeFunctionData(functionFragment: 'baseTokenPriceFeed', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'baseTrackingAccrued', values: [PromiseOrValue<string>]): string;
+  encodeFunctionData(functionFragment: 'baseTrackingAccrued', values: [string]): string;
   encodeFunctionData(functionFragment: 'baseTrackingBorrowSpeed', values?: undefined): string;
   encodeFunctionData(functionFragment: 'baseTrackingSupplySpeed', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'borrowBalanceOf', values: [PromiseOrValue<string>]): string;
+  encodeFunctionData(functionFragment: 'borrowBalanceOf', values: [string]): string;
   encodeFunctionData(functionFragment: 'borrowKink', values?: undefined): string;
   encodeFunctionData(functionFragment: 'borrowPerSecondInterestRateBase', values?: undefined): string;
   encodeFunctionData(functionFragment: 'borrowPerSecondInterestRateSlopeHigh', values?: undefined): string;
   encodeFunctionData(functionFragment: 'borrowPerSecondInterestRateSlopeLow', values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: 'buyCollateral',
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: 'collateralBalanceOf',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>]
-  ): string;
+  encodeFunctionData(functionFragment: 'buyCollateral', values: [string, BigNumberish, BigNumberish, string]): string;
+  encodeFunctionData(functionFragment: 'collateralBalanceOf', values: [string, string]): string;
   encodeFunctionData(functionFragment: 'decimals', values?: undefined): string;
   encodeFunctionData(functionFragment: 'extensionDelegate', values?: undefined): string;
   encodeFunctionData(functionFragment: 'factorScale', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'getAssetInfo', values: [PromiseOrValue<BigNumberish>]): string;
-  encodeFunctionData(functionFragment: 'getAssetInfoByAddress', values: [PromiseOrValue<string>]): string;
-  encodeFunctionData(functionFragment: 'getBorrowRate', values: [PromiseOrValue<BigNumberish>]): string;
-  encodeFunctionData(functionFragment: 'getPrice', values: [PromiseOrValue<string>]): string;
+  encodeFunctionData(functionFragment: 'getAssetInfo', values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'getAssetInfoByAddress', values: [string]): string;
+  encodeFunctionData(functionFragment: 'getBorrowRate', values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'getPrice', values: [string]): string;
   encodeFunctionData(functionFragment: 'getReserves', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'getSupplyRate', values: [PromiseOrValue<BigNumberish>]): string;
+  encodeFunctionData(functionFragment: 'getSupplyRate', values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: 'getUtilization', values?: undefined): string;
   encodeFunctionData(functionFragment: 'governor', values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: 'hasPermission',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>]
-  ): string;
+  encodeFunctionData(functionFragment: 'hasPermission', values: [string, string]): string;
   encodeFunctionData(functionFragment: 'initializeStorage', values?: undefined): string;
   encodeFunctionData(functionFragment: 'isAbsorbPaused', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'isAllowed', values: [PromiseOrValue<string>, PromiseOrValue<string>]): string;
-  encodeFunctionData(functionFragment: 'isBorrowCollateralized', values: [PromiseOrValue<string>]): string;
+  encodeFunctionData(functionFragment: 'isAllowed', values: [string, string]): string;
+  encodeFunctionData(functionFragment: 'isBorrowCollateralized', values: [string]): string;
   encodeFunctionData(functionFragment: 'isBuyPaused', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'isLiquidatable', values: [PromiseOrValue<string>]): string;
+  encodeFunctionData(functionFragment: 'isLiquidatable', values: [string]): string;
   encodeFunctionData(functionFragment: 'isSupplyPaused', values?: undefined): string;
   encodeFunctionData(functionFragment: 'isTransferPaused', values?: undefined): string;
   encodeFunctionData(functionFragment: 'isWithdrawPaused', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'liquidatorPoints', values: [PromiseOrValue<string>]): string;
+  encodeFunctionData(functionFragment: 'liquidatorPoints', values: [string]): string;
   encodeFunctionData(functionFragment: 'maxAssets', values?: undefined): string;
   encodeFunctionData(functionFragment: 'name', values?: undefined): string;
   encodeFunctionData(functionFragment: 'numAssets', values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: 'pause',
-    values: [
-      PromiseOrValue<boolean>,
-      PromiseOrValue<boolean>,
-      PromiseOrValue<boolean>,
-      PromiseOrValue<boolean>,
-      PromiseOrValue<boolean>
-    ]
-  ): string;
+  encodeFunctionData(functionFragment: 'pause', values: [boolean, boolean, boolean, boolean, boolean]): string;
   encodeFunctionData(functionFragment: 'pauseGuardian', values?: undefined): string;
   encodeFunctionData(functionFragment: 'priceScale', values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: 'quoteCollateral',
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
+  encodeFunctionData(functionFragment: 'quoteCollateral', values: [string, BigNumberish]): string;
   encodeFunctionData(functionFragment: 'storeFrontPriceFactor', values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: 'supply',
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: 'supplyFrom',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
+  encodeFunctionData(functionFragment: 'supply', values: [string, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'supplyFrom', values: [string, string, string, BigNumberish]): string;
   encodeFunctionData(functionFragment: 'supplyKink', values?: undefined): string;
   encodeFunctionData(functionFragment: 'supplyPerSecondInterestRateBase', values?: undefined): string;
   encodeFunctionData(functionFragment: 'supplyPerSecondInterestRateSlopeHigh', values?: undefined): string;
   encodeFunctionData(functionFragment: 'supplyPerSecondInterestRateSlopeLow', values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: 'supplyTo',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
+  encodeFunctionData(functionFragment: 'supplyTo', values: [string, string, BigNumberish]): string;
   encodeFunctionData(functionFragment: 'symbol', values?: undefined): string;
   encodeFunctionData(functionFragment: 'targetReserves', values?: undefined): string;
   encodeFunctionData(functionFragment: 'totalBorrow', values?: undefined): string;
   encodeFunctionData(functionFragment: 'totalSupply', values?: undefined): string;
   encodeFunctionData(functionFragment: 'totalsBasic', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'totalsCollateral', values: [PromiseOrValue<string>]): string;
+  encodeFunctionData(functionFragment: 'totalsCollateral', values: [string]): string;
   encodeFunctionData(functionFragment: 'trackingIndexScale', values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: 'transfer',
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: 'transferAsset',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: 'transferAssetFrom',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: 'transferFrom',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(functionFragment: 'userBasic', values: [PromiseOrValue<string>]): string;
-  encodeFunctionData(
-    functionFragment: 'userCollateral',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(functionFragment: 'userNonce', values: [PromiseOrValue<string>]): string;
+  encodeFunctionData(functionFragment: 'transfer', values: [string, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'transferAsset', values: [string, string, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'transferAssetFrom', values: [string, string, string, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'transferFrom', values: [string, string, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'userBasic', values: [string]): string;
+  encodeFunctionData(functionFragment: 'userCollateral', values: [string, string]): string;
+  encodeFunctionData(functionFragment: 'userNonce', values: [string]): string;
   encodeFunctionData(functionFragment: 'version', values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: 'withdraw',
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: 'withdrawFrom',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: 'withdrawReserves',
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: 'withdrawTo',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
+  encodeFunctionData(functionFragment: 'withdraw', values: [string, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'withdrawFrom', values: [string, string, string, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'withdrawReserves', values: [string, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'withdrawTo', values: [string, string, BigNumberish]): string;
 
   decodeFunctionResult(functionFragment: 'absorb', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'accrueAccount', data: BytesLike): Result;
@@ -664,54 +592,43 @@ export interface Comet extends BaseContract {
 
   functions: {
     absorb(
-      absorber: PromiseOrValue<string>,
-      accounts: PromiseOrValue<string>[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      absorber: string,
+      accounts: string[],
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
-    accrueAccount(
-      account: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
+    accrueAccount(account: string, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
-    allow(
-      manager: PromiseOrValue<string>,
-      isAllowed: PromiseOrValue<boolean>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
+    allow(manager: string, isAllowed: boolean, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
     allowBySig(
-      owner: PromiseOrValue<string>,
-      manager: PromiseOrValue<string>,
-      isAllowed: PromiseOrValue<boolean>,
-      nonce: PromiseOrValue<BigNumberish>,
-      expiry: PromiseOrValue<BigNumberish>,
-      v: PromiseOrValue<BigNumberish>,
-      r: PromiseOrValue<BytesLike>,
-      s: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      owner: string,
+      manager: string,
+      isAllowed: boolean,
+      nonce: BigNumberish,
+      expiry: BigNumberish,
+      v: BigNumberish,
+      r: BytesLike,
+      s: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
-    allowance(
-      owner: PromiseOrValue<string>,
-      spender: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    allowance(owner: string, spender: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     approve(
-      spender: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      spender: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     approveThis(
-      manager: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      manager: string,
+      asset: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
-    balanceOf(owner: PromiseOrValue<string>, overrides?: CallOverrides): Promise<[BigNumber]>;
+    balanceOf(owner: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     baseAccrualScale(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -727,13 +644,13 @@ export interface Comet extends BaseContract {
 
     baseTokenPriceFeed(overrides?: CallOverrides): Promise<[string]>;
 
-    baseTrackingAccrued(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<[BigNumber]>;
+    baseTrackingAccrued(account: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     baseTrackingBorrowSpeed(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     baseTrackingSupplySpeed(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    borrowBalanceOf(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<[BigNumber]>;
+    borrowBalanceOf(account: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     borrowKink(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -744,18 +661,14 @@ export interface Comet extends BaseContract {
     borrowPerSecondInterestRateSlopeLow(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     buyCollateral(
-      asset: PromiseOrValue<string>,
-      minAmount: PromiseOrValue<BigNumberish>,
-      baseAmount: PromiseOrValue<BigNumberish>,
-      recipient: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      asset: string,
+      minAmount: BigNumberish,
+      baseAmount: BigNumberish,
+      recipient: string,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
-    collateralBalanceOf(
-      account: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    collateralBalanceOf(account: string, asset: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     decimals(overrides?: CallOverrides): Promise<[number]>;
 
@@ -763,49 +676,35 @@ export interface Comet extends BaseContract {
 
     factorScale(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    getAssetInfo(
-      i: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[CometCore.AssetInfoStructOutput]>;
+    getAssetInfo(i: BigNumberish, overrides?: CallOverrides): Promise<[CometCore.AssetInfoStructOutput]>;
 
-    getAssetInfoByAddress(
-      asset: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[CometCore.AssetInfoStructOutput]>;
+    getAssetInfoByAddress(asset: string, overrides?: CallOverrides): Promise<[CometCore.AssetInfoStructOutput]>;
 
-    getBorrowRate(utilization: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<[BigNumber]>;
+    getBorrowRate(utilization: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    getPrice(priceFeed: PromiseOrValue<string>, overrides?: CallOverrides): Promise<[BigNumber]>;
+    getPrice(priceFeed: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     getReserves(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    getSupplyRate(utilization: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<[BigNumber]>;
+    getSupplyRate(utilization: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     getUtilization(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     governor(overrides?: CallOverrides): Promise<[string]>;
 
-    hasPermission(
-      owner: PromiseOrValue<string>,
-      manager: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+    hasPermission(owner: string, manager: string, overrides?: CallOverrides): Promise<[boolean]>;
 
-    initializeStorage(overrides?: Overrides & { from?: PromiseOrValue<string> }): Promise<ContractTransaction>;
+    initializeStorage(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
     isAbsorbPaused(overrides?: CallOverrides): Promise<[boolean]>;
 
-    isAllowed(
-      arg0: PromiseOrValue<string>,
-      arg1: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+    isAllowed(arg0: string, arg1: string, overrides?: CallOverrides): Promise<[boolean]>;
 
-    isBorrowCollateralized(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<[boolean]>;
+    isBorrowCollateralized(account: string, overrides?: CallOverrides): Promise<[boolean]>;
 
     isBuyPaused(overrides?: CallOverrides): Promise<[boolean]>;
 
-    isLiquidatable(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<[boolean]>;
+    isLiquidatable(account: string, overrides?: CallOverrides): Promise<[boolean]>;
 
     isSupplyPaused(overrides?: CallOverrides): Promise<[boolean]>;
 
@@ -814,7 +713,7 @@ export interface Comet extends BaseContract {
     isWithdrawPaused(overrides?: CallOverrides): Promise<[boolean]>;
 
     liquidatorPoints(
-      arg0: PromiseOrValue<string>,
+      arg0: string,
       overrides?: CallOverrides
     ): Promise<
       [number, BigNumber, BigNumber, number] & {
@@ -832,38 +731,34 @@ export interface Comet extends BaseContract {
     numAssets(overrides?: CallOverrides): Promise<[number]>;
 
     pause(
-      supplyPaused: PromiseOrValue<boolean>,
-      transferPaused: PromiseOrValue<boolean>,
-      withdrawPaused: PromiseOrValue<boolean>,
-      absorbPaused: PromiseOrValue<boolean>,
-      buyPaused: PromiseOrValue<boolean>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      supplyPaused: boolean,
+      transferPaused: boolean,
+      withdrawPaused: boolean,
+      absorbPaused: boolean,
+      buyPaused: boolean,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     pauseGuardian(overrides?: CallOverrides): Promise<[string]>;
 
     priceScale(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    quoteCollateral(
-      asset: PromiseOrValue<string>,
-      baseAmount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    quoteCollateral(asset: string, baseAmount: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     storeFrontPriceFactor(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     supply(
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      asset: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     supplyFrom(
-      from: PromiseOrValue<string>,
-      dst: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      from: string,
+      dst: string,
+      asset: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     supplyKink(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -875,10 +770,10 @@ export interface Comet extends BaseContract {
     supplyPerSecondInterestRateSlopeLow(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     supplyTo(
-      dst: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      dst: string,
+      asset: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     symbol(overrides?: CallOverrides): Promise<[string]>;
@@ -892,7 +787,7 @@ export interface Comet extends BaseContract {
     totalsBasic(overrides?: CallOverrides): Promise<[CometStorage.TotalsBasicStructOutput]>;
 
     totalsCollateral(
-      arg0: PromiseOrValue<string>,
+      arg0: string,
       overrides?: CallOverrides
     ): Promise<
       [BigNumber, BigNumber] & {
@@ -904,35 +799,35 @@ export interface Comet extends BaseContract {
     trackingIndexScale(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     transfer(
-      dst: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      dst: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     transferAsset(
-      dst: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      dst: string,
+      asset: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     transferAssetFrom(
-      src: PromiseOrValue<string>,
-      dst: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      src: string,
+      dst: string,
+      asset: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     transferFrom(
-      src: PromiseOrValue<string>,
-      dst: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      src: string,
+      dst: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     userBasic(
-      arg0: PromiseOrValue<string>,
+      arg0: string,
       overrides?: CallOverrides
     ): Promise<
       [BigNumber, BigNumber, BigNumber, number, number] & {
@@ -945,92 +840,77 @@ export interface Comet extends BaseContract {
     >;
 
     userCollateral(
-      arg0: PromiseOrValue<string>,
-      arg1: PromiseOrValue<string>,
+      arg0: string,
+      arg1: string,
       overrides?: CallOverrides
     ): Promise<[BigNumber, BigNumber] & { balance: BigNumber; _reserved: BigNumber }>;
 
-    userNonce(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<[BigNumber]>;
+    userNonce(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     version(overrides?: CallOverrides): Promise<[string]>;
 
     withdraw(
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      asset: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     withdrawFrom(
-      src: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      src: string,
+      to: string,
+      asset: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     withdrawReserves(
-      to: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      to: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     withdrawTo(
-      to: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      to: string,
+      asset: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
   };
 
-  absorb(
-    absorber: PromiseOrValue<string>,
-    accounts: PromiseOrValue<string>[],
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
+  absorb(absorber: string, accounts: string[], overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
-  accrueAccount(
-    account: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
+  accrueAccount(account: string, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
-  allow(
-    manager: PromiseOrValue<string>,
-    isAllowed: PromiseOrValue<boolean>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
+  allow(manager: string, isAllowed: boolean, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
   allowBySig(
-    owner: PromiseOrValue<string>,
-    manager: PromiseOrValue<string>,
-    isAllowed: PromiseOrValue<boolean>,
-    nonce: PromiseOrValue<BigNumberish>,
-    expiry: PromiseOrValue<BigNumberish>,
-    v: PromiseOrValue<BigNumberish>,
-    r: PromiseOrValue<BytesLike>,
-    s: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    owner: string,
+    manager: string,
+    isAllowed: boolean,
+    nonce: BigNumberish,
+    expiry: BigNumberish,
+    v: BigNumberish,
+    r: BytesLike,
+    s: BytesLike,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
-  allowance(
-    owner: PromiseOrValue<string>,
-    spender: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
+  allowance(owner: string, spender: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   approve(
-    spender: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    spender: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   approveThis(
-    manager: PromiseOrValue<string>,
-    asset: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    manager: string,
+    asset: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
-  balanceOf(owner: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+  balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   baseAccrualScale(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1046,13 +926,13 @@ export interface Comet extends BaseContract {
 
   baseTokenPriceFeed(overrides?: CallOverrides): Promise<string>;
 
-  baseTrackingAccrued(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+  baseTrackingAccrued(account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   baseTrackingBorrowSpeed(overrides?: CallOverrides): Promise<BigNumber>;
 
   baseTrackingSupplySpeed(overrides?: CallOverrides): Promise<BigNumber>;
 
-  borrowBalanceOf(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+  borrowBalanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   borrowKink(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1063,18 +943,14 @@ export interface Comet extends BaseContract {
   borrowPerSecondInterestRateSlopeLow(overrides?: CallOverrides): Promise<BigNumber>;
 
   buyCollateral(
-    asset: PromiseOrValue<string>,
-    minAmount: PromiseOrValue<BigNumberish>,
-    baseAmount: PromiseOrValue<BigNumberish>,
-    recipient: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    asset: string,
+    minAmount: BigNumberish,
+    baseAmount: BigNumberish,
+    recipient: string,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
-  collateralBalanceOf(
-    account: PromiseOrValue<string>,
-    asset: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
+  collateralBalanceOf(account: string, asset: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   decimals(overrides?: CallOverrides): Promise<number>;
 
@@ -1082,42 +958,35 @@ export interface Comet extends BaseContract {
 
   factorScale(overrides?: CallOverrides): Promise<BigNumber>;
 
-  getAssetInfo(i: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<CometCore.AssetInfoStructOutput>;
+  getAssetInfo(i: BigNumberish, overrides?: CallOverrides): Promise<CometCore.AssetInfoStructOutput>;
 
-  getAssetInfoByAddress(
-    asset: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<CometCore.AssetInfoStructOutput>;
+  getAssetInfoByAddress(asset: string, overrides?: CallOverrides): Promise<CometCore.AssetInfoStructOutput>;
 
-  getBorrowRate(utilization: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<BigNumber>;
+  getBorrowRate(utilization: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
-  getPrice(priceFeed: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+  getPrice(priceFeed: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   getReserves(overrides?: CallOverrides): Promise<BigNumber>;
 
-  getSupplyRate(utilization: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<BigNumber>;
+  getSupplyRate(utilization: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
   getUtilization(overrides?: CallOverrides): Promise<BigNumber>;
 
   governor(overrides?: CallOverrides): Promise<string>;
 
-  hasPermission(
-    owner: PromiseOrValue<string>,
-    manager: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
+  hasPermission(owner: string, manager: string, overrides?: CallOverrides): Promise<boolean>;
 
-  initializeStorage(overrides?: Overrides & { from?: PromiseOrValue<string> }): Promise<ContractTransaction>;
+  initializeStorage(overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
   isAbsorbPaused(overrides?: CallOverrides): Promise<boolean>;
 
-  isAllowed(arg0: PromiseOrValue<string>, arg1: PromiseOrValue<string>, overrides?: CallOverrides): Promise<boolean>;
+  isAllowed(arg0: string, arg1: string, overrides?: CallOverrides): Promise<boolean>;
 
-  isBorrowCollateralized(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<boolean>;
+  isBorrowCollateralized(account: string, overrides?: CallOverrides): Promise<boolean>;
 
   isBuyPaused(overrides?: CallOverrides): Promise<boolean>;
 
-  isLiquidatable(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<boolean>;
+  isLiquidatable(account: string, overrides?: CallOverrides): Promise<boolean>;
 
   isSupplyPaused(overrides?: CallOverrides): Promise<boolean>;
 
@@ -1126,7 +995,7 @@ export interface Comet extends BaseContract {
   isWithdrawPaused(overrides?: CallOverrides): Promise<boolean>;
 
   liquidatorPoints(
-    arg0: PromiseOrValue<string>,
+    arg0: string,
     overrides?: CallOverrides
   ): Promise<
     [number, BigNumber, BigNumber, number] & {
@@ -1144,38 +1013,30 @@ export interface Comet extends BaseContract {
   numAssets(overrides?: CallOverrides): Promise<number>;
 
   pause(
-    supplyPaused: PromiseOrValue<boolean>,
-    transferPaused: PromiseOrValue<boolean>,
-    withdrawPaused: PromiseOrValue<boolean>,
-    absorbPaused: PromiseOrValue<boolean>,
-    buyPaused: PromiseOrValue<boolean>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    supplyPaused: boolean,
+    transferPaused: boolean,
+    withdrawPaused: boolean,
+    absorbPaused: boolean,
+    buyPaused: boolean,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   pauseGuardian(overrides?: CallOverrides): Promise<string>;
 
   priceScale(overrides?: CallOverrides): Promise<BigNumber>;
 
-  quoteCollateral(
-    asset: PromiseOrValue<string>,
-    baseAmount: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
+  quoteCollateral(asset: string, baseAmount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
   storeFrontPriceFactor(overrides?: CallOverrides): Promise<BigNumber>;
 
-  supply(
-    asset: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
+  supply(asset: string, amount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
   supplyFrom(
-    from: PromiseOrValue<string>,
-    dst: PromiseOrValue<string>,
-    asset: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    from: string,
+    dst: string,
+    asset: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   supplyKink(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1187,10 +1048,10 @@ export interface Comet extends BaseContract {
   supplyPerSecondInterestRateSlopeLow(overrides?: CallOverrides): Promise<BigNumber>;
 
   supplyTo(
-    dst: PromiseOrValue<string>,
-    asset: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    dst: string,
+    asset: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   symbol(overrides?: CallOverrides): Promise<string>;
@@ -1204,7 +1065,7 @@ export interface Comet extends BaseContract {
   totalsBasic(overrides?: CallOverrides): Promise<CometStorage.TotalsBasicStructOutput>;
 
   totalsCollateral(
-    arg0: PromiseOrValue<string>,
+    arg0: string,
     overrides?: CallOverrides
   ): Promise<
     [BigNumber, BigNumber] & {
@@ -1215,36 +1076,32 @@ export interface Comet extends BaseContract {
 
   trackingIndexScale(overrides?: CallOverrides): Promise<BigNumber>;
 
-  transfer(
-    dst: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
+  transfer(dst: string, amount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
   transferAsset(
-    dst: PromiseOrValue<string>,
-    asset: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    dst: string,
+    asset: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   transferAssetFrom(
-    src: PromiseOrValue<string>,
-    dst: PromiseOrValue<string>,
-    asset: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    src: string,
+    dst: string,
+    asset: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   transferFrom(
-    src: PromiseOrValue<string>,
-    dst: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    src: string,
+    dst: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   userBasic(
-    arg0: PromiseOrValue<string>,
+    arg0: string,
     overrides?: CallOverrides
   ): Promise<
     [BigNumber, BigNumber, BigNumber, number, number] & {
@@ -1257,89 +1114,68 @@ export interface Comet extends BaseContract {
   >;
 
   userCollateral(
-    arg0: PromiseOrValue<string>,
-    arg1: PromiseOrValue<string>,
+    arg0: string,
+    arg1: string,
     overrides?: CallOverrides
   ): Promise<[BigNumber, BigNumber] & { balance: BigNumber; _reserved: BigNumber }>;
 
-  userNonce(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+  userNonce(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   version(overrides?: CallOverrides): Promise<string>;
 
   withdraw(
-    asset: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    asset: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   withdrawFrom(
-    src: PromiseOrValue<string>,
-    to: PromiseOrValue<string>,
-    asset: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    src: string,
+    to: string,
+    asset: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   withdrawReserves(
-    to: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    to: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   withdrawTo(
-    to: PromiseOrValue<string>,
-    asset: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    to: string,
+    asset: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    absorb(
-      absorber: PromiseOrValue<string>,
-      accounts: PromiseOrValue<string>[],
-      overrides?: CallOverrides
-    ): Promise<void>;
+    absorb(absorber: string, accounts: string[], overrides?: CallOverrides): Promise<void>;
 
-    accrueAccount(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<void>;
+    accrueAccount(account: string, overrides?: CallOverrides): Promise<void>;
 
-    allow(
-      manager: PromiseOrValue<string>,
-      isAllowed: PromiseOrValue<boolean>,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    allow(manager: string, isAllowed: boolean, overrides?: CallOverrides): Promise<void>;
 
     allowBySig(
-      owner: PromiseOrValue<string>,
-      manager: PromiseOrValue<string>,
-      isAllowed: PromiseOrValue<boolean>,
-      nonce: PromiseOrValue<BigNumberish>,
-      expiry: PromiseOrValue<BigNumberish>,
-      v: PromiseOrValue<BigNumberish>,
-      r: PromiseOrValue<BytesLike>,
-      s: PromiseOrValue<BytesLike>,
+      owner: string,
+      manager: string,
+      isAllowed: boolean,
+      nonce: BigNumberish,
+      expiry: BigNumberish,
+      v: BigNumberish,
+      r: BytesLike,
+      s: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    allowance(
-      owner: PromiseOrValue<string>,
-      spender: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    allowance(owner: string, spender: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    approve(
-      spender: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
+    approve(spender: string, amount: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
 
-    approveThis(
-      manager: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    approveThis(manager: string, asset: string, amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
-    balanceOf(owner: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     baseAccrualScale(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1355,13 +1191,13 @@ export interface Comet extends BaseContract {
 
     baseTokenPriceFeed(overrides?: CallOverrides): Promise<string>;
 
-    baseTrackingAccrued(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    baseTrackingAccrued(account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     baseTrackingBorrowSpeed(overrides?: CallOverrides): Promise<BigNumber>;
 
     baseTrackingSupplySpeed(overrides?: CallOverrides): Promise<BigNumber>;
 
-    borrowBalanceOf(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    borrowBalanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     borrowKink(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1372,18 +1208,14 @@ export interface Comet extends BaseContract {
     borrowPerSecondInterestRateSlopeLow(overrides?: CallOverrides): Promise<BigNumber>;
 
     buyCollateral(
-      asset: PromiseOrValue<string>,
-      minAmount: PromiseOrValue<BigNumberish>,
-      baseAmount: PromiseOrValue<BigNumberish>,
-      recipient: PromiseOrValue<string>,
+      asset: string,
+      minAmount: BigNumberish,
+      baseAmount: BigNumberish,
+      recipient: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    collateralBalanceOf(
-      account: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    collateralBalanceOf(account: string, asset: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     decimals(overrides?: CallOverrides): Promise<number>;
 
@@ -1391,42 +1223,35 @@ export interface Comet extends BaseContract {
 
     factorScale(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getAssetInfo(i: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<CometCore.AssetInfoStructOutput>;
+    getAssetInfo(i: BigNumberish, overrides?: CallOverrides): Promise<CometCore.AssetInfoStructOutput>;
 
-    getAssetInfoByAddress(
-      asset: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<CometCore.AssetInfoStructOutput>;
+    getAssetInfoByAddress(asset: string, overrides?: CallOverrides): Promise<CometCore.AssetInfoStructOutput>;
 
-    getBorrowRate(utilization: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<BigNumber>;
+    getBorrowRate(utilization: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
-    getPrice(priceFeed: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    getPrice(priceFeed: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     getReserves(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getSupplyRate(utilization: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<BigNumber>;
+    getSupplyRate(utilization: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     getUtilization(overrides?: CallOverrides): Promise<BigNumber>;
 
     governor(overrides?: CallOverrides): Promise<string>;
 
-    hasPermission(
-      owner: PromiseOrValue<string>,
-      manager: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
+    hasPermission(owner: string, manager: string, overrides?: CallOverrides): Promise<boolean>;
 
     initializeStorage(overrides?: CallOverrides): Promise<void>;
 
     isAbsorbPaused(overrides?: CallOverrides): Promise<boolean>;
 
-    isAllowed(arg0: PromiseOrValue<string>, arg1: PromiseOrValue<string>, overrides?: CallOverrides): Promise<boolean>;
+    isAllowed(arg0: string, arg1: string, overrides?: CallOverrides): Promise<boolean>;
 
-    isBorrowCollateralized(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<boolean>;
+    isBorrowCollateralized(account: string, overrides?: CallOverrides): Promise<boolean>;
 
     isBuyPaused(overrides?: CallOverrides): Promise<boolean>;
 
-    isLiquidatable(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<boolean>;
+    isLiquidatable(account: string, overrides?: CallOverrides): Promise<boolean>;
 
     isSupplyPaused(overrides?: CallOverrides): Promise<boolean>;
 
@@ -1435,7 +1260,7 @@ export interface Comet extends BaseContract {
     isWithdrawPaused(overrides?: CallOverrides): Promise<boolean>;
 
     liquidatorPoints(
-      arg0: PromiseOrValue<string>,
+      arg0: string,
       overrides?: CallOverrides
     ): Promise<
       [number, BigNumber, BigNumber, number] & {
@@ -1453,11 +1278,11 @@ export interface Comet extends BaseContract {
     numAssets(overrides?: CallOverrides): Promise<number>;
 
     pause(
-      supplyPaused: PromiseOrValue<boolean>,
-      transferPaused: PromiseOrValue<boolean>,
-      withdrawPaused: PromiseOrValue<boolean>,
-      absorbPaused: PromiseOrValue<boolean>,
-      buyPaused: PromiseOrValue<boolean>,
+      supplyPaused: boolean,
+      transferPaused: boolean,
+      withdrawPaused: boolean,
+      absorbPaused: boolean,
+      buyPaused: boolean,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1465,25 +1290,17 @@ export interface Comet extends BaseContract {
 
     priceScale(overrides?: CallOverrides): Promise<BigNumber>;
 
-    quoteCollateral(
-      asset: PromiseOrValue<string>,
-      baseAmount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    quoteCollateral(asset: string, baseAmount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     storeFrontPriceFactor(overrides?: CallOverrides): Promise<BigNumber>;
 
-    supply(
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    supply(asset: string, amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     supplyFrom(
-      from: PromiseOrValue<string>,
-      dst: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
+      from: string,
+      dst: string,
+      asset: string,
+      amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1495,12 +1312,7 @@ export interface Comet extends BaseContract {
 
     supplyPerSecondInterestRateSlopeLow(overrides?: CallOverrides): Promise<BigNumber>;
 
-    supplyTo(
-      dst: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    supplyTo(dst: string, asset: string, amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     symbol(overrides?: CallOverrides): Promise<string>;
 
@@ -1513,7 +1325,7 @@ export interface Comet extends BaseContract {
     totalsBasic(overrides?: CallOverrides): Promise<CometStorage.TotalsBasicStructOutput>;
 
     totalsCollateral(
-      arg0: PromiseOrValue<string>,
+      arg0: string,
       overrides?: CallOverrides
     ): Promise<
       [BigNumber, BigNumber] & {
@@ -1524,36 +1336,22 @@ export interface Comet extends BaseContract {
 
     trackingIndexScale(overrides?: CallOverrides): Promise<BigNumber>;
 
-    transfer(
-      dst: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
+    transfer(dst: string, amount: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
 
-    transferAsset(
-      dst: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    transferAsset(dst: string, asset: string, amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     transferAssetFrom(
-      src: PromiseOrValue<string>,
-      dst: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
+      src: string,
+      dst: string,
+      asset: string,
+      amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    transferFrom(
-      src: PromiseOrValue<string>,
-      dst: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
+    transferFrom(src: string, dst: string, amount: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
 
     userBasic(
-      arg0: PromiseOrValue<string>,
+      arg0: string,
       overrides?: CallOverrides
     ): Promise<
       [BigNumber, BigNumber, BigNumber, number, number] & {
@@ -1566,92 +1364,75 @@ export interface Comet extends BaseContract {
     >;
 
     userCollateral(
-      arg0: PromiseOrValue<string>,
-      arg1: PromiseOrValue<string>,
+      arg0: string,
+      arg1: string,
       overrides?: CallOverrides
     ): Promise<[BigNumber, BigNumber] & { balance: BigNumber; _reserved: BigNumber }>;
 
-    userNonce(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    userNonce(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     version(overrides?: CallOverrides): Promise<string>;
 
-    withdraw(
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    withdraw(asset: string, amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     withdrawFrom(
-      src: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
+      src: string,
+      to: string,
+      asset: string,
+      amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    withdrawReserves(
-      to: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    withdrawReserves(to: string, amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
-    withdrawTo(
-      to: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    withdrawTo(to: string, asset: string, amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {
     'AbsorbCollateral(address,address,address,uint256,uint256)'(
-      absorber?: PromiseOrValue<string> | null,
-      borrower?: PromiseOrValue<string> | null,
-      asset?: PromiseOrValue<string> | null,
+      absorber?: string | null,
+      borrower?: string | null,
+      asset?: string | null,
       collateralAbsorbed?: null,
       usdValue?: null
     ): AbsorbCollateralEventFilter;
     AbsorbCollateral(
-      absorber?: PromiseOrValue<string> | null,
-      borrower?: PromiseOrValue<string> | null,
-      asset?: PromiseOrValue<string> | null,
+      absorber?: string | null,
+      borrower?: string | null,
+      asset?: string | null,
       collateralAbsorbed?: null,
       usdValue?: null
     ): AbsorbCollateralEventFilter;
 
     'AbsorbDebt(address,address,uint256,uint256)'(
-      absorber?: PromiseOrValue<string> | null,
-      borrower?: PromiseOrValue<string> | null,
+      absorber?: string | null,
+      borrower?: string | null,
       basePaidOut?: null,
       usdValue?: null
     ): AbsorbDebtEventFilter;
     AbsorbDebt(
-      absorber?: PromiseOrValue<string> | null,
-      borrower?: PromiseOrValue<string> | null,
+      absorber?: string | null,
+      borrower?: string | null,
       basePaidOut?: null,
       usdValue?: null
     ): AbsorbDebtEventFilter;
 
     'Approval(address,address,uint256)'(
-      owner?: PromiseOrValue<string> | null,
-      spender?: PromiseOrValue<string> | null,
+      owner?: string | null,
+      spender?: string | null,
       amount?: null
     ): ApprovalEventFilter;
-    Approval(
-      owner?: PromiseOrValue<string> | null,
-      spender?: PromiseOrValue<string> | null,
-      amount?: null
-    ): ApprovalEventFilter;
+    Approval(owner?: string | null, spender?: string | null, amount?: null): ApprovalEventFilter;
 
     'BuyCollateral(address,address,uint256,uint256)'(
-      buyer?: PromiseOrValue<string> | null,
-      asset?: PromiseOrValue<string> | null,
+      buyer?: string | null,
+      asset?: string | null,
       baseAmount?: null,
       collateralAmount?: null
     ): BuyCollateralEventFilter;
     BuyCollateral(
-      buyer?: PromiseOrValue<string> | null,
-      asset?: PromiseOrValue<string> | null,
+      buyer?: string | null,
+      asset?: string | null,
       baseAmount?: null,
       collateralAmount?: null
     ): BuyCollateralEventFilter;
@@ -1671,128 +1452,89 @@ export interface Comet extends BaseContract {
       buyPaused?: null
     ): PauseActionEventFilter;
 
-    'Supply(address,address,uint256)'(
-      from?: PromiseOrValue<string> | null,
-      dst?: PromiseOrValue<string> | null,
-      amount?: null
-    ): SupplyEventFilter;
-    Supply(from?: PromiseOrValue<string> | null, dst?: PromiseOrValue<string> | null, amount?: null): SupplyEventFilter;
+    'Supply(address,address,uint256)'(from?: string | null, dst?: string | null, amount?: null): SupplyEventFilter;
+    Supply(from?: string | null, dst?: string | null, amount?: null): SupplyEventFilter;
 
     'SupplyCollateral(address,address,address,uint256)'(
-      from?: PromiseOrValue<string> | null,
-      dst?: PromiseOrValue<string> | null,
-      asset?: PromiseOrValue<string> | null,
+      from?: string | null,
+      dst?: string | null,
+      asset?: string | null,
       amount?: null
     ): SupplyCollateralEventFilter;
     SupplyCollateral(
-      from?: PromiseOrValue<string> | null,
-      dst?: PromiseOrValue<string> | null,
-      asset?: PromiseOrValue<string> | null,
+      from?: string | null,
+      dst?: string | null,
+      asset?: string | null,
       amount?: null
     ): SupplyCollateralEventFilter;
 
-    'Transfer(address,address,uint256)'(
-      from?: PromiseOrValue<string> | null,
-      to?: PromiseOrValue<string> | null,
-      amount?: null
-    ): TransferEventFilter;
-    Transfer(
-      from?: PromiseOrValue<string> | null,
-      to?: PromiseOrValue<string> | null,
-      amount?: null
-    ): TransferEventFilter;
+    'Transfer(address,address,uint256)'(from?: string | null, to?: string | null, amount?: null): TransferEventFilter;
+    Transfer(from?: string | null, to?: string | null, amount?: null): TransferEventFilter;
 
     'TransferCollateral(address,address,address,uint256)'(
-      from?: PromiseOrValue<string> | null,
-      to?: PromiseOrValue<string> | null,
-      asset?: PromiseOrValue<string> | null,
+      from?: string | null,
+      to?: string | null,
+      asset?: string | null,
       amount?: null
     ): TransferCollateralEventFilter;
     TransferCollateral(
-      from?: PromiseOrValue<string> | null,
-      to?: PromiseOrValue<string> | null,
-      asset?: PromiseOrValue<string> | null,
+      from?: string | null,
+      to?: string | null,
+      asset?: string | null,
       amount?: null
     ): TransferCollateralEventFilter;
 
-    'Withdraw(address,address,uint256)'(
-      src?: PromiseOrValue<string> | null,
-      to?: PromiseOrValue<string> | null,
-      amount?: null
-    ): WithdrawEventFilter;
-    Withdraw(
-      src?: PromiseOrValue<string> | null,
-      to?: PromiseOrValue<string> | null,
-      amount?: null
-    ): WithdrawEventFilter;
+    'Withdraw(address,address,uint256)'(src?: string | null, to?: string | null, amount?: null): WithdrawEventFilter;
+    Withdraw(src?: string | null, to?: string | null, amount?: null): WithdrawEventFilter;
 
     'WithdrawCollateral(address,address,address,uint256)'(
-      src?: PromiseOrValue<string> | null,
-      to?: PromiseOrValue<string> | null,
-      asset?: PromiseOrValue<string> | null,
+      src?: string | null,
+      to?: string | null,
+      asset?: string | null,
       amount?: null
     ): WithdrawCollateralEventFilter;
     WithdrawCollateral(
-      src?: PromiseOrValue<string> | null,
-      to?: PromiseOrValue<string> | null,
-      asset?: PromiseOrValue<string> | null,
+      src?: string | null,
+      to?: string | null,
+      asset?: string | null,
       amount?: null
     ): WithdrawCollateralEventFilter;
 
-    'WithdrawReserves(address,uint256)'(to?: PromiseOrValue<string> | null, amount?: null): WithdrawReservesEventFilter;
-    WithdrawReserves(to?: PromiseOrValue<string> | null, amount?: null): WithdrawReservesEventFilter;
+    'WithdrawReserves(address,uint256)'(to?: string | null, amount?: null): WithdrawReservesEventFilter;
+    WithdrawReserves(to?: string | null, amount?: null): WithdrawReservesEventFilter;
   };
 
   estimateGas: {
-    absorb(
-      absorber: PromiseOrValue<string>,
-      accounts: PromiseOrValue<string>[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
+    absorb(absorber: string, accounts: string[], overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
-    accrueAccount(
-      account: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
+    accrueAccount(account: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
-    allow(
-      manager: PromiseOrValue<string>,
-      isAllowed: PromiseOrValue<boolean>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
+    allow(manager: string, isAllowed: boolean, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
     allowBySig(
-      owner: PromiseOrValue<string>,
-      manager: PromiseOrValue<string>,
-      isAllowed: PromiseOrValue<boolean>,
-      nonce: PromiseOrValue<BigNumberish>,
-      expiry: PromiseOrValue<BigNumberish>,
-      v: PromiseOrValue<BigNumberish>,
-      r: PromiseOrValue<BytesLike>,
-      s: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      owner: string,
+      manager: string,
+      isAllowed: boolean,
+      nonce: BigNumberish,
+      expiry: BigNumberish,
+      v: BigNumberish,
+      r: BytesLike,
+      s: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
-    allowance(
-      owner: PromiseOrValue<string>,
-      spender: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    allowance(owner: string, spender: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    approve(
-      spender: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
+    approve(spender: string, amount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
     approveThis(
-      manager: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      manager: string,
+      asset: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
-    balanceOf(owner: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     baseAccrualScale(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1808,13 +1550,13 @@ export interface Comet extends BaseContract {
 
     baseTokenPriceFeed(overrides?: CallOverrides): Promise<BigNumber>;
 
-    baseTrackingAccrued(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    baseTrackingAccrued(account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     baseTrackingBorrowSpeed(overrides?: CallOverrides): Promise<BigNumber>;
 
     baseTrackingSupplySpeed(overrides?: CallOverrides): Promise<BigNumber>;
 
-    borrowBalanceOf(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    borrowBalanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     borrowKink(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1825,18 +1567,14 @@ export interface Comet extends BaseContract {
     borrowPerSecondInterestRateSlopeLow(overrides?: CallOverrides): Promise<BigNumber>;
 
     buyCollateral(
-      asset: PromiseOrValue<string>,
-      minAmount: PromiseOrValue<BigNumberish>,
-      baseAmount: PromiseOrValue<BigNumberish>,
-      recipient: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      asset: string,
+      minAmount: BigNumberish,
+      baseAmount: BigNumberish,
+      recipient: string,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
-    collateralBalanceOf(
-      account: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    collateralBalanceOf(account: string, asset: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     decimals(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1844,43 +1582,35 @@ export interface Comet extends BaseContract {
 
     factorScale(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getAssetInfo(i: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<BigNumber>;
+    getAssetInfo(i: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
-    getAssetInfoByAddress(asset: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    getAssetInfoByAddress(asset: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    getBorrowRate(utilization: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<BigNumber>;
+    getBorrowRate(utilization: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
-    getPrice(priceFeed: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    getPrice(priceFeed: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     getReserves(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getSupplyRate(utilization: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<BigNumber>;
+    getSupplyRate(utilization: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     getUtilization(overrides?: CallOverrides): Promise<BigNumber>;
 
     governor(overrides?: CallOverrides): Promise<BigNumber>;
 
-    hasPermission(
-      owner: PromiseOrValue<string>,
-      manager: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    hasPermission(owner: string, manager: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    initializeStorage(overrides?: Overrides & { from?: PromiseOrValue<string> }): Promise<BigNumber>;
+    initializeStorage(overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
     isAbsorbPaused(overrides?: CallOverrides): Promise<BigNumber>;
 
-    isAllowed(
-      arg0: PromiseOrValue<string>,
-      arg1: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    isAllowed(arg0: string, arg1: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    isBorrowCollateralized(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    isBorrowCollateralized(account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     isBuyPaused(overrides?: CallOverrides): Promise<BigNumber>;
 
-    isLiquidatable(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    isLiquidatable(account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     isSupplyPaused(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1888,7 +1618,7 @@ export interface Comet extends BaseContract {
 
     isWithdrawPaused(overrides?: CallOverrides): Promise<BigNumber>;
 
-    liquidatorPoints(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    liquidatorPoints(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     maxAssets(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1897,38 +1627,30 @@ export interface Comet extends BaseContract {
     numAssets(overrides?: CallOverrides): Promise<BigNumber>;
 
     pause(
-      supplyPaused: PromiseOrValue<boolean>,
-      transferPaused: PromiseOrValue<boolean>,
-      withdrawPaused: PromiseOrValue<boolean>,
-      absorbPaused: PromiseOrValue<boolean>,
-      buyPaused: PromiseOrValue<boolean>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      supplyPaused: boolean,
+      transferPaused: boolean,
+      withdrawPaused: boolean,
+      absorbPaused: boolean,
+      buyPaused: boolean,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     pauseGuardian(overrides?: CallOverrides): Promise<BigNumber>;
 
     priceScale(overrides?: CallOverrides): Promise<BigNumber>;
 
-    quoteCollateral(
-      asset: PromiseOrValue<string>,
-      baseAmount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    quoteCollateral(asset: string, baseAmount: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     storeFrontPriceFactor(overrides?: CallOverrides): Promise<BigNumber>;
 
-    supply(
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
+    supply(asset: string, amount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
     supplyFrom(
-      from: PromiseOrValue<string>,
-      dst: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      from: string,
+      dst: string,
+      asset: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     supplyKink(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1940,10 +1662,10 @@ export interface Comet extends BaseContract {
     supplyPerSecondInterestRateSlopeLow(overrides?: CallOverrides): Promise<BigNumber>;
 
     supplyTo(
-      dst: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      dst: string,
+      asset: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     symbol(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1956,128 +1678,105 @@ export interface Comet extends BaseContract {
 
     totalsBasic(overrides?: CallOverrides): Promise<BigNumber>;
 
-    totalsCollateral(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    totalsCollateral(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     trackingIndexScale(overrides?: CallOverrides): Promise<BigNumber>;
 
-    transfer(
-      dst: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
+    transfer(dst: string, amount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
     transferAsset(
-      dst: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      dst: string,
+      asset: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     transferAssetFrom(
-      src: PromiseOrValue<string>,
-      dst: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      src: string,
+      dst: string,
+      asset: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     transferFrom(
-      src: PromiseOrValue<string>,
-      dst: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      src: string,
+      dst: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
-    userBasic(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    userBasic(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    userCollateral(
-      arg0: PromiseOrValue<string>,
-      arg1: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    userCollateral(arg0: string, arg1: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    userNonce(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    userNonce(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     version(overrides?: CallOverrides): Promise<BigNumber>;
 
-    withdraw(
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
+    withdraw(asset: string, amount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
     withdrawFrom(
-      src: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      src: string,
+      to: string,
+      asset: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
-    withdrawReserves(
-      to: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
+    withdrawReserves(to: string, amount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
     withdrawTo(
-      to: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      to: string,
+      asset: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
     absorb(
-      absorber: PromiseOrValue<string>,
-      accounts: PromiseOrValue<string>[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      absorber: string,
+      accounts: string[],
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
-    accrueAccount(
-      account: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
+    accrueAccount(account: string, overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
 
     allow(
-      manager: PromiseOrValue<string>,
-      isAllowed: PromiseOrValue<boolean>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      manager: string,
+      isAllowed: boolean,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     allowBySig(
-      owner: PromiseOrValue<string>,
-      manager: PromiseOrValue<string>,
-      isAllowed: PromiseOrValue<boolean>,
-      nonce: PromiseOrValue<BigNumberish>,
-      expiry: PromiseOrValue<BigNumberish>,
-      v: PromiseOrValue<BigNumberish>,
-      r: PromiseOrValue<BytesLike>,
-      s: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      owner: string,
+      manager: string,
+      isAllowed: boolean,
+      nonce: BigNumberish,
+      expiry: BigNumberish,
+      v: BigNumberish,
+      r: BytesLike,
+      s: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
-    allowance(
-      owner: PromiseOrValue<string>,
-      spender: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    allowance(owner: string, spender: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     approve(
-      spender: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      spender: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     approveThis(
-      manager: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      manager: string,
+      asset: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
-    balanceOf(owner: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    balanceOf(owner: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     baseAccrualScale(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -2093,13 +1792,13 @@ export interface Comet extends BaseContract {
 
     baseTokenPriceFeed(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    baseTrackingAccrued(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    baseTrackingAccrued(account: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     baseTrackingBorrowSpeed(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     baseTrackingSupplySpeed(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    borrowBalanceOf(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    borrowBalanceOf(account: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     borrowKink(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -2110,18 +1809,14 @@ export interface Comet extends BaseContract {
     borrowPerSecondInterestRateSlopeLow(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     buyCollateral(
-      asset: PromiseOrValue<string>,
-      minAmount: PromiseOrValue<BigNumberish>,
-      baseAmount: PromiseOrValue<BigNumberish>,
-      recipient: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      asset: string,
+      minAmount: BigNumberish,
+      baseAmount: BigNumberish,
+      recipient: string,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
-    collateralBalanceOf(
-      account: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    collateralBalanceOf(account: string, asset: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     decimals(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -2129,43 +1824,35 @@ export interface Comet extends BaseContract {
 
     factorScale(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    getAssetInfo(i: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getAssetInfo(i: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    getAssetInfoByAddress(asset: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getAssetInfoByAddress(asset: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    getBorrowRate(utilization: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getBorrowRate(utilization: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    getPrice(priceFeed: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getPrice(priceFeed: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getReserves(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    getSupplyRate(utilization: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getSupplyRate(utilization: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getUtilization(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     governor(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    hasPermission(
-      owner: PromiseOrValue<string>,
-      manager: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    hasPermission(owner: string, manager: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    initializeStorage(overrides?: Overrides & { from?: PromiseOrValue<string> }): Promise<PopulatedTransaction>;
+    initializeStorage(overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
 
     isAbsorbPaused(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    isAllowed(
-      arg0: PromiseOrValue<string>,
-      arg1: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    isAllowed(arg0: string, arg1: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    isBorrowCollateralized(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    isBorrowCollateralized(account: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     isBuyPaused(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    isLiquidatable(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    isLiquidatable(account: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     isSupplyPaused(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -2173,7 +1860,7 @@ export interface Comet extends BaseContract {
 
     isWithdrawPaused(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    liquidatorPoints(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    liquidatorPoints(arg0: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     maxAssets(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -2182,38 +1869,34 @@ export interface Comet extends BaseContract {
     numAssets(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     pause(
-      supplyPaused: PromiseOrValue<boolean>,
-      transferPaused: PromiseOrValue<boolean>,
-      withdrawPaused: PromiseOrValue<boolean>,
-      absorbPaused: PromiseOrValue<boolean>,
-      buyPaused: PromiseOrValue<boolean>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      supplyPaused: boolean,
+      transferPaused: boolean,
+      withdrawPaused: boolean,
+      absorbPaused: boolean,
+      buyPaused: boolean,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     pauseGuardian(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     priceScale(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    quoteCollateral(
-      asset: PromiseOrValue<string>,
-      baseAmount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    quoteCollateral(asset: string, baseAmount: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     storeFrontPriceFactor(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     supply(
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      asset: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     supplyFrom(
-      from: PromiseOrValue<string>,
-      dst: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      from: string,
+      dst: string,
+      asset: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     supplyKink(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -2225,10 +1908,10 @@ export interface Comet extends BaseContract {
     supplyPerSecondInterestRateSlopeLow(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     supplyTo(
-      dst: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      dst: string,
+      asset: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -2241,75 +1924,71 @@ export interface Comet extends BaseContract {
 
     totalsBasic(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    totalsCollateral(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    totalsCollateral(arg0: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     trackingIndexScale(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     transfer(
-      dst: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      dst: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     transferAsset(
-      dst: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      dst: string,
+      asset: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     transferAssetFrom(
-      src: PromiseOrValue<string>,
-      dst: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      src: string,
+      dst: string,
+      asset: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     transferFrom(
-      src: PromiseOrValue<string>,
-      dst: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      src: string,
+      dst: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
-    userBasic(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    userBasic(arg0: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    userCollateral(
-      arg0: PromiseOrValue<string>,
-      arg1: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    userCollateral(arg0: string, arg1: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    userNonce(arg0: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    userNonce(arg0: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     version(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     withdraw(
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      asset: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     withdrawFrom(
-      src: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      src: string,
+      to: string,
+      asset: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     withdrawReserves(
-      to: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      to: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     withdrawTo(
-      to: PromiseOrValue<string>,
-      asset: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      to: string,
+      asset: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
   };
 }

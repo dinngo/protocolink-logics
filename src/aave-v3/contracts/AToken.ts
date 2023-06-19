@@ -15,7 +15,7 @@ import type {
 } from 'ethers';
 import type { FunctionFragment, Result, EventFragment } from '@ethersproject/abi';
 import type { Listener, Provider } from '@ethersproject/providers';
-import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent, PromiseOrValue } from './common';
+import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from './common';
 
 export interface ATokenInterface extends utils.Interface {
   functions: {
@@ -100,92 +100,39 @@ export interface ATokenInterface extends utils.Interface {
   encodeFunctionData(functionFragment: 'POOL', values?: undefined): string;
   encodeFunctionData(functionFragment: 'RESERVE_TREASURY_ADDRESS', values?: undefined): string;
   encodeFunctionData(functionFragment: 'UNDERLYING_ASSET_ADDRESS', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'allowance', values: [PromiseOrValue<string>, PromiseOrValue<string>]): string;
-  encodeFunctionData(
-    functionFragment: 'approve',
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(functionFragment: 'balanceOf', values: [PromiseOrValue<string>]): string;
-  encodeFunctionData(
-    functionFragment: 'burn',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
-  ): string;
+  encodeFunctionData(functionFragment: 'allowance', values: [string, string]): string;
+  encodeFunctionData(functionFragment: 'approve', values: [string, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'balanceOf', values: [string]): string;
+  encodeFunctionData(functionFragment: 'burn', values: [string, string, BigNumberish, BigNumberish]): string;
   encodeFunctionData(functionFragment: 'decimals', values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: 'decreaseAllowance',
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
+  encodeFunctionData(functionFragment: 'decreaseAllowance', values: [string, BigNumberish]): string;
   encodeFunctionData(functionFragment: 'getIncentivesController', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'getPreviousIndex', values: [PromiseOrValue<string>]): string;
-  encodeFunctionData(functionFragment: 'getScaledUserBalanceAndSupply', values: [PromiseOrValue<string>]): string;
-  encodeFunctionData(
-    functionFragment: 'handleRepayment',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: 'increaseAllowance',
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
+  encodeFunctionData(functionFragment: 'getPreviousIndex', values: [string]): string;
+  encodeFunctionData(functionFragment: 'getScaledUserBalanceAndSupply', values: [string]): string;
+  encodeFunctionData(functionFragment: 'handleRepayment', values: [string, string, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'increaseAllowance', values: [string, BigNumberish]): string;
   encodeFunctionData(
     functionFragment: 'initialize',
-    values: [
-      PromiseOrValue<string>,
-      PromiseOrValue<string>,
-      PromiseOrValue<string>,
-      PromiseOrValue<string>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<string>,
-      PromiseOrValue<string>,
-      PromiseOrValue<BytesLike>
-    ]
+    values: [string, string, string, string, BigNumberish, string, string, BytesLike]
   ): string;
-  encodeFunctionData(
-    functionFragment: 'mint',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: 'mintToTreasury',
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
-  ): string;
+  encodeFunctionData(functionFragment: 'mint', values: [string, string, BigNumberish, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'mintToTreasury', values: [BigNumberish, BigNumberish]): string;
   encodeFunctionData(functionFragment: 'name', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'nonces', values: [PromiseOrValue<string>]): string;
+  encodeFunctionData(functionFragment: 'nonces', values: [string]): string;
   encodeFunctionData(
     functionFragment: 'permit',
-    values: [
-      PromiseOrValue<string>,
-      PromiseOrValue<string>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BytesLike>,
-      PromiseOrValue<BytesLike>
-    ]
+    values: [string, string, BigNumberish, BigNumberish, BigNumberish, BytesLike, BytesLike]
   ): string;
-  encodeFunctionData(
-    functionFragment: 'rescueTokens',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(functionFragment: 'scaledBalanceOf', values: [PromiseOrValue<string>]): string;
+  encodeFunctionData(functionFragment: 'rescueTokens', values: [string, string, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'scaledBalanceOf', values: [string]): string;
   encodeFunctionData(functionFragment: 'scaledTotalSupply', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'setIncentivesController', values: [PromiseOrValue<string>]): string;
+  encodeFunctionData(functionFragment: 'setIncentivesController', values: [string]): string;
   encodeFunctionData(functionFragment: 'symbol', values?: undefined): string;
   encodeFunctionData(functionFragment: 'totalSupply', values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: 'transfer',
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: 'transferFrom',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: 'transferOnLiquidation',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: 'transferUnderlyingTo',
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
+  encodeFunctionData(functionFragment: 'transfer', values: [string, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'transferFrom', values: [string, string, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'transferOnLiquidation', values: [string, string, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'transferUnderlyingTo', values: [string, BigNumberish]): string;
 
   decodeFunctionResult(functionFragment: 'ATOKEN_REVISION', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'DOMAIN_SEPARATOR', data: BytesLike): Result;
@@ -343,113 +290,106 @@ export interface AToken extends BaseContract {
 
     UNDERLYING_ASSET_ADDRESS(overrides?: CallOverrides): Promise<[string]>;
 
-    allowance(
-      owner: PromiseOrValue<string>,
-      spender: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    allowance(owner: string, spender: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     approve(
-      spender: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      spender: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
-    balanceOf(user: PromiseOrValue<string>, overrides?: CallOverrides): Promise<[BigNumber]>;
+    balanceOf(user: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     burn(
-      from: PromiseOrValue<string>,
-      receiverOfUnderlying: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      index: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      from: string,
+      receiverOfUnderlying: string,
+      amount: BigNumberish,
+      index: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     decimals(overrides?: CallOverrides): Promise<[number]>;
 
     decreaseAllowance(
-      spender: PromiseOrValue<string>,
-      subtractedValue: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      spender: string,
+      subtractedValue: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     getIncentivesController(overrides?: CallOverrides): Promise<[string]>;
 
-    getPreviousIndex(user: PromiseOrValue<string>, overrides?: CallOverrides): Promise<[BigNumber]>;
+    getPreviousIndex(user: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    getScaledUserBalanceAndSupply(
-      user: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber, BigNumber]>;
+    getScaledUserBalanceAndSupply(user: string, overrides?: CallOverrides): Promise<[BigNumber, BigNumber]>;
 
     handleRepayment(
-      user: PromiseOrValue<string>,
-      onBehalfOf: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      user: string,
+      onBehalfOf: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     increaseAllowance(
-      spender: PromiseOrValue<string>,
-      addedValue: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      spender: string,
+      addedValue: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     initialize(
-      initializingPool: PromiseOrValue<string>,
-      treasury: PromiseOrValue<string>,
-      underlyingAsset: PromiseOrValue<string>,
-      incentivesController: PromiseOrValue<string>,
-      aTokenDecimals: PromiseOrValue<BigNumberish>,
-      aTokenName: PromiseOrValue<string>,
-      aTokenSymbol: PromiseOrValue<string>,
-      params: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      initializingPool: string,
+      treasury: string,
+      underlyingAsset: string,
+      incentivesController: string,
+      aTokenDecimals: BigNumberish,
+      aTokenName: string,
+      aTokenSymbol: string,
+      params: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     mint(
-      caller: PromiseOrValue<string>,
-      onBehalfOf: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      index: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      caller: string,
+      onBehalfOf: string,
+      amount: BigNumberish,
+      index: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     mintToTreasury(
-      amount: PromiseOrValue<BigNumberish>,
-      index: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      amount: BigNumberish,
+      index: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     name(overrides?: CallOverrides): Promise<[string]>;
 
-    nonces(owner: PromiseOrValue<string>, overrides?: CallOverrides): Promise<[BigNumber]>;
+    nonces(owner: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     permit(
-      owner: PromiseOrValue<string>,
-      spender: PromiseOrValue<string>,
-      value: PromiseOrValue<BigNumberish>,
-      deadline: PromiseOrValue<BigNumberish>,
-      v: PromiseOrValue<BigNumberish>,
-      r: PromiseOrValue<BytesLike>,
-      s: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      owner: string,
+      spender: string,
+      value: BigNumberish,
+      deadline: BigNumberish,
+      v: BigNumberish,
+      r: BytesLike,
+      s: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     rescueTokens(
-      token: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      token: string,
+      to: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
-    scaledBalanceOf(user: PromiseOrValue<string>, overrides?: CallOverrides): Promise<[BigNumber]>;
+    scaledBalanceOf(user: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     scaledTotalSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     setIncentivesController(
-      controller: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      controller: string,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     symbol(overrides?: CallOverrides): Promise<[string]>;
@@ -457,29 +397,29 @@ export interface AToken extends BaseContract {
     totalSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     transfer(
-      recipient: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      recipient: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     transferFrom(
-      sender: PromiseOrValue<string>,
-      recipient: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      sender: string,
+      recipient: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     transferOnLiquidation(
-      from: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      value: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      from: string,
+      to: string,
+      value: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     transferUnderlyingTo(
-      target: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      target: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
   };
 
@@ -497,143 +437,133 @@ export interface AToken extends BaseContract {
 
   UNDERLYING_ASSET_ADDRESS(overrides?: CallOverrides): Promise<string>;
 
-  allowance(
-    owner: PromiseOrValue<string>,
-    spender: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
+  allowance(owner: string, spender: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   approve(
-    spender: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    spender: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
-  balanceOf(user: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+  balanceOf(user: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   burn(
-    from: PromiseOrValue<string>,
-    receiverOfUnderlying: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    index: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    from: string,
+    receiverOfUnderlying: string,
+    amount: BigNumberish,
+    index: BigNumberish,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   decimals(overrides?: CallOverrides): Promise<number>;
 
   decreaseAllowance(
-    spender: PromiseOrValue<string>,
-    subtractedValue: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    spender: string,
+    subtractedValue: BigNumberish,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   getIncentivesController(overrides?: CallOverrides): Promise<string>;
 
-  getPreviousIndex(user: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+  getPreviousIndex(user: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-  getScaledUserBalanceAndSupply(
-    user: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<[BigNumber, BigNumber]>;
+  getScaledUserBalanceAndSupply(user: string, overrides?: CallOverrides): Promise<[BigNumber, BigNumber]>;
 
   handleRepayment(
-    user: PromiseOrValue<string>,
-    onBehalfOf: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    user: string,
+    onBehalfOf: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   increaseAllowance(
-    spender: PromiseOrValue<string>,
-    addedValue: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    spender: string,
+    addedValue: BigNumberish,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   initialize(
-    initializingPool: PromiseOrValue<string>,
-    treasury: PromiseOrValue<string>,
-    underlyingAsset: PromiseOrValue<string>,
-    incentivesController: PromiseOrValue<string>,
-    aTokenDecimals: PromiseOrValue<BigNumberish>,
-    aTokenName: PromiseOrValue<string>,
-    aTokenSymbol: PromiseOrValue<string>,
-    params: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    initializingPool: string,
+    treasury: string,
+    underlyingAsset: string,
+    incentivesController: string,
+    aTokenDecimals: BigNumberish,
+    aTokenName: string,
+    aTokenSymbol: string,
+    params: BytesLike,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   mint(
-    caller: PromiseOrValue<string>,
-    onBehalfOf: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    index: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    caller: string,
+    onBehalfOf: string,
+    amount: BigNumberish,
+    index: BigNumberish,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   mintToTreasury(
-    amount: PromiseOrValue<BigNumberish>,
-    index: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    amount: BigNumberish,
+    index: BigNumberish,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   name(overrides?: CallOverrides): Promise<string>;
 
-  nonces(owner: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+  nonces(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   permit(
-    owner: PromiseOrValue<string>,
-    spender: PromiseOrValue<string>,
-    value: PromiseOrValue<BigNumberish>,
-    deadline: PromiseOrValue<BigNumberish>,
-    v: PromiseOrValue<BigNumberish>,
-    r: PromiseOrValue<BytesLike>,
-    s: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    owner: string,
+    spender: string,
+    value: BigNumberish,
+    deadline: BigNumberish,
+    v: BigNumberish,
+    r: BytesLike,
+    s: BytesLike,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   rescueTokens(
-    token: PromiseOrValue<string>,
-    to: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    token: string,
+    to: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
-  scaledBalanceOf(user: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+  scaledBalanceOf(user: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   scaledTotalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
-  setIncentivesController(
-    controller: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
+  setIncentivesController(controller: string, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
   symbol(overrides?: CallOverrides): Promise<string>;
 
   totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
   transfer(
-    recipient: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    recipient: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   transferFrom(
-    sender: PromiseOrValue<string>,
-    recipient: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    sender: string,
+    recipient: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   transferOnLiquidation(
-    from: PromiseOrValue<string>,
-    to: PromiseOrValue<string>,
-    value: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    from: string,
+    to: string,
+    value: BigNumberish,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   transferUnderlyingTo(
-    target: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    target: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   callStatic: {
@@ -651,186 +581,126 @@ export interface AToken extends BaseContract {
 
     UNDERLYING_ASSET_ADDRESS(overrides?: CallOverrides): Promise<string>;
 
-    allowance(
-      owner: PromiseOrValue<string>,
-      spender: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    allowance(owner: string, spender: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    approve(
-      spender: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
+    approve(spender: string, amount: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
 
-    balanceOf(user: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    balanceOf(user: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     burn(
-      from: PromiseOrValue<string>,
-      receiverOfUnderlying: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      index: PromiseOrValue<BigNumberish>,
+      from: string,
+      receiverOfUnderlying: string,
+      amount: BigNumberish,
+      index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
     decimals(overrides?: CallOverrides): Promise<number>;
 
-    decreaseAllowance(
-      spender: PromiseOrValue<string>,
-      subtractedValue: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
+    decreaseAllowance(spender: string, subtractedValue: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
 
     getIncentivesController(overrides?: CallOverrides): Promise<string>;
 
-    getPreviousIndex(user: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    getPreviousIndex(user: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    getScaledUserBalanceAndSupply(
-      user: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber, BigNumber]>;
+    getScaledUserBalanceAndSupply(user: string, overrides?: CallOverrides): Promise<[BigNumber, BigNumber]>;
 
-    handleRepayment(
-      user: PromiseOrValue<string>,
-      onBehalfOf: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    handleRepayment(user: string, onBehalfOf: string, amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
-    increaseAllowance(
-      spender: PromiseOrValue<string>,
-      addedValue: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
+    increaseAllowance(spender: string, addedValue: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
 
     initialize(
-      initializingPool: PromiseOrValue<string>,
-      treasury: PromiseOrValue<string>,
-      underlyingAsset: PromiseOrValue<string>,
-      incentivesController: PromiseOrValue<string>,
-      aTokenDecimals: PromiseOrValue<BigNumberish>,
-      aTokenName: PromiseOrValue<string>,
-      aTokenSymbol: PromiseOrValue<string>,
-      params: PromiseOrValue<BytesLike>,
+      initializingPool: string,
+      treasury: string,
+      underlyingAsset: string,
+      incentivesController: string,
+      aTokenDecimals: BigNumberish,
+      aTokenName: string,
+      aTokenSymbol: string,
+      params: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
 
     mint(
-      caller: PromiseOrValue<string>,
-      onBehalfOf: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      index: PromiseOrValue<BigNumberish>,
+      caller: string,
+      onBehalfOf: string,
+      amount: BigNumberish,
+      index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    mintToTreasury(
-      amount: PromiseOrValue<BigNumberish>,
-      index: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    mintToTreasury(amount: BigNumberish, index: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     name(overrides?: CallOverrides): Promise<string>;
 
-    nonces(owner: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    nonces(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     permit(
-      owner: PromiseOrValue<string>,
-      spender: PromiseOrValue<string>,
-      value: PromiseOrValue<BigNumberish>,
-      deadline: PromiseOrValue<BigNumberish>,
-      v: PromiseOrValue<BigNumberish>,
-      r: PromiseOrValue<BytesLike>,
-      s: PromiseOrValue<BytesLike>,
+      owner: string,
+      spender: string,
+      value: BigNumberish,
+      deadline: BigNumberish,
+      v: BigNumberish,
+      r: BytesLike,
+      s: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    rescueTokens(
-      token: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    rescueTokens(token: string, to: string, amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
-    scaledBalanceOf(user: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    scaledBalanceOf(user: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     scaledTotalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
-    setIncentivesController(controller: PromiseOrValue<string>, overrides?: CallOverrides): Promise<void>;
+    setIncentivesController(controller: string, overrides?: CallOverrides): Promise<void>;
 
     symbol(overrides?: CallOverrides): Promise<string>;
 
     totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
-    transfer(
-      recipient: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
+    transfer(recipient: string, amount: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
 
-    transferFrom(
-      sender: PromiseOrValue<string>,
-      recipient: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
+    transferFrom(sender: string, recipient: string, amount: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
 
-    transferOnLiquidation(
-      from: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      value: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    transferOnLiquidation(from: string, to: string, value: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
-    transferUnderlyingTo(
-      target: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    transferUnderlyingTo(target: string, amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {
     'Approval(address,address,uint256)'(
-      owner?: PromiseOrValue<string> | null,
-      spender?: PromiseOrValue<string> | null,
+      owner?: string | null,
+      spender?: string | null,
       value?: null
     ): ApprovalEventFilter;
-    Approval(
-      owner?: PromiseOrValue<string> | null,
-      spender?: PromiseOrValue<string> | null,
-      value?: null
-    ): ApprovalEventFilter;
+    Approval(owner?: string | null, spender?: string | null, value?: null): ApprovalEventFilter;
 
     'BalanceTransfer(address,address,uint256,uint256)'(
-      from?: PromiseOrValue<string> | null,
-      to?: PromiseOrValue<string> | null,
+      from?: string | null,
+      to?: string | null,
       value?: null,
       index?: null
     ): BalanceTransferEventFilter;
-    BalanceTransfer(
-      from?: PromiseOrValue<string> | null,
-      to?: PromiseOrValue<string> | null,
-      value?: null,
-      index?: null
-    ): BalanceTransferEventFilter;
+    BalanceTransfer(from?: string | null, to?: string | null, value?: null, index?: null): BalanceTransferEventFilter;
 
     'Burn(address,address,uint256,uint256,uint256)'(
-      from?: PromiseOrValue<string> | null,
-      target?: PromiseOrValue<string> | null,
+      from?: string | null,
+      target?: string | null,
       value?: null,
       balanceIncrease?: null,
       index?: null
     ): BurnEventFilter;
     Burn(
-      from?: PromiseOrValue<string> | null,
-      target?: PromiseOrValue<string> | null,
+      from?: string | null,
+      target?: string | null,
       value?: null,
       balanceIncrease?: null,
       index?: null
     ): BurnEventFilter;
 
     'Initialized(address,address,address,address,uint8,string,string,bytes)'(
-      underlyingAsset?: PromiseOrValue<string> | null,
-      pool?: PromiseOrValue<string> | null,
+      underlyingAsset?: string | null,
+      pool?: string | null,
       treasury?: null,
       incentivesController?: null,
       aTokenDecimals?: null,
@@ -839,8 +709,8 @@ export interface AToken extends BaseContract {
       params?: null
     ): InitializedEventFilter;
     Initialized(
-      underlyingAsset?: PromiseOrValue<string> | null,
-      pool?: PromiseOrValue<string> | null,
+      underlyingAsset?: string | null,
+      pool?: string | null,
       treasury?: null,
       incentivesController?: null,
       aTokenDecimals?: null,
@@ -850,30 +720,22 @@ export interface AToken extends BaseContract {
     ): InitializedEventFilter;
 
     'Mint(address,address,uint256,uint256,uint256)'(
-      caller?: PromiseOrValue<string> | null,
-      onBehalfOf?: PromiseOrValue<string> | null,
+      caller?: string | null,
+      onBehalfOf?: string | null,
       value?: null,
       balanceIncrease?: null,
       index?: null
     ): MintEventFilter;
     Mint(
-      caller?: PromiseOrValue<string> | null,
-      onBehalfOf?: PromiseOrValue<string> | null,
+      caller?: string | null,
+      onBehalfOf?: string | null,
       value?: null,
       balanceIncrease?: null,
       index?: null
     ): MintEventFilter;
 
-    'Transfer(address,address,uint256)'(
-      from?: PromiseOrValue<string> | null,
-      to?: PromiseOrValue<string> | null,
-      value?: null
-    ): TransferEventFilter;
-    Transfer(
-      from?: PromiseOrValue<string> | null,
-      to?: PromiseOrValue<string> | null,
-      value?: null
-    ): TransferEventFilter;
+    'Transfer(address,address,uint256)'(from?: string | null, to?: string | null, value?: null): TransferEventFilter;
+    Transfer(from?: string | null, to?: string | null, value?: null): TransferEventFilter;
   };
 
   estimateGas: {
@@ -891,140 +753,125 @@ export interface AToken extends BaseContract {
 
     UNDERLYING_ASSET_ADDRESS(overrides?: CallOverrides): Promise<BigNumber>;
 
-    allowance(
-      owner: PromiseOrValue<string>,
-      spender: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    allowance(owner: string, spender: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    approve(
-      spender: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
+    approve(spender: string, amount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
-    balanceOf(user: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    balanceOf(user: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     burn(
-      from: PromiseOrValue<string>,
-      receiverOfUnderlying: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      index: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      from: string,
+      receiverOfUnderlying: string,
+      amount: BigNumberish,
+      index: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     decimals(overrides?: CallOverrides): Promise<BigNumber>;
 
     decreaseAllowance(
-      spender: PromiseOrValue<string>,
-      subtractedValue: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      spender: string,
+      subtractedValue: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     getIncentivesController(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getPreviousIndex(user: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    getPreviousIndex(user: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    getScaledUserBalanceAndSupply(user: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    getScaledUserBalanceAndSupply(user: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     handleRepayment(
-      user: PromiseOrValue<string>,
-      onBehalfOf: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      user: string,
+      onBehalfOf: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     increaseAllowance(
-      spender: PromiseOrValue<string>,
-      addedValue: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      spender: string,
+      addedValue: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     initialize(
-      initializingPool: PromiseOrValue<string>,
-      treasury: PromiseOrValue<string>,
-      underlyingAsset: PromiseOrValue<string>,
-      incentivesController: PromiseOrValue<string>,
-      aTokenDecimals: PromiseOrValue<BigNumberish>,
-      aTokenName: PromiseOrValue<string>,
-      aTokenSymbol: PromiseOrValue<string>,
-      params: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      initializingPool: string,
+      treasury: string,
+      underlyingAsset: string,
+      incentivesController: string,
+      aTokenDecimals: BigNumberish,
+      aTokenName: string,
+      aTokenSymbol: string,
+      params: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     mint(
-      caller: PromiseOrValue<string>,
-      onBehalfOf: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      index: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      caller: string,
+      onBehalfOf: string,
+      amount: BigNumberish,
+      index: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     mintToTreasury(
-      amount: PromiseOrValue<BigNumberish>,
-      index: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      amount: BigNumberish,
+      index: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
-    nonces(owner: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    nonces(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     permit(
-      owner: PromiseOrValue<string>,
-      spender: PromiseOrValue<string>,
-      value: PromiseOrValue<BigNumberish>,
-      deadline: PromiseOrValue<BigNumberish>,
-      v: PromiseOrValue<BigNumberish>,
-      r: PromiseOrValue<BytesLike>,
-      s: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      owner: string,
+      spender: string,
+      value: BigNumberish,
+      deadline: BigNumberish,
+      v: BigNumberish,
+      r: BytesLike,
+      s: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     rescueTokens(
-      token: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      token: string,
+      to: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
-    scaledBalanceOf(user: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    scaledBalanceOf(user: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     scaledTotalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
-    setIncentivesController(
-      controller: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
+    setIncentivesController(controller: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
     symbol(overrides?: CallOverrides): Promise<BigNumber>;
 
     totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
-    transfer(
-      recipient: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
+    transfer(recipient: string, amount: BigNumberish, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
     transferFrom(
-      sender: PromiseOrValue<string>,
-      recipient: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      sender: string,
+      recipient: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     transferOnLiquidation(
-      from: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      value: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      from: string,
+      to: string,
+      value: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     transferUnderlyingTo(
-      target: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      target: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
   };
 
@@ -1043,113 +890,106 @@ export interface AToken extends BaseContract {
 
     UNDERLYING_ASSET_ADDRESS(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    allowance(
-      owner: PromiseOrValue<string>,
-      spender: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    allowance(owner: string, spender: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     approve(
-      spender: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      spender: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
-    balanceOf(user: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    balanceOf(user: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     burn(
-      from: PromiseOrValue<string>,
-      receiverOfUnderlying: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      index: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      from: string,
+      receiverOfUnderlying: string,
+      amount: BigNumberish,
+      index: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     decimals(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     decreaseAllowance(
-      spender: PromiseOrValue<string>,
-      subtractedValue: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      spender: string,
+      subtractedValue: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     getIncentivesController(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    getPreviousIndex(user: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getPreviousIndex(user: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    getScaledUserBalanceAndSupply(
-      user: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    getScaledUserBalanceAndSupply(user: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     handleRepayment(
-      user: PromiseOrValue<string>,
-      onBehalfOf: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      user: string,
+      onBehalfOf: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     increaseAllowance(
-      spender: PromiseOrValue<string>,
-      addedValue: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      spender: string,
+      addedValue: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     initialize(
-      initializingPool: PromiseOrValue<string>,
-      treasury: PromiseOrValue<string>,
-      underlyingAsset: PromiseOrValue<string>,
-      incentivesController: PromiseOrValue<string>,
-      aTokenDecimals: PromiseOrValue<BigNumberish>,
-      aTokenName: PromiseOrValue<string>,
-      aTokenSymbol: PromiseOrValue<string>,
-      params: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      initializingPool: string,
+      treasury: string,
+      underlyingAsset: string,
+      incentivesController: string,
+      aTokenDecimals: BigNumberish,
+      aTokenName: string,
+      aTokenSymbol: string,
+      params: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     mint(
-      caller: PromiseOrValue<string>,
-      onBehalfOf: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      index: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      caller: string,
+      onBehalfOf: string,
+      amount: BigNumberish,
+      index: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     mintToTreasury(
-      amount: PromiseOrValue<BigNumberish>,
-      index: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      amount: BigNumberish,
+      index: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    nonces(owner: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    nonces(owner: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     permit(
-      owner: PromiseOrValue<string>,
-      spender: PromiseOrValue<string>,
-      value: PromiseOrValue<BigNumberish>,
-      deadline: PromiseOrValue<BigNumberish>,
-      v: PromiseOrValue<BigNumberish>,
-      r: PromiseOrValue<BytesLike>,
-      s: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      owner: string,
+      spender: string,
+      value: BigNumberish,
+      deadline: BigNumberish,
+      v: BigNumberish,
+      r: BytesLike,
+      s: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     rescueTokens(
-      token: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      token: string,
+      to: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
-    scaledBalanceOf(user: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    scaledBalanceOf(user: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     scaledTotalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     setIncentivesController(
-      controller: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      controller: string,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -1157,29 +997,29 @@ export interface AToken extends BaseContract {
     totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     transfer(
-      recipient: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      recipient: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     transferFrom(
-      sender: PromiseOrValue<string>,
-      recipient: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      sender: string,
+      recipient: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     transferOnLiquidation(
-      from: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      value: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      from: string,
+      to: string,
+      value: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     transferUnderlyingTo(
-      target: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      target: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
   };
 }

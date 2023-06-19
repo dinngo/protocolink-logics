@@ -3,7 +3,6 @@
 /* eslint-disable */
 import { Signer, utils, Contract, ContractFactory, Overrides } from 'ethers';
 import type { Provider, TransactionRequest } from '@ethersproject/providers';
-import type { PromiseOrValue } from '../common';
 import type { AaveV2FlashLoanCallback, AaveV2FlashLoanCallbackInterface } from '../AaveV2FlashLoanCallback';
 
 const _abi = [
@@ -125,16 +124,16 @@ export class AaveV2FlashLoanCallback__factory extends ContractFactory {
   }
 
   override deploy(
-    router_: PromiseOrValue<string>,
-    aaveV2Provider_: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    router_: string,
+    aaveV2Provider_: string,
+    overrides?: Overrides & { from?: string }
   ): Promise<AaveV2FlashLoanCallback> {
     return super.deploy(router_, aaveV2Provider_, overrides || {}) as Promise<AaveV2FlashLoanCallback>;
   }
   override getDeployTransaction(
-    router_: PromiseOrValue<string>,
-    aaveV2Provider_: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    router_: string,
+    aaveV2Provider_: string,
+    overrides?: Overrides & { from?: string }
   ): TransactionRequest {
     return super.getDeployTransaction(router_, aaveV2Provider_, overrides || {});
   }

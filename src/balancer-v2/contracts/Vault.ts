@@ -16,15 +16,15 @@ import type {
 } from 'ethers';
 import type { FunctionFragment, Result, EventFragment } from '@ethersproject/abi';
 import type { Listener, Provider } from '@ethersproject/providers';
-import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent, PromiseOrValue } from './common';
+import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from './common';
 
 export declare namespace IVault {
   export type BatchSwapStepStruct = {
-    poolId: PromiseOrValue<BytesLike>;
-    assetInIndex: PromiseOrValue<BigNumberish>;
-    assetOutIndex: PromiseOrValue<BigNumberish>;
-    amount: PromiseOrValue<BigNumberish>;
-    userData: PromiseOrValue<BytesLike>;
+    poolId: BytesLike;
+    assetInIndex: BigNumberish;
+    assetOutIndex: BigNumberish;
+    amount: BigNumberish;
+    userData: BytesLike;
   };
 
   export type BatchSwapStepStructOutput = [string, BigNumber, BigNumber, BigNumber, string] & {
@@ -36,10 +36,10 @@ export declare namespace IVault {
   };
 
   export type FundManagementStruct = {
-    sender: PromiseOrValue<string>;
-    fromInternalBalance: PromiseOrValue<boolean>;
-    recipient: PromiseOrValue<string>;
-    toInternalBalance: PromiseOrValue<boolean>;
+    sender: string;
+    fromInternalBalance: boolean;
+    recipient: string;
+    toInternalBalance: boolean;
   };
 
   export type FundManagementStructOutput = [string, boolean, string, boolean] & {
@@ -50,10 +50,10 @@ export declare namespace IVault {
   };
 
   export type ExitPoolRequestStruct = {
-    assets: PromiseOrValue<string>[];
-    minAmountsOut: PromiseOrValue<BigNumberish>[];
-    userData: PromiseOrValue<BytesLike>;
-    toInternalBalance: PromiseOrValue<boolean>;
+    assets: string[];
+    minAmountsOut: BigNumberish[];
+    userData: BytesLike;
+    toInternalBalance: boolean;
   };
 
   export type ExitPoolRequestStructOutput = [string[], BigNumber[], string, boolean] & {
@@ -64,10 +64,10 @@ export declare namespace IVault {
   };
 
   export type JoinPoolRequestStruct = {
-    assets: PromiseOrValue<string>[];
-    maxAmountsIn: PromiseOrValue<BigNumberish>[];
-    userData: PromiseOrValue<BytesLike>;
-    fromInternalBalance: PromiseOrValue<boolean>;
+    assets: string[];
+    maxAmountsIn: BigNumberish[];
+    userData: BytesLike;
+    fromInternalBalance: boolean;
   };
 
   export type JoinPoolRequestStructOutput = [string[], BigNumber[], string, boolean] & {
@@ -78,10 +78,10 @@ export declare namespace IVault {
   };
 
   export type PoolBalanceOpStruct = {
-    kind: PromiseOrValue<BigNumberish>;
-    poolId: PromiseOrValue<BytesLike>;
-    token: PromiseOrValue<string>;
-    amount: PromiseOrValue<BigNumberish>;
+    kind: BigNumberish;
+    poolId: BytesLike;
+    token: string;
+    amount: BigNumberish;
   };
 
   export type PoolBalanceOpStructOutput = [number, string, string, BigNumber] & {
@@ -92,11 +92,11 @@ export declare namespace IVault {
   };
 
   export type UserBalanceOpStruct = {
-    kind: PromiseOrValue<BigNumberish>;
-    asset: PromiseOrValue<string>;
-    amount: PromiseOrValue<BigNumberish>;
-    sender: PromiseOrValue<string>;
-    recipient: PromiseOrValue<string>;
+    kind: BigNumberish;
+    asset: string;
+    amount: BigNumberish;
+    sender: string;
+    recipient: string;
   };
 
   export type UserBalanceOpStructOutput = [number, string, BigNumber, string, string] & {
@@ -108,12 +108,12 @@ export declare namespace IVault {
   };
 
   export type SingleSwapStruct = {
-    poolId: PromiseOrValue<BytesLike>;
-    kind: PromiseOrValue<BigNumberish>;
-    assetIn: PromiseOrValue<string>;
-    assetOut: PromiseOrValue<string>;
-    amount: PromiseOrValue<BigNumberish>;
-    userData: PromiseOrValue<BytesLike>;
+    poolId: BytesLike;
+    kind: BigNumberish;
+    assetIn: string;
+    assetOut: string;
+    amount: BigNumberish;
+    userData: BytesLike;
   };
 
   export type SingleSwapStructOutput = [string, number, string, string, BigNumber, string] & {
@@ -190,85 +190,49 @@ export interface VaultInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: 'batchSwap',
     values: [
-      PromiseOrValue<BigNumberish>,
+      BigNumberish,
       IVault.BatchSwapStepStruct[],
-      PromiseOrValue<string>[],
+      string[],
       IVault.FundManagementStruct,
-      PromiseOrValue<BigNumberish>[],
-      PromiseOrValue<BigNumberish>
+      BigNumberish[],
+      BigNumberish
     ]
   ): string;
-  encodeFunctionData(
-    functionFragment: 'deregisterTokens',
-    values: [PromiseOrValue<BytesLike>, PromiseOrValue<string>[]]
-  ): string;
+  encodeFunctionData(functionFragment: 'deregisterTokens', values: [BytesLike, string[]]): string;
   encodeFunctionData(
     functionFragment: 'exitPool',
-    values: [PromiseOrValue<BytesLike>, PromiseOrValue<string>, PromiseOrValue<string>, IVault.ExitPoolRequestStruct]
+    values: [BytesLike, string, string, IVault.ExitPoolRequestStruct]
   ): string;
-  encodeFunctionData(
-    functionFragment: 'flashLoan',
-    values: [
-      PromiseOrValue<string>,
-      PromiseOrValue<string>[],
-      PromiseOrValue<BigNumberish>[],
-      PromiseOrValue<BytesLike>
-    ]
-  ): string;
-  encodeFunctionData(functionFragment: 'getActionId', values: [PromiseOrValue<BytesLike>]): string;
+  encodeFunctionData(functionFragment: 'flashLoan', values: [string, string[], BigNumberish[], BytesLike]): string;
+  encodeFunctionData(functionFragment: 'getActionId', values: [BytesLike]): string;
   encodeFunctionData(functionFragment: 'getAuthorizer', values?: undefined): string;
   encodeFunctionData(functionFragment: 'getDomainSeparator', values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: 'getInternalBalance',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>[]]
-  ): string;
-  encodeFunctionData(functionFragment: 'getNextNonce', values: [PromiseOrValue<string>]): string;
+  encodeFunctionData(functionFragment: 'getInternalBalance', values: [string, string[]]): string;
+  encodeFunctionData(functionFragment: 'getNextNonce', values: [string]): string;
   encodeFunctionData(functionFragment: 'getPausedState', values?: undefined): string;
-  encodeFunctionData(functionFragment: 'getPool', values: [PromiseOrValue<BytesLike>]): string;
-  encodeFunctionData(
-    functionFragment: 'getPoolTokenInfo',
-    values: [PromiseOrValue<BytesLike>, PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(functionFragment: 'getPoolTokens', values: [PromiseOrValue<BytesLike>]): string;
+  encodeFunctionData(functionFragment: 'getPool', values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: 'getPoolTokenInfo', values: [BytesLike, string]): string;
+  encodeFunctionData(functionFragment: 'getPoolTokens', values: [BytesLike]): string;
   encodeFunctionData(functionFragment: 'getProtocolFeesCollector', values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: 'hasApprovedRelayer',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>]
-  ): string;
+  encodeFunctionData(functionFragment: 'hasApprovedRelayer', values: [string, string]): string;
   encodeFunctionData(
     functionFragment: 'joinPool',
-    values: [PromiseOrValue<BytesLike>, PromiseOrValue<string>, PromiseOrValue<string>, IVault.JoinPoolRequestStruct]
+    values: [BytesLike, string, string, IVault.JoinPoolRequestStruct]
   ): string;
   encodeFunctionData(functionFragment: 'managePoolBalance', values: [IVault.PoolBalanceOpStruct[]]): string;
   encodeFunctionData(functionFragment: 'manageUserBalance', values: [IVault.UserBalanceOpStruct[]]): string;
   encodeFunctionData(
     functionFragment: 'queryBatchSwap',
-    values: [
-      PromiseOrValue<BigNumberish>,
-      IVault.BatchSwapStepStruct[],
-      PromiseOrValue<string>[],
-      IVault.FundManagementStruct
-    ]
+    values: [BigNumberish, IVault.BatchSwapStepStruct[], string[], IVault.FundManagementStruct]
   ): string;
-  encodeFunctionData(functionFragment: 'registerPool', values: [PromiseOrValue<BigNumberish>]): string;
-  encodeFunctionData(
-    functionFragment: 'registerTokens',
-    values: [PromiseOrValue<BytesLike>, PromiseOrValue<string>[], PromiseOrValue<string>[]]
-  ): string;
-  encodeFunctionData(functionFragment: 'setAuthorizer', values: [PromiseOrValue<string>]): string;
-  encodeFunctionData(functionFragment: 'setPaused', values: [PromiseOrValue<boolean>]): string;
-  encodeFunctionData(
-    functionFragment: 'setRelayerApproval',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<boolean>]
-  ): string;
+  encodeFunctionData(functionFragment: 'registerPool', values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'registerTokens', values: [BytesLike, string[], string[]]): string;
+  encodeFunctionData(functionFragment: 'setAuthorizer', values: [string]): string;
+  encodeFunctionData(functionFragment: 'setPaused', values: [boolean]): string;
+  encodeFunctionData(functionFragment: 'setRelayerApproval', values: [string, string, boolean]): string;
   encodeFunctionData(
     functionFragment: 'swap',
-    values: [
-      IVault.SingleSwapStruct,
-      IVault.FundManagementStruct,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>
-    ]
+    values: [IVault.SingleSwapStruct, IVault.FundManagementStruct, BigNumberish, BigNumberish]
   ): string;
 
   decodeFunctionResult(functionFragment: 'WETH', data: BytesLike): Result;
@@ -473,50 +437,50 @@ export interface Vault extends BaseContract {
     WETH(overrides?: CallOverrides): Promise<[string]>;
 
     batchSwap(
-      kind: PromiseOrValue<BigNumberish>,
+      kind: BigNumberish,
       swaps: IVault.BatchSwapStepStruct[],
-      assets: PromiseOrValue<string>[],
+      assets: string[],
       funds: IVault.FundManagementStruct,
-      limits: PromiseOrValue<BigNumberish>[],
-      deadline: PromiseOrValue<BigNumberish>,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+      limits: BigNumberish[],
+      deadline: BigNumberish,
+      overrides?: PayableOverrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     deregisterTokens(
-      poolId: PromiseOrValue<BytesLike>,
-      tokens: PromiseOrValue<string>[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      poolId: BytesLike,
+      tokens: string[],
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     exitPool(
-      poolId: PromiseOrValue<BytesLike>,
-      sender: PromiseOrValue<string>,
-      recipient: PromiseOrValue<string>,
+      poolId: BytesLike,
+      sender: string,
+      recipient: string,
       request: IVault.ExitPoolRequestStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     flashLoan(
-      recipient: PromiseOrValue<string>,
-      tokens: PromiseOrValue<string>[],
-      amounts: PromiseOrValue<BigNumberish>[],
-      userData: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      recipient: string,
+      tokens: string[],
+      amounts: BigNumberish[],
+      userData: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
-    getActionId(selector: PromiseOrValue<BytesLike>, overrides?: CallOverrides): Promise<[string]>;
+    getActionId(selector: BytesLike, overrides?: CallOverrides): Promise<[string]>;
 
     getAuthorizer(overrides?: CallOverrides): Promise<[string]>;
 
     getDomainSeparator(overrides?: CallOverrides): Promise<[string]>;
 
     getInternalBalance(
-      user: PromiseOrValue<string>,
-      tokens: PromiseOrValue<string>[],
+      user: string,
+      tokens: string[],
       overrides?: CallOverrides
     ): Promise<[BigNumber[]] & { balances: BigNumber[] }>;
 
-    getNextNonce(user: PromiseOrValue<string>, overrides?: CallOverrides): Promise<[BigNumber]>;
+    getNextNonce(user: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     getPausedState(overrides?: CallOverrides): Promise<
       [boolean, BigNumber, BigNumber] & {
@@ -526,11 +490,11 @@ export interface Vault extends BaseContract {
       }
     >;
 
-    getPool(poolId: PromiseOrValue<BytesLike>, overrides?: CallOverrides): Promise<[string, number]>;
+    getPool(poolId: BytesLike, overrides?: CallOverrides): Promise<[string, number]>;
 
     getPoolTokenInfo(
-      poolId: PromiseOrValue<BytesLike>,
-      token: PromiseOrValue<string>,
+      poolId: BytesLike,
+      token: string,
       overrides?: CallOverrides
     ): Promise<
       [BigNumber, BigNumber, BigNumber, string] & {
@@ -542,7 +506,7 @@ export interface Vault extends BaseContract {
     >;
 
     getPoolTokens(
-      poolId: PromiseOrValue<BytesLike>,
+      poolId: BytesLike,
       overrides?: CallOverrides
     ): Promise<
       [string[], BigNumber[], BigNumber] & {
@@ -554,123 +518,106 @@ export interface Vault extends BaseContract {
 
     getProtocolFeesCollector(overrides?: CallOverrides): Promise<[string]>;
 
-    hasApprovedRelayer(
-      user: PromiseOrValue<string>,
-      relayer: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+    hasApprovedRelayer(user: string, relayer: string, overrides?: CallOverrides): Promise<[boolean]>;
 
     joinPool(
-      poolId: PromiseOrValue<BytesLike>,
-      sender: PromiseOrValue<string>,
-      recipient: PromiseOrValue<string>,
+      poolId: BytesLike,
+      sender: string,
+      recipient: string,
       request: IVault.JoinPoolRequestStruct,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+      overrides?: PayableOverrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     managePoolBalance(
       ops: IVault.PoolBalanceOpStruct[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     manageUserBalance(
       ops: IVault.UserBalanceOpStruct[],
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+      overrides?: PayableOverrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     queryBatchSwap(
-      kind: PromiseOrValue<BigNumberish>,
+      kind: BigNumberish,
       swaps: IVault.BatchSwapStepStruct[],
-      assets: PromiseOrValue<string>[],
+      assets: string[],
       funds: IVault.FundManagementStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
-    registerPool(
-      specialization: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
+    registerPool(specialization: BigNumberish, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
     registerTokens(
-      poolId: PromiseOrValue<BytesLike>,
-      tokens: PromiseOrValue<string>[],
-      assetManagers: PromiseOrValue<string>[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      poolId: BytesLike,
+      tokens: string[],
+      assetManagers: string[],
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
-    setAuthorizer(
-      newAuthorizer: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
+    setAuthorizer(newAuthorizer: string, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
-    setPaused(
-      paused: PromiseOrValue<boolean>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
+    setPaused(paused: boolean, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
     setRelayerApproval(
-      sender: PromiseOrValue<string>,
-      relayer: PromiseOrValue<string>,
-      approved: PromiseOrValue<boolean>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      sender: string,
+      relayer: string,
+      approved: boolean,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     swap(
       singleSwap: IVault.SingleSwapStruct,
       funds: IVault.FundManagementStruct,
-      limit: PromiseOrValue<BigNumberish>,
-      deadline: PromiseOrValue<BigNumberish>,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+      limit: BigNumberish,
+      deadline: BigNumberish,
+      overrides?: PayableOverrides & { from?: string }
     ): Promise<ContractTransaction>;
   };
 
   WETH(overrides?: CallOverrides): Promise<string>;
 
   batchSwap(
-    kind: PromiseOrValue<BigNumberish>,
+    kind: BigNumberish,
     swaps: IVault.BatchSwapStepStruct[],
-    assets: PromiseOrValue<string>[],
+    assets: string[],
     funds: IVault.FundManagementStruct,
-    limits: PromiseOrValue<BigNumberish>[],
-    deadline: PromiseOrValue<BigNumberish>,
-    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    limits: BigNumberish[],
+    deadline: BigNumberish,
+    overrides?: PayableOverrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   deregisterTokens(
-    poolId: PromiseOrValue<BytesLike>,
-    tokens: PromiseOrValue<string>[],
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    poolId: BytesLike,
+    tokens: string[],
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   exitPool(
-    poolId: PromiseOrValue<BytesLike>,
-    sender: PromiseOrValue<string>,
-    recipient: PromiseOrValue<string>,
+    poolId: BytesLike,
+    sender: string,
+    recipient: string,
     request: IVault.ExitPoolRequestStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   flashLoan(
-    recipient: PromiseOrValue<string>,
-    tokens: PromiseOrValue<string>[],
-    amounts: PromiseOrValue<BigNumberish>[],
-    userData: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    recipient: string,
+    tokens: string[],
+    amounts: BigNumberish[],
+    userData: BytesLike,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
-  getActionId(selector: PromiseOrValue<BytesLike>, overrides?: CallOverrides): Promise<string>;
+  getActionId(selector: BytesLike, overrides?: CallOverrides): Promise<string>;
 
   getAuthorizer(overrides?: CallOverrides): Promise<string>;
 
   getDomainSeparator(overrides?: CallOverrides): Promise<string>;
 
-  getInternalBalance(
-    user: PromiseOrValue<string>,
-    tokens: PromiseOrValue<string>[],
-    overrides?: CallOverrides
-  ): Promise<BigNumber[]>;
+  getInternalBalance(user: string, tokens: string[], overrides?: CallOverrides): Promise<BigNumber[]>;
 
-  getNextNonce(user: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+  getNextNonce(user: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   getPausedState(overrides?: CallOverrides): Promise<
     [boolean, BigNumber, BigNumber] & {
@@ -680,11 +627,11 @@ export interface Vault extends BaseContract {
     }
   >;
 
-  getPool(poolId: PromiseOrValue<BytesLike>, overrides?: CallOverrides): Promise<[string, number]>;
+  getPool(poolId: BytesLike, overrides?: CallOverrides): Promise<[string, number]>;
 
   getPoolTokenInfo(
-    poolId: PromiseOrValue<BytesLike>,
-    token: PromiseOrValue<string>,
+    poolId: BytesLike,
+    token: string,
     overrides?: CallOverrides
   ): Promise<
     [BigNumber, BigNumber, BigNumber, string] & {
@@ -696,7 +643,7 @@ export interface Vault extends BaseContract {
   >;
 
   getPoolTokens(
-    poolId: PromiseOrValue<BytesLike>,
+    poolId: BytesLike,
     overrides?: CallOverrides
   ): Promise<
     [string[], BigNumber[], BigNumber] & {
@@ -708,123 +655,102 @@ export interface Vault extends BaseContract {
 
   getProtocolFeesCollector(overrides?: CallOverrides): Promise<string>;
 
-  hasApprovedRelayer(
-    user: PromiseOrValue<string>,
-    relayer: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
+  hasApprovedRelayer(user: string, relayer: string, overrides?: CallOverrides): Promise<boolean>;
 
   joinPool(
-    poolId: PromiseOrValue<BytesLike>,
-    sender: PromiseOrValue<string>,
-    recipient: PromiseOrValue<string>,
+    poolId: BytesLike,
+    sender: string,
+    recipient: string,
     request: IVault.JoinPoolRequestStruct,
-    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    overrides?: PayableOverrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   managePoolBalance(
     ops: IVault.PoolBalanceOpStruct[],
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   manageUserBalance(
     ops: IVault.UserBalanceOpStruct[],
-    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    overrides?: PayableOverrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   queryBatchSwap(
-    kind: PromiseOrValue<BigNumberish>,
+    kind: BigNumberish,
     swaps: IVault.BatchSwapStepStruct[],
-    assets: PromiseOrValue<string>[],
+    assets: string[],
     funds: IVault.FundManagementStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
-  registerPool(
-    specialization: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
+  registerPool(specialization: BigNumberish, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
   registerTokens(
-    poolId: PromiseOrValue<BytesLike>,
-    tokens: PromiseOrValue<string>[],
-    assetManagers: PromiseOrValue<string>[],
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    poolId: BytesLike,
+    tokens: string[],
+    assetManagers: string[],
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
-  setAuthorizer(
-    newAuthorizer: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
+  setAuthorizer(newAuthorizer: string, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
-  setPaused(
-    paused: PromiseOrValue<boolean>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
+  setPaused(paused: boolean, overrides?: Overrides & { from?: string }): Promise<ContractTransaction>;
 
   setRelayerApproval(
-    sender: PromiseOrValue<string>,
-    relayer: PromiseOrValue<string>,
-    approved: PromiseOrValue<boolean>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    sender: string,
+    relayer: string,
+    approved: boolean,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   swap(
     singleSwap: IVault.SingleSwapStruct,
     funds: IVault.FundManagementStruct,
-    limit: PromiseOrValue<BigNumberish>,
-    deadline: PromiseOrValue<BigNumberish>,
-    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+    limit: BigNumberish,
+    deadline: BigNumberish,
+    overrides?: PayableOverrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   callStatic: {
     WETH(overrides?: CallOverrides): Promise<string>;
 
     batchSwap(
-      kind: PromiseOrValue<BigNumberish>,
+      kind: BigNumberish,
       swaps: IVault.BatchSwapStepStruct[],
-      assets: PromiseOrValue<string>[],
+      assets: string[],
       funds: IVault.FundManagementStruct,
-      limits: PromiseOrValue<BigNumberish>[],
-      deadline: PromiseOrValue<BigNumberish>,
+      limits: BigNumberish[],
+      deadline: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber[]>;
 
-    deregisterTokens(
-      poolId: PromiseOrValue<BytesLike>,
-      tokens: PromiseOrValue<string>[],
-      overrides?: CallOverrides
-    ): Promise<void>;
+    deregisterTokens(poolId: BytesLike, tokens: string[], overrides?: CallOverrides): Promise<void>;
 
     exitPool(
-      poolId: PromiseOrValue<BytesLike>,
-      sender: PromiseOrValue<string>,
-      recipient: PromiseOrValue<string>,
+      poolId: BytesLike,
+      sender: string,
+      recipient: string,
       request: IVault.ExitPoolRequestStruct,
       overrides?: CallOverrides
     ): Promise<void>;
 
     flashLoan(
-      recipient: PromiseOrValue<string>,
-      tokens: PromiseOrValue<string>[],
-      amounts: PromiseOrValue<BigNumberish>[],
-      userData: PromiseOrValue<BytesLike>,
+      recipient: string,
+      tokens: string[],
+      amounts: BigNumberish[],
+      userData: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    getActionId(selector: PromiseOrValue<BytesLike>, overrides?: CallOverrides): Promise<string>;
+    getActionId(selector: BytesLike, overrides?: CallOverrides): Promise<string>;
 
     getAuthorizer(overrides?: CallOverrides): Promise<string>;
 
     getDomainSeparator(overrides?: CallOverrides): Promise<string>;
 
-    getInternalBalance(
-      user: PromiseOrValue<string>,
-      tokens: PromiseOrValue<string>[],
-      overrides?: CallOverrides
-    ): Promise<BigNumber[]>;
+    getInternalBalance(user: string, tokens: string[], overrides?: CallOverrides): Promise<BigNumber[]>;
 
-    getNextNonce(user: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    getNextNonce(user: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     getPausedState(overrides?: CallOverrides): Promise<
       [boolean, BigNumber, BigNumber] & {
@@ -834,11 +760,11 @@ export interface Vault extends BaseContract {
       }
     >;
 
-    getPool(poolId: PromiseOrValue<BytesLike>, overrides?: CallOverrides): Promise<[string, number]>;
+    getPool(poolId: BytesLike, overrides?: CallOverrides): Promise<[string, number]>;
 
     getPoolTokenInfo(
-      poolId: PromiseOrValue<BytesLike>,
-      token: PromiseOrValue<string>,
+      poolId: BytesLike,
+      token: string,
       overrides?: CallOverrides
     ): Promise<
       [BigNumber, BigNumber, BigNumber, string] & {
@@ -850,7 +776,7 @@ export interface Vault extends BaseContract {
     >;
 
     getPoolTokens(
-      poolId: PromiseOrValue<BytesLike>,
+      poolId: BytesLike,
       overrides?: CallOverrides
     ): Promise<
       [string[], BigNumber[], BigNumber] & {
@@ -862,16 +788,12 @@ export interface Vault extends BaseContract {
 
     getProtocolFeesCollector(overrides?: CallOverrides): Promise<string>;
 
-    hasApprovedRelayer(
-      user: PromiseOrValue<string>,
-      relayer: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
+    hasApprovedRelayer(user: string, relayer: string, overrides?: CallOverrides): Promise<boolean>;
 
     joinPool(
-      poolId: PromiseOrValue<BytesLike>,
-      sender: PromiseOrValue<string>,
-      recipient: PromiseOrValue<string>,
+      poolId: BytesLike,
+      sender: string,
+      recipient: string,
       request: IVault.JoinPoolRequestStruct,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -881,80 +803,70 @@ export interface Vault extends BaseContract {
     manageUserBalance(ops: IVault.UserBalanceOpStruct[], overrides?: CallOverrides): Promise<void>;
 
     queryBatchSwap(
-      kind: PromiseOrValue<BigNumberish>,
+      kind: BigNumberish,
       swaps: IVault.BatchSwapStepStruct[],
-      assets: PromiseOrValue<string>[],
+      assets: string[],
       funds: IVault.FundManagementStruct,
       overrides?: CallOverrides
     ): Promise<BigNumber[]>;
 
-    registerPool(specialization: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<string>;
+    registerPool(specialization: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
     registerTokens(
-      poolId: PromiseOrValue<BytesLike>,
-      tokens: PromiseOrValue<string>[],
-      assetManagers: PromiseOrValue<string>[],
+      poolId: BytesLike,
+      tokens: string[],
+      assetManagers: string[],
       overrides?: CallOverrides
     ): Promise<void>;
 
-    setAuthorizer(newAuthorizer: PromiseOrValue<string>, overrides?: CallOverrides): Promise<void>;
+    setAuthorizer(newAuthorizer: string, overrides?: CallOverrides): Promise<void>;
 
-    setPaused(paused: PromiseOrValue<boolean>, overrides?: CallOverrides): Promise<void>;
+    setPaused(paused: boolean, overrides?: CallOverrides): Promise<void>;
 
-    setRelayerApproval(
-      sender: PromiseOrValue<string>,
-      relayer: PromiseOrValue<string>,
-      approved: PromiseOrValue<boolean>,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    setRelayerApproval(sender: string, relayer: string, approved: boolean, overrides?: CallOverrides): Promise<void>;
 
     swap(
       singleSwap: IVault.SingleSwapStruct,
       funds: IVault.FundManagementStruct,
-      limit: PromiseOrValue<BigNumberish>,
-      deadline: PromiseOrValue<BigNumberish>,
+      limit: BigNumberish,
+      deadline: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
   };
 
   filters: {
-    'AuthorizerChanged(address)'(newAuthorizer?: PromiseOrValue<string> | null): AuthorizerChangedEventFilter;
-    AuthorizerChanged(newAuthorizer?: PromiseOrValue<string> | null): AuthorizerChangedEventFilter;
+    'AuthorizerChanged(address)'(newAuthorizer?: string | null): AuthorizerChangedEventFilter;
+    AuthorizerChanged(newAuthorizer?: string | null): AuthorizerChangedEventFilter;
 
     'ExternalBalanceTransfer(address,address,address,uint256)'(
-      token?: PromiseOrValue<string> | null,
-      sender?: PromiseOrValue<string> | null,
+      token?: string | null,
+      sender?: string | null,
       recipient?: null,
       amount?: null
     ): ExternalBalanceTransferEventFilter;
     ExternalBalanceTransfer(
-      token?: PromiseOrValue<string> | null,
-      sender?: PromiseOrValue<string> | null,
+      token?: string | null,
+      sender?: string | null,
       recipient?: null,
       amount?: null
     ): ExternalBalanceTransferEventFilter;
 
     'FlashLoan(address,address,uint256,uint256)'(
-      recipient?: PromiseOrValue<string> | null,
-      token?: PromiseOrValue<string> | null,
+      recipient?: string | null,
+      token?: string | null,
       amount?: null,
       feeAmount?: null
     ): FlashLoanEventFilter;
-    FlashLoan(
-      recipient?: PromiseOrValue<string> | null,
-      token?: PromiseOrValue<string> | null,
-      amount?: null,
-      feeAmount?: null
-    ): FlashLoanEventFilter;
+    FlashLoan(recipient?: string | null, token?: string | null, amount?: null, feeAmount?: null): FlashLoanEventFilter;
 
     'InternalBalanceChanged(address,address,int256)'(
-      user?: PromiseOrValue<string> | null,
-      token?: PromiseOrValue<string> | null,
+      user?: string | null,
+      token?: string | null,
       delta?: null
     ): InternalBalanceChangedEventFilter;
     InternalBalanceChanged(
-      user?: PromiseOrValue<string> | null,
-      token?: PromiseOrValue<string> | null,
+      user?: string | null,
+      token?: string | null,
       delta?: null
     ): InternalBalanceChangedEventFilter;
 
@@ -962,220 +874,189 @@ export interface Vault extends BaseContract {
     PausedStateChanged(paused?: null): PausedStateChangedEventFilter;
 
     'PoolBalanceChanged(bytes32,address,address[],int256[],uint256[])'(
-      poolId?: PromiseOrValue<BytesLike> | null,
-      liquidityProvider?: PromiseOrValue<string> | null,
+      poolId?: BytesLike | null,
+      liquidityProvider?: string | null,
       tokens?: null,
       deltas?: null,
       protocolFeeAmounts?: null
     ): PoolBalanceChangedEventFilter;
     PoolBalanceChanged(
-      poolId?: PromiseOrValue<BytesLike> | null,
-      liquidityProvider?: PromiseOrValue<string> | null,
+      poolId?: BytesLike | null,
+      liquidityProvider?: string | null,
       tokens?: null,
       deltas?: null,
       protocolFeeAmounts?: null
     ): PoolBalanceChangedEventFilter;
 
     'PoolBalanceManaged(bytes32,address,address,int256,int256)'(
-      poolId?: PromiseOrValue<BytesLike> | null,
-      assetManager?: PromiseOrValue<string> | null,
-      token?: PromiseOrValue<string> | null,
+      poolId?: BytesLike | null,
+      assetManager?: string | null,
+      token?: string | null,
       cashDelta?: null,
       managedDelta?: null
     ): PoolBalanceManagedEventFilter;
     PoolBalanceManaged(
-      poolId?: PromiseOrValue<BytesLike> | null,
-      assetManager?: PromiseOrValue<string> | null,
-      token?: PromiseOrValue<string> | null,
+      poolId?: BytesLike | null,
+      assetManager?: string | null,
+      token?: string | null,
       cashDelta?: null,
       managedDelta?: null
     ): PoolBalanceManagedEventFilter;
 
     'PoolRegistered(bytes32,address,uint8)'(
-      poolId?: PromiseOrValue<BytesLike> | null,
-      poolAddress?: PromiseOrValue<string> | null,
+      poolId?: BytesLike | null,
+      poolAddress?: string | null,
       specialization?: null
     ): PoolRegisteredEventFilter;
     PoolRegistered(
-      poolId?: PromiseOrValue<BytesLike> | null,
-      poolAddress?: PromiseOrValue<string> | null,
+      poolId?: BytesLike | null,
+      poolAddress?: string | null,
       specialization?: null
     ): PoolRegisteredEventFilter;
 
     'RelayerApprovalChanged(address,address,bool)'(
-      relayer?: PromiseOrValue<string> | null,
-      sender?: PromiseOrValue<string> | null,
+      relayer?: string | null,
+      sender?: string | null,
       approved?: null
     ): RelayerApprovalChangedEventFilter;
     RelayerApprovalChanged(
-      relayer?: PromiseOrValue<string> | null,
-      sender?: PromiseOrValue<string> | null,
+      relayer?: string | null,
+      sender?: string | null,
       approved?: null
     ): RelayerApprovalChangedEventFilter;
 
     'Swap(bytes32,address,address,uint256,uint256)'(
-      poolId?: PromiseOrValue<BytesLike> | null,
-      tokenIn?: PromiseOrValue<string> | null,
-      tokenOut?: PromiseOrValue<string> | null,
+      poolId?: BytesLike | null,
+      tokenIn?: string | null,
+      tokenOut?: string | null,
       amountIn?: null,
       amountOut?: null
     ): SwapEventFilter;
     Swap(
-      poolId?: PromiseOrValue<BytesLike> | null,
-      tokenIn?: PromiseOrValue<string> | null,
-      tokenOut?: PromiseOrValue<string> | null,
+      poolId?: BytesLike | null,
+      tokenIn?: string | null,
+      tokenOut?: string | null,
       amountIn?: null,
       amountOut?: null
     ): SwapEventFilter;
 
-    'TokensDeregistered(bytes32,address[])'(
-      poolId?: PromiseOrValue<BytesLike> | null,
-      tokens?: null
-    ): TokensDeregisteredEventFilter;
-    TokensDeregistered(poolId?: PromiseOrValue<BytesLike> | null, tokens?: null): TokensDeregisteredEventFilter;
+    'TokensDeregistered(bytes32,address[])'(poolId?: BytesLike | null, tokens?: null): TokensDeregisteredEventFilter;
+    TokensDeregistered(poolId?: BytesLike | null, tokens?: null): TokensDeregisteredEventFilter;
 
     'TokensRegistered(bytes32,address[],address[])'(
-      poolId?: PromiseOrValue<BytesLike> | null,
+      poolId?: BytesLike | null,
       tokens?: null,
       assetManagers?: null
     ): TokensRegisteredEventFilter;
-    TokensRegistered(
-      poolId?: PromiseOrValue<BytesLike> | null,
-      tokens?: null,
-      assetManagers?: null
-    ): TokensRegisteredEventFilter;
+    TokensRegistered(poolId?: BytesLike | null, tokens?: null, assetManagers?: null): TokensRegisteredEventFilter;
   };
 
   estimateGas: {
     WETH(overrides?: CallOverrides): Promise<BigNumber>;
 
     batchSwap(
-      kind: PromiseOrValue<BigNumberish>,
+      kind: BigNumberish,
       swaps: IVault.BatchSwapStepStruct[],
-      assets: PromiseOrValue<string>[],
+      assets: string[],
       funds: IVault.FundManagementStruct,
-      limits: PromiseOrValue<BigNumberish>[],
-      deadline: PromiseOrValue<BigNumberish>,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+      limits: BigNumberish[],
+      deadline: BigNumberish,
+      overrides?: PayableOverrides & { from?: string }
     ): Promise<BigNumber>;
 
     deregisterTokens(
-      poolId: PromiseOrValue<BytesLike>,
-      tokens: PromiseOrValue<string>[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      poolId: BytesLike,
+      tokens: string[],
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     exitPool(
-      poolId: PromiseOrValue<BytesLike>,
-      sender: PromiseOrValue<string>,
-      recipient: PromiseOrValue<string>,
+      poolId: BytesLike,
+      sender: string,
+      recipient: string,
       request: IVault.ExitPoolRequestStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     flashLoan(
-      recipient: PromiseOrValue<string>,
-      tokens: PromiseOrValue<string>[],
-      amounts: PromiseOrValue<BigNumberish>[],
-      userData: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      recipient: string,
+      tokens: string[],
+      amounts: BigNumberish[],
+      userData: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
-    getActionId(selector: PromiseOrValue<BytesLike>, overrides?: CallOverrides): Promise<BigNumber>;
+    getActionId(selector: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
     getAuthorizer(overrides?: CallOverrides): Promise<BigNumber>;
 
     getDomainSeparator(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getInternalBalance(
-      user: PromiseOrValue<string>,
-      tokens: PromiseOrValue<string>[],
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    getInternalBalance(user: string, tokens: string[], overrides?: CallOverrides): Promise<BigNumber>;
 
-    getNextNonce(user: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    getNextNonce(user: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     getPausedState(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getPool(poolId: PromiseOrValue<BytesLike>, overrides?: CallOverrides): Promise<BigNumber>;
+    getPool(poolId: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
-    getPoolTokenInfo(
-      poolId: PromiseOrValue<BytesLike>,
-      token: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    getPoolTokenInfo(poolId: BytesLike, token: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    getPoolTokens(poolId: PromiseOrValue<BytesLike>, overrides?: CallOverrides): Promise<BigNumber>;
+    getPoolTokens(poolId: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
     getProtocolFeesCollector(overrides?: CallOverrides): Promise<BigNumber>;
 
-    hasApprovedRelayer(
-      user: PromiseOrValue<string>,
-      relayer: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    hasApprovedRelayer(user: string, relayer: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     joinPool(
-      poolId: PromiseOrValue<BytesLike>,
-      sender: PromiseOrValue<string>,
-      recipient: PromiseOrValue<string>,
+      poolId: BytesLike,
+      sender: string,
+      recipient: string,
       request: IVault.JoinPoolRequestStruct,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+      overrides?: PayableOverrides & { from?: string }
     ): Promise<BigNumber>;
 
-    managePoolBalance(
-      ops: IVault.PoolBalanceOpStruct[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
+    managePoolBalance(ops: IVault.PoolBalanceOpStruct[], overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
     manageUserBalance(
       ops: IVault.UserBalanceOpStruct[],
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+      overrides?: PayableOverrides & { from?: string }
     ): Promise<BigNumber>;
 
     queryBatchSwap(
-      kind: PromiseOrValue<BigNumberish>,
+      kind: BigNumberish,
       swaps: IVault.BatchSwapStepStruct[],
-      assets: PromiseOrValue<string>[],
+      assets: string[],
       funds: IVault.FundManagementStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
-    registerPool(
-      specialization: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
+    registerPool(specialization: BigNumberish, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
     registerTokens(
-      poolId: PromiseOrValue<BytesLike>,
-      tokens: PromiseOrValue<string>[],
-      assetManagers: PromiseOrValue<string>[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      poolId: BytesLike,
+      tokens: string[],
+      assetManagers: string[],
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
-    setAuthorizer(
-      newAuthorizer: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
+    setAuthorizer(newAuthorizer: string, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
-    setPaused(
-      paused: PromiseOrValue<boolean>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
+    setPaused(paused: boolean, overrides?: Overrides & { from?: string }): Promise<BigNumber>;
 
     setRelayerApproval(
-      sender: PromiseOrValue<string>,
-      relayer: PromiseOrValue<string>,
-      approved: PromiseOrValue<boolean>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      sender: string,
+      relayer: string,
+      approved: boolean,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     swap(
       singleSwap: IVault.SingleSwapStruct,
       funds: IVault.FundManagementStruct,
-      limit: PromiseOrValue<BigNumberish>,
-      deadline: PromiseOrValue<BigNumberish>,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+      limit: BigNumberish,
+      deadline: BigNumberish,
+      overrides?: PayableOverrides & { from?: string }
     ): Promise<BigNumber>;
   };
 
@@ -1183,132 +1064,114 @@ export interface Vault extends BaseContract {
     WETH(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     batchSwap(
-      kind: PromiseOrValue<BigNumberish>,
+      kind: BigNumberish,
       swaps: IVault.BatchSwapStepStruct[],
-      assets: PromiseOrValue<string>[],
+      assets: string[],
       funds: IVault.FundManagementStruct,
-      limits: PromiseOrValue<BigNumberish>[],
-      deadline: PromiseOrValue<BigNumberish>,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+      limits: BigNumberish[],
+      deadline: BigNumberish,
+      overrides?: PayableOverrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     deregisterTokens(
-      poolId: PromiseOrValue<BytesLike>,
-      tokens: PromiseOrValue<string>[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      poolId: BytesLike,
+      tokens: string[],
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     exitPool(
-      poolId: PromiseOrValue<BytesLike>,
-      sender: PromiseOrValue<string>,
-      recipient: PromiseOrValue<string>,
+      poolId: BytesLike,
+      sender: string,
+      recipient: string,
       request: IVault.ExitPoolRequestStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     flashLoan(
-      recipient: PromiseOrValue<string>,
-      tokens: PromiseOrValue<string>[],
-      amounts: PromiseOrValue<BigNumberish>[],
-      userData: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      recipient: string,
+      tokens: string[],
+      amounts: BigNumberish[],
+      userData: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
-    getActionId(selector: PromiseOrValue<BytesLike>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getActionId(selector: BytesLike, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getAuthorizer(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getDomainSeparator(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    getInternalBalance(
-      user: PromiseOrValue<string>,
-      tokens: PromiseOrValue<string>[],
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    getInternalBalance(user: string, tokens: string[], overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    getNextNonce(user: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getNextNonce(user: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getPausedState(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    getPool(poolId: PromiseOrValue<BytesLike>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getPool(poolId: BytesLike, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    getPoolTokenInfo(
-      poolId: PromiseOrValue<BytesLike>,
-      token: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    getPoolTokenInfo(poolId: BytesLike, token: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    getPoolTokens(poolId: PromiseOrValue<BytesLike>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getPoolTokens(poolId: BytesLike, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getProtocolFeesCollector(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    hasApprovedRelayer(
-      user: PromiseOrValue<string>,
-      relayer: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    hasApprovedRelayer(user: string, relayer: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     joinPool(
-      poolId: PromiseOrValue<BytesLike>,
-      sender: PromiseOrValue<string>,
-      recipient: PromiseOrValue<string>,
+      poolId: BytesLike,
+      sender: string,
+      recipient: string,
       request: IVault.JoinPoolRequestStruct,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+      overrides?: PayableOverrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     managePoolBalance(
       ops: IVault.PoolBalanceOpStruct[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     manageUserBalance(
       ops: IVault.UserBalanceOpStruct[],
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+      overrides?: PayableOverrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     queryBatchSwap(
-      kind: PromiseOrValue<BigNumberish>,
+      kind: BigNumberish,
       swaps: IVault.BatchSwapStepStruct[],
-      assets: PromiseOrValue<string>[],
+      assets: string[],
       funds: IVault.FundManagementStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     registerPool(
-      specialization: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      specialization: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     registerTokens(
-      poolId: PromiseOrValue<BytesLike>,
-      tokens: PromiseOrValue<string>[],
-      assetManagers: PromiseOrValue<string>[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      poolId: BytesLike,
+      tokens: string[],
+      assetManagers: string[],
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
-    setAuthorizer(
-      newAuthorizer: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
+    setAuthorizer(newAuthorizer: string, overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
 
-    setPaused(
-      paused: PromiseOrValue<boolean>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
+    setPaused(paused: boolean, overrides?: Overrides & { from?: string }): Promise<PopulatedTransaction>;
 
     setRelayerApproval(
-      sender: PromiseOrValue<string>,
-      relayer: PromiseOrValue<string>,
-      approved: PromiseOrValue<boolean>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      sender: string,
+      relayer: string,
+      approved: boolean,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     swap(
       singleSwap: IVault.SingleSwapStruct,
       funds: IVault.FundManagementStruct,
-      limit: PromiseOrValue<BigNumberish>,
-      deadline: PromiseOrValue<BigNumberish>,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
+      limit: BigNumberish,
+      deadline: BigNumberish,
+      overrides?: PayableOverrides & { from?: string }
     ): Promise<PopulatedTransaction>;
   };
 }

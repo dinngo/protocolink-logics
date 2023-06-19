@@ -15,7 +15,7 @@ import type {
 } from 'ethers';
 import type { FunctionFragment, Result } from '@ethersproject/abi';
 import type { Listener, Provider } from '@ethersproject/providers';
-import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent, PromiseOrValue } from './common';
+import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from './common';
 
 export interface DebtTokenBaseInterface extends utils.Interface {
   functions: {
@@ -25,14 +25,8 @@ export interface DebtTokenBaseInterface extends utils.Interface {
 
   getFunction(nameOrSignatureOrTopic: 'approveDelegation' | 'borrowAllowance'): FunctionFragment;
 
-  encodeFunctionData(
-    functionFragment: 'approveDelegation',
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: 'borrowAllowance',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>]
-  ): string;
+  encodeFunctionData(functionFragment: 'approveDelegation', values: [string, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'borrowAllowance', values: [string, string]): string;
 
   decodeFunctionResult(functionFragment: 'approveDelegation', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'borrowAllowance', data: BytesLike): Result;
@@ -64,71 +58,47 @@ export interface DebtTokenBase extends BaseContract {
 
   functions: {
     approveDelegation(
-      delegatee: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      delegatee: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
-    borrowAllowance(
-      fromUser: PromiseOrValue<string>,
-      toUser: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    borrowAllowance(fromUser: string, toUser: string, overrides?: CallOverrides): Promise<[BigNumber]>;
   };
 
   approveDelegation(
-    delegatee: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    delegatee: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
-  borrowAllowance(
-    fromUser: PromiseOrValue<string>,
-    toUser: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
+  borrowAllowance(fromUser: string, toUser: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   callStatic: {
-    approveDelegation(
-      delegatee: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    approveDelegation(delegatee: string, amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
-    borrowAllowance(
-      fromUser: PromiseOrValue<string>,
-      toUser: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    borrowAllowance(fromUser: string, toUser: string, overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   filters: {};
 
   estimateGas: {
     approveDelegation(
-      delegatee: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      delegatee: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
-    borrowAllowance(
-      fromUser: PromiseOrValue<string>,
-      toUser: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    borrowAllowance(fromUser: string, toUser: string, overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
     approveDelegation(
-      delegatee: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      delegatee: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
-    borrowAllowance(
-      fromUser: PromiseOrValue<string>,
-      toUser: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    borrowAllowance(fromUser: string, toUser: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }

@@ -15,7 +15,7 @@ import type {
 } from 'ethers';
 import type { FunctionFragment, Result, EventFragment } from '@ethersproject/abi';
 import type { Listener, Provider } from '@ethersproject/providers';
-import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent, PromiseOrValue } from './common';
+import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from './common';
 
 export interface DebtTokenBaseInterface extends utils.Interface {
   functions: {
@@ -42,27 +42,13 @@ export interface DebtTokenBaseInterface extends utils.Interface {
   encodeFunctionData(functionFragment: 'DELEGATION_WITH_SIG_TYPEHASH', values?: undefined): string;
   encodeFunctionData(functionFragment: 'DOMAIN_SEPARATOR', values?: undefined): string;
   encodeFunctionData(functionFragment: 'EIP712_REVISION', values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: 'approveDelegation',
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: 'borrowAllowance',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>]
-  ): string;
+  encodeFunctionData(functionFragment: 'approveDelegation', values: [string, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'borrowAllowance', values: [string, string]): string;
   encodeFunctionData(
     functionFragment: 'delegationWithSig',
-    values: [
-      PromiseOrValue<string>,
-      PromiseOrValue<string>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BytesLike>,
-      PromiseOrValue<BytesLike>
-    ]
+    values: [string, string, BigNumberish, BigNumberish, BigNumberish, BytesLike, BytesLike]
   ): string;
-  encodeFunctionData(functionFragment: 'nonces', values: [PromiseOrValue<string>]): string;
+  encodeFunctionData(functionFragment: 'nonces', values: [string]): string;
 
   decodeFunctionResult(functionFragment: 'DELEGATION_WITH_SIG_TYPEHASH', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'DOMAIN_SEPARATOR', data: BytesLike): Result;
@@ -122,29 +108,25 @@ export interface DebtTokenBase extends BaseContract {
     EIP712_REVISION(overrides?: CallOverrides): Promise<[string]>;
 
     approveDelegation(
-      delegatee: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      delegatee: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
-    borrowAllowance(
-      fromUser: PromiseOrValue<string>,
-      toUser: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    borrowAllowance(fromUser: string, toUser: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     delegationWithSig(
-      delegator: PromiseOrValue<string>,
-      delegatee: PromiseOrValue<string>,
-      value: PromiseOrValue<BigNumberish>,
-      deadline: PromiseOrValue<BigNumberish>,
-      v: PromiseOrValue<BigNumberish>,
-      r: PromiseOrValue<BytesLike>,
-      s: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      delegator: string,
+      delegatee: string,
+      value: BigNumberish,
+      deadline: BigNumberish,
+      v: BigNumberish,
+      r: BytesLike,
+      s: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
-    nonces(owner: PromiseOrValue<string>, overrides?: CallOverrides): Promise<[BigNumber]>;
+    nonces(owner: string, overrides?: CallOverrides): Promise<[BigNumber]>;
   };
 
   DELEGATION_WITH_SIG_TYPEHASH(overrides?: CallOverrides): Promise<string>;
@@ -154,29 +136,25 @@ export interface DebtTokenBase extends BaseContract {
   EIP712_REVISION(overrides?: CallOverrides): Promise<string>;
 
   approveDelegation(
-    delegatee: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    delegatee: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
-  borrowAllowance(
-    fromUser: PromiseOrValue<string>,
-    toUser: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
+  borrowAllowance(fromUser: string, toUser: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   delegationWithSig(
-    delegator: PromiseOrValue<string>,
-    delegatee: PromiseOrValue<string>,
-    value: PromiseOrValue<BigNumberish>,
-    deadline: PromiseOrValue<BigNumberish>,
-    v: PromiseOrValue<BigNumberish>,
-    r: PromiseOrValue<BytesLike>,
-    s: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    delegator: string,
+    delegatee: string,
+    value: BigNumberish,
+    deadline: BigNumberish,
+    v: BigNumberish,
+    r: BytesLike,
+    s: BytesLike,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
-  nonces(owner: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+  nonces(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   callStatic: {
     DELEGATION_WITH_SIG_TYPEHASH(overrides?: CallOverrides): Promise<string>;
@@ -185,43 +163,35 @@ export interface DebtTokenBase extends BaseContract {
 
     EIP712_REVISION(overrides?: CallOverrides): Promise<string>;
 
-    approveDelegation(
-      delegatee: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    approveDelegation(delegatee: string, amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
-    borrowAllowance(
-      fromUser: PromiseOrValue<string>,
-      toUser: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    borrowAllowance(fromUser: string, toUser: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     delegationWithSig(
-      delegator: PromiseOrValue<string>,
-      delegatee: PromiseOrValue<string>,
-      value: PromiseOrValue<BigNumberish>,
-      deadline: PromiseOrValue<BigNumberish>,
-      v: PromiseOrValue<BigNumberish>,
-      r: PromiseOrValue<BytesLike>,
-      s: PromiseOrValue<BytesLike>,
+      delegator: string,
+      delegatee: string,
+      value: BigNumberish,
+      deadline: BigNumberish,
+      v: BigNumberish,
+      r: BytesLike,
+      s: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    nonces(owner: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    nonces(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   filters: {
     'BorrowAllowanceDelegated(address,address,address,uint256)'(
-      fromUser?: PromiseOrValue<string> | null,
-      toUser?: PromiseOrValue<string> | null,
-      asset?: PromiseOrValue<string> | null,
+      fromUser?: string | null,
+      toUser?: string | null,
+      asset?: string | null,
       amount?: null
     ): BorrowAllowanceDelegatedEventFilter;
     BorrowAllowanceDelegated(
-      fromUser?: PromiseOrValue<string> | null,
-      toUser?: PromiseOrValue<string> | null,
-      asset?: PromiseOrValue<string> | null,
+      fromUser?: string | null,
+      toUser?: string | null,
+      asset?: string | null,
       amount?: null
     ): BorrowAllowanceDelegatedEventFilter;
   };
@@ -234,29 +204,25 @@ export interface DebtTokenBase extends BaseContract {
     EIP712_REVISION(overrides?: CallOverrides): Promise<BigNumber>;
 
     approveDelegation(
-      delegatee: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      delegatee: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
-    borrowAllowance(
-      fromUser: PromiseOrValue<string>,
-      toUser: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    borrowAllowance(fromUser: string, toUser: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     delegationWithSig(
-      delegator: PromiseOrValue<string>,
-      delegatee: PromiseOrValue<string>,
-      value: PromiseOrValue<BigNumberish>,
-      deadline: PromiseOrValue<BigNumberish>,
-      v: PromiseOrValue<BigNumberish>,
-      r: PromiseOrValue<BytesLike>,
-      s: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      delegator: string,
+      delegatee: string,
+      value: BigNumberish,
+      deadline: BigNumberish,
+      v: BigNumberish,
+      r: BytesLike,
+      s: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
-    nonces(owner: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+    nonces(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -267,28 +233,24 @@ export interface DebtTokenBase extends BaseContract {
     EIP712_REVISION(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     approveDelegation(
-      delegatee: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      delegatee: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
-    borrowAllowance(
-      fromUser: PromiseOrValue<string>,
-      toUser: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    borrowAllowance(fromUser: string, toUser: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     delegationWithSig(
-      delegator: PromiseOrValue<string>,
-      delegatee: PromiseOrValue<string>,
-      value: PromiseOrValue<BigNumberish>,
-      deadline: PromiseOrValue<BigNumberish>,
-      v: PromiseOrValue<BigNumberish>,
-      r: PromiseOrValue<BytesLike>,
-      s: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      delegator: string,
+      delegatee: string,
+      value: BigNumberish,
+      deadline: BigNumberish,
+      v: BigNumberish,
+      r: BytesLike,
+      s: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
-    nonces(owner: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    nonces(owner: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }

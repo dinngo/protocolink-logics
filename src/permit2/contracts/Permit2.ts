@@ -15,13 +15,10 @@ import type {
 } from 'ethers';
 import type { FunctionFragment, Result, EventFragment } from '@ethersproject/abi';
 import type { Listener, Provider } from '@ethersproject/providers';
-import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent, PromiseOrValue } from './common';
+import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from './common';
 
 export declare namespace IAllowanceTransfer {
-  export type TokenSpenderPairStruct = {
-    token: PromiseOrValue<string>;
-    spender: PromiseOrValue<string>;
-  };
+  export type TokenSpenderPairStruct = { token: string; spender: string };
 
   export type TokenSpenderPairStructOutput = [string, string] & {
     token: string;
@@ -29,10 +26,10 @@ export declare namespace IAllowanceTransfer {
   };
 
   export type PermitDetailsStruct = {
-    token: PromiseOrValue<string>;
-    amount: PromiseOrValue<BigNumberish>;
-    expiration: PromiseOrValue<BigNumberish>;
-    nonce: PromiseOrValue<BigNumberish>;
+    token: string;
+    amount: BigNumberish;
+    expiration: BigNumberish;
+    nonce: BigNumberish;
   };
 
   export type PermitDetailsStructOutput = [string, BigNumber, number, number] & {
@@ -44,8 +41,8 @@ export declare namespace IAllowanceTransfer {
 
   export type PermitBatchStruct = {
     details: IAllowanceTransfer.PermitDetailsStruct[];
-    spender: PromiseOrValue<string>;
-    sigDeadline: PromiseOrValue<BigNumberish>;
+    spender: string;
+    sigDeadline: BigNumberish;
   };
 
   export type PermitBatchStructOutput = [IAllowanceTransfer.PermitDetailsStructOutput[], string, BigNumber] & {
@@ -56,8 +53,8 @@ export declare namespace IAllowanceTransfer {
 
   export type PermitSingleStruct = {
     details: IAllowanceTransfer.PermitDetailsStruct;
-    spender: PromiseOrValue<string>;
-    sigDeadline: PromiseOrValue<BigNumberish>;
+    spender: string;
+    sigDeadline: BigNumberish;
   };
 
   export type PermitSingleStructOutput = [IAllowanceTransfer.PermitDetailsStructOutput, string, BigNumber] & {
@@ -67,10 +64,10 @@ export declare namespace IAllowanceTransfer {
   };
 
   export type AllowanceTransferDetailsStruct = {
-    from: PromiseOrValue<string>;
-    to: PromiseOrValue<string>;
-    amount: PromiseOrValue<BigNumberish>;
-    token: PromiseOrValue<string>;
+    from: string;
+    to: string;
+    amount: BigNumberish;
+    token: string;
   };
 
   export type AllowanceTransferDetailsStructOutput = [string, string, BigNumber, string] & {
@@ -82,10 +79,7 @@ export declare namespace IAllowanceTransfer {
 }
 
 export declare namespace ISignatureTransfer {
-  export type TokenPermissionsStruct = {
-    token: PromiseOrValue<string>;
-    amount: PromiseOrValue<BigNumberish>;
-  };
+  export type TokenPermissionsStruct = { token: string; amount: BigNumberish };
 
   export type TokenPermissionsStructOutput = [string, BigNumber] & {
     token: string;
@@ -94,8 +88,8 @@ export declare namespace ISignatureTransfer {
 
   export type PermitTransferFromStruct = {
     permitted: ISignatureTransfer.TokenPermissionsStruct;
-    nonce: PromiseOrValue<BigNumberish>;
-    deadline: PromiseOrValue<BigNumberish>;
+    nonce: BigNumberish;
+    deadline: BigNumberish;
   };
 
   export type PermitTransferFromStructOutput = [
@@ -109,8 +103,8 @@ export declare namespace ISignatureTransfer {
   };
 
   export type SignatureTransferDetailsStruct = {
-    to: PromiseOrValue<string>;
-    requestedAmount: PromiseOrValue<BigNumberish>;
+    to: string;
+    requestedAmount: BigNumberish;
   };
 
   export type SignatureTransferDetailsStructOutput = [string, BigNumber] & {
@@ -120,8 +114,8 @@ export declare namespace ISignatureTransfer {
 
   export type PermitBatchTransferFromStruct = {
     permitted: ISignatureTransfer.TokenPermissionsStruct[];
-    nonce: PromiseOrValue<BigNumberish>;
-    deadline: PromiseOrValue<BigNumberish>;
+    nonce: BigNumberish;
+    deadline: BigNumberish;
   };
 
   export type PermitBatchTransferFromStructOutput = [
@@ -174,42 +168,27 @@ export interface Permit2Interface extends utils.Interface {
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: 'DOMAIN_SEPARATOR', values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: 'allowance',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: 'approve',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: 'invalidateNonces',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: 'invalidateUnorderedNonces',
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
-  ): string;
+  encodeFunctionData(functionFragment: 'allowance', values: [string, string, string]): string;
+  encodeFunctionData(functionFragment: 'approve', values: [string, string, BigNumberish, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'invalidateNonces', values: [string, string, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'invalidateUnorderedNonces', values: [BigNumberish, BigNumberish]): string;
   encodeFunctionData(functionFragment: 'lockdown', values: [IAllowanceTransfer.TokenSpenderPairStruct[]]): string;
-  encodeFunctionData(
-    functionFragment: 'nonceBitmap',
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
+  encodeFunctionData(functionFragment: 'nonceBitmap', values: [string, BigNumberish]): string;
   encodeFunctionData(
     functionFragment: 'permit(address,((address,uint160,uint48,uint48)[],address,uint256),bytes)',
-    values: [PromiseOrValue<string>, IAllowanceTransfer.PermitBatchStruct, PromiseOrValue<BytesLike>]
+    values: [string, IAllowanceTransfer.PermitBatchStruct, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: 'permit(address,((address,uint160,uint48,uint48),address,uint256),bytes)',
-    values: [PromiseOrValue<string>, IAllowanceTransfer.PermitSingleStruct, PromiseOrValue<BytesLike>]
+    values: [string, IAllowanceTransfer.PermitSingleStruct, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: 'permitTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes)',
     values: [
       ISignatureTransfer.PermitTransferFromStruct,
       ISignatureTransfer.SignatureTransferDetailsStruct,
-      PromiseOrValue<string>,
-      PromiseOrValue<BytesLike>
+      string,
+      BytesLike
     ]
   ): string;
   encodeFunctionData(
@@ -217,8 +196,8 @@ export interface Permit2Interface extends utils.Interface {
     values: [
       ISignatureTransfer.PermitBatchTransferFromStruct,
       ISignatureTransfer.SignatureTransferDetailsStruct[],
-      PromiseOrValue<string>,
-      PromiseOrValue<BytesLike>
+      string,
+      BytesLike
     ]
   ): string;
   encodeFunctionData(
@@ -226,10 +205,10 @@ export interface Permit2Interface extends utils.Interface {
     values: [
       ISignatureTransfer.PermitTransferFromStruct,
       ISignatureTransfer.SignatureTransferDetailsStruct,
-      PromiseOrValue<string>,
-      PromiseOrValue<BytesLike>,
-      PromiseOrValue<string>,
-      PromiseOrValue<BytesLike>
+      string,
+      BytesLike,
+      string,
+      BytesLike
     ]
   ): string;
   encodeFunctionData(
@@ -237,10 +216,10 @@ export interface Permit2Interface extends utils.Interface {
     values: [
       ISignatureTransfer.PermitBatchTransferFromStruct,
       ISignatureTransfer.SignatureTransferDetailsStruct[],
-      PromiseOrValue<string>,
-      PromiseOrValue<BytesLike>,
-      PromiseOrValue<string>,
-      PromiseOrValue<BytesLike>
+      string,
+      BytesLike,
+      string,
+      BytesLike
     ]
   ): string;
   encodeFunctionData(
@@ -249,7 +228,7 @@ export interface Permit2Interface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: 'transferFrom(address,address,uint160,address)',
-    values: [PromiseOrValue<string>, PromiseOrValue<string>, PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
+    values: [string, string, BigNumberish, string]
   ): string;
 
   decodeFunctionResult(functionFragment: 'DOMAIN_SEPARATOR', data: BytesLike): Result;
@@ -382,9 +361,9 @@ export interface Permit2 extends BaseContract {
     DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<[string]>;
 
     allowance(
-      arg0: PromiseOrValue<string>,
-      arg1: PromiseOrValue<string>,
-      arg2: PromiseOrValue<string>,
+      arg0: string,
+      arg1: string,
+      arg2: string,
       overrides?: CallOverrides
     ): Promise<
       [BigNumber, number, number] & {
@@ -395,107 +374,103 @@ export interface Permit2 extends BaseContract {
     >;
 
     approve(
-      token: PromiseOrValue<string>,
-      spender: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      expiration: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      token: string,
+      spender: string,
+      amount: BigNumberish,
+      expiration: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     invalidateNonces(
-      token: PromiseOrValue<string>,
-      spender: PromiseOrValue<string>,
-      newNonce: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      token: string,
+      spender: string,
+      newNonce: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     invalidateUnorderedNonces(
-      wordPos: PromiseOrValue<BigNumberish>,
-      mask: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      wordPos: BigNumberish,
+      mask: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     lockdown(
       approvals: IAllowanceTransfer.TokenSpenderPairStruct[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
-    nonceBitmap(
-      arg0: PromiseOrValue<string>,
-      arg1: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    nonceBitmap(arg0: string, arg1: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     'permit(address,((address,uint160,uint48,uint48)[],address,uint256),bytes)'(
-      owner: PromiseOrValue<string>,
+      owner: string,
       permitBatch: IAllowanceTransfer.PermitBatchStruct,
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      signature: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     'permit(address,((address,uint160,uint48,uint48),address,uint256),bytes)'(
-      owner: PromiseOrValue<string>,
+      owner: string,
       permitSingle: IAllowanceTransfer.PermitSingleStruct,
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      signature: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     'permitTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes)'(
       permit: ISignatureTransfer.PermitTransferFromStruct,
       transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct,
-      owner: PromiseOrValue<string>,
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      owner: string,
+      signature: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     'permitTransferFrom(((address,uint256)[],uint256,uint256),(address,uint256)[],address,bytes)'(
       permit: ISignatureTransfer.PermitBatchTransferFromStruct,
       transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct[],
-      owner: PromiseOrValue<string>,
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      owner: string,
+      signature: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     'permitWitnessTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes32,string,bytes)'(
       permit: ISignatureTransfer.PermitTransferFromStruct,
       transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct,
-      owner: PromiseOrValue<string>,
-      witness: PromiseOrValue<BytesLike>,
-      witnessTypeString: PromiseOrValue<string>,
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      owner: string,
+      witness: BytesLike,
+      witnessTypeString: string,
+      signature: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     'permitWitnessTransferFrom(((address,uint256)[],uint256,uint256),(address,uint256)[],address,bytes32,string,bytes)'(
       permit: ISignatureTransfer.PermitBatchTransferFromStruct,
       transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct[],
-      owner: PromiseOrValue<string>,
-      witness: PromiseOrValue<BytesLike>,
-      witnessTypeString: PromiseOrValue<string>,
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      owner: string,
+      witness: BytesLike,
+      witnessTypeString: string,
+      signature: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     'transferFrom((address,address,uint160,address)[])'(
       transferDetails: IAllowanceTransfer.AllowanceTransferDetailsStruct[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     'transferFrom(address,address,uint160,address)'(
-      from: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      token: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      from: string,
+      to: string,
+      amount: BigNumberish,
+      token: string,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
   };
 
   DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<string>;
 
   allowance(
-    arg0: PromiseOrValue<string>,
-    arg1: PromiseOrValue<string>,
-    arg2: PromiseOrValue<string>,
+    arg0: string,
+    arg1: string,
+    arg2: string,
     overrides?: CallOverrides
   ): Promise<
     [BigNumber, number, number] & {
@@ -506,107 +481,103 @@ export interface Permit2 extends BaseContract {
   >;
 
   approve(
-    token: PromiseOrValue<string>,
-    spender: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    expiration: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    token: string,
+    spender: string,
+    amount: BigNumberish,
+    expiration: BigNumberish,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   invalidateNonces(
-    token: PromiseOrValue<string>,
-    spender: PromiseOrValue<string>,
-    newNonce: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    token: string,
+    spender: string,
+    newNonce: BigNumberish,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   invalidateUnorderedNonces(
-    wordPos: PromiseOrValue<BigNumberish>,
-    mask: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    wordPos: BigNumberish,
+    mask: BigNumberish,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   lockdown(
     approvals: IAllowanceTransfer.TokenSpenderPairStruct[],
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
-  nonceBitmap(
-    arg0: PromiseOrValue<string>,
-    arg1: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
+  nonceBitmap(arg0: string, arg1: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
   'permit(address,((address,uint160,uint48,uint48)[],address,uint256),bytes)'(
-    owner: PromiseOrValue<string>,
+    owner: string,
     permitBatch: IAllowanceTransfer.PermitBatchStruct,
-    signature: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    signature: BytesLike,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   'permit(address,((address,uint160,uint48,uint48),address,uint256),bytes)'(
-    owner: PromiseOrValue<string>,
+    owner: string,
     permitSingle: IAllowanceTransfer.PermitSingleStruct,
-    signature: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    signature: BytesLike,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   'permitTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes)'(
     permit: ISignatureTransfer.PermitTransferFromStruct,
     transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct,
-    owner: PromiseOrValue<string>,
-    signature: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    owner: string,
+    signature: BytesLike,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   'permitTransferFrom(((address,uint256)[],uint256,uint256),(address,uint256)[],address,bytes)'(
     permit: ISignatureTransfer.PermitBatchTransferFromStruct,
     transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct[],
-    owner: PromiseOrValue<string>,
-    signature: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    owner: string,
+    signature: BytesLike,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   'permitWitnessTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes32,string,bytes)'(
     permit: ISignatureTransfer.PermitTransferFromStruct,
     transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct,
-    owner: PromiseOrValue<string>,
-    witness: PromiseOrValue<BytesLike>,
-    witnessTypeString: PromiseOrValue<string>,
-    signature: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    owner: string,
+    witness: BytesLike,
+    witnessTypeString: string,
+    signature: BytesLike,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   'permitWitnessTransferFrom(((address,uint256)[],uint256,uint256),(address,uint256)[],address,bytes32,string,bytes)'(
     permit: ISignatureTransfer.PermitBatchTransferFromStruct,
     transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct[],
-    owner: PromiseOrValue<string>,
-    witness: PromiseOrValue<BytesLike>,
-    witnessTypeString: PromiseOrValue<string>,
-    signature: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    owner: string,
+    witness: BytesLike,
+    witnessTypeString: string,
+    signature: BytesLike,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   'transferFrom((address,address,uint160,address)[])'(
     transferDetails: IAllowanceTransfer.AllowanceTransferDetailsStruct[],
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   'transferFrom(address,address,uint160,address)'(
-    from: PromiseOrValue<string>,
-    to: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    token: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    from: string,
+    to: string,
+    amount: BigNumberish,
+    token: string,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   callStatic: {
     DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<string>;
 
     allowance(
-      arg0: PromiseOrValue<string>,
-      arg1: PromiseOrValue<string>,
-      arg2: PromiseOrValue<string>,
+      arg0: string,
+      arg1: string,
+      arg2: string,
       overrides?: CallOverrides
     ): Promise<
       [BigNumber, number, number] & {
@@ -617,81 +588,68 @@ export interface Permit2 extends BaseContract {
     >;
 
     approve(
-      token: PromiseOrValue<string>,
-      spender: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      expiration: PromiseOrValue<BigNumberish>,
+      token: string,
+      spender: string,
+      amount: BigNumberish,
+      expiration: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    invalidateNonces(
-      token: PromiseOrValue<string>,
-      spender: PromiseOrValue<string>,
-      newNonce: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    invalidateNonces(token: string, spender: string, newNonce: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
-    invalidateUnorderedNonces(
-      wordPos: PromiseOrValue<BigNumberish>,
-      mask: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    invalidateUnorderedNonces(wordPos: BigNumberish, mask: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     lockdown(approvals: IAllowanceTransfer.TokenSpenderPairStruct[], overrides?: CallOverrides): Promise<void>;
 
-    nonceBitmap(
-      arg0: PromiseOrValue<string>,
-      arg1: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    nonceBitmap(arg0: string, arg1: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     'permit(address,((address,uint160,uint48,uint48)[],address,uint256),bytes)'(
-      owner: PromiseOrValue<string>,
+      owner: string,
       permitBatch: IAllowanceTransfer.PermitBatchStruct,
-      signature: PromiseOrValue<BytesLike>,
+      signature: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
 
     'permit(address,((address,uint160,uint48,uint48),address,uint256),bytes)'(
-      owner: PromiseOrValue<string>,
+      owner: string,
       permitSingle: IAllowanceTransfer.PermitSingleStruct,
-      signature: PromiseOrValue<BytesLike>,
+      signature: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
 
     'permitTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes)'(
       permit: ISignatureTransfer.PermitTransferFromStruct,
       transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct,
-      owner: PromiseOrValue<string>,
-      signature: PromiseOrValue<BytesLike>,
+      owner: string,
+      signature: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
 
     'permitTransferFrom(((address,uint256)[],uint256,uint256),(address,uint256)[],address,bytes)'(
       permit: ISignatureTransfer.PermitBatchTransferFromStruct,
       transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct[],
-      owner: PromiseOrValue<string>,
-      signature: PromiseOrValue<BytesLike>,
+      owner: string,
+      signature: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
 
     'permitWitnessTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes32,string,bytes)'(
       permit: ISignatureTransfer.PermitTransferFromStruct,
       transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct,
-      owner: PromiseOrValue<string>,
-      witness: PromiseOrValue<BytesLike>,
-      witnessTypeString: PromiseOrValue<string>,
-      signature: PromiseOrValue<BytesLike>,
+      owner: string,
+      witness: BytesLike,
+      witnessTypeString: string,
+      signature: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
 
     'permitWitnessTransferFrom(((address,uint256)[],uint256,uint256),(address,uint256)[],address,bytes32,string,bytes)'(
       permit: ISignatureTransfer.PermitBatchTransferFromStruct,
       transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct[],
-      owner: PromiseOrValue<string>,
-      witness: PromiseOrValue<BytesLike>,
-      witnessTypeString: PromiseOrValue<string>,
-      signature: PromiseOrValue<BytesLike>,
+      owner: string,
+      witness: BytesLike,
+      witnessTypeString: string,
+      signature: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -701,290 +659,264 @@ export interface Permit2 extends BaseContract {
     ): Promise<void>;
 
     'transferFrom(address,address,uint160,address)'(
-      from: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      token: PromiseOrValue<string>,
+      from: string,
+      to: string,
+      amount: BigNumberish,
+      token: string,
       overrides?: CallOverrides
     ): Promise<void>;
   };
 
   filters: {
     'Approval(address,address,address,uint160,uint48)'(
-      owner?: PromiseOrValue<string> | null,
-      token?: PromiseOrValue<string> | null,
-      spender?: PromiseOrValue<string> | null,
+      owner?: string | null,
+      token?: string | null,
+      spender?: string | null,
       amount?: null,
       expiration?: null
     ): ApprovalEventFilter;
     Approval(
-      owner?: PromiseOrValue<string> | null,
-      token?: PromiseOrValue<string> | null,
-      spender?: PromiseOrValue<string> | null,
+      owner?: string | null,
+      token?: string | null,
+      spender?: string | null,
       amount?: null,
       expiration?: null
     ): ApprovalEventFilter;
 
-    'Lockdown(address,address,address)'(
-      owner?: PromiseOrValue<string> | null,
-      token?: null,
-      spender?: null
-    ): LockdownEventFilter;
-    Lockdown(owner?: PromiseOrValue<string> | null, token?: null, spender?: null): LockdownEventFilter;
+    'Lockdown(address,address,address)'(owner?: string | null, token?: null, spender?: null): LockdownEventFilter;
+    Lockdown(owner?: string | null, token?: null, spender?: null): LockdownEventFilter;
 
     'NonceInvalidation(address,address,address,uint48,uint48)'(
-      owner?: PromiseOrValue<string> | null,
-      token?: PromiseOrValue<string> | null,
-      spender?: PromiseOrValue<string> | null,
+      owner?: string | null,
+      token?: string | null,
+      spender?: string | null,
       newNonce?: null,
       oldNonce?: null
     ): NonceInvalidationEventFilter;
     NonceInvalidation(
-      owner?: PromiseOrValue<string> | null,
-      token?: PromiseOrValue<string> | null,
-      spender?: PromiseOrValue<string> | null,
+      owner?: string | null,
+      token?: string | null,
+      spender?: string | null,
       newNonce?: null,
       oldNonce?: null
     ): NonceInvalidationEventFilter;
 
     'Permit(address,address,address,uint160,uint48,uint48)'(
-      owner?: PromiseOrValue<string> | null,
-      token?: PromiseOrValue<string> | null,
-      spender?: PromiseOrValue<string> | null,
+      owner?: string | null,
+      token?: string | null,
+      spender?: string | null,
       amount?: null,
       expiration?: null,
       nonce?: null
     ): PermitEventFilter;
     Permit(
-      owner?: PromiseOrValue<string> | null,
-      token?: PromiseOrValue<string> | null,
-      spender?: PromiseOrValue<string> | null,
+      owner?: string | null,
+      token?: string | null,
+      spender?: string | null,
       amount?: null,
       expiration?: null,
       nonce?: null
     ): PermitEventFilter;
 
     'UnorderedNonceInvalidation(address,uint256,uint256)'(
-      owner?: PromiseOrValue<string> | null,
+      owner?: string | null,
       word?: null,
       mask?: null
     ): UnorderedNonceInvalidationEventFilter;
-    UnorderedNonceInvalidation(
-      owner?: PromiseOrValue<string> | null,
-      word?: null,
-      mask?: null
-    ): UnorderedNonceInvalidationEventFilter;
+    UnorderedNonceInvalidation(owner?: string | null, word?: null, mask?: null): UnorderedNonceInvalidationEventFilter;
   };
 
   estimateGas: {
     DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<BigNumber>;
 
-    allowance(
-      arg0: PromiseOrValue<string>,
-      arg1: PromiseOrValue<string>,
-      arg2: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    allowance(arg0: string, arg1: string, arg2: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     approve(
-      token: PromiseOrValue<string>,
-      spender: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      expiration: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      token: string,
+      spender: string,
+      amount: BigNumberish,
+      expiration: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     invalidateNonces(
-      token: PromiseOrValue<string>,
-      spender: PromiseOrValue<string>,
-      newNonce: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      token: string,
+      spender: string,
+      newNonce: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     invalidateUnorderedNonces(
-      wordPos: PromiseOrValue<BigNumberish>,
-      mask: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      wordPos: BigNumberish,
+      mask: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     lockdown(
       approvals: IAllowanceTransfer.TokenSpenderPairStruct[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
-    nonceBitmap(
-      arg0: PromiseOrValue<string>,
-      arg1: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    nonceBitmap(arg0: string, arg1: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     'permit(address,((address,uint160,uint48,uint48)[],address,uint256),bytes)'(
-      owner: PromiseOrValue<string>,
+      owner: string,
       permitBatch: IAllowanceTransfer.PermitBatchStruct,
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      signature: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     'permit(address,((address,uint160,uint48,uint48),address,uint256),bytes)'(
-      owner: PromiseOrValue<string>,
+      owner: string,
       permitSingle: IAllowanceTransfer.PermitSingleStruct,
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      signature: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     'permitTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes)'(
       permit: ISignatureTransfer.PermitTransferFromStruct,
       transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct,
-      owner: PromiseOrValue<string>,
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      owner: string,
+      signature: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     'permitTransferFrom(((address,uint256)[],uint256,uint256),(address,uint256)[],address,bytes)'(
       permit: ISignatureTransfer.PermitBatchTransferFromStruct,
       transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct[],
-      owner: PromiseOrValue<string>,
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      owner: string,
+      signature: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     'permitWitnessTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes32,string,bytes)'(
       permit: ISignatureTransfer.PermitTransferFromStruct,
       transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct,
-      owner: PromiseOrValue<string>,
-      witness: PromiseOrValue<BytesLike>,
-      witnessTypeString: PromiseOrValue<string>,
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      owner: string,
+      witness: BytesLike,
+      witnessTypeString: string,
+      signature: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     'permitWitnessTransferFrom(((address,uint256)[],uint256,uint256),(address,uint256)[],address,bytes32,string,bytes)'(
       permit: ISignatureTransfer.PermitBatchTransferFromStruct,
       transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct[],
-      owner: PromiseOrValue<string>,
-      witness: PromiseOrValue<BytesLike>,
-      witnessTypeString: PromiseOrValue<string>,
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      owner: string,
+      witness: BytesLike,
+      witnessTypeString: string,
+      signature: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     'transferFrom((address,address,uint160,address)[])'(
       transferDetails: IAllowanceTransfer.AllowanceTransferDetailsStruct[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     'transferFrom(address,address,uint160,address)'(
-      from: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      token: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      from: string,
+      to: string,
+      amount: BigNumberish,
+      token: string,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
     DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    allowance(
-      arg0: PromiseOrValue<string>,
-      arg1: PromiseOrValue<string>,
-      arg2: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    allowance(arg0: string, arg1: string, arg2: string, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     approve(
-      token: PromiseOrValue<string>,
-      spender: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      expiration: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      token: string,
+      spender: string,
+      amount: BigNumberish,
+      expiration: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     invalidateNonces(
-      token: PromiseOrValue<string>,
-      spender: PromiseOrValue<string>,
-      newNonce: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      token: string,
+      spender: string,
+      newNonce: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     invalidateUnorderedNonces(
-      wordPos: PromiseOrValue<BigNumberish>,
-      mask: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      wordPos: BigNumberish,
+      mask: BigNumberish,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     lockdown(
       approvals: IAllowanceTransfer.TokenSpenderPairStruct[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
-    nonceBitmap(
-      arg0: PromiseOrValue<string>,
-      arg1: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    nonceBitmap(arg0: string, arg1: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     'permit(address,((address,uint160,uint48,uint48)[],address,uint256),bytes)'(
-      owner: PromiseOrValue<string>,
+      owner: string,
       permitBatch: IAllowanceTransfer.PermitBatchStruct,
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      signature: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     'permit(address,((address,uint160,uint48,uint48),address,uint256),bytes)'(
-      owner: PromiseOrValue<string>,
+      owner: string,
       permitSingle: IAllowanceTransfer.PermitSingleStruct,
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      signature: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     'permitTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes)'(
       permit: ISignatureTransfer.PermitTransferFromStruct,
       transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct,
-      owner: PromiseOrValue<string>,
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      owner: string,
+      signature: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     'permitTransferFrom(((address,uint256)[],uint256,uint256),(address,uint256)[],address,bytes)'(
       permit: ISignatureTransfer.PermitBatchTransferFromStruct,
       transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct[],
-      owner: PromiseOrValue<string>,
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      owner: string,
+      signature: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     'permitWitnessTransferFrom(((address,uint256),uint256,uint256),(address,uint256),address,bytes32,string,bytes)'(
       permit: ISignatureTransfer.PermitTransferFromStruct,
       transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct,
-      owner: PromiseOrValue<string>,
-      witness: PromiseOrValue<BytesLike>,
-      witnessTypeString: PromiseOrValue<string>,
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      owner: string,
+      witness: BytesLike,
+      witnessTypeString: string,
+      signature: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     'permitWitnessTransferFrom(((address,uint256)[],uint256,uint256),(address,uint256)[],address,bytes32,string,bytes)'(
       permit: ISignatureTransfer.PermitBatchTransferFromStruct,
       transferDetails: ISignatureTransfer.SignatureTransferDetailsStruct[],
-      owner: PromiseOrValue<string>,
-      witness: PromiseOrValue<BytesLike>,
-      witnessTypeString: PromiseOrValue<string>,
-      signature: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      owner: string,
+      witness: BytesLike,
+      witnessTypeString: string,
+      signature: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     'transferFrom((address,address,uint160,address)[])'(
       transferDetails: IAllowanceTransfer.AllowanceTransferDetailsStruct[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     'transferFrom(address,address,uint160,address)'(
-      from: PromiseOrValue<string>,
-      to: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      token: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      from: string,
+      to: string,
+      amount: BigNumberish,
+      token: string,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
   };
 }

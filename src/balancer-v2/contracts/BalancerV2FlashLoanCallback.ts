@@ -15,7 +15,7 @@ import type {
 } from 'ethers';
 import type { FunctionFragment, Result } from '@ethersproject/abi';
 import type { Listener, Provider } from '@ethersproject/providers';
-import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent, PromiseOrValue } from './common';
+import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from './common';
 
 export interface BalancerV2FlashLoanCallbackInterface extends utils.Interface {
   functions: {
@@ -29,12 +29,7 @@ export interface BalancerV2FlashLoanCallbackInterface extends utils.Interface {
   encodeFunctionData(functionFragment: 'balancerV2Vault', values?: undefined): string;
   encodeFunctionData(
     functionFragment: 'receiveFlashLoan',
-    values: [
-      PromiseOrValue<string>[],
-      PromiseOrValue<BigNumberish>[],
-      PromiseOrValue<BigNumberish>[],
-      PromiseOrValue<BytesLike>
-    ]
+    values: [string[], BigNumberish[], BigNumberish[], BytesLike]
   ): string;
   encodeFunctionData(functionFragment: 'router', values?: undefined): string;
 
@@ -71,11 +66,11 @@ export interface BalancerV2FlashLoanCallback extends BaseContract {
     balancerV2Vault(overrides?: CallOverrides): Promise<[string]>;
 
     receiveFlashLoan(
-      tokens: PromiseOrValue<string>[],
-      amounts: PromiseOrValue<BigNumberish>[],
-      feeAmounts: PromiseOrValue<BigNumberish>[],
-      userData: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      tokens: string[],
+      amounts: BigNumberish[],
+      feeAmounts: BigNumberish[],
+      userData: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
     router(overrides?: CallOverrides): Promise<[string]>;
@@ -84,11 +79,11 @@ export interface BalancerV2FlashLoanCallback extends BaseContract {
   balancerV2Vault(overrides?: CallOverrides): Promise<string>;
 
   receiveFlashLoan(
-    tokens: PromiseOrValue<string>[],
-    amounts: PromiseOrValue<BigNumberish>[],
-    feeAmounts: PromiseOrValue<BigNumberish>[],
-    userData: PromiseOrValue<BytesLike>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
+    tokens: string[],
+    amounts: BigNumberish[],
+    feeAmounts: BigNumberish[],
+    userData: BytesLike,
+    overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
   router(overrides?: CallOverrides): Promise<string>;
@@ -97,10 +92,10 @@ export interface BalancerV2FlashLoanCallback extends BaseContract {
     balancerV2Vault(overrides?: CallOverrides): Promise<string>;
 
     receiveFlashLoan(
-      tokens: PromiseOrValue<string>[],
-      amounts: PromiseOrValue<BigNumberish>[],
-      feeAmounts: PromiseOrValue<BigNumberish>[],
-      userData: PromiseOrValue<BytesLike>,
+      tokens: string[],
+      amounts: BigNumberish[],
+      feeAmounts: BigNumberish[],
+      userData: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -113,11 +108,11 @@ export interface BalancerV2FlashLoanCallback extends BaseContract {
     balancerV2Vault(overrides?: CallOverrides): Promise<BigNumber>;
 
     receiveFlashLoan(
-      tokens: PromiseOrValue<string>[],
-      amounts: PromiseOrValue<BigNumberish>[],
-      feeAmounts: PromiseOrValue<BigNumberish>[],
-      userData: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      tokens: string[],
+      amounts: BigNumberish[],
+      feeAmounts: BigNumberish[],
+      userData: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
     router(overrides?: CallOverrides): Promise<BigNumber>;
@@ -127,11 +122,11 @@ export interface BalancerV2FlashLoanCallback extends BaseContract {
     balancerV2Vault(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     receiveFlashLoan(
-      tokens: PromiseOrValue<string>[],
-      amounts: PromiseOrValue<BigNumberish>[],
-      feeAmounts: PromiseOrValue<BigNumberish>[],
-      userData: PromiseOrValue<BytesLike>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+      tokens: string[],
+      amounts: BigNumberish[],
+      feeAmounts: BigNumberish[],
+      userData: BytesLike,
+      overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
 
     router(overrides?: CallOverrides): Promise<PopulatedTransaction>;
