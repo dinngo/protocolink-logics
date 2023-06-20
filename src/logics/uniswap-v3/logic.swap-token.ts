@@ -3,6 +3,7 @@ import { axios } from 'src/utils';
 import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
 import { getConfig, supportedChainIds } from './configs';
+import { providers } from 'ethers';
 import * as univ3 from 'src/modules/univ3';
 
 export type SwapTokenLogicTokenList = common.Token[];
@@ -15,10 +16,14 @@ export type SwapTokenLogicOptions = univ3.SwapTokenLogicOptions;
 
 @core.LogicDefinitionDecorator()
 export class SwapTokenLogic
-  extends core.Logic
+  extends univ3.SwapTokenLogic
   implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
 {
   static readonly supportedChainIds = supportedChainIds;
+
+  constructor(chainId: number, provider?: providers.Provider) {
+    super({ chainId, provider, config: getConfig(chainId) });
+  }
 
   async getTokenList() {
     const { data } = await axios.get<TokenList>('https://gateway.ipfs.io/ipns/tokens.uniswap.org');
@@ -32,25 +37,5 @@ export class SwapTokenLogic
     }
 
     return tokenList;
-  }
-
-  async quote(params: SwapTokenLogicParams) {
-    const service = new univ3.SwapTokenService({
-      chainId: this.chainId,
-      provider: this.provider,
-      config: getConfig(this.chainId),
-    });
-
-    return service.quote(params);
-  }
-
-  async build(fields: SwapTokenLogicFields, options: SwapTokenLogicOptions) {
-    const service = new univ3.SwapTokenService({
-      chainId: this.chainId,
-      provider: this.provider,
-      config: getConfig(this.chainId),
-    });
-
-    return service.build(fields, options);
   }
 }

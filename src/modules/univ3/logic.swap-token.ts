@@ -16,16 +16,16 @@ import * as common from '@furucombo/composable-router-common';
 import * as core from '@furucombo/composable-router-core';
 import { getDeadline, toUniToken } from './utils';
 
-export interface ServiceOptions {
+export interface LogicOptions {
   chainId: number;
   provider?: providers.Provider;
   config: Config;
 }
 
-export class SwapTokenService extends common.Web3Toolkit {
+export class SwapTokenLogic extends core.Logic {
   public readonly config: Config;
 
-  constructor({ chainId, provider, config }: ServiceOptions) {
+  constructor({ chainId, provider, config }: LogicOptions) {
     super(chainId, provider);
     this.config = config;
   }
