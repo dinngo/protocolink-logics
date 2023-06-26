@@ -1,8 +1,8 @@
 import '@nomicfoundation/hardhat-chai-matchers';
-import '@furucombo/composable-router-test-helpers';
+import '@protocolink/test-helpers';
 
 import { HardhatUserConfig } from 'hardhat/config';
-import * as common from '@furucombo/composable-router-common';
+import * as common from '@protocolink/common';
 import { setup } from 'test/hooks';
 
 const chainId = process.env.CHAIN_ID ? parseInt(process.env.CHAIN_ID) : common.ChainId.mainnet;

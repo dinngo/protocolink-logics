@@ -1,10 +1,10 @@
 import { Permit2__factory } from './contracts';
 import { PermitTokenLogic } from './logic.permit-token';
-import * as common from '@furucombo/composable-router-common';
+import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
 import { expect } from 'chai';
 import { getContractAddress } from './config';
-import { mainnetTokens } from '@furucombo/composable-router-test-helpers';
+import { mainnetTokens } from '@protocolink/test-helpers';
 
 describe('Permit2 PermitTokenLogic', function () {
   const chainId = common.ChainId.mainnet;

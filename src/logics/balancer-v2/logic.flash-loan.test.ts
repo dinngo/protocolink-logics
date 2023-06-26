@@ -1,11 +1,11 @@
 import { FlashLoanLogic, FlashLoanLogicFields } from './logic.flash-loan';
 import { LogicTestCase } from 'test/types';
 import { Vault__factory } from './contracts';
-import * as common from '@furucombo/composable-router-common';
+import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
 import { expect } from 'chai';
 import { getContractAddress } from './config';
-import { mainnetTokens } from '@furucombo/composable-router-test-helpers';
+import { mainnetTokens } from '@protocolink/test-helpers';
 
 describe('BalancerV2 FlashLoanLogic', function () {
   context('Test getTokenList', async function () {

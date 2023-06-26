@@ -1,7 +1,7 @@
 import { BigNumberish, utils } from 'ethers';
 import { axios } from 'src/utils';
-import * as common from '@furucombo/composable-router-common';
-import * as core from '@furucombo/composable-router-core';
+import * as common from '@protocolink/common';
+import * as core from '@protocolink/core';
 
 export type SendTokenLogicTokenList = common.Token[];
 

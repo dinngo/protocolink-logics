@@ -1,11 +1,11 @@
 import { LogicTestCase } from 'test/types';
 import { SwapTokenLogic, SwapTokenLogicFields, SwapTokenLogicOptions } from './logic.swap-token';
-import * as common from '@furucombo/composable-router-common';
+import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
-import * as core from '@furucombo/composable-router-core';
+import * as core from '@protocolink/core';
 import { expect } from 'chai';
 import { getContractAddress } from './config';
-import { mainnetTokens } from '@furucombo/composable-router-test-helpers';
+import { mainnetTokens } from '@protocolink/test-helpers';
 
 describe('ParaswapV5 SwapTokenLogic', function () {
   context('Test getTokenList', async function () {

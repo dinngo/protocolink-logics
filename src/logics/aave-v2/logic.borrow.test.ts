@@ -3,9 +3,9 @@ import { InterestRateMode } from './types';
 import { LendingPool__factory } from './contracts';
 import { LogicTestCase } from 'test/types';
 import { Service } from './service';
-import * as common from '@furucombo/composable-router-common';
+import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
-import * as core from '@furucombo/composable-router-core';
+import * as core from '@protocolink/core';
 import { expect } from 'chai';
 import { mainnetTokens } from './tokens';
 

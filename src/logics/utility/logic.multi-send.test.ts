@@ -1,5 +1,5 @@
 import { MultiSendLogic } from './logic.multi-send';
-import * as common from '@furucombo/composable-router-common';
+import * as common from '@protocolink/common';
 import { expect } from 'chai';
 
 describe('Utility MultiSendLogic', function () {

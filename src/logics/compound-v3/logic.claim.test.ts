@@ -3,7 +3,7 @@ import { ClaimLogic, ClaimLogicFields } from './logic.claim';
 import { CometRewards__factory } from './contracts';
 import { LogicTestCase } from 'test/types';
 import { MarketId, getContractAddress } from './config';
-import * as common from '@furucombo/composable-router-common';
+import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
 import { expect } from 'chai';
 

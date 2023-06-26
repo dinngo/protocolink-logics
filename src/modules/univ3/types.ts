@@ -1,6 +1,6 @@
 import { FeeAmount } from '@uniswap/v3-sdk';
 import { Token } from '@uniswap/sdk-core';
-import * as core from '@furucombo/composable-router-core';
+import * as core from '@protocolink/core';
 
 export interface Config {
   chainId: number;

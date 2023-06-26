@@ -1,5 +1,5 @@
 import cTokensJSON from './data/cTokens.json';
-import * as common from '@furucombo/composable-router-common';
+import * as common from '@protocolink/common';
 import underlyingTokensJSON from './data/underlyingTokens.json';
 
 export const COMP = new common.Token(1, '0xc00e94Cb662C3520282E6f5717214004A7f26888', 18, 'COMP', 'Compound');

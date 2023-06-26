@@ -1,5 +1,5 @@
 import { Service } from '../service';
-import * as common from '@furucombo/composable-router-common';
+import * as common from '@protocolink/common';
 import fs from 'fs-extra';
 import { resolve } from 'path';
 

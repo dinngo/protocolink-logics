@@ -12,8 +12,8 @@ import { ISwapRouter } from './contracts/SwapRouter';
 import JSBI from 'jsbi';
 import { Pool__factory, SwapRouter__factory } from './contracts';
 import { UNSUPPORTED_TOKEN_ERROR } from './errors';
-import * as common from '@furucombo/composable-router-common';
-import * as core from '@furucombo/composable-router-core';
+import * as common from '@protocolink/common';
+import * as core from '@protocolink/core';
 import { getDeadline, toUniToken } from './utils';
 
 export interface LogicOptions {

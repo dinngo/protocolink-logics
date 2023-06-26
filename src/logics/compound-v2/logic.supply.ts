@@ -1,7 +1,7 @@
 import { BigNumber, BigNumberish } from 'ethers';
 import { CErc20__factory, CEther__factory } from './contracts';
-import * as common from '@furucombo/composable-router-common';
-import * as core from '@furucombo/composable-router-core';
+import * as common from '@protocolink/common';
+import * as core from '@protocolink/core';
 import { tokenPairs } from './tokens';
 
 export type SupplyLogicTokenList = [common.Token, common.Token][];

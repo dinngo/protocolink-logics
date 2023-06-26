@@ -1,5 +1,5 @@
-import * as common from '@furucombo/composable-router-common';
-import * as core from '@furucombo/composable-router-core';
+import * as common from '@protocolink/common';
+import * as core from '@protocolink/core';
 
 export interface CustomDataLogicFields {
   inputs?: common.TokenAmounts;

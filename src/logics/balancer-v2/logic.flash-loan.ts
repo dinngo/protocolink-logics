@@ -2,8 +2,8 @@ import { BigNumberish } from 'ethers';
 import { TokenList } from '@uniswap/token-lists';
 import { Vault__factory } from './contracts';
 import { axios } from 'src/utils';
-import * as common from '@furucombo/composable-router-common';
-import * as core from '@furucombo/composable-router-core';
+import * as common from '@protocolink/common';
+import * as core from '@protocolink/core';
 import { getContractAddress } from './config';
 
 export type FlashLoanLogicTokenList = common.Token[];

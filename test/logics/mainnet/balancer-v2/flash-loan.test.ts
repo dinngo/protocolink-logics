@@ -1,9 +1,9 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import * as balancerv2 from 'src/logics/balancer-v2';
-import * as common from '@furucombo/composable-router-common';
-import * as core from '@furucombo/composable-router-core';
+import * as common from '@protocolink/common';
+import * as core from '@protocolink/core';
 import { expect } from 'chai';
-import { getChainId, mainnetTokens, snapshotAndRevertEach } from '@furucombo/composable-router-test-helpers';
+import { getChainId, mainnetTokens, snapshotAndRevertEach } from '@protocolink/test-helpers';
 import hre from 'hardhat';
 import * as utility from 'src/logics/utility';
 

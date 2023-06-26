@@ -1,6 +1,6 @@
 import { DEFAULT_DEADLINE_FROM_NOW, L2_DEADLINE_FROM_NOW } from './constants';
 import { Token } from '@uniswap/sdk-core';
-import * as common from '@furucombo/composable-router-common';
+import * as common from '@protocolink/common';
 
 export function toUniToken(token: common.TokenTypes) {
   return new Token(token.chainId, token.address, token.decimals, token.symbol, token.name);

@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-import * as common from '@furucombo/composable-router-common';
+import * as common from '@protocolink/common';
 
 type ContractNames = 'CometRewards';
 

@@ -1,8 +1,8 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { approve } from '@furucombo/composable-router-test-helpers';
-import * as common from '@furucombo/composable-router-common';
+import { approve } from '@protocolink/test-helpers';
+import * as common from '@protocolink/common';
 import * as compoundv3 from 'src/logics/compound-v3';
-import * as core from '@furucombo/composable-router-core';
+import * as core from '@protocolink/core';
 import { expect } from 'chai';
 import hre from 'hardhat';
 

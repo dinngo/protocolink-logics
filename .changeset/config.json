@@ -1,6 +1,6 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@2.3.0/schema.json",
-  "changelog": ["@changesets/cli/changelog", { "repo": "dinngo/composable-router-logics" }],
+  "changelog": ["@changesets/cli/changelog", { "repo": "dinngo/protocolink-logics" }],
   "commit": false,
   "fixed": [],
   "linked": [],

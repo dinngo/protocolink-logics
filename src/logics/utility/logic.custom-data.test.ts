@@ -1,6 +1,6 @@
-import { LogicTestCase } from 'test/types';
 import { CustomDataLogic, CustomDataLogicFields } from './logic.custom-data';
-import * as common from '@furucombo/composable-router-common';
+import { LogicTestCase } from 'test/types';
+import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
 import { expect } from 'chai';
 

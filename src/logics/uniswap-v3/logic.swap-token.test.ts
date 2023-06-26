@@ -1,11 +1,11 @@
 import { LogicTestCase } from 'test/types';
 import { SwapTokenLogic, SwapTokenLogicFields, SwapTokenLogicOptions } from './logic.swap-token';
-import * as common from '@furucombo/composable-router-common';
+import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
-import * as core from '@furucombo/composable-router-core';
+import * as core from '@protocolink/core';
 import { expect } from 'chai';
 import { getConfig } from './configs';
-import { mainnetTokens } from '@furucombo/composable-router-test-helpers';
+import { mainnetTokens } from '@protocolink/test-helpers';
 import * as univ3 from 'src/modules/univ3';
 
 describe('UniswapV3 SwapTokenLogic', function () {

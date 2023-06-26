@@ -1,8 +1,8 @@
 import { BuildSwapTxInput, constructSimpleSDK } from '@paraswap/sdk';
 import { TokenList } from '@uniswap/token-lists';
 import { axios } from 'src/utils';
-import * as common from '@furucombo/composable-router-common';
-import * as core from '@furucombo/composable-router-core';
+import * as common from '@protocolink/common';
+import * as core from '@protocolink/core';
 import { getContractAddress, tokenListUrlsMap } from './config';
 
 export type SwapTokenLogicTokenList = common.Token[];

@@ -1,10 +1,10 @@
 import { LogicTestCase } from 'test/types';
 import { SendTokenLogic, SendTokenLogicFields } from './logic.send-token';
-import * as common from '@furucombo/composable-router-common';
+import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
-import * as core from '@furucombo/composable-router-core';
+import * as core from '@protocolink/core';
 import { expect } from 'chai';
-import { mainnetTokens } from '@furucombo/composable-router-test-helpers';
+import { mainnetTokens } from '@protocolink/test-helpers';
 
 describe('Utility SendTokenLogic', function () {
   context('Test getTokenList', async function () {

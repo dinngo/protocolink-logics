@@ -1,6 +1,6 @@
 import { FeeAmount } from '@uniswap/v3-sdk';
 import { arbitrumTokens, mainnetTokens, optimismTokens, polygonTokens } from './tokens';
-import * as common from '@furucombo/composable-router-common';
+import * as common from '@protocolink/common';
 import * as univ3 from 'src/modules/univ3';
 
 // https://github.com/Uniswap/interface/blob/v4.204.5/src/constants/routing.ts#L61
