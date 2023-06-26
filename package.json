@@ -20,7 +20,8 @@
     "lint": "eslint --fix src",
     "prepublishOnly": "yarn build",
     "test": "mocha",
-    "test:e2e": "hardhat test",
+    "test:e2e:mainnet": "CHAIN_ID=1 hardhat test",
+    "test:e2e:zksync": "CHAIN_ID=324 hardhat test",
     "test:unit": "mocha --recursive src"
   },
   "dependencies": {

@@ -2,7 +2,8 @@
 
 [![Lint](https://github.com/dinngo/composable-router-logics/actions/workflows/lint.yml/badge.svg)](https://github.com/dinngo/composable-router-logics/actions/workflows/lint.yml)
 [![Unit Test](https://github.com/dinngo/composable-router-logics/actions/workflows/unit-test.yml/badge.svg)](https://github.com/dinngo/composable-router-logics/actions/workflows/unit-test.yml)
-[![E2E Test](https://github.com/dinngo/composable-router-logics/actions/workflows/e2e-test.yml/badge.svg)](https://github.com/dinngo/composable-router-logics/actions/workflows/e2e-test.yml)
+[![E2E Test: Mainnet](https://github.com/dinngo/composable-router-logics/actions/workflows/e2e-test-mainnet.yml/badge.svg)](https://github.com/dinngo/composable-router-logics/actions/workflows/e2e-test-mainnet.yml)
+[![E2E Test: zkSync](https://github.com/dinngo/composable-router-logics/actions/workflows/e2e-test-zksync.yml/badge.svg)](https://github.com/dinngo/composable-router-logics/actions/workflows/e2e-test-zksync.yml)
 
 An SDK that build protocol logics for composable router
 

@@ -2,12 +2,16 @@ import '@nomicfoundation/hardhat-chai-matchers';
 import '@furucombo/composable-router-test-helpers';
 
 import { HardhatUserConfig } from 'hardhat/config';
+import * as common from '@furucombo/composable-router-common';
 import { setup } from 'test/hooks';
+
+const chainId = process.env.CHAIN_ID ? parseInt(process.env.CHAIN_ID) : common.ChainId.mainnet;
+const network = common.getNetwork(chainId);
 
 const config: HardhatUserConfig = {
   networks: {
     hardhat: {
-      chainId: process.env.CHAIN_ID ? parseInt(process.env.CHAIN_ID) : 1,
+      chainId,
       gasPrice: 0,
       initialBaseFeePerGas: 0,
       accounts: {
@@ -16,9 +20,12 @@ const config: HardhatUserConfig = {
         initialIndex: 0,
       },
       forking: {
-        url: process.env.HTTP_RPC_URL ?? 'https://rpc.ankr.com/eth',
+        url: network.rpcUrl,
       },
     },
+  },
+  paths: {
+    tests: `test/logics/${network.id}`,
   },
   mocha: {
     timeout: 1200000,
