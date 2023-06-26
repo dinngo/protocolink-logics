@@ -1,5 +1,12 @@
 # @protocolink/logics
 
+## 0.2.2
+
+### Patch Changes
+
+- 1ae6674: add zksync test environment
+- 43fc5d7: rename scope to @protocolink
+
 ## 0.2.1
 
 ### Patch Changes
