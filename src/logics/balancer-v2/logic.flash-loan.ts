@@ -4,7 +4,7 @@ import { Vault__factory } from './contracts';
 import { axios } from 'src/utils';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
-import { getContractAddress } from './config';
+import { getContractAddress, supportedChainIds } from './configs';
 
 export type FlashLoanLogicTokenList = common.Token[];
 
@@ -12,7 +12,7 @@ export type FlashLoanLogicFields = core.FlashLoanFields;
 
 @core.LogicDefinitionDecorator()
 export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicBuilderInterface {
-  static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon, common.ChainId.arbitrum];
+  static readonly supportedChainIds = supportedChainIds;
 
   async getTokenList() {
     const { data } = await axios.get<TokenList>(
