@@ -3,7 +3,7 @@ import { TokenList } from '@uniswap/token-lists';
 import { axios } from 'src/utils';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
-import { getContractAddress, tokenListUrlsMap } from './config';
+import { getTokenListUrls, supportedChainIds, tokenTransferProxyAddress } from './configs';
 
 export type SwapTokenLogicTokenList = common.Token[];
 
@@ -17,20 +17,14 @@ export type SwapTokenLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
 @core.LogicDefinitionDecorator()
 export class SwapTokenLogic extends core.Logic implements core.LogicOracleInterface, core.LogicBuilderInterface {
-  static readonly supportedChainIds = [
-    common.ChainId.mainnet,
-    common.ChainId.polygon,
-    common.ChainId.arbitrum,
-    common.ChainId.optimism,
-    common.ChainId.avalanche,
-  ];
+  static readonly supportedChainIds = supportedChainIds;
 
   get sdk() {
     return constructSimpleSDK({ chainId: this.chainId, axios });
   }
 
   async getTokenList() {
-    const tokenListUrls = tokenListUrlsMap[this.chainId];
+    const tokenListUrls = getTokenListUrls(this.chainId);
     const tokenLists = await Promise.all(tokenListUrls.map((tokenListUrl) => axios.get<TokenList>(tokenListUrl)));
 
     const tmp: Record<string, boolean> = { [this.nativeToken.address]: true };
@@ -90,7 +84,7 @@ export class SwapTokenLogic extends core.Logic implements core.LogicOracleInterf
       { ignoreChecks: true, ignoreGasEstimate: true }
     );
     const inputs = [core.newLogicInput({ input })];
-    const approveTo = getContractAddress(this.chainId, 'TokenTransferProxy');
+    const approveTo = tokenTransferProxyAddress;
 
     return core.newLogic({ to, data, inputs, approveTo });
   }
