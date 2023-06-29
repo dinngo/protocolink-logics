@@ -173,5 +173,103 @@
     "decimals": 18,
     "symbol": "aEthCRV",
     "name": "Aave Ethereum CRV"
+  },
+  "MKR": {
+    "chainId": 1,
+    "address": "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2",
+    "decimals": 18,
+    "symbol": "MKR",
+    "name": "Maker"
+  },
+  "aEthMKR": {
+    "chainId": 1,
+    "address": "0x8A458A9dc9048e005d22849F470891b840296619",
+    "decimals": 18,
+    "symbol": "aEthMKR",
+    "name": "Aave Ethereum MKR"
+  },
+  "SNX": {
+    "chainId": 1,
+    "address": "0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F",
+    "decimals": 18,
+    "symbol": "SNX",
+    "name": "Synthetix Network Token"
+  },
+  "aEthSNX": {
+    "chainId": 1,
+    "address": "0xC7B4c17861357B8ABB91F25581E7263E08DCB59c",
+    "decimals": 18,
+    "symbol": "aEthSNX",
+    "name": "Aave Ethereum SNX"
+  },
+  "BAL": {
+    "chainId": 1,
+    "address": "0xba100000625a3754423978a60c9317c58a424e3D",
+    "decimals": 18,
+    "symbol": "BAL",
+    "name": "Balancer"
+  },
+  "aEthBAL": {
+    "chainId": 1,
+    "address": "0x2516E7B3F76294e03C42AA4c5b5b4DCE9C436fB8",
+    "decimals": 18,
+    "symbol": "aEthBAL",
+    "name": "Aave Ethereum BAL"
+  },
+  "UNI": {
+    "chainId": 1,
+    "address": "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
+    "decimals": 18,
+    "symbol": "UNI",
+    "name": "Uniswap"
+  },
+  "aEthUNI": {
+    "chainId": 1,
+    "address": "0xF6D2224916DDFbbab6e6bd0D1B7034f4Ae0CaB18",
+    "decimals": 18,
+    "symbol": "aEthUNI",
+    "name": "Aave Ethereum UNI"
+  },
+  "LDO": {
+    "chainId": 1,
+    "address": "0x5A98FcBEA516Cf06857215779Fd812CA3beF1B32",
+    "decimals": 18,
+    "symbol": "LDO",
+    "name": "Lido DAO Token"
+  },
+  "aEthLDO": {
+    "chainId": 1,
+    "address": "0x9A44fd41566876A39655f74971a3A6eA0a17a454",
+    "decimals": 18,
+    "symbol": "aEthLDO",
+    "name": "Aave Ethereum LDO"
+  },
+  "ENS": {
+    "chainId": 1,
+    "address": "0xC18360217D8F7Ab5e7c516566761Ea12Ce7F9D72",
+    "decimals": 18,
+    "symbol": "ENS",
+    "name": "Ethereum Name Service"
+  },
+  "aEthENS": {
+    "chainId": 1,
+    "address": "0x545bD6c032eFdde65A377A6719DEF2796C8E0f2e",
+    "decimals": 18,
+    "symbol": "aEthENS",
+    "name": "Aave Ethereum ENS"
+  },
+  "1INCH": {
+    "chainId": 1,
+    "address": "0x111111111117dC0aa78b770fA6A738034120C302",
+    "decimals": 18,
+    "symbol": "1INCH",
+    "name": "1INCH Token"
+  },
+  "aEth1INCH": {
+    "chainId": 1,
+    "address": "0x71Aef7b30728b9BB371578f36c5A1f1502a5723e",
+    "decimals": 18,
+    "symbol": "aEth1INCH",
+    "name": "Aave Ethereum 1INCH"
   }
 }

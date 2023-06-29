@@ -3,6 +3,7 @@ import { Pool__factory } from './contracts';
 import { Service } from './service';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
+import { supportedChainIds } from './configs';
 
 export type BorrowLogicTokenList = common.Token[];
 
@@ -12,13 +13,7 @@ export type BorrowLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
 @core.LogicDefinitionDecorator()
 export class BorrowLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicBuilderInterface {
-  static readonly supportedChainIds = [
-    common.ChainId.mainnet,
-    common.ChainId.polygon,
-    common.ChainId.arbitrum,
-    common.ChainId.optimism,
-    common.ChainId.avalanche,
-  ];
+  static readonly supportedChainIds = supportedChainIds;
 
   async getTokenList() {
     const service = new Service(this.chainId, this.provider);

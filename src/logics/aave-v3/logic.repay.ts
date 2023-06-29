@@ -3,6 +3,7 @@ import { Pool__factory } from './contracts';
 import { Service } from './service';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
+import { supportedChainIds } from './configs';
 
 export type RepayLogicTokenList = common.Token[];
 
@@ -15,13 +16,7 @@ export class RepayLogic
   extends core.Logic
   implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
 {
-  static readonly supportedChainIds = [
-    common.ChainId.mainnet,
-    common.ChainId.polygon,
-    common.ChainId.arbitrum,
-    common.ChainId.optimism,
-    common.ChainId.avalanche,
-  ];
+  static readonly supportedChainIds = supportedChainIds;
 
   async getTokenList() {
     const service = new Service(this.chainId, this.provider);

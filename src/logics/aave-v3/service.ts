@@ -8,7 +8,7 @@ import {
 import { InterestRateMode, ReserveTokens, ReserveTokensAddress } from './types';
 import * as common from '@protocolink/common';
 import { constants } from 'ethers';
-import { getContractAddress } from './config';
+import { getContractAddress } from './configs';
 
 export class Service extends common.Web3Toolkit {
   get poolDataProvider() {

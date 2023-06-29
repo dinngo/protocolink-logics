@@ -4,7 +4,7 @@ import { Pool__factory } from './contracts';
 import { Service } from './service';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
-import { getContractAddress } from './config';
+import { getContractAddress, supportedChainIds } from './configs';
 
 export type FlashLoanLogicTokenList = common.Token[];
 
@@ -12,13 +12,7 @@ export type FlashLoanLogicFields = core.FlashLoanFields<{ referralCode?: number 
 
 @core.LogicDefinitionDecorator()
 export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicBuilderInterface {
-  static readonly supportedChainIds = [
-    common.ChainId.mainnet,
-    common.ChainId.polygon,
-    common.ChainId.arbitrum,
-    common.ChainId.optimism,
-    common.ChainId.avalanche,
-  ];
+  static readonly supportedChainIds = supportedChainIds;
 
   async getTokenList() {
     const service = new Service(this.chainId, this.provider);
