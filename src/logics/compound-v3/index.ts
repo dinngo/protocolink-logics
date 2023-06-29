@@ -1,4 +1,4 @@
-export * from './config';
+export * from './configs';
 export * from './contracts';
 export * from './logic.borrow';
 export * from './logic.claim';

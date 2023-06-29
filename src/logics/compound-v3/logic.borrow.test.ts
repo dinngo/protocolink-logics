@@ -1,7 +1,7 @@
 import { BorrowLogic, BorrowLogicFields } from './logic.borrow';
 import { Comet__factory } from './contracts';
 import { LogicTestCase } from 'test/types';
-import { MarketId, getMarket } from './config';
+import { MarketId, getMarket } from './configs';
 import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
 import * as core from '@protocolink/core';

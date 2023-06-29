@@ -3,7 +3,7 @@ import { Service } from './service';
 import * as common from '@protocolink/common';
 import { constants } from 'ethers';
 import * as core from '@protocolink/core';
-import { getMarket, getMarkets } from './config';
+import { getMarket, getMarkets, supportedChainIds } from './configs';
 
 export type WithdrawBaseLogicTokenList = Record<string, [common.Token, common.Token][]>;
 
@@ -18,7 +18,7 @@ export class WithdrawBaseLogic
   extends core.Logic
   implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
 {
-  static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon];
+  static readonly supportedChainIds = supportedChainIds;
 
   async getTokenList() {
     const tokenList: WithdrawBaseLogicTokenList = {};

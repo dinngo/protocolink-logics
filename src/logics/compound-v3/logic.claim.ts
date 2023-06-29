@@ -3,7 +3,7 @@ import { CometRewards__factory } from './contracts';
 import { Service } from './service';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
-import { getContractAddress, getMarket } from './config';
+import { getContractAddress, getMarket, supportedChainIds } from './configs';
 
 export type ClaimLogicTokenList = [common.Token];
 
@@ -18,7 +18,7 @@ export class ClaimLogic
   extends core.Logic
   implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
 {
-  static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon];
+  static readonly supportedChainIds = supportedChainIds;
 
   async getTokenList() {
     const tokenList: ClaimLogicTokenList = [COMP(this.chainId)];

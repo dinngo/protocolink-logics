@@ -3,7 +3,7 @@ import { Service } from './service';
 import * as common from '@protocolink/common';
 import { constants } from 'ethers';
 import * as core from '@protocolink/core';
-import { getMarket, getMarkets } from './config';
+import { getMarket, getMarkets, supportedChainIds } from './configs';
 
 export type RepayLogicTokenList = Record<string, common.Token[]>;
 
@@ -13,7 +13,7 @@ export type RepayLogicFields = core.RepayFields<{ marketId: string }>;
 
 @core.LogicDefinitionDecorator()
 export class RepayLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicBuilderInterface {
-  static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon];
+  static readonly supportedChainIds = supportedChainIds;
 
   async getTokenList() {
     const tokenList: RepayLogicTokenList = {};

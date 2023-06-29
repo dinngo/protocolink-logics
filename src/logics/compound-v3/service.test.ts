@@ -1,4 +1,4 @@
-import { MarketId, getMarkets } from './config';
+import { MarketId, getMarkets } from './configs';
 import { Service } from './service';
 import * as common from '@protocolink/common';
 import { expect } from 'chai';

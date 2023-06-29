@@ -1,6 +1,6 @@
 import { Comet__factory } from './contracts';
 import { LogicTestCase } from 'test/types';
-import { MarketId, getMarket } from './config';
+import { MarketId, getMarket } from './configs';
 import { RepayLogic, RepayLogicFields } from './logic.repay';
 import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';

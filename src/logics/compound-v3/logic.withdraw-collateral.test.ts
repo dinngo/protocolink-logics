@@ -1,6 +1,6 @@
 import { Comet__factory } from './contracts';
 import { LogicTestCase } from 'test/types';
-import { MarketId, getMarket } from './config';
+import { MarketId, getMarket } from './configs';
 import { WithdrawCollateralLogic, WithdrawCollateralLogicFields } from './logic.withdraw-collateral';
 import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';

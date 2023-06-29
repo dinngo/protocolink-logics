@@ -2,7 +2,7 @@ import { Comet__factory } from './contracts';
 import { Service } from './service';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
-import { getMarket, getMarkets } from './config';
+import { getMarket, getMarkets, supportedChainIds } from './configs';
 
 export type SupplyCollateralLogicTokenList = Record<string, common.Token[]>;
 
@@ -15,7 +15,7 @@ export class SupplyCollateralLogic
   extends core.Logic
   implements core.LogicTokenListInterface, core.LogicBuilderInterface
 {
-  static readonly supportedChainIds = [common.ChainId.mainnet, common.ChainId.polygon];
+  static readonly supportedChainIds = supportedChainIds;
 
   async getTokenList() {
     const tokenList: SupplyCollateralLogicTokenList = {};

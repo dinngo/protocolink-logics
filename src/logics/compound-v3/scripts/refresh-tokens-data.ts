@@ -1,7 +1,7 @@
 import { Service } from '../service';
 import * as common from '@protocolink/common';
 import fs from 'fs-extra';
-import { getMarkets } from '../config';
+import { getMarkets } from '../configs';
 import { resolve } from 'path';
 
 export default async function () {
