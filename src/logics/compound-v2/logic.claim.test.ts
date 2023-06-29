@@ -5,7 +5,7 @@ import { LogicTestCase } from 'test/types';
 import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
 import { expect } from 'chai';
-import { getContractAddress } from './config';
+import { getContractAddress } from './configs';
 
 describe('CompoundV2 ClaimLogic', function () {
   context('Test getTokenList', async function () {

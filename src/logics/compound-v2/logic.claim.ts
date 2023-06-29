@@ -2,7 +2,7 @@ import { COMP } from './tokens';
 import { CompoundLens__factory, Comptroller__factory } from './contracts';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
-import { getContractAddress } from './config';
+import { getContractAddress, supportedChainIds } from './configs';
 
 export type ClaimLogicTokenList = [common.Token];
 
@@ -15,7 +15,7 @@ export class ClaimLogic
   extends core.Logic
   implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
 {
-  static readonly supportedChainIds = [common.ChainId.mainnet];
+  static readonly supportedChainIds = supportedChainIds;
 
   getTokenList() {
     const tokenList: ClaimLogicTokenList = [COMP];

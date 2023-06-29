@@ -2,6 +2,7 @@ import { BigNumber, BigNumberish } from 'ethers';
 import { CErc20__factory, CEther__factory } from './contracts';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
+import { supportedChainIds } from './configs';
 import { tokenPairs } from './tokens';
 
 export type SupplyLogicTokenList = [common.Token, common.Token][];
@@ -15,7 +16,7 @@ export class SupplyLogic
   extends core.Logic
   implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
 {
-  static readonly supportedChainIds = [common.ChainId.mainnet];
+  static readonly supportedChainIds = supportedChainIds;
 
   getTokenList() {
     const tokenList: SupplyLogicTokenList = tokenPairs.map(({ underlyingToken, cToken }) => [underlyingToken, cToken]);
