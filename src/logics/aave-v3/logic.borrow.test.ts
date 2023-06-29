@@ -12,7 +12,7 @@ import { mainnetTokens } from './tokens';
 describe('AaveV3 BorrowLogic', function () {
   context('Test getTokenList', async function () {
     BorrowLogic.supportedChainIds.forEach((chainId) => {
-      it(`network: ${common.getNetworkId(chainId)}`, async function () {
+      it(`network: ${common.toNetworkId(chainId)}`, async function () {
         const logic = new BorrowLogic(chainId);
         const tokenList = await logic.getTokenList();
         expect(tokenList).to.have.lengthOf.above(0);

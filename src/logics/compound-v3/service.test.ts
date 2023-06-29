@@ -8,7 +8,7 @@ describe('CompoundV3 Service', function () {
   context('Test getCollaterals', function () {
     const chainIds = [common.ChainId.mainnet, common.ChainId.polygon];
     chainIds.forEach((chainId) => {
-      it(common.getNetworkId(chainId), async function () {
+      it(common.toNetworkId(chainId), async function () {
         const markets = getMarkets(chainId);
         const service = new Service(chainId);
         for (const market of markets) {

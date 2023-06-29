@@ -10,7 +10,7 @@ import { expect } from 'chai';
 describe('CompoundV3 ClaimLogic', function () {
   context('Test getTokenList', async function () {
     ClaimLogic.supportedChainIds.forEach((chainId) => {
-      it(`network: ${common.getNetworkId(chainId)}`, async function () {
+      it(`network: ${common.toNetworkId(chainId)}`, async function () {
         const logic = new ClaimLogic(chainId);
         const tokenList = await logic.getTokenList();
         expect(tokenList.length).to.eq(1);

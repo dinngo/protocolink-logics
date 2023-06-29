@@ -11,7 +11,7 @@ import { mainnetTokens } from './tokens';
 describe('CompoundV3 WithdrawCollateralLogic', function () {
   context('Test getTokenList', async function () {
     WithdrawCollateralLogic.supportedChainIds.forEach((chainId) => {
-      it(`network: ${common.getNetworkId(chainId)}`, async function () {
+      it(`network: ${common.toNetworkId(chainId)}`, async function () {
         const logic = new WithdrawCollateralLogic(chainId);
         const tokenList = await logic.getTokenList();
         expect(Object.keys(tokenList).length).to.be.gt(0);

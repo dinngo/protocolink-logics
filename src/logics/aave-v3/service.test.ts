@@ -8,7 +8,7 @@ describe('AaveV3 Service', function () {
 
   context('Test getReserveTokensAddresses', function () {
     chainIds.forEach((chainId) => {
-      it(common.getNetworkId(chainId), async function () {
+      it(common.toNetworkId(chainId), async function () {
         const service = new Service(chainId);
         const reserveTokensAddresses = await service.getReserveTokensAddresses();
         expect(reserveTokensAddresses).to.have.lengthOf.above(0);

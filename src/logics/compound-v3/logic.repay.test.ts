@@ -11,7 +11,7 @@ import { mainnetTokens } from './tokens';
 describe('CompoundV3 RepayLogic', function () {
   context('Test getTokenList', async function () {
     RepayLogic.supportedChainIds.forEach((chainId) => {
-      it(`network: ${common.getNetworkId(chainId)}`, async function () {
+      it(`network: ${common.toNetworkId(chainId)}`, async function () {
         const logic = new RepayLogic(chainId);
         const tokenList = await logic.getTokenList();
         const marketIds = Object.keys(tokenList);

@@ -1015,10 +1015,10 @@
     bignumber.js "^9.0.2"
     ts-essentials "^9.1.2"
 
-"@protocolink/common@^0.2.6":
-  version "0.2.6"
-  resolved "https://registry.yarnpkg.com/@protocolink/common/-/common-0.2.6.tgz#5d369454b0aa4a99e4af9dc52f5c63674f66d6da"
-  integrity sha512-M1l2EN5XgLxYNYGW2UBsopRvv60jv7K++oZZNLPZAemEKMdXQua4fV+hBdsHwfAQ04Vg5Bg4f/WyFBgewoVdoA==
+"@protocolink/common@^0.2.6", "@protocolink/common@^0.2.8":
+  version "0.2.8"
+  resolved "https://registry.yarnpkg.com/@protocolink/common/-/common-0.2.8.tgz#9f7887dd93b3d050be33359db4ac728e4a7ae58b"
+  integrity sha512-DQ+jigo8IU6kcmWNbtydKOwPzVNSMaO+2yse0/Fvxd3rN+JDuNhwr0wdDjoLFMpKwmY+htED4YFHKeunmadJOw==
   dependencies:
     "@types/lodash" "^4.14.195"
     bignumber.js "^9.1.1"

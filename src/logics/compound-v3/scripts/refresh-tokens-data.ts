@@ -26,7 +26,7 @@ export default async function () {
       }
     }
 
-    const tokenDataPath = resolve(__dirname, '..', 'tokens', 'data', `${common.getNetworkId(chainId)}.json`);
+    const tokenDataPath = resolve(__dirname, '..', 'tokens', 'data', `${common.toNetworkId(chainId)}.json`);
     fs.outputJSONSync(tokenDataPath, tokenMap, { spaces: 2 });
   }
 }

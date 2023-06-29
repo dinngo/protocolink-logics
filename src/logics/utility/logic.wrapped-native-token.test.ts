@@ -9,7 +9,7 @@ import { mainnetTokens } from '@protocolink/test-helpers';
 describe('Utility WrappedNativeTokenLogic', function () {
   context('Test getTokenList', async function () {
     WrappedNativeTokenLogic.supportedChainIds.forEach((chainId) => {
-      it(`network: ${common.getNetworkId(chainId)}`, async function () {
+      it(`network: ${common.toNetworkId(chainId)}`, async function () {
         const logic = new WrappedNativeTokenLogic(chainId);
         const tokenList = logic.getTokenList();
         expect(tokenList).to.have.lengthOf.above(0);

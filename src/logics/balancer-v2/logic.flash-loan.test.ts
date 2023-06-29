@@ -4,13 +4,13 @@ import { Vault__factory } from './contracts';
 import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
 import { expect } from 'chai';
-import { getContractAddress } from './config';
+import { getContractAddress } from './configs';
 import { mainnetTokens } from '@protocolink/test-helpers';
 
 describe('BalancerV2 FlashLoanLogic', function () {
   context('Test getTokenList', async function () {
     FlashLoanLogic.supportedChainIds.forEach((chainId) => {
-      it(`network: ${common.getNetworkId(chainId)}`, async function () {
+      it(`network: ${common.toNetworkId(chainId)}`, async function () {
         const logic = new FlashLoanLogic(chainId);
         const tokenList = await logic.getTokenList();
         expect(tokenList).to.have.lengthOf.above(0);

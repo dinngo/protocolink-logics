@@ -10,7 +10,7 @@ import { mainnetTokens } from '@protocolink/test-helpers';
 describe('ParaswapV5 SwapTokenLogic', function () {
   context('Test getTokenList', async function () {
     SwapTokenLogic.supportedChainIds.forEach((chainId) => {
-      it(`network: ${common.getNetworkId(chainId)}`, async function () {
+      it(`network: ${common.toNetworkId(chainId)}`, async function () {
         const logic = new SwapTokenLogic(chainId);
         const tokenList = await logic.getTokenList();
         expect(tokenList).to.have.lengthOf.above(0);

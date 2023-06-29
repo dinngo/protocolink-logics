@@ -11,7 +11,7 @@ import { mainnetTokens } from './tokens';
 describe('CompoundV3 WithdrawBaseLogic', function () {
   context('Test getTokenList', async function () {
     WithdrawBaseLogic.supportedChainIds.forEach((chainId) => {
-      it(`network: ${common.getNetworkId(chainId)}`, async function () {
+      it(`network: ${common.toNetworkId(chainId)}`, async function () {
         const logic = new WithdrawBaseLogic(chainId);
         const tokenList = await logic.getTokenList();
         expect(Object.keys(tokenList)).to.have.lengthOf.above(0);

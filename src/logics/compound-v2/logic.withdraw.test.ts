@@ -10,7 +10,7 @@ import { expect } from 'chai';
 describe('CompoundV2 WithdrawLogic', function () {
   context('Test getTokenList', async function () {
     WithdrawLogic.supportedChainIds.forEach((chainId) => {
-      it(`network: ${common.getNetworkId(chainId)}`, async function () {
+      it(`network: ${common.toNetworkId(chainId)}`, async function () {
         const logic = new WithdrawLogic(chainId);
         const tokenList = await logic.getTokenList();
         expect(tokenList).to.have.lengthOf.above(0);
