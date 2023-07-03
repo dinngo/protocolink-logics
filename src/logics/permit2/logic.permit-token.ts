@@ -3,7 +3,7 @@ import { PERMIT_EXPIRATION, PERMIT_SIG_DEADLINE } from './constants';
 import { Permit2__factory } from './contracts';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
-import { getContractAddress } from './config';
+import { getContractAddress, supportedChainIds } from './configs';
 import { getDeadline, isPermitSingle } from './utils';
 
 export interface PermitTokenLogicFields {
@@ -15,13 +15,7 @@ export type PermitTokenLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
 @core.LogicDefinitionDecorator()
 export class PermitTokenLogic extends core.Logic implements core.LogicBuilderInterface {
-  static readonly supportedChainIds = [
-    common.ChainId.mainnet,
-    common.ChainId.polygon,
-    common.ChainId.arbitrum,
-    common.ChainId.optimism,
-    common.ChainId.avalanche,
-  ];
+  static readonly supportedChainIds = supportedChainIds;
 
   async getPermitData(account: string, erc20Funds: common.TokenAmounts) {
     const details: PermitDetails[] = [];

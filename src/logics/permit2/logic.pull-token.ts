@@ -1,8 +1,7 @@
 import { IAllowanceTransfer } from './contracts/Permit2';
 import { Permit2__factory } from './contracts';
-import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
-import { getContractAddress } from './config';
+import { getContractAddress, supportedChainIds } from './configs';
 
 export type PullTokenLogicFields = core.TokensInFields;
 
@@ -10,13 +9,7 @@ export type PullTokenLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
 @core.LogicDefinitionDecorator()
 export class PullTokenLogic extends core.Logic implements core.LogicBuilderInterface {
-  static readonly supportedChainIds = [
-    common.ChainId.mainnet,
-    common.ChainId.polygon,
-    common.ChainId.arbitrum,
-    common.ChainId.optimism,
-    common.ChainId.avalanche,
-  ];
+  static readonly supportedChainIds = supportedChainIds;
 
   async build(fields: PullTokenLogicFields, options: PullTokenLogicOptions) {
     const { inputs } = fields;

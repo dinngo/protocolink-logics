@@ -1,4 +1,4 @@
-export * from './config';
+export * from './configs';
 export * from './constants';
 export * from './contracts';
 export * from './logic.permit-token';

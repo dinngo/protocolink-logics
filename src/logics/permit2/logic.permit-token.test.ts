@@ -3,7 +3,7 @@ import { PermitTokenLogic } from './logic.permit-token';
 import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
 import { expect } from 'chai';
-import { getContractAddress } from './config';
+import { getContractAddress } from './configs';
 import { mainnetTokens } from '@protocolink/test-helpers';
 
 describe('Permit2 PermitTokenLogic', function () {
