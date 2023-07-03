@@ -1,0 +1,317 @@
+{
+  "$KANA": {
+    "chainId": 324,
+    "address": "0x26aC1D9945f65392B8E4E6b895969b5c01A7B414",
+    "decimals": 18,
+    "symbol": "$KANA",
+    "name": "Kannagi Token"
+  },
+  "$SNRK": {
+    "chainId": 324,
+    "address": "0x533b5F887383196C6bc642f83338a69596465307",
+    "decimals": 18,
+    "symbol": "$SNRK",
+    "name": "Snark Launch"
+  },
+  "AVAX": {
+    "chainId": 324,
+    "address": "0x6A5279E99CA7786fb13F827Fc1Fb4F61684933d6",
+    "decimals": 18,
+    "symbol": "AVAX",
+    "name": "Avalanche"
+  },
+  "Array": {
+    "chainId": 324,
+    "address": "0x6068AD384b4d330d4De77F47041885956c9F32a3",
+    "decimals": 18,
+    "symbol": "Array",
+    "name": "Array"
+  },
+  "BNB": {
+    "chainId": 324,
+    "address": "0x7400793aAd94C8CA801aa036357d10F5Fd0ce08f",
+    "decimals": 18,
+    "symbol": "BNB",
+    "name": "Binance Coin"
+  },
+  "BUSD": {
+    "chainId": 324,
+    "address": "0x2039bb4116B4EFc145Ec4f0e2eA75012D6C0f181",
+    "decimals": 18,
+    "symbol": "BUSD",
+    "name": "Binance USD"
+  },
+  "Cheems": {
+    "chainId": 324,
+    "address": "0xd599dA85F8Fc4877e61f547dFAcffe1238A7149E",
+    "decimals": 18,
+    "symbol": "Cheems",
+    "name": "Cheems Token"
+  },
+  "DCA": {
+    "chainId": 324,
+    "address": "0x8b69A4e5AEB67858E3d03d0124176E85C3DFa51d",
+    "decimals": 18,
+    "symbol": "DCA",
+    "name": "AutoDCA"
+  },
+  "DOGERA": {
+    "chainId": 324,
+    "address": "0xA59af353E423F54D47F2Ce5F85e3e265d95282Cd",
+    "decimals": 18,
+    "symbol": "DOGERA",
+    "name": "Dogera"
+  },
+  "DVF": {
+    "chainId": 324,
+    "address": "0xBbD1bA24d589C319C86519646817F2F153c9B716",
+    "decimals": 18,
+    "symbol": "DVF",
+    "name": "DeversiFi Token"
+  },
+  "ERA": {
+    "chainId": 324,
+    "address": "0xeCD9f240ED3895c77dB676004328Dd1d246f33C9",
+    "decimals": 18,
+    "symbol": "ERA",
+    "name": "ERA"
+  },
+  "ETH": {
+    "chainId": 324,
+    "address": "0x0000000000000000000000000000000000000000",
+    "decimals": 18,
+    "symbol": "ETH",
+    "name": "Ethereum"
+  },
+  "FLOKI": {
+    "chainId": 324,
+    "address": "0xbcADdDAD3F224115fC7efA8f0C5d3778a41D24Dc",
+    "decimals": 9,
+    "symbol": "FLOKI",
+    "name": "FLOKI"
+  },
+  "FRAX": {
+    "chainId": 324,
+    "address": "0xb4C1544cb4163f4C2ECa1aE9Ce999F63892d912A",
+    "decimals": 18,
+    "symbol": "FRAX",
+    "name": "Frax"
+  },
+  "GOVI": {
+    "chainId": 324,
+    "address": "0xD63eF5e9C628c8a0E8984CDfb7444AEE44B09044",
+    "decimals": 18,
+    "symbol": "GOVI",
+    "name": "GOVI"
+  },
+  "IBEX": {
+    "chainId": 324,
+    "address": "0xbe9f8C0d6f0Fd7e46CDaCCA340747EA2f247991D",
+    "decimals": 18,
+    "symbol": "IBEX",
+    "name": "Impermax"
+  },
+  "LSD": {
+    "chainId": 324,
+    "address": "0x458A2E32eAbc7626187E6b75f29D7030a5202bD4",
+    "decimals": 18,
+    "symbol": "LSD",
+    "name": "LSD Coin"
+  },
+  "LUSD": {
+    "chainId": 324,
+    "address": "0x503234F203fC7Eb888EEC8513210612a43Cf6115",
+    "decimals": 18,
+    "symbol": "LUSD",
+    "name": "LUSD Stablecoin"
+  },
+  "MATIC": {
+    "chainId": 324,
+    "address": "0x28a487240e4D45CfF4A2980D334CC933B7483842",
+    "decimals": 18,
+    "symbol": "MATIC",
+    "name": "Matic Token"
+  },
+  "MUTE": {
+    "chainId": 324,
+    "address": "0x0e97C7a0F8B2C9885C8ac9fC6136e829CbC21d42",
+    "decimals": 18,
+    "symbol": "MUTE",
+    "name": "Mute.io"
+  },
+  "Nfomo": {
+    "chainId": 324,
+    "address": "0x2844EC8A0C85F8F9B4ED4F04ef71eC8594907A0a",
+    "decimals": 6,
+    "symbol": "Nfomo",
+    "name": "NoFomo"
+  },
+  "OT": {
+    "chainId": 324,
+    "address": "0xD0eA21ba66B67bE636De1EC4bd9696EB8C61e9AA",
+    "decimals": 18,
+    "symbol": "OT",
+    "name": "OT"
+  },
+  "PEPE": {
+    "chainId": 324,
+    "address": "0x68a8b2DBce73a9221A8cd981Ad6A70d2BaE40668",
+    "decimals": 18,
+    "symbol": "PEPE",
+    "name": "Pepe"
+  },
+  "PEPERA": {
+    "chainId": 324,
+    "address": "0x60143F39b54a731aC790708c8719211878e638C3",
+    "decimals": 18,
+    "symbol": "PEPERA",
+    "name": "PEPERA"
+  },
+  "SHIT": {
+    "chainId": 324,
+    "address": "0x13aD5b4248BDeAAA03344023d50d8fAf1FD96442",
+    "decimals": 18,
+    "symbol": "SHIT",
+    "name": "Shit"
+  },
+  "SIS": {
+    "chainId": 324,
+    "address": "0xdd9f72afED3631a6C85b5369D84875e6c42f1827",
+    "decimals": 18,
+    "symbol": "SIS",
+    "name": "Symbiosis"
+  },
+  "SPACE": {
+    "chainId": 324,
+    "address": "0x47260090cE5e83454d5f05A0AbbB2C953835f777",
+    "decimals": 18,
+    "symbol": "SPACE",
+    "name": "SPACE"
+  },
+  "TWT": {
+    "chainId": 324,
+    "address": "0x5dBe66ceA5734317d4B21f5588471556c306fB87",
+    "decimals": 9,
+    "symbol": "TWT",
+    "name": "TwitFi Token"
+  },
+  "USD+": {
+    "chainId": 324,
+    "address": "0x8E86e46278518EFc1C5CEd245cBA2C7e3ef11557",
+    "decimals": 6,
+    "symbol": "USD+",
+    "name": "USD+"
+  },
+  "USDC": {
+    "chainId": 324,
+    "address": "0x3355df6D4c9C3035724Fd0e3914dE96A5a83aaf4",
+    "decimals": 6,
+    "symbol": "USDC",
+    "name": "USD Coin"
+  },
+  "USDT": {
+    "chainId": 324,
+    "address": "0x493257fD37EDB34451f62EDf8D2a0C418852bA4C",
+    "decimals": 6,
+    "symbol": "USDT",
+    "name": "Tether USD"
+  },
+  "VC": {
+    "chainId": 324,
+    "address": "0x85D84c774CF8e9fF85342684b0E795Df72A24908",
+    "decimals": 18,
+    "symbol": "VC",
+    "name": "Velocore"
+  },
+  "VS": {
+    "chainId": 324,
+    "address": "0x5756A28E2aAe01F600FC2C01358395F5C1f8ad3A",
+    "decimals": 18,
+    "symbol": "VS",
+    "name": "veSync"
+  },
+  "WBTC": {
+    "chainId": 324,
+    "address": "0xBBeB516fb02a01611cBBE0453Fe3c580D7281011",
+    "decimals": 8,
+    "symbol": "WBTC",
+    "name": "Wrapped BTC"
+  },
+  "WETH": {
+    "chainId": 324,
+    "address": "0x5AEa5775959fBC2557Cc8789bC1bf90A239D9a91",
+    "decimals": 18,
+    "symbol": "WETH",
+    "name": "Wrapped Ether"
+  },
+  "WISP": {
+    "chainId": 324,
+    "address": "0xc8Ec5B0627C794de0e4ea5d97AD9A556B361d243",
+    "decimals": 18,
+    "symbol": "WISP",
+    "name": "Whisper"
+  },
+  "ZAT": {
+    "chainId": 324,
+    "address": "0x47EF4A5641992A72CFd57b9406c9D9cefEE8e0C4",
+    "decimals": 18,
+    "symbol": "ZAT",
+    "name": "zkApes token"
+  },
+  "ZKDC": {
+    "chainId": 324,
+    "address": "0xe2c55af390a0f82dd3FE29d6B31Df2f756f7deCD",
+    "decimals": 18,
+    "symbol": "ZKDC",
+    "name": "ZKDC"
+  },
+  "ZKDOGE": {
+    "chainId": 324,
+    "address": "0xbFB4b5616044Eded03e5b1AD75141f0D9Cb1499b",
+    "decimals": 18,
+    "symbol": "ZKDOGE",
+    "name": "zkDoge"
+  },
+  "ZKSPAD": {
+    "chainId": 324,
+    "address": "0x68A682b4dcAdc5D483457AB0454b65d4AB78955e",
+    "decimals": 18,
+    "symbol": "ZKSPAD",
+    "name": "ZKSPad"
+  },
+  "ZPC": {
+    "chainId": 324,
+    "address": "0x4BE6f11Ee1310Ecf29A9d0130a12A9D0885e0c92",
+    "decimals": 18,
+    "symbol": "ZPC",
+    "name": "ZenPandaCoin V2"
+  },
+  "crvUSD": {
+    "chainId": 324,
+    "address": "0x43cD37CC4B9EC54833c8aC362Dd55E58bFd62b86",
+    "decimals": 18,
+    "symbol": "crvUSD",
+    "name": "Curve.Fi USD Stablecoin"
+  },
+  "frxETH": {
+    "chainId": 324,
+    "address": "0xB54aAE4A0743aeEc1d584F2b2abC1EBDC12f1b0F",
+    "decimals": 18,
+    "symbol": "frxETH",
+    "name": "Frax Ether"
+  },
+  "rETH": {
+    "chainId": 324,
+    "address": "0x32Fd44bB869620C0EF993754c8a00Be67C464806",
+    "decimals": 18,
+    "symbol": "rETH",
+    "name": "Rocket Pool ETH"
+  },
+  "zkUSD": {
+    "chainId": 324,
+    "address": "0xfC7E56298657B002b3e656400E746b7212912757",
+    "decimals": 6,
+    "symbol": "zkUSD",
+    "name": "zkUSD Dollar"
+  }
+}
