@@ -1,4 +1,4 @@
-name: E2E Test zkSync
+name: E2E Test Mainnet
 
 on:
   push:
@@ -21,4 +21,4 @@ jobs:
         run: yarn install
 
       - name: Run e2e test
-        run: yarn test:e2e:zksync
+        run: yarn test:e2e

@@ -2,16 +2,12 @@ import '@nomicfoundation/hardhat-chai-matchers';
 import '@protocolink/test-helpers';
 
 import { HardhatUserConfig } from 'hardhat/config';
-import * as common from '@protocolink/common';
 import { setup } from 'test/hooks';
-
-const chainId = process.env.CHAIN_ID ? parseInt(process.env.CHAIN_ID) : common.ChainId.mainnet;
-const network = common.getNetwork(chainId);
 
 const config: HardhatUserConfig = {
   networks: {
     hardhat: {
-      chainId,
+      chainId: process.env.CHAIN_ID ? parseInt(process.env.CHAIN_ID) : 1,
       gasPrice: 0,
       initialBaseFeePerGas: 0,
       accounts: {
@@ -20,12 +16,9 @@ const config: HardhatUserConfig = {
         initialIndex: 0,
       },
       forking: {
-        url: network.rpcUrl,
+        url: process.env.HTTP_RPC_URL ?? 'https://rpc.ankr.com/eth',
       },
     },
-  },
-  paths: {
-    tests: `test/logics/${network.id}`,
   },
   mocha: {
     timeout: 1200000,
