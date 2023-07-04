@@ -37,7 +37,6 @@ export interface PathWithAmounts {
   stepsWithAmount: StepWithAmount[];
   amountIn: BigNumber;
   amountOut: BigNumber;
-  quote: BigNumber;
 }
 
 export interface GetAmountParams {
@@ -53,7 +52,6 @@ export interface GetAmountParams {
 export interface GroupAmounts {
   pathsWithAmounts: PathWithAmounts[];
   amountOut: BigNumber;
-  quoteOut: BigNumber;
 }
 
 export interface SwapPath {

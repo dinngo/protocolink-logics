@@ -12,7 +12,6 @@ import {
 } from './types';
 import { BigNumber, constants, utils } from 'ethers';
 import {
-  ETHER,
   FOUR,
   LIQUIDITY_MIN_RESERVE,
   MAX_FEE,
@@ -43,7 +42,7 @@ function normalizePools(routePools: RouteHelper.RoutePoolStructOutput[]) {
   }));
 }
 
-function normalizeRoutePools(routePools: RouteHelper.RoutePoolsStructOutput): RoutePools {
+export function normalizeRoutePools(routePools: RouteHelper.RoutePoolsStructOutput): RoutePools {
   return {
     poolsDirect: normalizePools(routePools.poolsDirect),
     poolsA: normalizePools(routePools.poolsA),
@@ -123,13 +122,8 @@ function getPathsWith2Hops(
   return paths;
 }
 
-export function findAllPossiblePaths(
-  tokenIn: string,
-  tokenOut: string,
-  routePools: RouteHelper.RoutePoolsStructOutput,
-  baseTokens: string[]
-) {
-  const { poolsDirect, poolsA, poolsB, poolsBase } = normalizeRoutePools(routePools);
+export function findAllPossiblePaths(tokenIn: string, tokenOut: string, routePools: RoutePools, baseTokens: string[]) {
+  const { poolsDirect, poolsA, poolsB, poolsBase } = routePools;
 
   const paths: Path[] = [];
 
@@ -489,57 +483,7 @@ function calculateAmountOut(params: GetAmountParams, checkOverflow: boolean): Bi
   return amountOut;
 }
 
-function getQuoteOutStable(params: GetAmountParams): BigNumber {
-  const multiplier = 10000;
-
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const adjustedReserveIn = params.reserveIn.mul(params.tokenInPrecisionMultiplier!).mul(multiplier);
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const adjustedReserveOut = params.reserveOut.mul(params.tokenOutPrecisionMultiplier!).mul(multiplier);
-
-  const amountIn = params.amount;
-  const feeDeductedAmountIn = amountIn.sub(amountIn.mul(params.swapFee).div(MAX_FEE));
-
-  const d = computeDFromAdjustedBalances(STABLE_POOL_A, adjustedReserveIn, adjustedReserveOut, false);
-
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const x = adjustedReserveIn.add(feeDeductedAmountIn.mul(params.tokenInPrecisionMultiplier!));
-  const y = getY(STABLE_POOL_A, x, d);
-  const dy = adjustedReserveOut.sub(y).sub(1);
-
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  return dy.div(params.tokenOutPrecisionMultiplier!);
-}
-
-function getQuoteOutClassic(params: GetAmountParams): BigNumber {
-  const amountIn = params.amount;
-  const multiplier = 100000;
-
-  const amountInWithFee = amountIn.mul(MAX_FEE.sub(params.swapFee));
-  return amountInWithFee.mul(params.reserveOut.mul(multiplier)).div(params.reserveIn.mul(multiplier).mul(MAX_FEE));
-}
-
-function calculateQuoteOut(params: GetAmountParams): BigNumber {
-  if (params.amount.isZero()) {
-    return ZERO;
-  }
-
-  let quoteOut;
-  if (params.stable) {
-    quoteOut = getQuoteOutStable(params);
-  } else {
-    quoteOut = getQuoteOutClassic(params);
-  }
-
-  return quoteOut;
-}
-
-function calculateAmountOutForStep(
-  chainId: number,
-  step: Step,
-  amountIn: BigNumber,
-  quoteIn: BigNumber
-): [BigNumber, BigNumber, Step | null] {
+function calculateAmountOutForStep(chainId: number, step: Step, amountIn: BigNumber): [BigNumber, Step | null] {
   const isTokenAIn = step.routePool.tokenA === step.tokenIn;
   const [reserveIn, reserveOut] = isTokenAIn
     ? [step.routePool.reserveA, step.routePool.reserveB]
@@ -582,7 +526,6 @@ function calculateAmountOutForStep(
     true
   );
 
-  let quoteOut = ZERO;
   let updatedStep: Step | null = null;
   if (!amountOut.isZero()) {
     // update reserves
@@ -594,37 +537,20 @@ function calculateAmountOutForStep(
       updatedStep.routePool.reserveB = step.routePool.reserveB.add(amountIn);
       updatedStep.routePool.reserveA = step.routePool.reserveA.sub(amountOut);
     }
-
-    // calculate quote
-    quoteOut = calculateQuoteOut({
-      stable: stable,
-      amount: quoteIn, // quote
-      reserveIn: reserveIn,
-      reserveOut: reserveOut,
-      swapFee: swapFee,
-      tokenInPrecisionMultiplier: tokenInPrecisionMultiplier,
-      tokenOutPrecisionMultiplier: tokenOutPrecisionMultiplier,
-    });
   }
 
-  return [amountOut, quoteOut, updatedStep];
+  return [amountOut, updatedStep];
 }
 
 function calculatePathAmountsByInput(chainId: number, path: Path, amountIn: BigNumber) {
   const stepsWithAmount: StepWithAmount[] = [];
   let amountInNext = amountIn;
-  let quoteInNext = amountIn;
 
   // calculate amount for each step
   for (let i = 0; i < path.steps.length; i++) {
     const step = path.steps[i];
 
-    const [stepAmountOut, stepQuoteOut, updatedStep] = calculateAmountOutForStep(
-      chainId,
-      step,
-      amountInNext,
-      quoteInNext
-    );
+    const [stepAmountOut, updatedStep] = calculateAmountOutForStep(chainId, step, amountInNext);
     if (stepAmountOut.isZero()) {
       return null;
     } else {
@@ -636,18 +562,15 @@ function calculatePathAmountsByInput(chainId: number, path: Path, amountIn: BigN
       });
 
       amountInNext = stepAmountOut; // use step output as input of next step
-      quoteInNext = stepQuoteOut;
     }
   }
 
   const pathAmountOut = amountInNext; // amount out of the end step
-  const pathQuoteOut = quoteInNext;
 
   const amounts: PathWithAmounts = {
     stepsWithAmount: stepsWithAmount,
     amountOut: pathAmountOut,
     amountIn: amountIn,
-    quote: pathQuoteOut,
   };
 
   return amounts;
@@ -660,7 +583,6 @@ async function calculateGroupAmounts(
 ): Promise<GroupAmounts | null> {
   const pathsWithAmounts: PathWithAmounts[] = [];
   let amountOut = ZERO;
-  let quoteOut = ZERO;
 
   const lastSteps: Map<string, Step> = new Map();
 
@@ -693,11 +615,10 @@ async function calculateGroupAmounts(
 
       pathsWithAmounts.push(pathWithAmounts);
       amountOut = amountOut.add(pathWithAmounts.amountOut);
-      quoteOut = quoteOut.add(pathWithAmounts.quote);
     }
   }
 
-  return { pathsWithAmounts, amountOut, quoteOut };
+  return { pathsWithAmounts, amountOut };
 }
 
 export async function findBestAmountsForPathsExactIn(
@@ -709,7 +630,6 @@ export async function findBestAmountsForPathsExactIn(
 
   const groups: GroupAmounts[] = [];
   const groupPromises: Promise<boolean>[] = [];
-
   // for each amount group
   for (const amounts of pathAmounts) {
     const promise = new Promise<boolean>((resolve, reject) => {
@@ -722,7 +642,6 @@ export async function findBestAmountsForPathsExactIn(
         }
       });
     });
-
     groupPromises.push(promise);
   }
 
@@ -731,25 +650,12 @@ export async function findBestAmountsForPathsExactIn(
 
   let bestPathsWithAmounts: PathWithAmounts[] = [];
   let bestAmountOut = ZERO;
-  let bestPriceImpact: BigNumber | null = null;
-
   // compare groups for the best
   for (const group of groups) {
-    const groupAmountOut = group.amountOut;
-
-    if (!groupAmountOut.isZero() && !group.quoteOut.isZero()) {
-      const amountLoss = group.quoteOut.sub(groupAmountOut);
-      const groupPriceImpact = amountLoss.mul(ETHER).div(group.quoteOut);
-
-      if (bestPriceImpact === null || groupPriceImpact.lt(bestPriceImpact)) {
-        bestPriceImpact = groupPriceImpact;
-      }
-
-      if (groupAmountOut.gt(bestAmountOut)) {
-        // set as best if has more output
-        bestPathsWithAmounts = group.pathsWithAmounts;
-        bestAmountOut = groupAmountOut;
-      }
+    if (group.amountOut.gt(bestAmountOut)) {
+      // set as best if has more output
+      bestPathsWithAmounts = group.pathsWithAmounts;
+      bestAmountOut = group.amountOut;
     }
   }
 

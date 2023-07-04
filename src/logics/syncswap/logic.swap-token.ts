@@ -3,7 +3,7 @@ import { RouteHelper__factory, Router__factory } from './contracts';
 import { SwapPath } from './types';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
-import { findAllPossiblePaths, findBestAmountsForPathsExactIn, toSwapPaths } from './utils';
+import { findAllPossiblePaths, findBestAmountsForPathsExactIn, normalizeRoutePools, toSwapPaths } from './utils';
 import { getConfig, getContractAddress, supportedChainIds } from './configs';
 
 export type SwapTokenLogicTokenList = common.Token[];
@@ -40,7 +40,12 @@ export class SwapTokenLogic
       config.contract.PoolMaster,
       constants.AddressZero
     );
-    const paths = findAllPossiblePaths(tokenInAddress, tokenOutAddress, routePools, config.baseTokenAddresses);
+    const paths = findAllPossiblePaths(
+      tokenInAddress,
+      tokenOutAddress,
+      normalizeRoutePools(routePools),
+      config.baseTokenAddresses
+    );
     const bestAmounts = await findBestAmountsForPathsExactIn(this.chainId, paths, input.amountWei);
     const output = new common.TokenAmount(tokenOut).setWei(bestAmounts.amountOut);
 

@@ -13,7 +13,6 @@ export const ONE = BigNumber.from(1);
 export const TWO = BigNumber.from(2);
 export const THREE = BigNumber.from(3);
 export const FOUR = BigNumber.from(4);
-export const ETHER = BigNumber.from(10).pow(18);
 
 export const UINT128_MAX = BigNumber.from('0xffffffffffffffffffffffffffffffff');
 export const UINT256_MAX = BigNumber.from('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff');
