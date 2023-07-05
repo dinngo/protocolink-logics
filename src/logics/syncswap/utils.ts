@@ -1,5 +1,5 @@
 import {
-  BestPathsWithAmounts,
+  BestAmountWithPaths,
   GetAmountParams,
   GroupAmounts,
   Path,
@@ -621,11 +621,11 @@ async function calculateGroupAmounts(
   return { pathsWithAmounts, amountOut };
 }
 
-export async function findBestAmountsForPathsExactIn(
+export async function findBestAmountFromPaths(
   chainId: number,
   paths: Path[],
   amountIn: BigNumber
-): Promise<BestPathsWithAmounts> {
+): Promise<BestAmountWithPaths> {
   const pathAmounts: BigNumber[][] = await splitAmount(amountIn, paths.length);
 
   const groups: GroupAmounts[] = [];

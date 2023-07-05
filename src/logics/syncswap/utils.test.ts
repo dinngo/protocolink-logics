@@ -3,7 +3,7 @@ import { IRouter } from './contracts/Router';
 import { RoutePools, SwapPath } from './types';
 import * as common from '@protocolink/common';
 import { expect } from 'chai';
-import { findAllPossiblePaths, findBestAmountsForPathsExactIn, toSwapPaths } from './utils';
+import { findAllPossiblePaths, findBestAmountFromPaths, toSwapPaths } from './utils';
 import { getConfig } from './configs';
 import { zksyncTokens } from './tokens';
 
@@ -247,7 +247,7 @@ describe('SyncSwap utils functions', function () {
         routePools,
         config.baseTokenAddresses
       );
-      const bestAmounts = await findBestAmountsForPathsExactIn(this.chainId, paths, input.amountWei);
+      const bestAmounts = await findBestAmountFromPaths(this.chainId, paths, input.amountWei);
       expect(bestAmounts.amountOut).to.eq(expected.amountOut);
       expect(bestAmounts.paths).to.deep.eq(expected.paths);
       expect(toSwapPaths(bestAmounts.paths, account)).to.deep.eq(expected.swapPaths);

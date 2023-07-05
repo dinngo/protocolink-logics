@@ -60,7 +60,7 @@ export interface SwapPath {
   amountIn: BigNumberish;
 }
 
-export interface BestPathsWithAmounts {
+export interface BestAmountWithPaths {
   amountOut: BigNumber;
   paths: SwapPath[];
 }

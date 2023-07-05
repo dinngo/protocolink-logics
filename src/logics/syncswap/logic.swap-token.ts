@@ -3,7 +3,7 @@ import { RouteHelper__factory, Router__factory } from './contracts';
 import { SwapPath } from './types';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
-import { findAllPossiblePaths, findBestAmountsForPathsExactIn, normalizeRoutePools, toSwapPaths } from './utils';
+import { findAllPossiblePaths, findBestAmountFromPaths, normalizeRoutePools, toSwapPaths } from './utils';
 import { getConfig, getContractAddress, supportedChainIds } from './configs';
 
 export type SwapTokenLogicTokenList = common.Token[];
@@ -46,10 +46,10 @@ export class SwapTokenLogic
       normalizeRoutePools(routePools),
       config.baseTokenAddresses
     );
-    const bestAmounts = await findBestAmountsForPathsExactIn(this.chainId, paths, input.amountWei);
-    const output = new common.TokenAmount(tokenOut).setWei(bestAmounts.amountOut);
+    const bestAmount = await findBestAmountFromPaths(this.chainId, paths, input.amountWei);
+    const output = new common.TokenAmount(tokenOut).setWei(bestAmount.amountOut);
 
-    return { input, output, paths: bestAmounts.paths };
+    return { input, output, paths: bestAmount.paths };
   }
 
   // https://syncswap.gitbook.io/api-documentation/guides/request-swap-with-router/swap-eth-for-dai
