@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@paraswap/sdk": "^6.2.1",
-    "@protocolink/common": "^0.2.8",
+    "@protocolink/common": "^0.2.10",
     "@protocolink/core": "^0.2.6",
     "@types/lodash": "^4.14.195",
     "@uniswap/permit2-sdk": "^1.2.0",

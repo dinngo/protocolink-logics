@@ -10,14 +10,7 @@ export interface CustomDataLogicFields {
 
 @core.LogicDefinitionDecorator()
 export class CustomDataLogic extends core.Logic implements core.LogicBuilderInterface {
-  static readonly supportedChainIds = [
-    common.ChainId.mainnet,
-    common.ChainId.polygon,
-    common.ChainId.arbitrum,
-    common.ChainId.optimism,
-    common.ChainId.avalanche,
-    common.ChainId.fantom,
-  ];
+  static readonly supportedChainIds = common.networks.map(({ chainId }) => chainId);
 
   async build(fields: CustomDataLogicFields) {
     const { to, data } = fields;

@@ -1,7 +1,7 @@
-import { BigNumberish, utils } from 'ethers';
-import { axios } from 'src/utils';
+import { BigNumberish } from 'ethers';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
+import { get1InchTokens } from 'src/utils';
 
 export type SendTokenLogicTokenList = common.Token[];
 
@@ -9,32 +9,10 @@ export type SendTokenLogicFields = core.TokenToUserFields;
 
 @core.LogicDefinitionDecorator()
 export class SendTokenLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicBuilderInterface {
-  static readonly supportedChainIds = [
-    common.ChainId.mainnet,
-    common.ChainId.polygon,
-    common.ChainId.arbitrum,
-    common.ChainId.optimism,
-    common.ChainId.avalanche,
-    common.ChainId.fantom,
-  ];
+  static readonly supportedChainIds = common.networks.map(({ chainId }) => chainId);
 
-  async getTokenList() {
-    const { data } = await axios.get<{
-      tokens: Record<string, { symbol: string; name: string; decimals: number; address: string }>;
-    }>(`https://api.1inch.io/v5.0/${this.chainId}/tokens`);
-
-    const tokenList: SendTokenLogicTokenList = [];
-    Object.keys(data.tokens).forEach((key) => {
-      const token = data.tokens[key];
-      const address = utils.getAddress(token.address);
-      tokenList.push(
-        address === common.ELASTIC_ADDRESS
-          ? this.nativeToken
-          : new common.Token(this.chainId, address, token.decimals, token.symbol, token.name)
-      );
-    });
-
-    return tokenList;
+  async getTokenList(): Promise<SendTokenLogicTokenList> {
+    return get1InchTokens(this.chainId);
   }
 
   async build(fields: SendTokenLogicFields) {

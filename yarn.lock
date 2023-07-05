@@ -1015,10 +1015,10 @@
     bignumber.js "^9.0.2"
     ts-essentials "^9.1.2"
 
-"@protocolink/common@^0.2.6", "@protocolink/common@^0.2.8":
-  version "0.2.8"
-  resolved "https://registry.yarnpkg.com/@protocolink/common/-/common-0.2.8.tgz#9f7887dd93b3d050be33359db4ac728e4a7ae58b"
-  integrity sha512-DQ+jigo8IU6kcmWNbtydKOwPzVNSMaO+2yse0/Fvxd3rN+JDuNhwr0wdDjoLFMpKwmY+htED4YFHKeunmadJOw==
+"@protocolink/common@^0.2.10", "@protocolink/common@^0.2.6":
+  version "0.2.10"
+  resolved "https://registry.yarnpkg.com/@protocolink/common/-/common-0.2.10.tgz#9790afa190ebac259a1ac96a7db70556518dd9c1"
+  integrity sha512-XLjkgSorMLVoDjim5qJghsYgla0fPx3uwg12Bm4GoEqNcichSxv7u4Y8hc2XK5vUO2MMSof0TnQ3KOcSBcgrrQ==
   dependencies:
     "@types/lodash" "^4.14.195"
     bignumber.js "^9.1.1"
@@ -1026,6 +1026,7 @@
     lodash "^4.17.21"
     tiny-invariant "^1.3.1"
     type-fest "^3.12.0"
+    zksync-web3 "^0.14.3"
 
 "@protocolink/core@^0.2.6":
   version "0.2.6"
@@ -5781,3 +5782,8 @@ yocto-queue@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
+
+zksync-web3@^0.14.3:
+  version "0.14.3"
+  resolved "https://registry.yarnpkg.com/zksync-web3/-/zksync-web3-0.14.3.tgz#64ac2a16d597464c3fc4ae07447a8007631c57c9"
+  integrity sha512-hT72th4AnqyLW1d5Jlv8N2B/qhEnl2NePK2A3org7tAa24niem/UAaHMkEvmWI3SF9waYUPtqAtjpf+yvQ9zvQ==

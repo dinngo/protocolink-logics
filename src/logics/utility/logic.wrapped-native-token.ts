@@ -13,14 +13,7 @@ export class WrappedNativeTokenLogic
   extends core.Logic
   implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
 {
-  static readonly supportedChainIds = [
-    common.ChainId.mainnet,
-    common.ChainId.polygon,
-    common.ChainId.arbitrum,
-    common.ChainId.optimism,
-    common.ChainId.avalanche,
-    common.ChainId.fantom,
-  ];
+  static readonly supportedChainIds = common.networks.map(({ chainId }) => chainId);
 
   getTokenList() {
     const tokenList: WrappedNativeTokenLogicTokenList = [
