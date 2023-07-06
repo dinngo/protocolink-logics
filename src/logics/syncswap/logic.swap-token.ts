@@ -25,6 +25,7 @@ export class SwapTokenLogic
     return getConfig(this.chainId).tokens;
   }
 
+  // https://jet-uncle-e97.notion.site/SyncSwap-Routing-Resource-db736e425b5240cc8e257c3f313e20b9
   async quote(params: SwapTokenLogicParams) {
     const { input, tokenOut } = params;
     const tokenInAddress = input.token.wrapped.address;
