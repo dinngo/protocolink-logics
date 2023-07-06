@@ -53,7 +53,7 @@ describe('CompoundV2 WithdrawLogic', function () {
     ];
 
     testCases.forEach(({ fields }) => {
-      it(`${fields.input.token.symbol} to ${fields.output.token.symbol}${
+      it(`${fields.output.token.symbol} to ${fields.output.token.symbol}${
         fields.balanceBps ? ' with balanceBps' : ''
       }`, async function () {
         const routerLogic = await logic.build(fields);

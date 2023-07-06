@@ -12,21 +12,21 @@ export const configs: Config[] = [
     chainId: common.ChainId.mainnet,
     contract: {
       Vault: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-      BalancerV2FlashLoanCallback: '0x6b0C384B0495f8f5d713091a0185E182298eE74A',
+      BalancerV2FlashLoanCallback: '0xCD8063C4Edb42f6eC6d41295268D60Fa525401A4',
     },
   },
   {
     chainId: common.ChainId.polygon,
     contract: {
       Vault: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-      BalancerV2FlashLoanCallback: '',
+      BalancerV2FlashLoanCallback: '0xCD8063C4Edb42f6eC6d41295268D60Fa525401A4',
     },
   },
   {
     chainId: common.ChainId.arbitrum,
     contract: {
       Vault: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-      BalancerV2FlashLoanCallback: '',
+      BalancerV2FlashLoanCallback: '0xCD8063C4Edb42f6eC6d41295268D60Fa525401A4',
     },
   },
   {

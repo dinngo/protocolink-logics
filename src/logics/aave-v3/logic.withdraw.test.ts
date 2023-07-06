@@ -74,7 +74,7 @@ describe('AaveV3 WithdrawLogic', function () {
     ];
 
     testCases.forEach(({ fields }) => {
-      it(`withdraw ${fields.input.token.symbol}${fields.balanceBps ? ' with balanceBps' : ''}`, async function () {
+      it(`withdraw ${fields.output.token.symbol}${fields.balanceBps ? ' with balanceBps' : ''}`, async function () {
         const routerLogic = await logic.build(fields, { account });
         const sig = routerLogic.data.substring(0, 10);
         const { input, output, balanceBps } = fields;
