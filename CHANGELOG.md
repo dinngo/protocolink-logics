@@ -1,5 +1,13 @@
 # @protocolink/logics
 
+## 0.2.5
+
+### Patch Changes
+
+- 4f702d6: Updated dependencies
+  - @protocolink/core@0.2.11
+- 04b67c6: update aave v3, balancer v2 FlashLoanCallback addresses
+
 ## 0.2.4
 
 ### Patch Changes
