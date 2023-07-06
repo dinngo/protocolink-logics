@@ -1,5 +1,30 @@
 # @protocolink/logics
 
+## 0.2.3
+
+### Patch Changes
+
+- 7b603c8: cli add tokens cmd
+- 5470af5: add compound v3 configs
+- c91bfcd: add permit2 configs
+- 9f3dce9: add paraswap v5 configs
+- 1b45c56: add balancer v2 configs
+- f1f9772: add aave v2 configs
+- 979d518: add syncswap swap token logic
+- 21efcd7: refactor syncswap swap token utils functions
+- 45d8ce0: add compound v2 configs
+- 7b7c9cd: syncswap swap token quote add reference url
+- 4c3f86d: revert zksync e2e test
+- 9b5c03f: Updated dependencies
+  - @protocolink/common@0.2.8
+- 7d2d843: utils add get1inchTokens
+- 045ea68: add aave v3 configs
+- f247b6c: update for review comments
+  - https://github.com/dinngo/protocolink-logics/pull/20#discussion_r1252605565
+  - https://github.com/dinngo/protocolink-logics/pull/20#pullrequestreview-1512236225
+  - https://github.com/dinngo/protocolink-logics/pull/20#discussion_r1252484687
+  - https://github.com/dinngo/protocolink-logics/pull/20#discussion_r1252491176
+
 ## 0.2.2
 
 ### Patch Changes
