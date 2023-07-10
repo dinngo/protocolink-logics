@@ -1,8 +1,7 @@
-import { COMP } from './tokens';
+import { COMP, MarketId, getContractAddress } from './configs';
 import { ClaimLogic, ClaimLogicFields } from './logic.claim';
 import { CometRewards__factory } from './contracts';
 import { LogicTestCase } from 'test/types';
-import { MarketId, getContractAddress } from './configs';
 import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
 import { expect } from 'chai';

@@ -1,7 +1,6 @@
-import { COMP } from './tokens';
+import { COMP, getContractAddress, getMarket } from './configs';
 import { CometRewards__factory, Comet__factory } from './contracts';
 import * as common from '@protocolink/common';
-import { getContractAddress, getMarket } from './configs';
 
 export class Service extends common.Web3Toolkit {
   async getCToken(marketId: string) {

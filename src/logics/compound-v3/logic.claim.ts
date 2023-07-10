@@ -1,9 +1,8 @@
-import { COMP } from './tokens';
+import { COMP, getContractAddress, getMarket, supportedChainIds } from './configs';
 import { CometRewards__factory } from './contracts';
 import { Service } from './service';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
-import { getContractAddress, getMarket, supportedChainIds } from './configs';
 
 export type ClaimLogicTokenList = [common.Token];
 

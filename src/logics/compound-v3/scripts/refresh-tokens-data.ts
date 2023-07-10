@@ -1,12 +1,11 @@
 import { Service } from '../service';
 import * as common from '@protocolink/common';
 import fs from 'fs-extra';
-import { getMarkets } from '../configs';
+import { getMarkets, supportedChainIds } from '../configs';
 import { resolve } from 'path';
 
 export default async function () {
-  const chainIds = [common.ChainId.mainnet, common.ChainId.polygon];
-  for (const chainId of chainIds) {
+  for (const chainId of supportedChainIds) {
     const markets = getMarkets(chainId);
     const service = new Service(chainId);
 

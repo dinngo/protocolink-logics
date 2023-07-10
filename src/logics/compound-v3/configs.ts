@@ -17,6 +17,7 @@ export interface Config {
   chainId: number;
   contract: Record<ContractNames, string>;
   markets: MarketConfig[];
+  COMP: common.Token;
 }
 
 export const configs: Config[] = [
@@ -37,6 +38,13 @@ export const configs: Config[] = [
         baseTokenAddress: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
       },
     ],
+    COMP: new common.Token(
+      common.ChainId.mainnet,
+      '0xc00e94Cb662C3520282E6f5717214004A7f26888',
+      18,
+      'COMP',
+      'Compound'
+    ),
   },
   {
     chainId: common.ChainId.polygon,
@@ -50,10 +58,37 @@ export const configs: Config[] = [
         baseTokenAddress: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
       },
     ],
+    COMP: new common.Token(
+      common.ChainId.polygon,
+      '0x8505b9d2254A7Ae468c0E9dd10Ccea3A837aef5c',
+      18,
+      'COMP',
+      '(PoS) Compound'
+    ),
+  },
+  {
+    chainId: common.ChainId.arbitrum,
+    contract: {
+      CometRewards: '0x45939657d1CA34A8FA39A924B71D28Fe8431e581',
+    },
+    markets: [
+      {
+        id: MarketId.USDC,
+        cometAddress: '0xA5EDBDD9646f8dFF606d7448e414884C7d905dCA',
+        baseTokenAddress: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
+      },
+    ],
+    COMP: new common.Token(
+      common.ChainId.arbitrum,
+      '0x354A6dA3fcde098F8389cad84b0182725c6C91dE',
+      18,
+      'COMP',
+      'Compound'
+    ),
   },
 ];
 
-export const [supportedChainIds, configMap, marketMap] = configs.reduce(
+export const [supportedChainIds, configMap, marketMap, COMPMap] = configs.reduce(
   (accumulator, config) => {
     accumulator[0].push(config.chainId);
     accumulator[1][config.chainId] = config;
@@ -61,10 +96,16 @@ export const [supportedChainIds, configMap, marketMap] = configs.reduce(
     for (const market of config.markets) {
       accumulator[2][config.chainId][market.id] = market;
     }
+    accumulator[3][config.chainId] = config.COMP;
 
     return accumulator;
   },
-  [[], {}, {}] as [number[], Record<number, Config>, Record<number, Record<string, MarketConfig>>]
+  [[], {}, {}, {}] as [
+    number[],
+    Record<number, Config>,
+    Record<number, Record<string, MarketConfig>>,
+    Record<number, common.Token>
+  ]
 );
 
 export function getMarkets(chainId: number) {
@@ -77,4 +118,8 @@ export function getMarket(chainId: number, id: string) {
 
 export function getContractAddress(chainId: number, name: ContractNames) {
   return configMap[chainId].contract[name];
+}
+
+export function COMP(chainId: number) {
+  return COMPMap[chainId];
 }
