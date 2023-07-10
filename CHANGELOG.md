@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 0.2.6
+
+### Patch Changes
+
+- 5784590: compound v3 logic add arbitrum config
+
 ## 0.2.5
 
 ### Patch Changes
