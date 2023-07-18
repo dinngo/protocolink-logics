@@ -1,5 +1,13 @@
 # @protocolink/logics
 
+## 0.2.7
+
+### Patch Changes
+
+- d385927: Updated dependencies
+  - @protocolink/common@0.2.11
+  - @protocolink/core@0.2.12
+
 ## 0.2.6
 
 ### Patch Changes
