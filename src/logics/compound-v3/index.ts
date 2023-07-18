@@ -1,5 +1,6 @@
 export * from './configs';
 export * from './contracts';
+export * from './contracts/Comet';
 export * from './logic.borrow';
 export * from './logic.claim';
 export * from './logic.repay';
