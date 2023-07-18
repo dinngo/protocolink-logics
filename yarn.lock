@@ -1020,10 +1020,10 @@
     bignumber.js "^9.0.2"
     ts-essentials "^9.1.2"
 
-"@protocolink/common@^0.2.11":
-  version "0.2.11"
-  resolved "https://registry.yarnpkg.com/@protocolink/common/-/common-0.2.11.tgz#7eac52f8c2c5025bef6c288534a773f4362aef7c"
-  integrity sha512-6mVGLh2sIcNow7G2P/L+0Qlh1vq5/cd+CYK/qXAk8DQc4hmUeNQGWQ3L/aF2WzpWp8l+UdkL0NqWFckHrPFyfA==
+"@protocolink/common@^0.2.11", "@protocolink/common@^0.2.15":
+  version "0.2.15"
+  resolved "https://registry.yarnpkg.com/@protocolink/common/-/common-0.2.15.tgz#2e396f632ffe9ddd76edececfb3526d80f89bc2a"
+  integrity sha512-+EA42/FHUPntVS0IzXuabtAqdK1oMQ4S10K8qSWsnPC6qm+84saxVT+UOy++8SyNuEzxEPuAo+/h08eiimQjLg==
   dependencies:
     "@types/lodash" "^4.14.195"
     bignumber.js "^9.1.1"
@@ -1033,12 +1033,12 @@
     type-fest "^3.12.0"
     zksync-web3 "^0.14.3"
 
-"@protocolink/core@^0.2.12":
-  version "0.2.12"
-  resolved "https://registry.yarnpkg.com/@protocolink/core/-/core-0.2.12.tgz#a1658e7df07444a03bfc23c788e704b21b165af2"
-  integrity sha512-CaJ5T84/VLtmcNKgr73gl72dBhBjeYk0a/YyUB/2cGFPtUPpLNZKGuBgSCCzQmZ10QLrTwOfgvzEW3D9vV9Ugg==
+"@protocolink/core@^0.2.14":
+  version "0.2.14"
+  resolved "https://registry.yarnpkg.com/@protocolink/core/-/core-0.2.14.tgz#1befb32295abc8e3de63e2c7581e6b942aba3c45"
+  integrity sha512-xzUWHLPQcg4dDlw6TXPjoD66npqqoPZQQpXZrkp6S6yO81lI0VppwhhoyuDt2FQuAn353gAKP4u+xgFAnQFMyw==
   dependencies:
-    "@protocolink/common" "^0.2.11"
+    "@protocolink/common" "^0.2.15"
     ethers "^5.7.2"
     tiny-invariant "^1.3.1"
     zksync-web3 "^0.14.3"

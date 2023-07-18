@@ -5,7 +5,7 @@ import path from 'path';
 
 describe('Protocol Logics', async function () {
   const cwd = process.cwd();
-  const protocols = fs
+  const protocolIds = fs
     .readdirSync(path.join(cwd, 'src', 'logics'), { withFileTypes: true })
     .reduce((accumulator, dir) => {
       if (dir.isDirectory()) accumulator.push(dir.name);
@@ -13,9 +13,9 @@ describe('Protocol Logics', async function () {
     }, [] as string[]);
 
   context('Test logic definition', function () {
-    for (const protocol of protocols) {
-      context(protocol, function () {
-        const protocolPath = path.join(cwd, 'src', protocol);
+    for (const protocolId of protocolIds) {
+      context(protocolId, function () {
+        const protocolPath = path.join(cwd, 'src', 'logics', protocolId);
         const logicFiles = glob.sync('logic.*[!.test].ts', { cwd: protocolPath });
         for (const logicFile of logicFiles) {
           const logicId = logicFile.split('.')[1];
@@ -26,7 +26,7 @@ describe('Protocol Logics', async function () {
               const logic = imports[key];
               expect(logic).to.not.be.undefined;
               expect(logic.id).to.eq(logicId);
-              expect(logic.protocol).to.eq(protocol);
+              expect(logic.protocolId).to.eq(protocolId);
               expect(logic.supportedChainIds).to.be.a('array');
             }
           });
@@ -37,6 +37,6 @@ describe('Protocol Logics', async function () {
 
   it('Test exports', async function () {
     const exports = await import('./index');
-    expect(Object.keys(exports)).to.include.members(protocols.map((protocol) => protocol.replace(/-/g, '')));
+    expect(Object.keys(exports)).to.include.members(protocolIds.map((protocolId) => protocolId.replace(/-/g, '')));
   });
 });
