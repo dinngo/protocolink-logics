@@ -12,28 +12,28 @@ export const configs: Config[] = [
     chainId: common.ChainId.mainnet,
     contract: {
       Vault: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-      BalancerV2FlashLoanCallback: '0xCD8063C4Edb42f6eC6d41295268D60Fa525401A4',
+      BalancerV2FlashLoanCallback: '0x03EdE4da71B8c404f7a2d61b8Ad367edEFc90Af8',
     },
   },
   {
     chainId: common.ChainId.polygon,
     contract: {
       Vault: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-      BalancerV2FlashLoanCallback: '0xCD8063C4Edb42f6eC6d41295268D60Fa525401A4',
+      BalancerV2FlashLoanCallback: '0x03EdE4da71B8c404f7a2d61b8Ad367edEFc90Af8',
     },
   },
   {
     chainId: common.ChainId.arbitrum,
     contract: {
       Vault: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-      BalancerV2FlashLoanCallback: '0xCD8063C4Edb42f6eC6d41295268D60Fa525401A4',
+      BalancerV2FlashLoanCallback: '0x03EdE4da71B8c404f7a2d61b8Ad367edEFc90Af8',
     },
   },
   {
     chainId: common.ChainId.optimism,
     contract: {
       Vault: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-      BalancerV2FlashLoanCallback: '',
+      BalancerV2FlashLoanCallback: '0x03EdE4da71B8c404f7a2d61b8Ad367edEFc90Af8',
     },
   },
 ];
