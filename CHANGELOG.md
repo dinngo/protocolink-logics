@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 0.2.9
+
+### Patch Changes
+
+- aa27d39: update aave v3, balance v2 flash loan callback addresses
+
 ## 0.2.8
 
 ### Patch Changes
