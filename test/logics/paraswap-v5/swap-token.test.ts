@@ -15,35 +15,62 @@ describe('Test ParaswapV5 SwapToken Logic', function () {
     chainId = await getChainId();
     [, user] = await hre.ethers.getSigners();
     await claimToken(chainId, user.address, mainnetTokens.ETH, '100');
-    await claimToken(chainId, user.address, mainnetTokens.USDC, '100');
+    await claimToken(chainId, user.address, mainnetTokens.USDC, '3000');
   });
 
   snapshotAndRevertEach();
 
   const testCases = [
     {
-      input: new common.TokenAmount(mainnetTokens.ETH, '1'),
-      tokenOut: mainnetTokens.USDC,
-      slippage: 500,
+      params: {
+        input: new common.TokenAmount(mainnetTokens.ETH, '1'),
+        tokenOut: mainnetTokens.USDC,
+        slippage: 500,
+      },
     },
     {
-      input: new common.TokenAmount(mainnetTokens.USDC, '1'),
-      tokenOut: mainnetTokens.ETH,
-      slippage: 500,
+      params: {
+        input: new common.TokenAmount(mainnetTokens.USDC, '1'),
+        tokenOut: mainnetTokens.ETH,
+        slippage: 500,
+      },
     },
     {
-      input: new common.TokenAmount(mainnetTokens.USDC, '1'),
-      tokenOut: mainnetTokens.DAI,
-      slippage: 500,
+      params: {
+        input: new common.TokenAmount(mainnetTokens.USDC, '1'),
+        tokenOut: mainnetTokens.DAI,
+        slippage: 500,
+      },
+    },
+    {
+      params: {
+        tokenIn: mainnetTokens.ETH,
+        output: new common.TokenAmount(mainnetTokens.USDC, '1'),
+        slippage: 500,
+      },
+    },
+    {
+      params: {
+        tokenIn: mainnetTokens.USDC,
+        output: new common.TokenAmount(mainnetTokens.ETH, '1'),
+        slippage: 500,
+      },
+    },
+    {
+      params: {
+        tokenIn: mainnetTokens.USDC,
+        output: new common.TokenAmount(mainnetTokens.DAI, '1'),
+        slippage: 500,
+      },
     },
   ];
 
-  testCases.forEach(({ input, tokenOut, slippage }, i) => {
+  testCases.forEach(({ params }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. get output
       const logicParaswapV5SwapToken = new paraswapv5.SwapTokenLogic(chainId);
-      const quotation = await logicParaswapV5SwapToken.quote({ input, tokenOut, slippage });
-      const { output } = quotation;
+      const quotation = await logicParaswapV5SwapToken.quote(params);
+      const { input, output } = quotation;
 
       // 2. build funds, tokensReturn
       const funds = new common.TokenAmounts(input);

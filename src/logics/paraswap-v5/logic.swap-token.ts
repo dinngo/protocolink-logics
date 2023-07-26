@@ -1,4 +1,4 @@
-import { BuildSwapTxInput, constructSimpleSDK } from '@paraswap/sdk';
+import { BuildSwapTxInput, SwapSide, constructSimpleSDK } from '@paraswap/sdk';
 import { TokenList } from '@uniswap/token-lists';
 import { axios } from 'src/utils';
 import * as common from '@protocolink/common';
@@ -7,7 +7,7 @@ import { getTokenListUrls, supportedChainIds, tokenTransferProxyAddress } from '
 
 export type SwapTokenLogicTokenList = common.Token[];
 
-export type SwapTokenLogicParams = core.TokenToTokenExactInParams<{ slippage?: number }>;
+export type SwapTokenLogicParams = core.TokenToTokenParams<{ slippage?: number }>;
 
 export type SwapTokenLogicFields = core.TokenToTokenExactInFields<
   Pick<BuildSwapTxInput, 'partner' | 'partnerAddress'> & { slippage?: number }
@@ -44,18 +44,37 @@ export class SwapTokenLogic
   }
 
   async quote(params: SwapTokenLogicParams) {
-    const { input, tokenOut, slippage } = params;
+    let input: common.TokenAmount;
+    let output: common.TokenAmount;
+    if (core.isTokenToTokenExactInParams(params)) {
+      let tokenOut: common.Token;
+      ({ input, tokenOut } = params);
 
-    const { destAmount } = await this.sdk.swap.getRate({
-      srcToken: input.token.elasticAddress,
-      srcDecimals: input.token.decimals,
-      amount: input.amountWei.toString(),
-      destToken: tokenOut.elasticAddress,
-      destDecimals: tokenOut.decimals,
-    });
-    const output = new common.TokenAmount(tokenOut).setWei(destAmount);
+      const { destAmount } = await this.sdk.swap.getRate({
+        srcToken: input.token.elasticAddress,
+        srcDecimals: input.token.decimals,
+        amount: input.amountWei.toString(),
+        destToken: tokenOut.elasticAddress,
+        destDecimals: tokenOut.decimals,
+        side: SwapSide.SELL,
+      });
+      output = new common.TokenAmount(tokenOut).setWei(destAmount);
+    } else {
+      let tokenIn: common.Token;
+      ({ tokenIn, output } = params);
 
-    return { input, output, slippage };
+      const { srcAmount } = await this.sdk.swap.getRate({
+        srcToken: tokenIn.elasticAddress,
+        srcDecimals: tokenIn.decimals,
+        amount: output.amountWei.toString(),
+        destToken: output.token.elasticAddress,
+        destDecimals: output.token.decimals,
+        side: SwapSide.BUY,
+      });
+      input = new common.TokenAmount(tokenIn).setWei(srcAmount);
+    }
+
+    return { input, output, slippage: params.slippage };
   }
 
   async build(fields: SwapTokenLogicFields, options: SwapTokenLogicOptions) {
