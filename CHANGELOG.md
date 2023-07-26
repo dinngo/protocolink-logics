@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 0.2.10
+
+### Patch Changes
+
+- 637d849: paraswap v5 logic quotation support buy trade type
+
 ## 0.2.9
 
 ### Patch Changes
