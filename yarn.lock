@@ -1033,10 +1033,10 @@
     type-fest "^3.12.0"
     zksync-web3 "^0.14.3"
 
-"@protocolink/core@^0.2.15":
-  version "0.2.15"
-  resolved "https://registry.yarnpkg.com/@protocolink/core/-/core-0.2.15.tgz#ea490d7a6ec69636cfb488705b805d921f0b22f4"
-  integrity sha512-NZePxZD34D0UfQZQoCu2i5xtUu4txZMxJf5WPmoyhq9FsYWBUOIH3Cuk+mP/UQGtwEm1qXlW4/ZVzLdIOtlfCw==
+"@protocolink/core@^0.2.16":
+  version "0.2.16"
+  resolved "https://registry.yarnpkg.com/@protocolink/core/-/core-0.2.16.tgz#a419ff151a7a5647e0237a7f246f7b1bc8e48a5e"
+  integrity sha512-DLP3QNJ3j/R7ZTZS54vM+8P84oI2F1wBCDyTDxMtP/bDwI6oUY7ymTT40qNjtiAuDEb5xSuItzXi5BlpNQopAw==
   dependencies:
     "@protocolink/common" "^0.2.15"
     ethers "^5.7.2"
