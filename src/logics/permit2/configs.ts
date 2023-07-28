@@ -32,6 +32,24 @@ export const configs: Config[] = [
       Permit2: '0x000000000022D473030F116dDEE9F6B43aC78BA3',
     },
   },
+  {
+    chainId: common.ChainId.avalanche,
+    contract: {
+      Permit2: '0x000000000022D473030F116dDEE9F6B43aC78BA3',
+    },
+  },
+  {
+    chainId: common.ChainId.fantom,
+    contract: {
+      Permit2: '0x000000000022D473030F116dDEE9F6B43aC78BA3',
+    },
+  },
+  {
+    chainId: common.ChainId.zksync,
+    contract: {
+      Permit2: '0x87C0878B54c174199f438470FD74B3F7e1Def295',
+    },
+  },
 ];
 
 export const [supportedChainIds, configMap] = configs.reduce(
