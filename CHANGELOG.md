@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 0.2.11
+
+### Patch Changes
+
+- 5c5aea0: permit2 logic add avalanche, fantom, zksync addresses
+
 ## 0.2.10
 
 ### Patch Changes
