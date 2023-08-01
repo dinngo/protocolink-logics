@@ -11,7 +11,6 @@ import * as utils from 'test/utils';
 describe('Test AaveV3 FlashLoan Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
-  let flashLoanPremiumTotal: number;
 
   before(async function () {
     chainId = await getChainId();
@@ -20,9 +19,6 @@ describe('Test AaveV3 FlashLoan Logic', function () {
     await claimToken(chainId, user.address, mainnetTokens.USDC, '2');
     await claimToken(chainId, user.address, mainnetTokens.USDT, '2');
     await claimToken(chainId, user.address, mainnetTokens.DAI, '2');
-
-    const service = new aavev3.Service(chainId, hre.ethers.provider);
-    flashLoanPremiumTotal = await service.getFlashLoanPremiumTotal();
   });
 
   snapshotAndRevertEach();
@@ -34,31 +30,32 @@ describe('Test AaveV3 FlashLoan Logic', function () {
 
   testCases.forEach(({ outputs }, i) => {
     it(`case ${i + 1}`, async function () {
-      // 1. build funds and router logics for flash loan by flash loan fee
+      // 1. get flash loan quotation
+      const logicAaveV3FlashLoan = new aavev3.FlashLoanLogic(chainId);
+      const { loans, repays, fees } = await logicAaveV3FlashLoan.quote({ outputs });
+
+      // 2. build funds and router logics for flash loan by flash loan fee
       const funds = new common.TokenAmounts();
       const flashLoanRouterLogics: core.IParam.LogicStruct[] = [];
-      const logicUtilitySendToken = new utility.SendTokenLogic(chainId);
-      for (const output of outputs.toArray()) {
-        const feeWei = common.calcFee(output.amountWei, flashLoanPremiumTotal);
-        const fund = new common.TokenAmount(output.token).addWei(feeWei);
-        funds.add(fund);
+      const utilitySendTokenLogic = new utility.SendTokenLogic(chainId);
+      for (let i = 0; i < fees.length; i++) {
+        funds.add(fees.at(i).clone());
         flashLoanRouterLogics.push(
-          await logicUtilitySendToken.build({
-            input: output.clone().addWei(feeWei),
+          await utilitySendTokenLogic.build({
+            input: repays.at(i),
             recipient: aavev3.getContractAddress(chainId, 'AaveV3FlashLoanCallback'),
           })
         );
       }
 
-      // 2. build router logics
+      // 3. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
 
       const params = core.newCallbackParams(flashLoanRouterLogics);
-      const logicAaveV3FlashLoan = new aavev3.FlashLoanLogic(chainId);
-      routerLogics.push(await logicAaveV3FlashLoan.build({ outputs, params }));
+      routerLogics.push(await logicAaveV3FlashLoan.build({ outputs: loans, params }));
 
-      // 3. send router tx
+      // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics });
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
       for (const fund of funds.toArray()) {
