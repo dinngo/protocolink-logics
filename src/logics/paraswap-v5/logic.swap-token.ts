@@ -28,12 +28,20 @@ export class SwapTokenLogic
 
   async getTokenList() {
     const tokenListUrls = getTokenListUrls(this.chainId);
-    const tokenLists = await Promise.all(tokenListUrls.map((tokenListUrl) => axios.get<TokenList>(tokenListUrl)));
+    const tokenLists: TokenList[] = [];
+    await Promise.all(
+      tokenListUrls.map(async (tokenListUrl) => {
+        try {
+          const { data } = await axios.get<TokenList>(tokenListUrl);
+          tokenLists.push(data);
+        } catch {}
+      })
+    );
 
     const tmp: Record<string, boolean> = { [this.nativeToken.address]: true };
     const tokenList: SwapTokenLogicTokenList = [this.nativeToken];
-    for (const { data } of tokenLists) {
-      for (const { chainId, address, decimals, symbol, name } of data.tokens) {
+    for (const { tokens } of tokenLists) {
+      for (const { chainId, address, decimals, symbol, name } of tokens) {
         if (tmp[address] || chainId !== this.chainId || !name || !symbol || !decimals) continue;
         tokenList.push(new common.Token(chainId, address, decimals, symbol, name));
         tmp[address] = true;

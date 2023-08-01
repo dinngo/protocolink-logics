@@ -27,11 +27,23 @@ export class FlashLoanLogic
 {
   static readonly supportedChainIds = supportedChainIds;
 
+  get callbackAddress() {
+    return getContractAddress(this.chainId, 'AaveV3FlashLoanCallback');
+  }
+
   async getTokenList() {
     const service = new Service(this.chainId, this.provider);
-    const tokens: FlashLoanLogicTokenList = await service.getAssets();
+    const tokens = await service.getAssets();
+    const { assetInfos } = await service.getFlashLoanConfiguration(tokens);
 
-    return tokens;
+    const tokenList: FlashLoanLogicTokenList = [];
+    for (let i = 0; i < assetInfos.length; i++) {
+      const { isActive, isPaused, isFlashLoanEnabled } = assetInfos[i];
+      if (!isActive || isPaused || !isFlashLoanEnabled) continue;
+      tokenList.push(tokens[i]);
+    }
+
+    return tokenList;
   }
 
   async quote(params: FlashLoanLogicParams) {
@@ -77,7 +89,7 @@ export class FlashLoanLogic
       modes.push(InterestRateMode.none);
     });
     const data = Pool__factory.createInterface().encodeFunctionData('flashLoan', [
-      getContractAddress(this.chainId, 'AaveV3FlashLoanCallback'),
+      this.callbackAddress,
       assets,
       amounts,
       modes,
@@ -86,7 +98,7 @@ export class FlashLoanLogic
       referralCode,
     ]);
 
-    const callback = getContractAddress(this.chainId, 'AaveV3FlashLoanCallback');
+    const callback = this.callbackAddress;
 
     return core.newLogic({ to, data, callback });
   }

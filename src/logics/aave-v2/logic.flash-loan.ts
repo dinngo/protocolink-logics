@@ -24,11 +24,23 @@ export type FlashLoanLogicFields = core.FlashLoanFields<{ referralCode?: number 
 export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicBuilderInterface {
   static readonly supportedChainIds = supportedChainIds;
 
+  get callbackAddress() {
+    return getContractAddress(this.chainId, 'AaveV2FlashLoanCallback');
+  }
+
   async getTokenList() {
     const service = new Service(this.chainId, this.provider);
-    const tokens: FlashLoanLogicTokenList = await service.getAssets();
+    const tokens = await service.getAssets();
+    const { assetInfos } = await service.getFlashLoanConfiguration(tokens);
 
-    return tokens;
+    const tokenList: FlashLoanLogicTokenList = [];
+    for (let i = 0; i < assetInfos.length; i++) {
+      const { isActive } = assetInfos[i];
+      if (!isActive) continue;
+      tokenList.push(tokens[i]);
+    }
+
+    return tokenList;
   }
 
   async quote(params: FlashLoanLogicParams) {
@@ -72,7 +84,7 @@ export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInt
       modes.push(InterestRateMode.none);
     });
     const data = LendingPool__factory.createInterface().encodeFunctionData('flashLoan', [
-      getContractAddress(this.chainId, 'AaveV2FlashLoanCallback'),
+      this.callbackAddress,
       assets,
       amounts,
       modes,
@@ -81,7 +93,7 @@ export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInt
       referralCode,
     ]);
 
-    const callback = getContractAddress(this.chainId, 'AaveV2FlashLoanCallback');
+    const callback = this.callbackAddress;
 
     return core.newLogic({ to, data, callback });
   }

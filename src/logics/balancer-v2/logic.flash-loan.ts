@@ -24,6 +24,10 @@ export type FlashLoanLogicFields = core.FlashLoanFields;
 export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicBuilderInterface {
   static readonly supportedChainIds = supportedChainIds;
 
+  get callbackAddress() {
+    return getContractAddress(this.chainId, 'BalancerV2FlashLoanCallback');
+  }
+
   async getTokenList() {
     const { data } = await axios.get<TokenList>(
       'https://raw.githubusercontent.com/balancer/tokenlists/main/generated/listed-old.tokenlist.json'
@@ -78,13 +82,13 @@ export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInt
       amounts.push(output.amountWei);
     }
     const data = Vault__factory.createInterface().encodeFunctionData('flashLoan', [
-      getContractAddress(this.chainId, 'BalancerV2FlashLoanCallback'),
+      this.callbackAddress,
       assets,
       amounts,
       params,
     ]);
 
-    const callback = getContractAddress(this.chainId, 'BalancerV2FlashLoanCallback');
+    const callback = this.callbackAddress;
 
     return core.newLogic({ to, data, callback });
   }

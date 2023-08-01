@@ -18,28 +18,28 @@ export const configs: Config[] = [
   {
     chainId: common.ChainId.polygon,
     contract: {
-      PoolDataProvider: '0x69FA688f1Dc47d4B5d8029D5a35FB7a548310654',
+      PoolDataProvider: '0x9441B65EE553F70df9C77d45d3283B6BC24F222d',
       AaveV3FlashLoanCallback: '0xe1356560B683cA54e7D7e9e81b05319E9140a977',
     },
   },
   {
     chainId: common.ChainId.arbitrum,
     contract: {
-      PoolDataProvider: '0x69FA688f1Dc47d4B5d8029D5a35FB7a548310654',
+      PoolDataProvider: '0x6b4E260b765B3cA1514e618C0215A6B7839fF93e',
       AaveV3FlashLoanCallback: '0xe1356560B683cA54e7D7e9e81b05319E9140a977',
     },
   },
   {
     chainId: common.ChainId.optimism,
     contract: {
-      PoolDataProvider: '0x69FA688f1Dc47d4B5d8029D5a35FB7a548310654',
+      PoolDataProvider: '0xd9Ca4878dd38B021583c1B669905592EAe76E044',
       AaveV3FlashLoanCallback: '0xe1356560B683cA54e7D7e9e81b05319E9140a977',
     },
   },
   {
     chainId: common.ChainId.avalanche,
     contract: {
-      PoolDataProvider: '0x69FA688f1Dc47d4B5d8029D5a35FB7a548310654',
+      PoolDataProvider: '0x50ddd0Cd4266299527d25De9CBb55fE0EB8dAc30',
       AaveV3FlashLoanCallback: '0xe1356560B683cA54e7D7e9e81b05319E9140a977',
     },
   },
