@@ -5,8 +5,11 @@ import { Service } from './service';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
 import { getContractAddress, supportedChainIds } from './configs';
+import invariant from 'tiny-invariant';
 
 export type FlashLoanLogicTokenList = common.Token[];
+
+export type FlashLoanLogicParams = core.TokensOutFields;
 
 export type FlashLoanLogicFields = core.FlashLoanFields<{ referralCode?: number }>;
 
@@ -19,6 +22,31 @@ export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInt
     const tokens: FlashLoanLogicTokenList = await service.getAssets();
 
     return tokens;
+  }
+
+  async quote(params: FlashLoanLogicParams) {
+    const { outputs: loans } = params;
+
+    const service = new Service(this.chainId, this.provider);
+    const { feeBps, assetInfos } = await service.getFlashLoanConfiguration(loans.map((loan) => loan.token));
+
+    const repays = new common.TokenAmounts();
+    const fees = new common.TokenAmounts();
+    for (let i = 0; i < loans.length; i++) {
+      const loan = loans.at(i);
+      const { isActive, avaliableToBorrow } = assetInfos[i];
+      invariant(isActive, `asset is not active: ${loan.token.address}`);
+      invariant(avaliableToBorrow.gte(loan), `insufficient borrowing capacity for the asset: ${loan.token.address}`);
+
+      const feeAmountWei = common.calcFee(loan.amountWei, feeBps);
+      const fee = new common.TokenAmount(loan.token).setWei(feeAmountWei);
+      fees.add(fee);
+
+      const repay = loan.clone().add(fee);
+      repays.add(repay);
+    }
+
+    return { loans, repays, fees, feeBps };
   }
 
   async build(fields: FlashLoanLogicFields) {

@@ -36,8 +36,8 @@ describe('Test Utility CustomData Logic', function () {
 
     // 3. build router logics
     const routerLogics: core.IParam.LogicStruct[] = [];
-    const logicUtilityCustomData = new utility.CustomDataLogic(chainId);
-    routerLogics.push(await logicUtilityCustomData.build({ to, data }));
+    const utilityCustomDataLogic = new utility.CustomDataLogic(chainId);
+    routerLogics.push(await utilityCustomDataLogic.build({ to, data }));
 
     // 4. send router tx
     const transactionRequest = core.newRouterExecuteTransactionRequest({
@@ -75,9 +75,9 @@ describe('Test Utility CustomData Logic', function () {
     const erc20Funds = funds.erc20;
     const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user1, erc20Funds);
 
-    const logicUtilityCustomData = new utility.CustomDataLogic(chainId);
+    const utilityCustomDataLogic = new utility.CustomDataLogic(chainId);
     routerLogics.push(
-      await logicUtilityCustomData.build({
+      await utilityCustomDataLogic.build({
         inputs: new common.TokenAmounts(input),
         outputs: new common.TokenAmounts(output),
         to: data.tx.to,

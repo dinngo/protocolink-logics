@@ -47,4 +47,25 @@ describe('AaveV2 Service', function () {
       });
     });
   });
+
+  context('Test getFlashLoanConfiguration', function () {
+    const service = new Service(common.ChainId.mainnet);
+
+    const testCases = [
+      { assets: [mainnetTokens.WETH, mainnetTokens.USDC] },
+      { assets: [mainnetTokens.WBTC, mainnetTokens.USDT] },
+    ];
+
+    testCases.forEach(({ assets }, i) => {
+      it(`case ${i + 1}`, async function () {
+        const flashLoanConfiguration = await service.getFlashLoanConfiguration(assets);
+        console.log('object :>> ', JSON.stringify(flashLoanConfiguration));
+        expect(flashLoanConfiguration).to.have.keys('feeBps', 'assetInfos');
+        expect(flashLoanConfiguration.assetInfos).to.have.lengthOf.above(0);
+        for (const assetInfo of flashLoanConfiguration.assetInfos) {
+          expect(assetInfo).to.have.keys('isActive', 'avaliableToBorrow');
+        }
+      });
+    });
+  });
 });

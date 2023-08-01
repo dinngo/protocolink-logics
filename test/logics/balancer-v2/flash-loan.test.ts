@@ -27,10 +27,10 @@ describe('Test BalancerV2 FlashLoan Logic', function () {
     it(`case ${i + 1}`, async function () {
       // 1. build funds and router logics for flash loan
       const flashLoanRouterLogics: core.IParam.LogicStruct[] = [];
-      const logicUtilitySendToken = new utility.SendTokenLogic(chainId);
+      const utilitySendTokenLogic = new utility.SendTokenLogic(chainId);
       for (const output of outputs.toArray()) {
         flashLoanRouterLogics.push(
-          await logicUtilitySendToken.build({
+          await utilitySendTokenLogic.build({
             input: output,
             recipient: balancerv2.getContractAddress(chainId, 'BalancerV2FlashLoanCallback'),
           })
