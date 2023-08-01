@@ -53,8 +53,8 @@ describe('Test AaveV3 Supply Logic', function () {
   testCases.forEach(({ input, tokenOut, balanceBps }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. get output
-      const logicAavev3Supply = new aavev3.SupplyLogic(chainId);
-      const { output } = await logicAavev3Supply.quote({ input, tokenOut });
+      const aavev3SupplyLogic = new aavev3.SupplyLogic(chainId);
+      const { output } = await aavev3SupplyLogic.quote({ input, tokenOut });
 
       // 2. build funds, tokensReturn
       const tokensReturn = [output.token.elasticAddress];
@@ -69,7 +69,7 @@ describe('Test AaveV3 Supply Logic', function () {
       // 3. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
-      routerLogics.push(await logicAavev3Supply.build({ input, output, balanceBps }, { account: user.address }));
+      routerLogics.push(await aavev3SupplyLogic.build({ input, output, balanceBps }, { account: user.address }));
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({

@@ -44,8 +44,8 @@ describe('Test CompoundV2 Withdraw Logic', function () {
   testCases.forEach(({ input, tokenOut, balanceBps }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. get output
-      const logicCompoundV2Withdraw = new compoundv2.WithdrawLogic(chainId, hre.ethers.provider);
-      const { output } = await logicCompoundV2Withdraw.quote({ input, tokenOut });
+      const compoundV2WithdrawLogic = new compoundv2.WithdrawLogic(chainId, hre.ethers.provider);
+      const { output } = await compoundV2WithdrawLogic.quote({ input, tokenOut });
 
       // 2. supply
       const underlyingToken = output.token;
@@ -65,7 +65,7 @@ describe('Test CompoundV2 Withdraw Logic', function () {
       // 4. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
-      routerLogics.push(await logicCompoundV2Withdraw.build({ input, output, balanceBps }));
+      routerLogics.push(await compoundV2WithdrawLogic.build({ input, output, balanceBps }));
 
       // 5. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics, tokensReturn });

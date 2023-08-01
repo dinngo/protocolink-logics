@@ -11,6 +11,13 @@ export type FlashLoanLogicTokenList = common.Token[];
 
 export type FlashLoanLogicParams = core.TokensOutFields;
 
+export type FlashLoanLogicQuotation = {
+  loans: common.TokenAmounts;
+  repays: common.TokenAmounts;
+  fees: common.TokenAmounts;
+  feeBps: number;
+};
+
 export type FlashLoanLogicFields = core.FlashLoanFields<{ referralCode?: number }>;
 
 @core.LogicDefinitionDecorator()
@@ -45,8 +52,9 @@ export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInt
       const repay = loan.clone().add(fee);
       repays.add(repay);
     }
+    const quotation: FlashLoanLogicQuotation = { loans, repays, fees, feeBps };
 
-    return { loans, repays, fees, feeBps };
+    return quotation;
   }
 
   async build(fields: FlashLoanLogicFields) {

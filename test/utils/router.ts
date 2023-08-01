@@ -30,18 +30,18 @@ export async function getPermitAndPullTokenRouterLogics(
     await approves(user, permit2Address, erc20Funds);
 
     // 2. get permit2 permit token logic
-    const logicPermit2PermitToken = new permit2.PermitTokenLogic(chainId, hre.ethers.provider);
-    const permitData = await logicPermit2PermitToken.getPermitData(user.address, erc20Funds);
+    const permit2PermitTokenLogic = new permit2.PermitTokenLogic(chainId, hre.ethers.provider);
+    const permitData = await permit2PermitTokenLogic.getPermitData(user.address, erc20Funds);
     if (permitData) {
       const permitSig = await user._signTypedData(permitData.domain, permitData.types, permitData.values);
       routerLogics.push(
-        await logicPermit2PermitToken.build({ permit: permitData.values, sig: permitSig }, { account: user.address })
+        await permit2PermitTokenLogic.build({ permit: permitData.values, sig: permitSig }, { account: user.address })
       );
     }
 
     // 3. get permit2 pull token logic
-    const logicPermit2PullToken = new permit2.PullTokenLogic(chainId, hre.ethers.provider);
-    routerLogics.push(await logicPermit2PullToken.build({ inputs: erc20Funds }, { account: user.address }));
+    const permit2PullTokenLogic = new permit2.PullTokenLogic(chainId, hre.ethers.provider);
+    routerLogics.push(await permit2PullTokenLogic.build({ inputs: erc20Funds }, { account: user.address }));
   }
 
   return routerLogics;

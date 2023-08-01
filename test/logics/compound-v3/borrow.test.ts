@@ -80,8 +80,8 @@ describe('Test CompoundV3 Borrow Logic', function () {
 
       // 5. build router logics
       const routerLogics: core.IParam.LogicStruct[] = [];
-      const logicCompoundV3Borrow = new compoundv3.BorrowLogic(chainId, hre.ethers.provider);
-      routerLogics.push(await logicCompoundV3Borrow.build({ marketId, output }, { account: user.address }));
+      const compoundV3BorrowLogic = new compoundv3.BorrowLogic(chainId, hre.ethers.provider);
+      routerLogics.push(await compoundV3BorrowLogic.build({ marketId, output }, { account: user.address }));
 
       // 6. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({

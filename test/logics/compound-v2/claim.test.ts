@@ -61,13 +61,13 @@ describe('Test CompoundV2 Claim Logic', function () {
 
       // 2. get allocated COMP amount after 1000 blocks
       await hrehelpers.mine(1000);
-      const logicCompoundV2Claim = new compoundv2.ClaimLogic(chainId, hre.ethers.provider);
-      const { output } = await logicCompoundV2Claim.quote({ owner: owner.address });
+      const compoundV2ClaimLogic = new compoundv2.ClaimLogic(chainId, hre.ethers.provider);
+      const { output } = await compoundV2ClaimLogic.quote({ owner: owner.address });
       expect(output.amountWei).to.be.gt(0);
 
       // 3. build router logics
       const routerLogics: core.IParam.LogicStruct[] = [];
-      routerLogics.push(await logicCompoundV2Claim.build({ owner: owner.address, output }));
+      routerLogics.push(await compoundV2ClaimLogic.build({ owner: owner.address, output }));
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics });

@@ -55,8 +55,8 @@ describe('Test AaveV3 Borrow Logic', function () {
       // 3. build router logics
       const routerLogics: core.IParam.LogicStruct[] = [];
 
-      const logicAaveV3Borrow = new aavev3.BorrowLogic(chainId);
-      routerLogics.push(await logicAaveV3Borrow.build({ output, interestRateMode }, { account: user.address }));
+      const aaveV3BorrowLogic = new aavev3.BorrowLogic(chainId);
+      routerLogics.push(await aaveV3BorrowLogic.build({ output, interestRateMode }, { account: user.address }));
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics, tokensReturn });

@@ -91,9 +91,9 @@ describe('Test CompoundV3 SupplyCollateral Logic', function () {
       // 3. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
-      const logicCompoundV3SupplyCollateral = new compoundv3.SupplyCollateralLogic(chainId, hre.ethers.provider);
+      const compoundV3SupplyCollateralLogic = new compoundv3.SupplyCollateralLogic(chainId, hre.ethers.provider);
       routerLogics.push(
-        await logicCompoundV3SupplyCollateral.build({ marketId, input, balanceBps }, { account: user.address })
+        await compoundV3SupplyCollateralLogic.build({ marketId, input, balanceBps }, { account: user.address })
       );
 
       // 4. send router tx

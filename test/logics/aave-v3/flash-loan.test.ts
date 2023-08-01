@@ -31,8 +31,8 @@ describe('Test AaveV3 FlashLoan Logic', function () {
   testCases.forEach(({ outputs }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. get flash loan quotation
-      const logicAaveV3FlashLoan = new aavev3.FlashLoanLogic(chainId);
-      const { loans, repays, fees } = await logicAaveV3FlashLoan.quote({ outputs });
+      const aaveV3FlashLoanLogic = new aavev3.FlashLoanLogic(chainId);
+      const { loans, repays, fees } = await aaveV3FlashLoanLogic.quote({ outputs });
 
       // 2. build funds and router logics for flash loan by flash loan fee
       const funds = new common.TokenAmounts();
@@ -53,7 +53,7 @@ describe('Test AaveV3 FlashLoan Logic', function () {
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
 
       const params = core.newCallbackParams(flashLoanRouterLogics);
-      routerLogics.push(await logicAaveV3FlashLoan.build({ outputs: loans, params }));
+      routerLogics.push(await aaveV3FlashLoanLogic.build({ outputs: loans, params }));
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics });

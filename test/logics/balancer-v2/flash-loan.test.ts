@@ -25,26 +25,32 @@ describe('Test BalancerV2 FlashLoan Logic', function () {
 
   testCases.forEach(({ outputs }, i) => {
     it(`case ${i + 1}`, async function () {
-      // 1. build funds and router logics for flash loan
+      // 1. get flash loan quotation
+      const aaveV3FlashLoanLogic = new balancerv2.FlashLoanLogic(chainId);
+      const { loans, repays, fees } = await aaveV3FlashLoanLogic.quote({ outputs });
+
+      // 2. build funds and router logics for flash loan
+      const funds = new common.TokenAmounts();
       const flashLoanRouterLogics: core.IParam.LogicStruct[] = [];
       const utilitySendTokenLogic = new utility.SendTokenLogic(chainId);
-      for (const output of outputs.toArray()) {
+      for (let i = 0; i < fees.length; i++) {
+        funds.add(fees.at(i).clone());
         flashLoanRouterLogics.push(
           await utilitySendTokenLogic.build({
-            input: output,
+            input: repays.at(i),
             recipient: balancerv2.getContractAddress(chainId, 'BalancerV2FlashLoanCallback'),
           })
         );
       }
 
-      // 2. build router logics
+      // 3. build router logics
       const routerLogics: core.IParam.LogicStruct[] = [];
 
       const userData = core.newCallbackParams(flashLoanRouterLogics);
-      const logicBalancerV2FlashLoan = new balancerv2.FlashLoanLogic(chainId);
-      routerLogics.push(await logicBalancerV2FlashLoan.build({ outputs, params: userData }));
+      const balancerV2FlashLoanLogic = new balancerv2.FlashLoanLogic(chainId);
+      routerLogics.push(await balancerV2FlashLoanLogic.build({ outputs: loans, params: userData }));
 
-      // 3. send router tx
+      // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics });
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
     });

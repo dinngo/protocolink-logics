@@ -5,8 +5,18 @@ import { axios } from 'src/utils';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
 import { getContractAddress, supportedChainIds } from './configs';
+import invariant from 'tiny-invariant';
 
 export type FlashLoanLogicTokenList = common.Token[];
+
+export type FlashLoanLogicParams = core.TokensOutFields;
+
+export type FlashLoanLogicQuotation = {
+  loans: common.TokenAmounts;
+  repays: common.TokenAmounts;
+  fees: common.TokenAmounts;
+  feeBps: number;
+};
 
 export type FlashLoanLogicFields = core.FlashLoanFields;
 
@@ -28,6 +38,32 @@ export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInt
     }
 
     return tokenList;
+  }
+
+  async quote(params: FlashLoanLogicParams) {
+    const { outputs: loans } = params;
+
+    const vaultAddress = getContractAddress(this.chainId, 'Vault');
+    const calls: common.Multicall2.CallStruct[] = loans.map((loan) => ({
+      target: loan.token.address,
+      callData: this.erc20Iface.encodeFunctionData('balanceOf', [vaultAddress]),
+    }));
+    const { returnData } = await this.multicall2.callStatic.aggregate(calls);
+
+    const repays = new common.TokenAmounts();
+    const fees = new common.TokenAmounts();
+    for (let i = 0; i < loans.length; i++) {
+      const loan = loans.at(i);
+      const [balance] = this.erc20Iface.decodeFunctionResult('balanceOf', returnData[i]);
+      const avaliableToBorrow = new common.TokenAmount(loan.token).setWei(balance);
+      invariant(avaliableToBorrow.gte(loan), `insufficient borrowing capacity for the asset: ${loan.token.address}`);
+
+      repays.add(loan.token, loan.amount);
+      fees.add(loan.token, '0');
+    }
+    const quotation: FlashLoanLogicQuotation = { loans, repays, fees, feeBps: 0 };
+
+    return quotation;
   }
 
   async build(fields: FlashLoanLogicFields) {
