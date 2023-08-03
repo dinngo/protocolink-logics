@@ -279,10 +279,10 @@ export class Service extends common.Web3Toolkit {
       j++;
 
       const [balance] = this.erc20Iface.decodeFunctionResult('balanceOf', returnData[j]);
-      const avaliableToBorrow = new common.TokenAmount(assets[i]).setWei(balance);
+      const availableToBorrow = new common.TokenAmount(assets[i]).setWei(balance);
       j++;
 
-      assetInfos.push({ isActive, avaliableToBorrow });
+      assetInfos.push({ isActive, availableToBorrow });
     }
 
     return { feeBps: feeBps, assetInfos };

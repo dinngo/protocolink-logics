@@ -53,9 +53,9 @@ export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInt
     const fees = new common.TokenAmounts();
     for (let i = 0; i < loans.length; i++) {
       const loan = loans.at(i);
-      const { isActive, avaliableToBorrow } = assetInfos[i];
+      const { isActive, availableToBorrow } = assetInfos[i];
       invariant(isActive, `asset is not active: ${loan.token.address}`);
-      invariant(avaliableToBorrow.gte(loan), `insufficient borrowing capacity for the asset: ${loan.token.address}`);
+      invariant(availableToBorrow.gte(loan), `insufficient borrowing capacity for the asset: ${loan.token.address}`);
 
       const feeAmountWei = common.calcFee(loan.amountWei, feeBps);
       const fee = new common.TokenAmount(loan.token).setWei(feeAmountWei);

@@ -24,7 +24,7 @@ export interface FlashLoanAssetInfo {
   isPaused: boolean;
   isActive: boolean;
   isFlashLoanEnabled: boolean;
-  avaliableToBorrow: common.TokenAmount;
+  availableToBorrow: common.TokenAmount;
 }
 
 export interface FlashLoanConfiguration {

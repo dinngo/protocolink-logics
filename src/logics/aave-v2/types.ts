@@ -22,7 +22,7 @@ export enum InterestRateMode {
 
 export interface FlashLoanAssetInfo {
   isActive: boolean;
-  avaliableToBorrow: common.TokenAmount;
+  availableToBorrow: common.TokenAmount;
 }
 
 export interface FlashLoanConfiguration {

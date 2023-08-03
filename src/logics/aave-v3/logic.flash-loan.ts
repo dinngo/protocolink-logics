@@ -56,11 +56,11 @@ export class FlashLoanLogic
     const fees = new common.TokenAmounts();
     for (let i = 0; i < loans.length; i++) {
       const loan = loans.at(i);
-      const { isActive, isPaused, isFlashLoanEnabled, avaliableToBorrow } = assetInfos[i];
+      const { isActive, isPaused, isFlashLoanEnabled, availableToBorrow } = assetInfos[i];
       invariant(isActive, `asset is not active: ${loan.token.address}`);
       invariant(!isPaused, `asset is paused: ${loan.token.address}`);
       invariant(isFlashLoanEnabled, `asset can not be used in flash loan: ${loan.token.address}`);
-      invariant(avaliableToBorrow.gte(loan), `insufficient borrowing capacity for the asset: ${loan.token.address}`);
+      invariant(availableToBorrow.gte(loan), `insufficient borrowing capacity for the asset: ${loan.token.address}`);
 
       const feeAmountWei = common.calcFee(loan.amountWei, feeBps);
       const fee = new common.TokenAmount(loan.token).setWei(feeAmountWei);

@@ -1,6 +1,6 @@
 import { BigNumberish } from 'ethers';
+import { ProtocolFeesCollector__factory, Vault__factory } from './contracts';
 import { TokenList } from '@uniswap/token-lists';
-import { Vault__factory } from './contracts';
 import { axios } from 'src/utils';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
@@ -30,7 +30,7 @@ export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInt
 
   async getTokenList() {
     const { data } = await axios.get<TokenList>(
-      'https://raw.githubusercontent.com/balancer/tokenlists/main/generated/listed-old.tokenlist.json'
+      'https://raw.githubusercontent.com/balancer/tokenlists/main/generated/balancer.tokenlist.json'
     );
 
     const tmp: Record<string, boolean> = {};
@@ -46,26 +46,50 @@ export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInt
 
   async quote(params: FlashLoanLogicParams) {
     const { outputs: loans } = params;
+    invariant(new Set(loans.map(({ token }) => token.address)).size === loans.length, 'loans have duplicate tokens');
 
     const vaultAddress = getContractAddress(this.chainId, 'Vault');
-    const calls: common.Multicall2.CallStruct[] = loans.map((loan) => ({
-      target: loan.token.address,
-      callData: this.erc20Iface.encodeFunctionData('balanceOf', [vaultAddress]),
-    }));
+    const protocolFeesCollectorIface = ProtocolFeesCollector__factory.createInterface();
+
+    const calls: common.Multicall2.CallStruct[] = [
+      {
+        target: getContractAddress(this.chainId, 'ProtocolFeesCollector'),
+        callData: protocolFeesCollectorIface.encodeFunctionData('getFlashLoanFeePercentage'),
+      },
+    ];
+    loans.forEach(({ token }) => {
+      calls.push({
+        target: token.address,
+        callData: this.erc20Iface.encodeFunctionData('balanceOf', [vaultAddress]),
+      });
+    });
     const { returnData } = await this.multicall2.callStatic.aggregate(calls);
+
+    let j = 0;
+    const [flashLoanFeePercentage] = protocolFeesCollectorIface.decodeFunctionResult(
+      'getFlashLoanFeePercentage',
+      returnData[j]
+    );
+    const feeBps = flashLoanFeePercentage.toNumber();
+    j++;
 
     const repays = new common.TokenAmounts();
     const fees = new common.TokenAmounts();
     for (let i = 0; i < loans.length; i++) {
       const loan = loans.at(i);
-      const [balance] = this.erc20Iface.decodeFunctionResult('balanceOf', returnData[i]);
-      const avaliableToBorrow = new common.TokenAmount(loan.token).setWei(balance);
-      invariant(avaliableToBorrow.gte(loan), `insufficient borrowing capacity for the asset: ${loan.token.address}`);
+      const [balance] = this.erc20Iface.decodeFunctionResult('balanceOf', returnData[j]);
+      const availableToBorrow = new common.TokenAmount(loan.token).setWei(balance);
+      invariant(availableToBorrow.gte(loan), `insufficient borrowing capacity for the asset: ${loan.token.address}`);
+      j++;
 
-      repays.add(loan.token, loan.amount);
-      fees.add(loan.token, '0');
+      const feeAmountWei = common.calcFee(loan.amountWei, feeBps);
+      const fee = new common.TokenAmount(loan.token).setWei(feeAmountWei);
+      fees.add(fee);
+
+      const repay = loan.clone().add(fee);
+      repays.add(repay);
     }
-    const quotation: FlashLoanLogicQuotation = { loans, repays, fees, feeBps: 0 };
+    const quotation: FlashLoanLogicQuotation = { loans, repays, fees, feeBps };
 
     return quotation;
   }

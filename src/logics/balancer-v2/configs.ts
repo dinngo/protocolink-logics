@@ -1,6 +1,6 @@
 import * as common from '@protocolink/common';
 
-type ContractNames = 'Vault' | 'BalancerV2FlashLoanCallback';
+type ContractNames = 'Vault' | 'BalancerV2FlashLoanCallback' | 'ProtocolFeesCollector';
 
 export interface Config {
   chainId: number;
@@ -13,6 +13,7 @@ export const configs: Config[] = [
     contract: {
       Vault: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
       BalancerV2FlashLoanCallback: '0x03EdE4da71B8c404f7a2d61b8Ad367edEFc90Af8',
+      ProtocolFeesCollector: '0xce88686553686DA562CE7Cea497CE749DA109f9F',
     },
   },
   {
@@ -20,6 +21,7 @@ export const configs: Config[] = [
     contract: {
       Vault: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
       BalancerV2FlashLoanCallback: '0x03EdE4da71B8c404f7a2d61b8Ad367edEFc90Af8',
+      ProtocolFeesCollector: '0xce88686553686DA562CE7Cea497CE749DA109f9F',
     },
   },
   {
@@ -27,6 +29,7 @@ export const configs: Config[] = [
     contract: {
       Vault: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
       BalancerV2FlashLoanCallback: '0x03EdE4da71B8c404f7a2d61b8Ad367edEFc90Af8',
+      ProtocolFeesCollector: '0xce88686553686DA562CE7Cea497CE749DA109f9F',
     },
   },
   {
@@ -34,6 +37,15 @@ export const configs: Config[] = [
     contract: {
       Vault: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
       BalancerV2FlashLoanCallback: '0x03EdE4da71B8c404f7a2d61b8Ad367edEFc90Af8',
+      ProtocolFeesCollector: '0xce88686553686DA562CE7Cea497CE749DA109f9F',
+    },
+  },
+  {
+    chainId: common.ChainId.avalanche,
+    contract: {
+      Vault: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+      BalancerV2FlashLoanCallback: '0x03EdE4da71B8c404f7a2d61b8Ad367edEFc90Af8',
+      ProtocolFeesCollector: '0xce88686553686DA562CE7Cea497CE749DA109f9F',
     },
   },
 ];

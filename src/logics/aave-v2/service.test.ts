@@ -62,7 +62,7 @@ describe('AaveV2 Service', function () {
         expect(flashLoanConfiguration).to.have.keys('feeBps', 'assetInfos');
         expect(flashLoanConfiguration.assetInfos).to.have.lengthOf.above(0);
         for (const assetInfo of flashLoanConfiguration.assetInfos) {
-          expect(assetInfo).to.have.keys('isActive', 'avaliableToBorrow');
+          expect(assetInfo).to.have.keys('isActive', 'availableToBorrow');
         }
       });
     });
