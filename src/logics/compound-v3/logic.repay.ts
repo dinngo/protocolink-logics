@@ -37,7 +37,7 @@ export class RepayLogic extends core.Logic implements core.LogicTokenListInterfa
 
     const service = new Service(this.chainId, this.provider);
     const borrowBalance = await service.getBorrowBalance(marketId, borrower, tokenIn);
-    borrowBalance.setWei(common.calcSlippage(borrowBalance.amountWei, -100)); // slightly higher than borrowed amount
+    borrowBalance.setWei(common.calcSlippage(borrowBalance.amountWei, -1)); // slightly higher than borrowed amount
 
     return { marketId, borrower, input: borrowBalance };
   }
@@ -45,10 +45,13 @@ export class RepayLogic extends core.Logic implements core.LogicTokenListInterfa
   async build(fields: RepayLogicFields) {
     const { marketId, borrower, input, balanceBps } = fields;
 
+    // check if the repay amount is greater than or equal to the borrow balance.
+    // If it is, it means that the user wants to repay the entire debt.
     const market = getMarket(this.chainId, marketId);
     const tokenIn = input.token.wrapped;
-    const quotation = await this.quote({ marketId, borrower, tokenIn: input.token });
-    const repayAll = balanceBps === common.BPS_BASE || input.amountWei.gte(quotation.input.amountWei);
+    const service = new Service(this.chainId, this.provider);
+    const borrowBalance = await service.getBorrowBalance(marketId, borrower, tokenIn);
+    const repayAll = input.gte(borrowBalance);
 
     const to = market.cometAddress;
     const data = Comet__factory.createInterface().encodeFunctionData('supplyTo', [
