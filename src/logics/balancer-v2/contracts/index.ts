@@ -2,7 +2,9 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { BalancerV2FlashLoanCallback } from './BalancerV2FlashLoanCallback';
+export type { ProtocolFeesCollector } from './ProtocolFeesCollector';
 export type { Vault } from './Vault';
 export * as factories from './factories';
 export { BalancerV2FlashLoanCallback__factory } from './factories/BalancerV2FlashLoanCallback__factory';
+export { ProtocolFeesCollector__factory } from './factories/ProtocolFeesCollector__factory';
 export { Vault__factory } from './factories/Vault__factory';

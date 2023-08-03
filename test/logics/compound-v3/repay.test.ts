@@ -272,8 +272,8 @@ describe('Test CompoundV3 Repay Logic', function () {
       await helpers.borrow(chainId, borrower, marketId, borrow);
 
       // 3. get quotation
-      const logicCompoundV3Repay = new compoundv3.RepayLogic(chainId, hre.ethers.provider);
-      const quotation = await logicCompoundV3Repay.quote({
+      const compoundV3RepayLogic = new compoundv3.RepayLogic(chainId, hre.ethers.provider);
+      const quotation = await compoundV3RepayLogic.quote({
         marketId,
         borrower: borrower.address,
         tokenIn: repay.token,
@@ -292,7 +292,7 @@ describe('Test CompoundV3 Repay Logic', function () {
       // 4. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, repayer, erc20Funds);
-      routerLogics.push(await logicCompoundV3Repay.build({ marketId, borrower: borrower.address, input: repay }));
+      routerLogics.push(await compoundV3RepayLogic.build({ marketId, borrower: borrower.address, input: repay }));
 
       // 5. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({

@@ -91,8 +91,8 @@ describe('Test UniswapV3 SwapToken Logic', function () {
   testCases.forEach(({ params, balanceBps }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. get input or output
-      const logicUniswapV3SwapToken = new uniswapv3.SwapTokenLogic(chainId);
-      const quotation = await logicUniswapV3SwapToken.quote(params);
+      const uniswapV3SwapTokenLogic = new uniswapv3.SwapTokenLogic(chainId);
+      const quotation = await uniswapV3SwapTokenLogic.quote(params);
       const { tradeType, input, output } = quotation;
 
       // 2. build funds, tokensReturn
@@ -108,7 +108,7 @@ describe('Test UniswapV3 SwapToken Logic', function () {
       // 3. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
-      routerLogics.push(await logicUniswapV3SwapToken.build(quotation, { account: user.address }));
+      routerLogics.push(await uniswapV3SwapTokenLogic.build(quotation, { account: user.address }));
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({

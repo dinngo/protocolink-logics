@@ -43,8 +43,8 @@ describe('Test CompoundV2 Supply Logic', function () {
   testCases.forEach(({ input, tokenOut, balanceBps }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. get output
-      const logicCompoundV2Supply = new compoundv2.SupplyLogic(chainId, hre.ethers.provider);
-      const { output } = await logicCompoundV2Supply.quote({ input, tokenOut });
+      const compoundV2SupplyLogic = new compoundv2.SupplyLogic(chainId, hre.ethers.provider);
+      const { output } = await compoundV2SupplyLogic.quote({ input, tokenOut });
 
       // 2. build funds, tokensReturn
       const tokensReturn = [output.token.elasticAddress];
@@ -59,7 +59,7 @@ describe('Test CompoundV2 Supply Logic', function () {
       // 3. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
-      routerLogics.push(await logicCompoundV2Supply.build({ input, output, balanceBps }));
+      routerLogics.push(await compoundV2SupplyLogic.build({ input, output, balanceBps }));
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({

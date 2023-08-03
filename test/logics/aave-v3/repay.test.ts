@@ -74,8 +74,8 @@ describe('Test AaveV3 Repay Logic', function () {
       await helpers.borrow(chainId, user, borrow, interestRateMode);
 
       // 2. get user debt
-      const logicAaveV3Repay = new aavev3.RepayLogic(chainId, hre.ethers.provider);
-      let quotation = await logicAaveV3Repay.quote({ borrower: user.address, tokenIn: borrow.token, interestRateMode });
+      const aaveV3RepayLogic = new aavev3.RepayLogic(chainId, hre.ethers.provider);
+      let quotation = await aaveV3RepayLogic.quote({ borrower: user.address, tokenIn: borrow.token, interestRateMode });
       const { input } = quotation;
 
       // 3. build funds and tokensReturn
@@ -91,7 +91,7 @@ describe('Test AaveV3 Repay Logic', function () {
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
 
-      routerLogics.push(await logicAaveV3Repay.build({ input, interestRateMode, borrower: user.address, balanceBps }));
+      routerLogics.push(await aaveV3RepayLogic.build({ input, interestRateMode, borrower: user.address, balanceBps }));
 
       // 5. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({
@@ -104,7 +104,7 @@ describe('Test AaveV3 Repay Logic', function () {
       await expect(user.address).to.changeBalance(input.token, -input.amount, 200);
 
       // 6. check user's debt should be zero
-      quotation = await logicAaveV3Repay.quote({ borrower: user.address, tokenIn: borrow.token, interestRateMode });
+      quotation = await aaveV3RepayLogic.quote({ borrower: user.address, tokenIn: borrow.token, interestRateMode });
       expect(quotation.input.amountWei).to.eq(0);
     });
   });

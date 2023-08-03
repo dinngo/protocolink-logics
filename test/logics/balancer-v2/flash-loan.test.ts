@@ -25,26 +25,34 @@ describe('Test BalancerV2 FlashLoan Logic', function () {
 
   testCases.forEach(({ outputs }, i) => {
     it(`case ${i + 1}`, async function () {
-      // 1. build funds and router logics for flash loan
+      // 1. get flash loan quotation
+      const balancerV2FlashLoanLogic = new balancerv2.FlashLoanLogic(chainId);
+      const { loans, repays, fees } = await balancerV2FlashLoanLogic.quote({ outputs });
+
+      // 2. build funds and router logics for flash loan
+      const funds = new common.TokenAmounts();
       const flashLoanRouterLogics: core.IParam.LogicStruct[] = [];
-      const logicUtilitySendToken = new utility.SendTokenLogic(chainId);
-      for (const output of outputs.toArray()) {
+      const utilitySendTokenLogic = new utility.SendTokenLogic(chainId);
+      for (let i = 0; i < fees.length; i++) {
+        const fee = fees.at(i).clone();
+        if (!fee.isZero) {
+          funds.add(fee);
+        }
         flashLoanRouterLogics.push(
-          await logicUtilitySendToken.build({
-            input: output,
+          await utilitySendTokenLogic.build({
+            input: repays.at(i),
             recipient: balancerv2.getContractAddress(chainId, 'BalancerV2FlashLoanCallback'),
           })
         );
       }
 
-      // 2. build router logics
+      // 3. build router logics
       const routerLogics: core.IParam.LogicStruct[] = [];
 
-      const userData = core.newCallbackParams(flashLoanRouterLogics);
-      const logicBalancerV2FlashLoan = new balancerv2.FlashLoanLogic(chainId);
-      routerLogics.push(await logicBalancerV2FlashLoan.build({ outputs, params: userData }));
+      const params = core.newCallbackParams(flashLoanRouterLogics);
+      routerLogics.push(await balancerV2FlashLoanLogic.build({ outputs: loans, params: params }));
 
-      // 3. send router tx
+      // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics });
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
     });

@@ -30,8 +30,8 @@ describe('Test Utility WrappedNativeToken Logic', function () {
   testCases.forEach(({ input, tokenOut, balanceBps }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. get output
-      const logicUtilityWrappedNativeToken = new utility.WrappedNativeTokenLogic(chainId);
-      const { output } = logicUtilityWrappedNativeToken.quote({ input, tokenOut });
+      const utilityWrappedNativeTokenLogic = new utility.WrappedNativeTokenLogic(chainId);
+      const { output } = utilityWrappedNativeTokenLogic.quote({ input, tokenOut });
 
       // 2. build funds, tokensReturn
       const tokensReturn = [output.token.elasticAddress];
@@ -47,7 +47,7 @@ describe('Test Utility WrappedNativeToken Logic', function () {
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
 
-      routerLogics.push(await logicUtilityWrappedNativeToken.build({ input, output, balanceBps }));
+      routerLogics.push(await utilityWrappedNativeTokenLogic.build({ input, output, balanceBps }));
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({

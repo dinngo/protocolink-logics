@@ -59,8 +59,8 @@ describe('Test CompoundV3 SupplyBase Logic', function () {
   testCases.forEach(({ marketId, input, tokenOut, balanceBps }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. get quotation
-      const logicCompoundV3SupplyBase = new compoundv3.SupplyBaseLogic(chainId, hre.ethers.provider);
-      const { output } = await logicCompoundV3SupplyBase.quote({ marketId, input, tokenOut });
+      const compoundV3SupplyBaseLogic = new compoundv3.SupplyBaseLogic(chainId, hre.ethers.provider);
+      const { output } = await compoundV3SupplyBaseLogic.quote({ marketId, input, tokenOut });
 
       // 2. build funds, tokensReturn
       const tokensReturn = [output.token.elasticAddress];
@@ -75,7 +75,7 @@ describe('Test CompoundV3 SupplyBase Logic', function () {
       // 3. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
-      routerLogics.push(await logicCompoundV3SupplyBase.build({ marketId, input, output, balanceBps }));
+      routerLogics.push(await compoundV3SupplyBaseLogic.build({ marketId, input, output, balanceBps }));
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({

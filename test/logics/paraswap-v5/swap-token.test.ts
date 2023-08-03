@@ -68,8 +68,8 @@ describe('Test ParaswapV5 SwapToken Logic', function () {
   testCases.forEach(({ params }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. get output
-      const logicParaswapV5SwapToken = new paraswapv5.SwapTokenLogic(chainId);
-      const quotation = await logicParaswapV5SwapToken.quote(params);
+      const paraswapV5SwapTokenLogic = new paraswapv5.SwapTokenLogic(chainId);
+      const quotation = await paraswapV5SwapTokenLogic.quote(params);
       const { input, output } = quotation;
 
       // 2. build funds, tokensReturn
@@ -79,7 +79,7 @@ describe('Test ParaswapV5 SwapToken Logic', function () {
       // 3. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
-      routerLogics.push(await logicParaswapV5SwapToken.build(quotation, { account: user.address }));
+      routerLogics.push(await paraswapV5SwapTokenLogic.build(quotation, { account: user.address }));
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({

@@ -53,8 +53,8 @@ describe('Test AaveV2 Deposit Logic', function () {
   testCases.forEach(({ input, tokenOut, balanceBps }, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. get output
-      const logicAaveV2Deposit = new aavev2.DepositLogic(chainId);
-      const { output } = await logicAaveV2Deposit.quote({ input, tokenOut });
+      const aaveV2DepositLogic = new aavev2.DepositLogic(chainId);
+      const { output } = await aaveV2DepositLogic.quote({ input, tokenOut });
 
       // 2. build funds, tokensReturn
       const tokensReturn = [output.token.elasticAddress];
@@ -69,7 +69,7 @@ describe('Test AaveV2 Deposit Logic', function () {
       // 3. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
-      routerLogics.push(await logicAaveV2Deposit.build({ input, output, balanceBps }, { account: user.address }));
+      routerLogics.push(await aaveV2DepositLogic.build({ input, output, balanceBps }, { account: user.address }));
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({

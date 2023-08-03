@@ -1,12 +1,22 @@
 import { BigNumberish } from 'ethers';
+import { ProtocolFeesCollector__factory, Vault__factory } from './contracts';
 import { TokenList } from '@uniswap/token-lists';
-import { Vault__factory } from './contracts';
 import { axios } from 'src/utils';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
 import { getContractAddress, supportedChainIds } from './configs';
+import invariant from 'tiny-invariant';
 
 export type FlashLoanLogicTokenList = common.Token[];
+
+export type FlashLoanLogicParams = core.TokensOutFields;
+
+export type FlashLoanLogicQuotation = {
+  loans: common.TokenAmounts;
+  repays: common.TokenAmounts;
+  fees: common.TokenAmounts;
+  feeBps: number;
+};
 
 export type FlashLoanLogicFields = core.FlashLoanFields;
 
@@ -14,9 +24,13 @@ export type FlashLoanLogicFields = core.FlashLoanFields;
 export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicBuilderInterface {
   static readonly supportedChainIds = supportedChainIds;
 
+  get callbackAddress() {
+    return getContractAddress(this.chainId, 'BalancerV2FlashLoanCallback');
+  }
+
   async getTokenList() {
     const { data } = await axios.get<TokenList>(
-      'https://raw.githubusercontent.com/balancer/tokenlists/main/generated/listed-old.tokenlist.json'
+      'https://raw.githubusercontent.com/balancer/tokenlists/main/generated/balancer.tokenlist.json'
     );
 
     const tmp: Record<string, boolean> = {};
@@ -28,6 +42,56 @@ export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInt
     }
 
     return tokenList;
+  }
+
+  async quote(params: FlashLoanLogicParams) {
+    const { outputs: loans } = params;
+    invariant(new Set(loans.map(({ token }) => token.address)).size === loans.length, 'loans have duplicate tokens');
+
+    const vaultAddress = getContractAddress(this.chainId, 'Vault');
+    const protocolFeesCollectorIface = ProtocolFeesCollector__factory.createInterface();
+
+    const calls: common.Multicall2.CallStruct[] = [
+      {
+        target: getContractAddress(this.chainId, 'ProtocolFeesCollector'),
+        callData: protocolFeesCollectorIface.encodeFunctionData('getFlashLoanFeePercentage'),
+      },
+    ];
+    loans.forEach(({ token }) => {
+      calls.push({
+        target: token.address,
+        callData: this.erc20Iface.encodeFunctionData('balanceOf', [vaultAddress]),
+      });
+    });
+    const { returnData } = await this.multicall2.callStatic.aggregate(calls);
+
+    let j = 0;
+    const [flashLoanFeePercentage] = protocolFeesCollectorIface.decodeFunctionResult(
+      'getFlashLoanFeePercentage',
+      returnData[j]
+    );
+    const feeBps = flashLoanFeePercentage.toNumber();
+    j++;
+
+    const repays = new common.TokenAmounts();
+    const fees = new common.TokenAmounts();
+    for (let i = 0; i < loans.length; i++) {
+      const loan = loans.at(i);
+      const [balance] = this.erc20Iface.decodeFunctionResult('balanceOf', returnData[j]);
+      const availableToBorrow = new common.TokenAmount(loan.token).setWei(balance);
+      invariant(availableToBorrow.gte(loan), `insufficient borrowing capacity for the asset: ${loan.token.address}`);
+      j++;
+
+      const feeAmountWei = common.calcFee(loan.amountWei, feeBps);
+      const fee = new common.TokenAmount(loan.token).setWei(feeAmountWei);
+      fees.add(fee);
+
+      const repay = loan.clone().add(fee);
+      repays.add(repay);
+    }
+    const quotation: FlashLoanLogicQuotation = { loans, repays, fees, feeBps };
+
+    return quotation;
   }
 
   async build(fields: FlashLoanLogicFields) {
@@ -42,13 +106,13 @@ export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInt
       amounts.push(output.amountWei);
     }
     const data = Vault__factory.createInterface().encodeFunctionData('flashLoan', [
-      getContractAddress(this.chainId, 'BalancerV2FlashLoanCallback'),
+      this.callbackAddress,
       assets,
       amounts,
       params,
     ]);
 
-    const callback = getContractAddress(this.chainId, 'BalancerV2FlashLoanCallback');
+    const callback = this.callbackAddress;
 
     return core.newLogic({ to, data, callback });
   }

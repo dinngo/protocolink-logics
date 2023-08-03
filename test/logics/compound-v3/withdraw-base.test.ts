@@ -65,8 +65,8 @@ describe('Test CompoundV3 WithdrawBase Logic', function () {
       await expect(user.address).to.changeBalance(supply.token, supply.amount, 1);
 
       // 2. get quotation
-      const logicCompoundV3WithdrawBase = new compoundv3.WithdrawBaseLogic(chainId, hre.ethers.provider);
-      const { output } = await logicCompoundV3WithdrawBase.quote({ marketId, input, tokenOut });
+      const compoundV3WithdrawBaseLogic = new compoundv3.WithdrawBaseLogic(chainId, hre.ethers.provider);
+      const { output } = await compoundV3WithdrawBaseLogic.quote({ marketId, input, tokenOut });
 
       // 3. build funds, tokensReturn
       const tokensReturn = [output.token.elasticAddress];
@@ -81,7 +81,7 @@ describe('Test CompoundV3 WithdrawBase Logic', function () {
       // 4. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
-      routerLogics.push(await logicCompoundV3WithdrawBase.build({ marketId, input, output, balanceBps }));
+      routerLogics.push(await compoundV3WithdrawBaseLogic.build({ marketId, input, output, balanceBps }));
 
       // 5. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({

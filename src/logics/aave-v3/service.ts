@@ -2,17 +2,53 @@ import {
   AToken__factory,
   DebtTokenBase__factory,
   PoolAddressesProvider__factory,
+  PoolDataProvider,
   PoolDataProvider__factory,
   Pool__factory,
 } from './contracts';
-import { InterestRateMode, ReserveTokens, ReserveTokensAddress } from './types';
+import {
+  FlashLoanAssetInfo,
+  FlashLoanConfiguration,
+  InterestRateMode,
+  ReserveTokens,
+  ReserveTokensAddress,
+} from './types';
+import { PoolDataProviderInterface } from './contracts/PoolDataProvider';
+import { PoolInterface } from './contracts/Pool';
 import * as common from '@protocolink/common';
 import { constants } from 'ethers';
 import { getContractAddress } from './configs';
+import invariant from 'tiny-invariant';
 
 export class Service extends common.Web3Toolkit {
+  private _poolDataProvider?: PoolDataProvider;
+
   get poolDataProvider() {
-    return PoolDataProvider__factory.connect(getContractAddress(this.chainId, 'PoolDataProvider'), this.provider);
+    if (!this._poolDataProvider) {
+      this._poolDataProvider = PoolDataProvider__factory.connect(
+        getContractAddress(this.chainId, 'PoolDataProvider'),
+        this.provider
+      );
+    }
+    return this._poolDataProvider;
+  }
+
+  private _poolDataProviderIface?: PoolDataProviderInterface;
+
+  get poolDataProviderIface() {
+    if (!this._poolDataProviderIface) {
+      this._poolDataProviderIface = PoolDataProvider__factory.createInterface();
+    }
+    return this._poolDataProviderIface;
+  }
+
+  private _poolIface?: PoolInterface;
+
+  get poolIface() {
+    if (!this._poolIface) {
+      this._poolIface = Pool__factory.createInterface();
+    }
+    return this._poolIface;
   }
 
   private poolAddress?: string;
@@ -33,17 +69,19 @@ export class Service extends common.Web3Toolkit {
       const poolAddress = await this.getPoolAddress();
       const assetAddresses = await Pool__factory.connect(poolAddress, this.provider).getReservesList();
 
-      const iface = PoolDataProvider__factory.createInterface();
       const calls: common.Multicall2.CallStruct[] = assetAddresses.map((assetAddress) => ({
-        target: getContractAddress(this.chainId, 'PoolDataProvider'),
-        callData: iface.encodeFunctionData('getReserveConfigurationData', [assetAddress]),
+        target: this.poolDataProvider.address,
+        callData: this.poolDataProviderIface.encodeFunctionData('getReserveConfigurationData', [assetAddress]),
       }));
       const { returnData } = await this.multicall2.callStatic.aggregate(calls);
 
       this.assetAddresses = [];
       for (let i = 0; i < assetAddresses.length; i++) {
         const assetAddress = assetAddresses[i];
-        const { isActive, isFrozen } = iface.decodeFunctionResult('getReserveConfigurationData', returnData[i]);
+        const { isActive, isFrozen } = this.poolDataProviderIface.decodeFunctionResult(
+          'getReserveConfigurationData',
+          returnData[i]
+        );
         if (isActive && !isFrozen) this.assetAddresses.push(assetAddress);
       }
     }
@@ -57,21 +95,17 @@ export class Service extends common.Web3Toolkit {
     if (!this.reserveTokensAddresses) {
       const assetAddresses = await this.getAssetAddresses();
 
-      const iface = PoolDataProvider__factory.createInterface();
       const calls: common.Multicall2.CallStruct[] = assetAddresses.map((asset) => ({
-        target: getContractAddress(this.chainId, 'PoolDataProvider'),
-        callData: iface.encodeFunctionData('getReserveTokensAddresses', [asset]),
+        target: this.poolDataProvider.address,
+        callData: this.poolDataProviderIface.encodeFunctionData('getReserveTokensAddresses', [asset]),
       }));
-
       const { returnData } = await this.multicall2.callStatic.aggregate(calls);
 
       this.reserveTokensAddresses = [];
       for (let i = 0; i < assetAddresses.length; i++) {
         const assetAddress = assetAddresses[i];
-        const { aTokenAddress, stableDebtTokenAddress, variableDebtTokenAddress } = iface.decodeFunctionResult(
-          'getReserveTokensAddresses',
-          returnData[i]
-        );
+        const { aTokenAddress, stableDebtTokenAddress, variableDebtTokenAddress } =
+          this.poolDataProviderIface.decodeFunctionResult('getReserveTokensAddresses', returnData[i]);
         this.reserveTokensAddresses.push({
           assetAddress,
           aTokenAddress,
@@ -139,7 +173,29 @@ export class Service extends common.Web3Toolkit {
 
   async toAToken(asset: common.Token) {
     const { aTokenAddress } = await this.poolDataProvider.getReserveTokensAddresses(asset.wrapped.address);
+    invariant(aTokenAddress !== constants.AddressZero, `unsupported asset: ${asset.wrapped.address}`);
+
     return this.getToken(aTokenAddress);
+  }
+
+  async toATokens(assets: common.Token[]) {
+    const calls: common.Multicall2.CallStruct[] = assets.map((asset) => ({
+      target: this.poolDataProvider.address,
+      callData: this.poolDataProviderIface.encodeFunctionData('getReserveTokensAddresses', [asset.wrapped.address]),
+    }));
+    const { returnData } = await this.multicall2.callStatic.aggregate(calls);
+
+    const aTokenAddresses: string[] = [];
+    for (let i = 0; i < assets.length; i++) {
+      const { aTokenAddress } = this.poolDataProviderIface.decodeFunctionResult(
+        'getReserveTokensAddresses',
+        returnData[i]
+      );
+      invariant(aTokenAddress !== constants.AddressZero, `unsupported asset: ${assets[i].wrapped.address}`);
+      aTokenAddresses.push(aTokenAddress);
+    }
+
+    return this.getTokens(aTokenAddresses);
   }
 
   async toAsset(aToken: common.Token) {
@@ -187,5 +243,65 @@ export class Service extends common.Web3Toolkit {
     const data = iface.encodeFunctionData('approveDelegation', [delegateeAddress, constants.MaxUint256]);
 
     return { to, data };
+  }
+
+  async getFlashLoanConfiguration(assets: common.Token[]): Promise<FlashLoanConfiguration> {
+    const aTokens = await this.toATokens(assets);
+    const poolAddress = await this.getPoolAddress();
+
+    const calls: common.Multicall2.CallStruct[] = [
+      { target: poolAddress, callData: this.poolIface.encodeFunctionData('FLASHLOAN_PREMIUM_TOTAL') },
+    ];
+    for (let i = 0; i < assets.length; i++) {
+      const assetAddress = assets[i].wrapped.address;
+      calls.push({
+        target: this.poolDataProvider.address,
+        callData: this.poolDataProviderIface.encodeFunctionData('getPaused', [assetAddress]),
+      });
+      calls.push({
+        target: this.poolDataProvider.address,
+        callData: this.poolDataProviderIface.encodeFunctionData('getReserveConfigurationData', [assetAddress]),
+      });
+      calls.push({
+        target: this.poolDataProvider.address,
+        callData: this.poolDataProviderIface.encodeFunctionData('getFlashLoanEnabled', [assetAddress]),
+      });
+      calls.push({
+        target: assetAddress,
+        callData: this.erc20Iface.encodeFunctionData('balanceOf', [aTokens[i].address]),
+      });
+    }
+    const { returnData } = await this.multicall2.callStatic.aggregate(calls);
+
+    let j = 0;
+    const [premium] = this.poolIface.decodeFunctionResult('FLASHLOAN_PREMIUM_TOTAL', returnData[j]);
+    const feeBps = premium.toNumber();
+    j++;
+
+    const assetInfos: FlashLoanAssetInfo[] = [];
+    for (let i = 0; i < assets.length; i++) {
+      const [isPaused] = this.poolDataProviderIface.decodeFunctionResult('getPaused', returnData[j]);
+      j++;
+
+      const { isActive } = this.poolDataProviderIface.decodeFunctionResult(
+        'getReserveConfigurationData',
+        returnData[j]
+      );
+      j++;
+
+      const [isFlashLoanEnabled] = this.poolDataProviderIface.decodeFunctionResult(
+        'getFlashLoanEnabled',
+        returnData[j]
+      );
+      j++;
+
+      const [balance] = this.erc20Iface.decodeFunctionResult('balanceOf', returnData[j]);
+      const availableToBorrow = new common.TokenAmount(assets[i]).setWei(balance);
+      j++;
+
+      assetInfos.push({ isPaused, isActive, isFlashLoanEnabled, availableToBorrow });
+    }
+
+    return { feeBps: feeBps, assetInfos };
   }
 }

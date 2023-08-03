@@ -5,20 +5,73 @@ import { Service } from './service';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
 import { getContractAddress, supportedChainIds } from './configs';
+import invariant from 'tiny-invariant';
 
 export type FlashLoanLogicTokenList = common.Token[];
+
+export type FlashLoanLogicParams = core.TokensOutFields;
+
+export type FlashLoanLogicQuotation = {
+  loans: common.TokenAmounts;
+  repays: common.TokenAmounts;
+  fees: common.TokenAmounts;
+  feeBps: number;
+};
 
 export type FlashLoanLogicFields = core.FlashLoanFields<{ referralCode?: number }>;
 
 @core.LogicDefinitionDecorator()
-export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicBuilderInterface {
+export class FlashLoanLogic
+  extends core.Logic
+  implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
+{
   static readonly supportedChainIds = supportedChainIds;
+
+  get callbackAddress() {
+    return getContractAddress(this.chainId, 'AaveV3FlashLoanCallback');
+  }
 
   async getTokenList() {
     const service = new Service(this.chainId, this.provider);
-    const tokens: FlashLoanLogicTokenList = await service.getAssets();
+    const tokens = await service.getAssets();
+    const { assetInfos } = await service.getFlashLoanConfiguration(tokens);
 
-    return tokens;
+    const tokenList: FlashLoanLogicTokenList = [];
+    for (let i = 0; i < assetInfos.length; i++) {
+      const { isActive, isPaused, isFlashLoanEnabled } = assetInfos[i];
+      if (!isActive || isPaused || !isFlashLoanEnabled) continue;
+      tokenList.push(tokens[i]);
+    }
+
+    return tokenList;
+  }
+
+  async quote(params: FlashLoanLogicParams) {
+    const { outputs: loans } = params;
+
+    const service = new Service(this.chainId, this.provider);
+    const { feeBps, assetInfos } = await service.getFlashLoanConfiguration(loans.map((loan) => loan.token));
+
+    const repays = new common.TokenAmounts();
+    const fees = new common.TokenAmounts();
+    for (let i = 0; i < loans.length; i++) {
+      const loan = loans.at(i);
+      const { isActive, isPaused, isFlashLoanEnabled, availableToBorrow } = assetInfos[i];
+      invariant(isActive, `asset is not active: ${loan.token.address}`);
+      invariant(!isPaused, `asset is paused: ${loan.token.address}`);
+      invariant(isFlashLoanEnabled, `asset can not be used in flash loan: ${loan.token.address}`);
+      invariant(availableToBorrow.gte(loan), `insufficient borrowing capacity for the asset: ${loan.token.address}`);
+
+      const feeAmountWei = common.calcFee(loan.amountWei, feeBps);
+      const fee = new common.TokenAmount(loan.token).setWei(feeAmountWei);
+      fees.add(fee);
+
+      const repay = loan.clone().add(fee);
+      repays.add(repay);
+    }
+    const quotation: FlashLoanLogicQuotation = { loans, repays, fees, feeBps };
+
+    return quotation;
   }
 
   async build(fields: FlashLoanLogicFields) {
@@ -36,7 +89,7 @@ export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInt
       modes.push(InterestRateMode.none);
     });
     const data = Pool__factory.createInterface().encodeFunctionData('flashLoan', [
-      getContractAddress(this.chainId, 'AaveV3FlashLoanCallback'),
+      this.callbackAddress,
       assets,
       amounts,
       modes,
@@ -45,7 +98,7 @@ export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInt
       referralCode,
     ]);
 
-    const callback = getContractAddress(this.chainId, 'AaveV3FlashLoanCallback');
+    const callback = this.callbackAddress;
 
     return core.newLogic({ to, data, callback });
   }

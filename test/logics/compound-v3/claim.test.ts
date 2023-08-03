@@ -66,8 +66,8 @@ describe('Test CompoundV3 Claim Logic', function () {
 
       // 2. get rewards amount after 1000 blocks
       await hrehelpers.mine(1000);
-      const logicCompoundV3Claim = new compoundv3.ClaimLogic(chainId, hre.ethers.provider);
-      const { output } = await logicCompoundV3Claim.quote({ marketId, owner: owner.address });
+      const compoundV3ClaimLogic = new compoundv3.ClaimLogic(chainId, hre.ethers.provider);
+      const { output } = await compoundV3ClaimLogic.quote({ marketId, owner: owner.address });
       expect(output.amountWei).to.be.gt(0);
 
       // 2. allow userAgent help user to claim
@@ -83,7 +83,7 @@ describe('Test CompoundV3 Claim Logic', function () {
       // 4. build router logics
       const routerLogics: core.IParam.LogicStruct[] = [];
       routerLogics.push(
-        await logicCompoundV3Claim.build({ marketId, owner: owner.address, output }, { account: claimer.address })
+        await compoundV3ClaimLogic.build({ marketId, owner: owner.address, output }, { account: claimer.address })
       );
 
       // 5. send router tx

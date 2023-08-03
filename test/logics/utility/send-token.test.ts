@@ -46,8 +46,8 @@ describe('Test Utility SendToken Logic', function () {
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user1, erc20Funds);
 
-      const logicUtilitySendToken = new utility.SendTokenLogic(chainId);
-      routerLogics.push(await logicUtilitySendToken.build({ input, recipient: user2.address }));
+      const utilitySendTokenLogic = new utility.SendTokenLogic(chainId);
+      routerLogics.push(await utilitySendTokenLogic.build({ input, recipient: user2.address }));
 
       // 3. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({

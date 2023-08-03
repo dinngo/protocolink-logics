@@ -51,8 +51,8 @@ describe('Test CompoundV2 Repay Logic', function () {
 
       // 2. get borrow balance after 1000 blocks
       await hrehelpers.mine(1000);
-      const logicCompoundV2Repay = new compoundv2.RepayLogic(chainId, hre.ethers.provider);
-      const { input } = await logicCompoundV2Repay.quote({ borrower: user.address, tokenIn: borrow.token });
+      const compoundV2RepayLogic = new compoundv2.RepayLogic(chainId, hre.ethers.provider);
+      const { input } = await compoundV2RepayLogic.quote({ borrower: user.address, tokenIn: borrow.token });
       expect(input.amountWei).to.be.gt(borrow.amountWei);
 
       // 3. build input, funds, tokensReturn
@@ -67,7 +67,7 @@ describe('Test CompoundV2 Repay Logic', function () {
       // 4. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
-      routerLogics.push(await logicCompoundV2Repay.build({ input, balanceBps, borrower: user.address }));
+      routerLogics.push(await compoundV2RepayLogic.build({ input, balanceBps, borrower: user.address }));
 
       // 5. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({

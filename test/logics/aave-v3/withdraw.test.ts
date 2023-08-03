@@ -58,8 +58,8 @@ describe('Test AaveV3 Withdraw Logic', function () {
       await helpers.supply(chainId, user, assetsAmount);
 
       // 2. get output
-      const logicAaveV3Withdraw = new aavev3.WithdrawLogic(chainId);
-      const { output } = await logicAaveV3Withdraw.quote({ input, tokenOut });
+      const aaveV3WithdrawLogic = new aavev3.WithdrawLogic(chainId);
+      const { output } = await aaveV3WithdrawLogic.quote({ input, tokenOut });
 
       // 3. build funds, tokensReturn
       const tokensReturn = [output.token.elasticAddress];
@@ -74,7 +74,7 @@ describe('Test AaveV3 Withdraw Logic', function () {
       // 4. build router logics
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
-      routerLogics.push(await logicAaveV3Withdraw.build({ input, output, balanceBps }, { account: user.address }));
+      routerLogics.push(await aaveV3WithdrawLogic.build({ input, output, balanceBps }, { account: user.address }));
 
       // 5. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics, tokensReturn });

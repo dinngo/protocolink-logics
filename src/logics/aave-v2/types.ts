@@ -19,3 +19,13 @@ export enum InterestRateMode {
   stable = 1,
   variable = 2,
 }
+
+export interface FlashLoanAssetInfo {
+  isActive: boolean;
+  availableToBorrow: common.TokenAmount;
+}
+
+export interface FlashLoanConfiguration {
+  feeBps: number;
+  assetInfos: FlashLoanAssetInfo[];
+}
