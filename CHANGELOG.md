@@ -1,5 +1,18 @@
 # @protocolink/logics
 
+## 0.2.12
+
+### Patch Changes
+
+- 6f5e0b8: Updated dependencies
+  - @protocolink/core@0.2.18
+- 46eb428: refine compound v3 repay logic balanceBps usage
+- da8f0fc: aave v2 flash loan logic add quote func
+- 05d29c9: aave v3 flash loan logic add quote func
+- 5659236: Utility MultiSendLogic implement with core.LogicMultwqiBuilderInterface
+- 874029a: balancer v2 flash loan logic add quote func
+- 195b3a8: feat: utility add flash loan aggregator logic
+
 ## 0.2.11
 
 ### Patch Changes
