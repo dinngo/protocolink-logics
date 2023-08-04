@@ -8,7 +8,7 @@ export const supportedFlashLoanLogics = [aavev2.FlashLoanLogic, aavev3.FlashLoan
 
 export type FlashLoanAggregatorLogicTokenList = common.Token[];
 
-export type FlashLoanAggregatorLogicParams = core.FlashLoanParams;
+export type FlashLoanAggregatorLogicParams = core.FlashLoanParams<{ protocolId?: string }>;
 
 export type FlashLoanAggregatorLogicQuotation = core.FlashLoanQuotation<{ protocolId: string; callback: string }>;
 
@@ -52,8 +52,10 @@ export class FlashLoanAggregatorLogic
   }
 
   async quote(params: FlashLoanAggregatorLogicParams) {
+    const { protocolId, ...others } = params;
+
     const flashLoanLogics = supportedFlashLoanLogics.filter((FlashLoanLogic) =>
-      FlashLoanLogic.supportedChainIds.includes(this.chainId)
+      protocolId ? FlashLoanLogic.protocolId === protocolId : FlashLoanLogic.supportedChainIds.includes(this.chainId)
     );
 
     const quotations: FlashLoanAggregatorLogicQuotation[] = [];
@@ -61,7 +63,7 @@ export class FlashLoanAggregatorLogic
       flashLoanLogics.map(async (FlashLoanLogic) => {
         const flashLoanLogic = new FlashLoanLogic(this.chainId, this.provider);
         try {
-          const quotation = await flashLoanLogic.quote(params);
+          const quotation = await flashLoanLogic.quote(others);
           quotations.push({
             protocolId: FlashLoanLogic.protocolId,
             callback: flashLoanLogic.callbackAddress,

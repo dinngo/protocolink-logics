@@ -16,6 +16,7 @@ describe('Test Utility FlashLoanAggregator Logic', function () {
     chainId = await getChainId();
     [, user] = await hre.ethers.getSigners();
     await claimToken(chainId, user.address, aavev3.mainnetTokens['1INCH'], '2');
+    await claimToken(chainId, user.address, mainnetTokens.WETH, '2');
     await claimToken(chainId, user.address, mainnetTokens.USDC, '2');
   });
 
@@ -27,13 +28,17 @@ describe('Test Utility FlashLoanAggregator Logic', function () {
     { outputs: new common.TokenAmounts([mainnetTokens.USDT, '1'], [mainnetTokens.DAI, '1']) },
     // aave-v3
     { outputs: new common.TokenAmounts([aavev3.mainnetTokens['1INCH'], '1'], [aavev3.mainnetTokens.USDC, '1']) },
+    { protocolId: 'aave-v3', outputs: new common.TokenAmounts([mainnetTokens.WETH, '1'], [mainnetTokens.USDC, '1']) },
   ];
 
-  testCases.forEach(({ outputs }, i) => {
+  testCases.forEach((params, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. get flash loan quotation
       const utilityFlashLoanAggregatorLogic = new utility.FlashLoanAggregatorLogic(chainId);
-      const { protocolId, loans, repays, fees, callback } = await utilityFlashLoanAggregatorLogic.quote({ outputs });
+      const { protocolId, loans, repays, fees, callback } = await utilityFlashLoanAggregatorLogic.quote(params);
+      if (params.protocolId) {
+        expect(protocolId).to.be.eq(params.protocolId);
+      }
 
       // 2. build funds and router logics for flash loan
       const funds = new common.TokenAmounts();
@@ -59,8 +64,10 @@ describe('Test Utility FlashLoanAggregator Logic', function () {
         routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
       }
 
-      const params = core.newCallbackParams(flashLoanRouterLogics);
-      routerLogics.push(await utilityFlashLoanAggregatorLogic.build({ protocolId, outputs: loans, params }));
+      const callbackParams = core.newCallbackParams(flashLoanRouterLogics);
+      routerLogics.push(
+        await utilityFlashLoanAggregatorLogic.build({ protocolId, outputs: loans, params: callbackParams })
+      );
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics });
