@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 0.2.13
+
+### Patch Changes
+
+- 6ed8cef: Utility FlashLoanAggregatorLogic quote params add optional protocolId
+
 ## 0.2.12
 
 ### Patch Changes
