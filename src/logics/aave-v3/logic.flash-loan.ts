@@ -9,14 +9,9 @@ import invariant from 'tiny-invariant';
 
 export type FlashLoanLogicTokenList = common.Token[];
 
-export type FlashLoanLogicParams = core.TokensOutFields;
+export type FlashLoanLogicParams = core.FlashLoanParams;
 
-export type FlashLoanLogicQuotation = {
-  loans: common.TokenAmounts;
-  repays: common.TokenAmounts;
-  fees: common.TokenAmounts;
-  feeBps: number;
-};
+export type FlashLoanLogicQuotation = core.FlashLoanQuotation;
 
 export type FlashLoanLogicFields = core.FlashLoanFields<{ referralCode?: number }>;
 

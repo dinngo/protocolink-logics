@@ -8,16 +8,9 @@ export const supportedFlashLoanLogics = [aavev2.FlashLoanLogic, aavev3.FlashLoan
 
 export type FlashLoanAggregatorLogicTokenList = common.Token[];
 
-export type FlashLoanAggregatorLogicParams = core.TokensOutFields;
+export type FlashLoanAggregatorLogicParams = core.FlashLoanParams;
 
-export type FlashLoanAggregatorLogicQuotation = {
-  protocolId: string;
-  loans: common.TokenAmounts;
-  repays: common.TokenAmounts;
-  fees: common.TokenAmounts;
-  feeBps: number;
-  callback: string;
-};
+export type FlashLoanAggregatorLogicQuotation = core.FlashLoanQuotation<{ protocolId: string; callback: string }>;
 
 export type FlashLoanAggregatorLogicFields = core.FlashLoanFields<{ protocolId: string; referralCode?: number }>;
 
