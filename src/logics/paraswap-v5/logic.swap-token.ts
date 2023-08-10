@@ -91,8 +91,10 @@ export class SwapTokenLogic
 
     const priceRoute = await this.sdk.swap.getRate({
       srcToken: input.token.elasticAddress,
+      srcDecimals: input.token.decimals,
       amount: input.amountWei.toString(),
       destToken: output.token.elasticAddress,
+      destDecimals: output.token.decimals,
     });
     const { srcToken, srcDecimals, srcAmount, destToken, destDecimals, destAmount } = priceRoute;
     output.setWei(destAmount);

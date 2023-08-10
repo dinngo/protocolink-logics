@@ -8,3 +8,5 @@ export interface LogicTestCaseWithOptions<TField, TOptions> extends LogicTestCas
 export type LogicTestCase<TField, TOptions = void> = TOptions extends void
   ? LogicTestCaseWithoutOptions<TField>
   : LogicTestCaseWithOptions<TField, TOptions>;
+
+export type LogicTestCaseWithChainId<TField, TOptions = void> = { chainId: number } & LogicTestCase<TField, TOptions>;
