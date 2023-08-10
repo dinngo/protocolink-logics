@@ -26,14 +26,14 @@ describe('BalancerV2 FlashLoanLogic', function () {
     const testCases: LogicTestCase<FlashLoanLogicFields>[] = [
       {
         fields: {
-          outputs: new common.TokenAmounts([mainnetTokens.WETH, '1'], [mainnetTokens.USDC, '1']),
+          loans: new common.TokenAmounts([mainnetTokens.WETH, '1'], [mainnetTokens.USDC, '1']),
           params: '0x',
         },
       },
     ];
 
     testCases.forEach(({ fields }) => {
-      it(`flash loan ${fields.outputs.map((output) => output.token.symbol).join(',')}`, async function () {
+      it(`flash loan ${fields.loans.map((loan) => loan.token.symbol).join(',')}`, async function () {
         const routerLogic = await logic.build(fields);
         const sig = routerLogic.data.substring(0, 10);
 

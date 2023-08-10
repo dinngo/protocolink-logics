@@ -24,22 +24,25 @@ describe('Test AaveV2 FlashLoan Logic', function () {
   snapshotAndRevertEach();
 
   const testCases = [
-    { outputs: new common.TokenAmounts([aavev2.mainnetTokens.WETH, '1'], [aavev2.mainnetTokens.USDC, '1']) },
-    { outputs: new common.TokenAmounts([aavev2.mainnetTokens.USDT, '1'], [aavev2.mainnetTokens.DAI, '1']) },
+    { loans: new common.TokenAmounts([aavev2.mainnetTokens.WETH, '1'], [aavev2.mainnetTokens.USDC, '1']) },
+    { repays: new common.TokenAmounts([aavev2.mainnetTokens.WETH, '1'], [aavev2.mainnetTokens.USDC, '1']) },
+    { loans: new common.TokenAmounts([aavev2.mainnetTokens.USDT, '1'], [aavev2.mainnetTokens.DAI, '1']) },
+    { repays: new common.TokenAmounts([aavev2.mainnetTokens.USDT, '1'], [aavev2.mainnetTokens.DAI, '1']) },
   ];
 
-  testCases.forEach(({ outputs }, i) => {
+  testCases.forEach((params, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. get flash loan quotation
       const aaveV2FlashLoanLogic = new aavev2.FlashLoanLogic(chainId);
-      const { loans, repays, fees } = await aaveV2FlashLoanLogic.quote({ outputs });
+      const { loans, repays } = await aaveV2FlashLoanLogic.quote(params);
 
       // 2. build funds and router logics for flash loan by flash loan fee
       const funds = new common.TokenAmounts();
       const flashLoanRouterLogics: core.IParam.LogicStruct[] = [];
       const utilitySendTokenLogic = new utility.SendTokenLogic(chainId);
-      for (let i = 0; i < fees.length; i++) {
-        funds.add(fees.at(i).clone());
+      for (let i = 0; i < repays.length; i++) {
+        const fee = repays.at(i).clone().sub(loans.at(i));
+        funds.add(fee);
         flashLoanRouterLogics.push(
           await utilitySendTokenLogic.build({
             input: repays.at(i),
@@ -52,8 +55,8 @@ describe('Test AaveV2 FlashLoan Logic', function () {
       const erc20Funds = funds.erc20;
       const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
 
-      const params = core.newCallbackParams(flashLoanRouterLogics);
-      routerLogics.push(await aaveV2FlashLoanLogic.build({ outputs: loans, params }));
+      const callbackParams = core.newCallbackParams(flashLoanRouterLogics);
+      routerLogics.push(await aaveV2FlashLoanLogic.build({ loans, params: callbackParams }));
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics });

@@ -38,34 +38,61 @@ export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInt
     return tokenList;
   }
 
+  // https://github.com/aave/protocol-v2/blob/master/contracts/protocol/lendingpool/LendingPool.sol#L483
+  // https://github.com/aave/protocol-v2/blob/master/contracts/protocol/lendingpool/LendingPool.sol#L504
   async quote(params: FlashLoanLogicParams) {
-    const { outputs: loans } = params;
+    const assets = core.isFlashLoanLoanParams(params)
+      ? params.loans.map(({ token }) => token)
+      : params.repays.map(({ token }) => token);
 
     const service = new Service(this.chainId, this.provider);
-    const { feeBps, assetInfos } = await service.getFlashLoanConfiguration(loans.map((loan) => loan.token));
+    const { feeBps, assetInfos } = await service.getFlashLoanConfiguration(assets);
 
-    const repays = new common.TokenAmounts();
-    const fees = new common.TokenAmounts();
-    for (let i = 0; i < loans.length; i++) {
-      const loan = loans.at(i);
-      const { isActive, availableToBorrow } = assetInfos[i];
-      invariant(isActive, `asset is not active: ${loan.token.address}`);
-      invariant(availableToBorrow.gte(loan), `insufficient borrowing capacity for the asset: ${loan.token.address}`);
+    let loans: common.TokenAmounts;
+    let repays: common.TokenAmounts;
+    if (core.isFlashLoanLoanParams(params)) {
+      ({ loans } = params);
 
-      const feeAmountWei = common.calcFee(loan.amountWei, feeBps);
-      const fee = new common.TokenAmount(loan.token).setWei(feeAmountWei);
-      fees.add(fee);
+      repays = new common.TokenAmounts();
+      for (let i = 0; i < loans.length; i++) {
+        const loan = loans.at(i);
 
-      const repay = loan.clone().add(fee);
-      repays.add(repay);
+        const { isActive, availableToBorrow } = assetInfos[i];
+        invariant(isActive, `asset is not active: ${loan.token.address}`);
+        invariant(availableToBorrow.gte(loan), `insufficient borrowing capacity for the asset: ${loan.token.address}`);
+
+        const feeAmountWei = common.calcFee(loan.amountWei, feeBps);
+        const fee = new common.TokenAmount(loan.token).setWei(feeAmountWei);
+        const repay = loan.clone().add(fee);
+        repays.add(repay);
+      }
+    } else {
+      loans = new common.TokenAmounts();
+      repays = new common.TokenAmounts();
+      for (let i = 0; i < params.repays.length; i++) {
+        const repay = params.repays.at(i);
+
+        const loanAmountWei = common.reverseAmountWithFee(repay.amountWei, feeBps);
+        const loan = new common.TokenAmount(repay.token).setWei(loanAmountWei);
+        loans.add(loan);
+
+        const { isActive, availableToBorrow } = assetInfos[i];
+        invariant(isActive, `asset is not active: ${loan.token.address}`);
+        invariant(availableToBorrow.gte(loan), `insufficient borrowing capacity for the asset: ${loan.token.address}`);
+
+        const feeAmountWei = common.calcFee(loan.amountWei, feeBps);
+        const fee = new common.TokenAmount(loan.token).setWei(feeAmountWei);
+        repays.add(loan.clone().add(fee));
+      }
     }
-    const quotation: FlashLoanLogicQuotation = { loans, repays, fees, feeBps };
+
+    const quotation: FlashLoanLogicQuotation = { loans, repays, feeBps };
 
     return quotation;
   }
 
   async build(fields: FlashLoanLogicFields) {
-    const { outputs, params, referralCode = 0 } = fields;
+    const { loans, params, referralCode = 0 } = fields;
 
     const service = new Service(this.chainId, this.provider);
     const to = await service.getLendingPoolAddress();
@@ -73,9 +100,9 @@ export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInt
     const assets: string[] = [];
     const amounts: BigNumberish[] = [];
     const modes: number[] = [];
-    outputs.forEach((output) => {
-      assets.push(output.token.address);
-      amounts.push(output.amountWei);
+    loans.forEach((loan) => {
+      assets.push(loan.token.address);
+      amounts.push(loan.amountWei);
       modes.push(InterestRateMode.none);
     });
     const data = LendingPool__factory.createInterface().encodeFunctionData('flashLoan', [

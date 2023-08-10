@@ -24,18 +24,22 @@ describe('Test Utility FlashLoanAggregator Logic', function () {
 
   const testCases = [
     // balancer-v2
-    { outputs: new common.TokenAmounts([mainnetTokens.WETH, '1'], [mainnetTokens.USDC, '1']) },
-    { outputs: new common.TokenAmounts([mainnetTokens.USDT, '1'], [mainnetTokens.DAI, '1']) },
+    { loans: new common.TokenAmounts([mainnetTokens.WETH, '1'], [mainnetTokens.USDC, '1']) },
+    { repays: new common.TokenAmounts([mainnetTokens.WETH, '1'], [mainnetTokens.USDC, '1']) },
+    { loans: new common.TokenAmounts([mainnetTokens.USDT, '1'], [mainnetTokens.DAI, '1']) },
+    { repays: new common.TokenAmounts([mainnetTokens.USDT, '1'], [mainnetTokens.DAI, '1']) },
     // aave-v3
-    { outputs: new common.TokenAmounts([aavev3.mainnetTokens['1INCH'], '1'], [aavev3.mainnetTokens.USDC, '1']) },
-    { protocolId: 'aave-v3', outputs: new common.TokenAmounts([mainnetTokens.WETH, '1'], [mainnetTokens.USDC, '1']) },
+    { loans: new common.TokenAmounts([aavev3.mainnetTokens['1INCH'], '1'], [aavev3.mainnetTokens.USDC, '1']) },
+    { repays: new common.TokenAmounts([aavev3.mainnetTokens['1INCH'], '1'], [aavev3.mainnetTokens.USDC, '1']) },
+    { protocolId: 'aave-v3', loans: new common.TokenAmounts([mainnetTokens.WETH, '1'], [mainnetTokens.USDC, '1']) },
+    { protocolId: 'aave-v3', repays: new common.TokenAmounts([mainnetTokens.WETH, '1'], [mainnetTokens.USDC, '1']) },
   ];
 
   testCases.forEach((params, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. get flash loan quotation
       const utilityFlashLoanAggregatorLogic = new utility.FlashLoanAggregatorLogic(chainId);
-      const { protocolId, loans, repays, fees, callback } = await utilityFlashLoanAggregatorLogic.quote(params);
+      const { protocolId, loans, repays, callback } = await utilityFlashLoanAggregatorLogic.quote(params);
       if (params.protocolId) {
         expect(protocolId).to.be.eq(params.protocolId);
       }
@@ -44,8 +48,8 @@ describe('Test Utility FlashLoanAggregator Logic', function () {
       const funds = new common.TokenAmounts();
       const flashLoanRouterLogics: core.IParam.LogicStruct[] = [];
       const utilitySendTokenLogic = new utility.SendTokenLogic(chainId);
-      for (let i = 0; i < fees.length; i++) {
-        const fee = fees.at(i).clone();
+      for (let i = 0; i < repays.length; i++) {
+        const fee = repays.at(i).clone().sub(loans.at(i));
         if (!fee.isZero) {
           funds.add(fee);
         }
@@ -65,9 +69,7 @@ describe('Test Utility FlashLoanAggregator Logic', function () {
       }
 
       const callbackParams = core.newCallbackParams(flashLoanRouterLogics);
-      routerLogics.push(
-        await utilityFlashLoanAggregatorLogic.build({ protocolId, outputs: loans, params: callbackParams })
-      );
+      routerLogics.push(await utilityFlashLoanAggregatorLogic.build({ protocolId, loans, params: callbackParams }));
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics });

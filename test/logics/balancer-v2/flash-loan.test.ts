@@ -19,22 +19,24 @@ describe('Test BalancerV2 FlashLoan Logic', function () {
   snapshotAndRevertEach();
 
   const testCases = [
-    { outputs: new common.TokenAmounts([mainnetTokens.WETH, '1'], [mainnetTokens.USDC, '1']) },
-    { outputs: new common.TokenAmounts([mainnetTokens.USDT, '1'], [mainnetTokens.DAI, '1']) },
+    { loans: new common.TokenAmounts([mainnetTokens.WETH, '1'], [mainnetTokens.USDC, '1']) },
+    { repays: new common.TokenAmounts([mainnetTokens.WETH, '1'], [mainnetTokens.USDC, '1']) },
+    { loans: new common.TokenAmounts([mainnetTokens.USDT, '1'], [mainnetTokens.DAI, '1']) },
+    { repays: new common.TokenAmounts([mainnetTokens.USDT, '1'], [mainnetTokens.DAI, '1']) },
   ];
 
-  testCases.forEach(({ outputs }, i) => {
+  testCases.forEach((params, i) => {
     it(`case ${i + 1}`, async function () {
       // 1. get flash loan quotation
       const balancerV2FlashLoanLogic = new balancerv2.FlashLoanLogic(chainId);
-      const { loans, repays, fees } = await balancerV2FlashLoanLogic.quote({ outputs });
+      const { loans, repays } = await balancerV2FlashLoanLogic.quote(params);
 
       // 2. build funds and router logics for flash loan
       const funds = new common.TokenAmounts();
       const flashLoanRouterLogics: core.IParam.LogicStruct[] = [];
       const utilitySendTokenLogic = new utility.SendTokenLogic(chainId);
-      for (let i = 0; i < fees.length; i++) {
-        const fee = fees.at(i).clone();
+      for (let i = 0; i < repays.length; i++) {
+        const fee = repays.at(i).clone().sub(loans.at(i));
         if (!fee.isZero) {
           funds.add(fee);
         }
@@ -49,8 +51,8 @@ describe('Test BalancerV2 FlashLoan Logic', function () {
       // 3. build router logics
       const routerLogics: core.IParam.LogicStruct[] = [];
 
-      const params = core.newCallbackParams(flashLoanRouterLogics);
-      routerLogics.push(await balancerV2FlashLoanLogic.build({ outputs: loans, params: params }));
+      const callbackParams = core.newCallbackParams(flashLoanRouterLogics);
+      routerLogics.push(await balancerV2FlashLoanLogic.build({ loans, params: callbackParams }));
 
       // 4. send router tx
       const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics });
