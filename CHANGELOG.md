@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 0.2.14
+
+### Patch Changes
+
+- 69568f8: update flash loan quote with repays
+
 ## 0.2.13
 
 ### Patch Changes
