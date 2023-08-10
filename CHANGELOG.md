@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 0.2.15
+
+### Patch Changes
+
+- 8599925: fix the issue of paraswap v5 caused by missing token decimals
+
 ## 0.2.14
 
 ### Patch Changes
