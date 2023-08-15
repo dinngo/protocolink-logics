@@ -1,5 +1,12 @@
 # @protocolink/logics
 
+## 0.2.16
+
+### Patch Changes
+
+- e43f7b4: refine compound v3 withdraw base logic
+- e35c3ac: utility flash loan aggregator logic quote add quotation validation
+
 ## 0.2.15
 
 ### Patch Changes
