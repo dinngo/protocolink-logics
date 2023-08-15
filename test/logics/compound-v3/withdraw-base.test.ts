@@ -26,34 +26,19 @@ describe('Test CompoundV3 WithdrawBase Logic', function () {
       marketId: compoundv3.MarketId.USDC,
       input: new common.TokenAmount(compoundv3.mainnetTokens.cUSDCv3, '1'),
       tokenOut: compoundv3.mainnetTokens.USDC,
-    },
-    {
-      marketId: compoundv3.MarketId.USDC,
-      input: new common.TokenAmount(compoundv3.mainnetTokens.cUSDCv3, '1'),
-      tokenOut: compoundv3.mainnetTokens.USDC,
-      balanceBps: 5000,
+      balanceBps: 10000,
     },
     {
       marketId: compoundv3.MarketId.ETH,
       input: new common.TokenAmount(compoundv3.mainnetTokens.cWETHv3, '1'),
       tokenOut: compoundv3.mainnetTokens.ETH,
-    },
-    {
-      marketId: compoundv3.MarketId.ETH,
-      input: new common.TokenAmount(compoundv3.mainnetTokens.cWETHv3, '1'),
-      tokenOut: compoundv3.mainnetTokens.ETH,
-      balanceBps: 5000,
+      balanceBps: 10000,
     },
     {
       marketId: compoundv3.MarketId.ETH,
       input: new common.TokenAmount(compoundv3.mainnetTokens.cWETHv3, '1'),
       tokenOut: compoundv3.mainnetTokens.WETH,
-    },
-    {
-      marketId: compoundv3.MarketId.ETH,
-      input: new common.TokenAmount(compoundv3.mainnetTokens.cWETHv3, '1'),
-      tokenOut: compoundv3.mainnetTokens.WETH,
-      balanceBps: 5000,
+      balanceBps: 10000,
     },
   ];
 

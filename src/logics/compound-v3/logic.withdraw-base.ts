@@ -1,7 +1,6 @@
 import { Comet__factory } from './contracts';
 import { Service } from './service';
 import * as common from '@protocolink/common';
-import { constants } from 'ethers';
 import * as core from '@protocolink/core';
 import { getMarket, getMarkets, supportedChainIds } from './configs';
 
@@ -49,10 +48,9 @@ export class WithdrawBaseLogic
 
     const market = getMarket(this.chainId, marketId);
     const tokenOut = output.token.wrapped;
-    const amountWei = balanceBps ? input.amountWei : constants.MaxUint256;
 
     const to = market.cometAddress;
-    const data = Comet__factory.createInterface().encodeFunctionData('withdraw', [tokenOut.address, amountWei]);
+    const data = Comet__factory.createInterface().encodeFunctionData('withdraw', [tokenOut.address, input.amountWei]);
     const amountOffset = balanceBps ? common.getParamOffset(1) : undefined;
     const inputs = [core.newLogicInput({ input, balanceBps, amountOffset })];
     const wrapMode = output.token.isNative ? core.WrapMode.unwrapAfter : core.WrapMode.none;
