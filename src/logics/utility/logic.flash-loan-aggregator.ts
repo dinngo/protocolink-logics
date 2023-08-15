@@ -3,6 +3,7 @@ import * as aavev3 from '../aave-v3';
 import * as balancerv2 from '../balancer-v2';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
+import invariant from 'tiny-invariant';
 
 export const supportedFlashLoanLogics = [aavev2.FlashLoanLogic, aavev3.FlashLoanLogic, balancerv2.FlashLoanLogic];
 
@@ -73,12 +74,13 @@ export class FlashLoanAggregatorLogic
       })
     );
 
-    let quotation = quotations[0];
-    for (let i = 1; i < quotations.length; i++) {
-      if (quotations[i].feeBps < quotation.feeBps) {
+    let quotation: FlashLoanAggregatorLogicQuotation | undefined;
+    for (let i = 0; i < quotations.length; i++) {
+      if (!quotation || quotations[i].feeBps < quotation.feeBps) {
         quotation = quotations[i];
       }
     }
+    invariant(!!quotation, 'no suitable flash loan found');
 
     return quotation;
   }
