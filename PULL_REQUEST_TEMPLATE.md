@@ -4,8 +4,8 @@
 ## Protocol Information
 
 - **Name:**
-- **Twitter Link:**
-- **Website Link:**
+- **Twitter:**
+- **Website:**
 - **Github:**
 - **Developer Docs:**
 - **Are you a member of the protocol?** [Yes/No]

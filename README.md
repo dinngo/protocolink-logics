@@ -23,9 +23,9 @@ An SDK that build protocol logics for Protocolink
   - Implement the Logic class in the logic file using PascalCase. Append `Logic` to the action name.
   - Extend the `core.Logic` class.
   - Implement the following interfaces based on the requirements:
-    - `core.LogicTokenListInterface`: Support for tokens list function.
-    - `core.LogicOracleInterface`: Quotation function.
-    - `core.LogicBuilderInterface`: Txdata encode function for interacting with contracts.
+    - `core.LogicTokenListInterface`: The tokens list function.
+    - `core.LogicOracleInterface`: The quotation function.
+    - `core.LogicBuilderInterface`: The txdata encode function for interacting with contracts.
 
   **Example:**
   ```typescript
@@ -43,17 +43,17 @@ An SDK that build protocol logics for Protocolink
   - More: [GO](src/logics/)
 
 4. **Unit Testing:**
-  - Write tests that won't change based on block number increments.
+  - Write tests that won't fail based on block number increments.
   - Test files are in the same path as the logic files, named `logic.{logicId}.test.ts`.
   - Write tests for functions like `getTokenList()` and `build()` as needed.
 
 5. **Integration Testing:**
   - Write tests that interact with the Router contract in real time.
-  - Test files are in `test/logics/{protocolId}/{logicId}.test.ts`.
-  - Utilize Logic's quotation function to generate Logic Data for contract interaction.
+  - Test files are in `test/logics/{protocolId}/`, named `{logicId}.test.ts`.
+  - Utilize Logic's quotation functions to generate Logic Data for contract interactions.
   - Verify transaction success and expected changes in user asset balances.
 
-6. Submit a Pull Request (PR):
+6. **Submit a Pull Request (PR)**:
   - Use the [PR template](PULL_REQUEST_TEMPLATE.md) for PR content. Fill in the template and submit the PR.
   - Enable "Allow edits by maintainers" when creating the PR.
   - If your PR isn't merged promptly, feel free to ask for assistance on our Discord.
@@ -63,6 +63,12 @@ An SDK that build protocol logics for Protocolink
 - Discord: [Join Our Community](https://discord.furucombo.app/)
 
 ## CLI
+
+- Install the required dependencies
+
+  ```sh
+  yarn install
+  ```
 
 - Generate protocol's abi TypeScript classes
 
