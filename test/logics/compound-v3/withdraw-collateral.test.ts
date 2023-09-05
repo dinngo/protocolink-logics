@@ -10,13 +10,15 @@ import hre from 'hardhat';
 describe('Test CompoundV3 WithdrawCollateral Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
-  let userAgent: string;
+  let routerKit: core.RouterKit;
+  let agent: string;
   let service: compoundv3.Service;
 
   before(async function () {
     chainId = await getChainId();
     [, user] = await hre.ethers.getSigners();
-    userAgent = core.calcAccountAgent(chainId, user.address);
+    routerKit = new core.RouterKit(chainId);
+    agent = await routerKit.calcAgent(user.address);
     service = new compoundv3.Service(chainId, hre.ethers.provider);
     await claimToken(chainId, user.address, compoundv3.mainnetTokens.WETH, '10');
     await claimToken(chainId, user.address, compoundv3.mainnetTokens.WBTC, '10');
@@ -61,7 +63,7 @@ describe('Test CompoundV3 WithdrawCollateral Logic', function () {
 
       // 3. allow userAgent to manage user's collaterals
       await helpers.allow(chainId, user, marketId);
-      const isAllowed = await service.isAllowed(marketId, user.address, userAgent);
+      const isAllowed = await service.isAllowed(marketId, user.address, agent);
       expect(isAllowed).to.be.true;
 
       // 4. build funds, tokensReturn
@@ -72,8 +74,8 @@ describe('Test CompoundV3 WithdrawCollateral Logic', function () {
       const compoundV3WithdrawCollateralLogic = new compoundv3.WithdrawCollateralLogic(chainId, hre.ethers.provider);
       routerLogics.push(await compoundV3WithdrawCollateralLogic.build({ marketId, output }, { account: user.address }));
 
-      // 6. send router tx
-      const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics, tokensReturn });
+      // 5. send router tx
+      const transactionRequest = routerKit.buildExecuteTransactionRequest({ routerLogics, tokensReturn });
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
       const collateralBalance = await service.getCollateralBalance(marketId, user.address, output.token);
       expect(supply.amountWei.sub(collateralBalance.amountWei)).to.eq(output.amountWei);

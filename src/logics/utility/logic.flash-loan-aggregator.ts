@@ -29,6 +29,14 @@ export class FlashLoanAggregatorLogic
     }, new Set<number>())
   );
 
+  async calcCallbackFee(protocolId: string, loan: common.TokenAmount) {
+    const FlashLoanLogic = supportedFlashLoanLogics.find((Logic) => Logic.protocolId === protocolId)!;
+    const flashLoanLogic = new FlashLoanLogic(this.chainId, this.provider);
+    const callbackFee = await flashLoanLogic.calcCallbackFee(loan);
+
+    return callbackFee;
+  }
+
   async getTokenList() {
     const flashLoanLogics = supportedFlashLoanLogics.filter((FlashLoanLogic) =>
       FlashLoanLogic.supportedChainIds.includes(this.chainId)

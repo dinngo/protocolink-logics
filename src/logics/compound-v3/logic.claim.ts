@@ -42,11 +42,11 @@ export class ClaimLogic
     const to = getContractAddress(this.chainId, 'CometRewards');
     let data: string;
     if (owner === account) {
-      const userAgent = core.calcAccountAgent(this.chainId, account);
+      const agent = await this.calcAgent(account);
       data = CometRewards__factory.createInterface().encodeFunctionData('claimTo', [
         market.cometAddress,
         owner,
-        userAgent,
+        agent,
         true,
       ]);
     } else {

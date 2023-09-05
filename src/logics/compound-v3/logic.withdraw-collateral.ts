@@ -35,13 +35,13 @@ export class WithdrawCollateralLogic
     const { account } = options;
 
     const market = getMarket(this.chainId, marketId);
-    const userAgent = core.calcAccountAgent(this.chainId, account);
     const tokenOut = output.token.wrapped;
+    const agent = await this.calcAgent(account);
 
     const to = market.cometAddress;
     const data = Comet__factory.createInterface().encodeFunctionData('withdrawFrom', [
       account,
-      userAgent,
+      agent,
       tokenOut.address,
       output.amountWei,
     ]);

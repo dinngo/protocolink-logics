@@ -46,13 +46,14 @@ export class DepositLogic
     const { account } = options;
 
     const tokenIn = input.token.wrapped;
+    const agent = await this.calcAgent(account);
 
     const service = new Service(this.chainId, this.provider);
     const to = await service.getLendingPoolAddress();
     const data = LendingPool__factory.createInterface().encodeFunctionData('deposit', [
       tokenIn.address,
       input.amountWei,
-      core.calcAccountAgent(this.chainId, account),
+      agent,
       referralCode,
     ]);
     const amountOffset = balanceBps ? common.getParamOffset(1) : undefined;

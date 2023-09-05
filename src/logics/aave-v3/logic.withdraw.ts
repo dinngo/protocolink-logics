@@ -46,13 +46,14 @@ export class WithdrawLogic
     const { account } = options;
 
     const tokenOut = output.token.wrapped;
+    const agent = await this.calcAgent(account);
 
     const service = new Service(this.chainId, this.provider);
     const to = await service.getPoolAddress();
     const data = Pool__factory.createInterface().encodeFunctionData('withdraw', [
       tokenOut.address,
       input.amountWei,
-      core.calcAccountAgent(this.chainId, account),
+      agent,
     ]);
     const amountOffset = balanceBps ? common.getParamOffset(1) : undefined;
     const inputs = [core.newLogicInput({ input, balanceBps, amountOffset })];

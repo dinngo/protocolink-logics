@@ -2,7 +2,6 @@ import { Token, WETH9 } from '@uniswap/sdk-core';
 import arbitrumTokensJSON from './data/arbitrum.json';
 import * as common from '@protocolink/common';
 import mainnetTokensJSON from './data/mainnet.json';
-import optimismTokensJSON from './data/optimism.json';
 import polygonTokensJSON from './data/polygon.json';
 import * as univ3 from 'src/modules/univ3';
 
@@ -22,13 +21,6 @@ export const WRAPPED_NATIVE_CURRENCY: Record<number, Token> = {
     'WETH',
     'Wrapped Ether'
   ),
-  [common.ChainId.optimism]: new Token(
-    common.ChainId.optimism,
-    '0x4200000000000000000000000000000000000006',
-    18,
-    'WETH',
-    'Wrapped Ether'
-  ),
 };
 
 type MainnetTokenSymbols = keyof typeof mainnetTokensJSON;
@@ -42,7 +34,3 @@ export const polygonTokens = univ3.toTokenMap<PolygonTokenSymbols>(polygonTokens
 type ArbitrumTokenSymbols = keyof typeof arbitrumTokensJSON;
 
 export const arbitrumTokens = univ3.toTokenMap<ArbitrumTokenSymbols>(arbitrumTokensJSON);
-
-type OptimismTokenSymbols = keyof typeof optimismTokensJSON;
-
-export const optimismTokens = univ3.toTokenMap<OptimismTokenSymbols>(optimismTokensJSON);

@@ -59,7 +59,8 @@ describe('Test AaveV3 Borrow Logic', function () {
       routerLogics.push(await aaveV3BorrowLogic.build({ output, interestRateMode }, { account: user.address }));
 
       // 4. send router tx
-      const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics, tokensReturn });
+      const routerKit = new core.RouterKit(chainId);
+      const transactionRequest = routerKit.buildExecuteTransactionRequest({ routerLogics, tokensReturn });
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
       await expect(user.address).to.changeBalance(output.token, output.amount);
     });

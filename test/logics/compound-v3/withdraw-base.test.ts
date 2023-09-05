@@ -64,13 +64,16 @@ describe('Test CompoundV3 WithdrawBase Logic', function () {
       }
 
       // 4. build router logics
-      const erc20Funds = funds.erc20;
-      const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
+      const routerLogics: core.IParam.LogicStruct[] = [];
       routerLogics.push(await compoundV3WithdrawBaseLogic.build({ marketId, input, output, balanceBps }));
 
-      // 5. send router tx
-      const transactionRequest = core.newRouterExecuteTransactionRequest({
-        chainId,
+      // 5. get router permit2 datas
+      const permit2Datas = await utils.getRouterPermit2Datas(chainId, user, funds.erc20);
+
+      // 6. send router tx
+      const routerKit = new core.RouterKit(chainId);
+      const transactionRequest = routerKit.buildExecuteTransactionRequest({
+        permit2Datas,
         routerLogics,
         tokensReturn,
         value: funds.native?.amountWei ?? 0,

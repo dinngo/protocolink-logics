@@ -88,14 +88,16 @@ describe('Test AaveV3 Repay Logic', function () {
       const tokensReturn = [input.token.elasticAddress];
 
       // 4. build router logics
-      const erc20Funds = funds.erc20;
-      const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
-
+      const routerLogics: core.IParam.LogicStruct[] = [];
       routerLogics.push(await aaveV3RepayLogic.build({ input, interestRateMode, borrower: user.address, balanceBps }));
 
-      // 5. send router tx
-      const transactionRequest = core.newRouterExecuteTransactionRequest({
-        chainId,
+      // 5. get router permit2 datas
+      const permit2Datas = await utils.getRouterPermit2Datas(chainId, user, funds.erc20);
+
+      // 6. send router tx
+      const routerKit = new core.RouterKit(chainId);
+      const transactionRequest = routerKit.buildExecuteTransactionRequest({
+        permit2Datas,
         routerLogics,
         tokensReturn,
         value: funds.native?.amountWei ?? 0,
@@ -103,7 +105,7 @@ describe('Test AaveV3 Repay Logic', function () {
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
       await expect(user.address).to.changeBalance(input.token, -input.amount, 200);
 
-      // 6. check user's debt should be zero
+      // 7. check user's debt should be zero
       quotation = await aaveV3RepayLogic.quote({ borrower: user.address, tokenIn: borrow.token, interestRateMode });
       expect(quotation.input.amountWei).to.eq(0);
     });

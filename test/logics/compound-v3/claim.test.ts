@@ -70,12 +70,14 @@ describe('Test CompoundV3 Claim Logic', function () {
       const { output } = await compoundV3ClaimLogic.quote({ marketId, owner: owner.address });
       expect(output.amountWei).to.be.gt(0);
 
-      // 2. allow userAgent help user to claim
+      const routerKit = new core.RouterKit(chainId);
+
+      // 3. allow agent help user to claim
       const tokensReturn = [];
       if (claimer.address === owner.address) {
         await helpers.allow(chainId, claimer, marketId);
-        const userAgent = core.calcAccountAgent(chainId, claimer.address);
-        const isAllowed = await service.isAllowed(marketId, claimer.address, userAgent);
+        const agent = await routerKit.calcAgent(claimer.address);
+        const isAllowed = await service.isAllowed(marketId, claimer.address, agent);
         expect(isAllowed).to.be.true;
         tokensReturn.push(output.token.elasticAddress);
       }
@@ -87,7 +89,7 @@ describe('Test CompoundV3 Claim Logic', function () {
       );
 
       // 5. send router tx
-      const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics, tokensReturn });
+      const transactionRequest = routerKit.buildExecuteTransactionRequest({ routerLogics, tokensReturn });
       await expect(claimer.sendTransaction(transactionRequest)).to.not.be.reverted;
       await expect(owner.address).to.changeBalance(output.token, output.amount, 1);
     });

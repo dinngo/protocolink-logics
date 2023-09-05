@@ -70,7 +70,8 @@ describe('Test CompoundV2 Claim Logic', function () {
       routerLogics.push(await compoundV2ClaimLogic.build({ owner: owner.address, output }));
 
       // 4. send router tx
-      const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics });
+      const routerKit = new core.RouterKit(chainId);
+      const transactionRequest = routerKit.buildExecuteTransactionRequest({ routerLogics });
       await expect(claimer.sendTransaction(transactionRequest)).to.not.be.reverted;
       await expect(owner.address).to.changeBalance(output.token, output.amount, 1);
     });

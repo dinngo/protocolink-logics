@@ -3,7 +3,6 @@ import { approves } from '@protocolink/test-helpers';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
 import hre from 'hardhat';
-import * as permit2 from 'src/logics/permit2';
 
 export function calcRequiredAmountByBalanceBps(input: common.TokenAmount, balanceBps?: number) {
   let required: common.TokenAmount;
@@ -17,32 +16,27 @@ export function calcRequiredAmountByBalanceBps(input: common.TokenAmount, balanc
   return required;
 }
 
-export async function getPermitAndPullTokenRouterLogics(
-  chainId: number,
-  user: SignerWithAddress,
-  erc20Funds: common.TokenAmounts
-) {
-  const routerLogics: core.IParam.LogicStruct[] = [];
-  if (!erc20Funds.isEmpty) {
-    const permit2Address = permit2.getContractAddress(chainId, 'Permit2');
+export async function getRouterPermit2Datas(chainId: number, user: SignerWithAddress, inputs: common.TokenAmounts) {
+  const permit2Datas: string[] = [];
+  if (!inputs.isEmpty) {
+    const router = new core.RouterKit(chainId, hre.ethers.provider);
+    const permit2Address = await router.getPermit2Address();
 
     // 1. user approve permit2 to spend fund erc20 tokens
-    await approves(user, permit2Address, erc20Funds);
+    await approves(user, permit2Address, inputs);
 
-    // 2. get permit2 permit token logic
-    const permit2PermitTokenLogic = new permit2.PermitTokenLogic(chainId, hre.ethers.provider);
-    const permitData = await permit2PermitTokenLogic.getPermitData(user.address, erc20Funds);
+    // 2. get permit2 permit call data
+    const permitData = await router.getPermit2PermitData(user.address, inputs);
     if (permitData) {
       const permitSig = await user._signTypedData(permitData.domain, permitData.types, permitData.values);
-      routerLogics.push(
-        await permit2PermitTokenLogic.build({ permit: permitData.values, sig: permitSig }, { account: user.address })
-      );
+      const permitCallData = router.encodePermit2Permit(user.address, permitData.values, permitSig);
+      permit2Datas.push(permitCallData);
     }
 
-    // 3. get permit2 pull token logic
-    const permit2PullTokenLogic = new permit2.PullTokenLogic(chainId, hre.ethers.provider);
-    routerLogics.push(await permit2PullTokenLogic.build({ inputs: erc20Funds }, { account: user.address }));
+    // 3. get permit2 transferFrom data
+    const transferFromCallData = await router.encodePermit2TransferFrom(user.address, inputs);
+    permit2Datas.push(transferFromCallData);
   }
 
-  return routerLogics;
+  return permit2Datas;
 }

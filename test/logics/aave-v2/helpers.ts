@@ -28,17 +28,13 @@ export async function approveDelegation(
   assetAmount: common.TokenAmount,
   interestRateMode: aavev2.InterestRateMode
 ) {
-  const userAgent = core.calcAccountAgent(chainId, user.address);
+  const routerKit = new core.RouterKit(chainId);
+  const agent = await routerKit.calcAgent(user.address);
 
   const service = new aavev2.Service(chainId, hre.ethers.provider);
-  const isDelegationApproved = await service.isDelegationApproved(
-    user.address,
-    userAgent,
-    assetAmount,
-    interestRateMode
-  );
+  const isDelegationApproved = await service.isDelegationApproved(user.address, agent, assetAmount, interestRateMode);
   if (!isDelegationApproved) {
-    const tx = await service.buildApproveDelegationTransactionRequest(userAgent, assetAmount, interestRateMode);
+    const tx = await service.buildApproveDelegationTransactionRequest(agent, assetAmount, interestRateMode);
     await expect(user.sendTransaction(tx)).to.not.be.reverted;
   }
 }

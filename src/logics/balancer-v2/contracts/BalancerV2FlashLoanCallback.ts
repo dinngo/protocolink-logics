@@ -20,13 +20,19 @@ import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from './com
 export interface BalancerV2FlashLoanCallbackInterface extends utils.Interface {
   functions: {
     'balancerV2Vault()': FunctionFragment;
+    'feeRate()': FunctionFragment;
+    'metadata()': FunctionFragment;
     'receiveFlashLoan(address[],uint256[],uint256[],bytes)': FunctionFragment;
     'router()': FunctionFragment;
   };
 
-  getFunction(nameOrSignatureOrTopic: 'balancerV2Vault' | 'receiveFlashLoan' | 'router'): FunctionFragment;
+  getFunction(
+    nameOrSignatureOrTopic: 'balancerV2Vault' | 'feeRate' | 'metadata' | 'receiveFlashLoan' | 'router'
+  ): FunctionFragment;
 
   encodeFunctionData(functionFragment: 'balancerV2Vault', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'feeRate', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'metadata', values?: undefined): string;
   encodeFunctionData(
     functionFragment: 'receiveFlashLoan',
     values: [string[], BigNumberish[], BigNumberish[], BytesLike]
@@ -34,6 +40,8 @@ export interface BalancerV2FlashLoanCallbackInterface extends utils.Interface {
   encodeFunctionData(functionFragment: 'router', values?: undefined): string;
 
   decodeFunctionResult(functionFragment: 'balancerV2Vault', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'feeRate', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'metadata', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'receiveFlashLoan', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'router', data: BytesLike): Result;
 
@@ -65,6 +73,10 @@ export interface BalancerV2FlashLoanCallback extends BaseContract {
   functions: {
     balancerV2Vault(overrides?: CallOverrides): Promise<[string]>;
 
+    feeRate(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    metadata(overrides?: CallOverrides): Promise<[string]>;
+
     receiveFlashLoan(
       tokens: string[],
       amounts: BigNumberish[],
@@ -78,6 +90,10 @@ export interface BalancerV2FlashLoanCallback extends BaseContract {
 
   balancerV2Vault(overrides?: CallOverrides): Promise<string>;
 
+  feeRate(overrides?: CallOverrides): Promise<BigNumber>;
+
+  metadata(overrides?: CallOverrides): Promise<string>;
+
   receiveFlashLoan(
     tokens: string[],
     amounts: BigNumberish[],
@@ -90,6 +106,10 @@ export interface BalancerV2FlashLoanCallback extends BaseContract {
 
   callStatic: {
     balancerV2Vault(overrides?: CallOverrides): Promise<string>;
+
+    feeRate(overrides?: CallOverrides): Promise<BigNumber>;
+
+    metadata(overrides?: CallOverrides): Promise<string>;
 
     receiveFlashLoan(
       tokens: string[],
@@ -107,6 +127,10 @@ export interface BalancerV2FlashLoanCallback extends BaseContract {
   estimateGas: {
     balancerV2Vault(overrides?: CallOverrides): Promise<BigNumber>;
 
+    feeRate(overrides?: CallOverrides): Promise<BigNumber>;
+
+    metadata(overrides?: CallOverrides): Promise<BigNumber>;
+
     receiveFlashLoan(
       tokens: string[],
       amounts: BigNumberish[],
@@ -120,6 +144,10 @@ export interface BalancerV2FlashLoanCallback extends BaseContract {
 
   populateTransaction: {
     balancerV2Vault(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    feeRate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    metadata(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     receiveFlashLoan(
       tokens: string[],

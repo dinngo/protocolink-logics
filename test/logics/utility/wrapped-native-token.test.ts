@@ -44,14 +44,16 @@ describe('Test Utility WrappedNativeToken Logic', function () {
       }
 
       // 3. build router logics
-      const erc20Funds = funds.erc20;
-      const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
-
+      const routerLogics: core.IParam.LogicStruct[] = [];
       routerLogics.push(await utilityWrappedNativeTokenLogic.build({ input, output, balanceBps }));
 
-      // 4. send router tx
-      const transactionRequest = core.newRouterExecuteTransactionRequest({
-        chainId,
+      // 4. get router permit2 datas
+      const permit2Datas = await utils.getRouterPermit2Datas(chainId, user, funds.erc20);
+
+      // 5. send router tx
+      const routerKit = new core.RouterKit(chainId);
+      const transactionRequest = routerKit.buildExecuteTransactionRequest({
+        permit2Datas,
         routerLogics,
         tokensReturn,
         value: funds.native?.amountWei ?? 0,

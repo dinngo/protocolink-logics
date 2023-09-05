@@ -1,6 +1,6 @@
+import { AaveV2FlashLoanCallback__factory, LendingPool__factory } from './contracts';
 import { BigNumberish, constants } from 'ethers';
 import { InterestRateMode } from './types';
-import { LendingPool__factory } from './contracts';
 import { Service } from './service';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
@@ -21,6 +21,14 @@ export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInt
 
   get callbackAddress() {
     return getContractAddress(this.chainId, 'AaveV2FlashLoanCallback');
+  }
+
+  async calcCallbackFee(loan: common.TokenAmount) {
+    const callback = AaveV2FlashLoanCallback__factory.connect(this.callbackAddress, this.provider);
+    const feeRate = await callback.feeRate();
+    const callbackFee = new common.TokenAmount(loan.token).setWei(common.calcFee(loan.amountWei, feeRate.toNumber()));
+
+    return callbackFee;
   }
 
   async getTokenList() {

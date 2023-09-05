@@ -67,7 +67,7 @@ export class SwapTokenLogic extends core.Logic {
     const { tradeType, input, output, balanceBps, slippage } = fields;
     const { account } = options;
 
-    const recipient = core.calcAccountAgent(this.chainId, account);
+    const recipient = await this.calcAgent(account);
     const deadline = getDeadline(this.chainId);
     const amountIn = input.amountWei;
     const amountOut =
@@ -161,9 +161,9 @@ export class SwapTokenLogic extends core.Logic {
     const routes = await this.getAllRoutes(currencyIn, currencyOut);
     if (routes.length === 0) throw UNSUPPORTED_TOKEN_ERROR;
 
-    const results = await Promise.all<common.Multicall2.ResultStructOutput>(
+    const results = await Promise.all<common.Multicall3.ResultStructOutput>(
       routes.map((route) =>
-        this.multicall2.callStatic
+        this.multicall3.callStatic
           .tryAggregate(false, [
             {
               target: this.config.quoter.address,
@@ -252,8 +252,8 @@ export class SwapTokenLogic extends core.Logic {
     const callDataSlot0 = iface.encodeFunctionData('slot0');
     const callDataLiquidity = iface.encodeFunctionData('liquidity');
 
-    const callsSlot0: common.Multicall2.CallStruct[] = [];
-    const callsLiquidity: common.Multicall2.CallStruct[] = [];
+    const callsSlot0: common.Multicall3.CallStruct[] = [];
+    const callsLiquidity: common.Multicall3.CallStruct[] = [];
     for (const [tokenA, tokenB, fee] of poolTokens) {
       const poolAddress = computePoolAddress({ factoryAddress: this.config.factoryAddress, tokenA, tokenB, fee });
       callsSlot0.push({ target: poolAddress, callData: callDataSlot0 });
@@ -261,8 +261,8 @@ export class SwapTokenLogic extends core.Logic {
     }
 
     const [resultsSlot0, resultsLiquidity] = await Promise.all([
-      this.multicall2.callStatic.tryAggregate(false, callsSlot0),
-      this.multicall2.callStatic.tryAggregate(false, callsLiquidity),
+      this.multicall3.callStatic.tryAggregate(false, callsSlot0),
+      this.multicall3.callStatic.tryAggregate(false, callsLiquidity),
     ]);
 
     const pools = poolTokens.reduce((accumulator, [tokenA, tokenB, fee], i) => {

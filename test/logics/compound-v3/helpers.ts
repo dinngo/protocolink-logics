@@ -7,12 +7,13 @@ import { expect } from 'chai';
 import hre from 'hardhat';
 
 export async function allow(chainId: number, user: SignerWithAddress, marketId: string) {
-  const userAgent = core.calcAccountAgent(chainId, user.address);
+  const routerKit = new core.RouterKit(chainId);
+  const agent = await routerKit.calcAgent(user.address);
 
   const service = new compoundv3.Service(chainId, hre.ethers.provider);
-  const isAllowed = await service.isAllowed(marketId, user.address, userAgent);
+  const isAllowed = await service.isAllowed(marketId, user.address, agent);
   if (!isAllowed) {
-    const tx = await service.buildAllowTransactionRequest(marketId, userAgent, true);
+    const tx = await service.buildAllowTransactionRequest(marketId, agent, true);
     await expect(user.sendTransaction(tx)).to.not.be.reverted;
   }
 }

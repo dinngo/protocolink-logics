@@ -57,9 +57,9 @@ export class SwapTokenLogic
   async build(fields: SwapTokenLogicFields, options: SwapTokenLogicOptions) {
     const { input, output, slippage, paths } = fields;
     const { account } = options;
-    const userAgent = core.calcAccountAgent(this.chainId, account);
 
-    const swapPaths = toSwapPaths(paths, userAgent);
+    const agent = await this.calcAgent(account);
+    const swapPaths = toSwapPaths(paths, agent);
     const amountOutMin = slippage ? common.calcSlippage(output.amountWei, slippage) : output.amountWei;
     const deadline = BigNumber.from(Math.floor(Date.now() / 1000)).add(1800); // 30m
     const data = Router__factory.createInterface().encodeFunctionData('swap', [swapPaths, amountOutMin, deadline]);

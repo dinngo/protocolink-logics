@@ -72,12 +72,15 @@ describe('Test AaveV3 Withdraw Logic', function () {
       }
 
       // 4. build router logics
-      const erc20Funds = funds.erc20;
-      const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
+      const routerLogics: core.IParam.LogicStruct[] = [];
       routerLogics.push(await aaveV3WithdrawLogic.build({ input, output, balanceBps }, { account: user.address }));
 
-      // 5. send router tx
-      const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics, tokensReturn });
+      // 5. get router permit2 datas
+      const permit2Datas = await utils.getRouterPermit2Datas(chainId, user, funds.erc20);
+
+      // 6. send router tx
+      const routerKit = new core.RouterKit(chainId);
+      const transactionRequest = routerKit.buildExecuteTransactionRequest({ permit2Datas, routerLogics, tokensReturn });
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
       await expect(user.address).to.changeBalance(input.token, -input.amount, 1);
       await expect(user.address).to.changeBalance(output.token, output.amount);

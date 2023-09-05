@@ -41,25 +41,35 @@ describe('Test AaveV2 FlashLoan Logic', function () {
       const flashLoanRouterLogics: core.IParam.LogicStruct[] = [];
       const utilitySendTokenLogic = new utility.SendTokenLogic(chainId);
       for (let i = 0; i < repays.length; i++) {
-        const fee = repays.at(i).clone().sub(loans.at(i));
+        const loan = loans.at(i);
+        const repay = repays.at(i);
+
+        const fee = repay.clone().sub(loan);
         funds.add(fee);
+
+        const callbackFee = await aaveV2FlashLoanLogic.calcCallbackFee(loan);
+        funds.add(callbackFee);
+        repay.add(callbackFee);
+
         flashLoanRouterLogics.push(
           await utilitySendTokenLogic.build({
-            input: repays.at(i),
+            input: repay,
             recipient: aavev2.getContractAddress(chainId, 'AaveV2FlashLoanCallback'),
           })
         );
       }
 
       // 3. build router logics
-      const erc20Funds = funds.erc20;
-      const routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
-
+      const routerLogics: core.IParam.LogicStruct[] = [];
       const callbackParams = core.newCallbackParams(flashLoanRouterLogics);
       routerLogics.push(await aaveV2FlashLoanLogic.build({ loans, params: callbackParams }));
 
-      // 4. send router tx
-      const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics });
+      // 4. get router permit2 datas
+      const permit2Datas = await utils.getRouterPermit2Datas(chainId, user, funds.erc20);
+
+      // 5. send router tx
+      const routerKit = new core.RouterKit(chainId);
+      const transactionRequest = routerKit.buildExecuteTransactionRequest({ permit2Datas, routerLogics });
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
       for (const fund of funds.toArray()) {
         await expect(user.address).to.changeBalance(fund.token, -fund.amount);

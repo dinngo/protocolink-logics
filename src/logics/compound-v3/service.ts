@@ -29,11 +29,11 @@ export class Service extends common.Web3Toolkit {
     const numAssets = await Comet__factory.connect(market.cometAddress, this.provider).numAssets();
 
     const iface = Comet__factory.createInterface();
-    const calls: common.Multicall2.CallStruct[] = [];
+    const calls: common.Multicall3.CallStruct[] = [];
     for (let i = 0; i < numAssets; i++) {
       calls.push({ target: market.cometAddress, callData: iface.encodeFunctionData('getAssetInfo', [i]) });
     }
-    const { returnData } = await this.multicall2.callStatic.aggregate(calls);
+    const { returnData } = await this.multicall3.callStatic.aggregate(calls);
 
     const collateralAddresses: string[] = [];
     for (let i = 0; i < numAssets; i++) {
@@ -109,7 +109,7 @@ export class Service extends common.Web3Toolkit {
     const asset = supply.token.wrapped.address;
 
     const iface = Comet__factory.createInterface();
-    const calls: common.Multicall2.CallStruct[] = [
+    const calls: common.Multicall3.CallStruct[] = [
       {
         target: market.cometAddress,
         callData: iface.encodeFunctionData('getAssetInfoByAddress', [asset]),
@@ -119,7 +119,7 @@ export class Service extends common.Web3Toolkit {
         callData: iface.encodeFunctionData('totalsCollateral', [asset]),
       },
     ];
-    const { returnData } = await this.multicall2.callStatic.aggregate(calls);
+    const { returnData } = await this.multicall3.callStatic.aggregate(calls);
 
     const [{ supplyCap }] = iface.decodeFunctionResult('getAssetInfoByAddress', returnData[0]);
     const [totalSupplyAsset] = iface.decodeFunctionResult('totalsCollateral', returnData[1]);

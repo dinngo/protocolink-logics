@@ -2,7 +2,6 @@ import '@nomicfoundation/hardhat-chai-matchers';
 import '@protocolink/test-helpers';
 
 import { HardhatUserConfig } from 'hardhat/config';
-import { setup } from 'test/hooks';
 
 const config: HardhatUserConfig = {
   networks: {
@@ -23,7 +22,6 @@ const config: HardhatUserConfig = {
   mocha: {
     timeout: 1200000,
     retries: 3,
-    rootHooks: { beforeAll: [setup] },
   },
 };
 

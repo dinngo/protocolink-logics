@@ -21,20 +21,28 @@ export interface AaveV2FlashLoanCallbackInterface extends utils.Interface {
   functions: {
     'aaveV2Provider()': FunctionFragment;
     'executeOperation(address[],uint256[],uint256[],address,bytes)': FunctionFragment;
+    'feeRate()': FunctionFragment;
+    'metadata()': FunctionFragment;
     'router()': FunctionFragment;
   };
 
-  getFunction(nameOrSignatureOrTopic: 'aaveV2Provider' | 'executeOperation' | 'router'): FunctionFragment;
+  getFunction(
+    nameOrSignatureOrTopic: 'aaveV2Provider' | 'executeOperation' | 'feeRate' | 'metadata' | 'router'
+  ): FunctionFragment;
 
   encodeFunctionData(functionFragment: 'aaveV2Provider', values?: undefined): string;
   encodeFunctionData(
     functionFragment: 'executeOperation',
     values: [string[], BigNumberish[], BigNumberish[], string, BytesLike]
   ): string;
+  encodeFunctionData(functionFragment: 'feeRate', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'metadata', values?: undefined): string;
   encodeFunctionData(functionFragment: 'router', values?: undefined): string;
 
   decodeFunctionResult(functionFragment: 'aaveV2Provider', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'executeOperation', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'feeRate', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'metadata', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'router', data: BytesLike): Result;
 
   events: {};
@@ -74,6 +82,10 @@ export interface AaveV2FlashLoanCallback extends BaseContract {
       overrides?: Overrides & { from?: string }
     ): Promise<ContractTransaction>;
 
+    feeRate(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    metadata(overrides?: CallOverrides): Promise<[string]>;
+
     router(overrides?: CallOverrides): Promise<[string]>;
   };
 
@@ -88,6 +100,10 @@ export interface AaveV2FlashLoanCallback extends BaseContract {
     overrides?: Overrides & { from?: string }
   ): Promise<ContractTransaction>;
 
+  feeRate(overrides?: CallOverrides): Promise<BigNumber>;
+
+  metadata(overrides?: CallOverrides): Promise<string>;
+
   router(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
@@ -101,6 +117,10 @@ export interface AaveV2FlashLoanCallback extends BaseContract {
       params: BytesLike,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    feeRate(overrides?: CallOverrides): Promise<BigNumber>;
+
+    metadata(overrides?: CallOverrides): Promise<string>;
 
     router(overrides?: CallOverrides): Promise<string>;
   };
@@ -119,6 +139,10 @@ export interface AaveV2FlashLoanCallback extends BaseContract {
       overrides?: Overrides & { from?: string }
     ): Promise<BigNumber>;
 
+    feeRate(overrides?: CallOverrides): Promise<BigNumber>;
+
+    metadata(overrides?: CallOverrides): Promise<BigNumber>;
+
     router(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
@@ -133,6 +157,10 @@ export interface AaveV2FlashLoanCallback extends BaseContract {
       params: BytesLike,
       overrides?: Overrides & { from?: string }
     ): Promise<PopulatedTransaction>;
+
+    feeRate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    metadata(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     router(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };

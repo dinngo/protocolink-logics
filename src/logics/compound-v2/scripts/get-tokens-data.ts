@@ -31,14 +31,14 @@ export default async function () {
   const web3Toolkit = new common.Web3Toolkit(chainId);
 
   const cTokens = await web3Toolkit.getTokens(cTokenAddresses);
-  const calls: common.Multicall2.CallStruct[] = [];
+  const calls: common.Multicall3.CallStruct[] = [];
   const iface = CErc20__factory.createInterface();
   for (const cToken of cTokens) {
     if (cToken.symbol !== 'cETH') {
       calls.push({ target: cToken.address, callData: iface.encodeFunctionData('underlying') });
     }
   }
-  const { returnData } = await web3Toolkit.multicall2.callStatic.aggregate(calls);
+  const { returnData } = await web3Toolkit.multicall3.callStatic.aggregate(calls);
 
   const tokenAddresses: string[] = [];
   let j = 0;

@@ -32,28 +32,6 @@ export const configs: Config[] = [
       'https://tokens.coingecko.com/arbitrum-one/all.json',
     ],
   },
-  {
-    chainId: common.ChainId.optimism,
-    tokenListUrls: [
-      'https://static.optimism.io/optimism.tokenlist.json',
-      'https://tokens.coingecko.com/optimistic-ethereum/all.json',
-    ],
-  },
-  {
-    chainId: common.ChainId.avalanche,
-    tokenListUrls: [
-      'https://raw.githubusercontent.com/pangolindex/tokenlists/main/pangolin.tokenlist.json',
-      'https://raw.githubusercontent.com/traderjoe-xyz/joe-tokenlists/main/mc.tokenlist.json',
-      'https://tokens.coingecko.com/avalanche/all.json',
-    ],
-  },
-  {
-    chainId: common.ChainId.fantom,
-    tokenListUrls: [
-      'https://raw.githubusercontent.com/SpookySwap/spooky-info/master/src/constants/token/spookyswap.json',
-      'https://tokens.coingecko.com/fantom/all.json',
-    ],
-  },
 ];
 
 export const [supportedChainIds, configMap] = configs.reduce(

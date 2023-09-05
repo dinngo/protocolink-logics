@@ -1,5 +1,5 @@
+import { BalancerV2FlashLoanCallback__factory, ProtocolFeesCollector__factory, Vault__factory } from './contracts';
 import { BigNumberish } from 'ethers';
-import { ProtocolFeesCollector__factory, Vault__factory } from './contracts';
 import { TokenList } from '@uniswap/token-lists';
 import { axios } from 'src/utils';
 import * as common from '@protocolink/common';
@@ -21,6 +21,14 @@ export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInt
 
   get callbackAddress() {
     return getContractAddress(this.chainId, 'BalancerV2FlashLoanCallback');
+  }
+
+  async calcCallbackFee(loan: common.TokenAmount) {
+    const callback = BalancerV2FlashLoanCallback__factory.connect(this.callbackAddress, this.provider);
+    const feeRate = await callback.feeRate();
+    const callbackFee = new common.TokenAmount(loan.token).setWei(common.calcFee(loan.amountWei, feeRate.toNumber()));
+
+    return callbackFee;
   }
 
   async getTokenList() {
@@ -48,7 +56,7 @@ export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInt
     const vaultAddress = getContractAddress(this.chainId, 'Vault');
     const protocolFeesCollectorIface = ProtocolFeesCollector__factory.createInterface();
 
-    const calls: common.Multicall2.CallStruct[] = [
+    const calls: common.Multicall3.CallStruct[] = [
       {
         target: getContractAddress(this.chainId, 'ProtocolFeesCollector'),
         callData: protocolFeesCollectorIface.encodeFunctionData('getFlashLoanFeePercentage'),
@@ -60,7 +68,7 @@ export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInt
         callData: this.erc20Iface.encodeFunctionData('balanceOf', [vaultAddress]),
       });
     });
-    const { returnData } = await this.multicall2.callStatic.aggregate(calls);
+    const { returnData } = await this.multicall3.callStatic.aggregate(calls);
 
     let j = 0;
     const [flashLoanFeePercentage] = protocolFeesCollectorIface.decodeFunctionResult(

@@ -69,11 +69,11 @@ export class Service extends common.Web3Toolkit {
       const poolAddress = await this.getPoolAddress();
       const assetAddresses = await Pool__factory.connect(poolAddress, this.provider).getReservesList();
 
-      const calls: common.Multicall2.CallStruct[] = assetAddresses.map((assetAddress) => ({
+      const calls: common.Multicall3.CallStruct[] = assetAddresses.map((assetAddress) => ({
         target: this.poolDataProvider.address,
         callData: this.poolDataProviderIface.encodeFunctionData('getReserveConfigurationData', [assetAddress]),
       }));
-      const { returnData } = await this.multicall2.callStatic.aggregate(calls);
+      const { returnData } = await this.multicall3.callStatic.aggregate(calls);
 
       this.assetAddresses = [];
       for (let i = 0; i < assetAddresses.length; i++) {
@@ -95,11 +95,11 @@ export class Service extends common.Web3Toolkit {
     if (!this.reserveTokensAddresses) {
       const assetAddresses = await this.getAssetAddresses();
 
-      const calls: common.Multicall2.CallStruct[] = assetAddresses.map((asset) => ({
+      const calls: common.Multicall3.CallStruct[] = assetAddresses.map((asset) => ({
         target: this.poolDataProvider.address,
         callData: this.poolDataProviderIface.encodeFunctionData('getReserveTokensAddresses', [asset]),
       }));
-      const { returnData } = await this.multicall2.callStatic.aggregate(calls);
+      const { returnData } = await this.multicall3.callStatic.aggregate(calls);
 
       this.reserveTokensAddresses = [];
       for (let i = 0; i < assetAddresses.length; i++) {
@@ -179,11 +179,11 @@ export class Service extends common.Web3Toolkit {
   }
 
   async toATokens(assets: common.Token[]) {
-    const calls: common.Multicall2.CallStruct[] = assets.map((asset) => ({
+    const calls: common.Multicall3.CallStruct[] = assets.map((asset) => ({
       target: this.poolDataProvider.address,
       callData: this.poolDataProviderIface.encodeFunctionData('getReserveTokensAddresses', [asset.wrapped.address]),
     }));
-    const { returnData } = await this.multicall2.callStatic.aggregate(calls);
+    const { returnData } = await this.multicall3.callStatic.aggregate(calls);
 
     const aTokenAddresses: string[] = [];
     for (let i = 0; i < assets.length; i++) {
@@ -249,7 +249,7 @@ export class Service extends common.Web3Toolkit {
     const aTokens = await this.toATokens(assets);
     const poolAddress = await this.getPoolAddress();
 
-    const calls: common.Multicall2.CallStruct[] = [
+    const calls: common.Multicall3.CallStruct[] = [
       { target: poolAddress, callData: this.poolIface.encodeFunctionData('FLASHLOAN_PREMIUM_TOTAL') },
     ];
     for (let i = 0; i < assets.length; i++) {
@@ -271,7 +271,7 @@ export class Service extends common.Web3Toolkit {
         callData: this.erc20Iface.encodeFunctionData('balanceOf', [aTokens[i].address]),
       });
     }
-    const { returnData } = await this.multicall2.callStatic.aggregate(calls);
+    const { returnData } = await this.multicall3.callStatic.aggregate(calls);
 
     let j = 0;
     const [premium] = this.poolIface.decodeFunctionResult('FLASHLOAN_PREMIUM_TOTAL', returnData[j]);

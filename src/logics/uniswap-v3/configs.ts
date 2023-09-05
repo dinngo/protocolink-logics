@@ -1,5 +1,5 @@
 import { FeeAmount } from '@uniswap/v3-sdk';
-import { arbitrumTokens, mainnetTokens, optimismTokens, polygonTokens } from './tokens';
+import { arbitrumTokens, mainnetTokens, polygonTokens } from './tokens';
 import * as common from '@protocolink/common';
 import * as univ3 from 'src/modules/univ3';
 
@@ -55,14 +55,6 @@ export const configs: univ3.Config[] = [
       arbitrumTokens.USDC,
       arbitrumTokens['USDC.e'],
     ],
-  },
-  {
-    chainId: common.ChainId.optimism,
-    factoryAddress: '0x1F98431c8aD98523631AE4a59f267346ea31F984',
-    quoter: { address: '0x61fFE014bA17989E743c5F6cB21bF9697530B21e', isV2: true },
-    swapRouterAddress: '0xE592427A0AEce92De3Edee1F18E0157C05861564',
-    feeAmounts: [FeeAmount.LOWEST, FeeAmount.LOW, FeeAmount.MEDIUM, FeeAmount.HIGH],
-    bases: [optimismTokens.WETH, optimismTokens.DAI, optimismTokens.USDT, optimismTokens.WBTC, optimismTokens.USDC],
   },
 ];
 

@@ -18,6 +18,8 @@ describe('Test Utility FlashLoanAggregator Logic', function () {
     await claimToken(chainId, user.address, aavev3.mainnetTokens['1INCH'], '2');
     await claimToken(chainId, user.address, mainnetTokens.WETH, '2');
     await claimToken(chainId, user.address, mainnetTokens.USDC, '2');
+    await claimToken(chainId, user.address, mainnetTokens.USDT, '2');
+    await claimToken(chainId, user.address, mainnetTokens.DAI, '2');
   });
 
   snapshotAndRevertEach();
@@ -49,30 +51,35 @@ describe('Test Utility FlashLoanAggregator Logic', function () {
       const flashLoanRouterLogics: core.IParam.LogicStruct[] = [];
       const utilitySendTokenLogic = new utility.SendTokenLogic(chainId);
       for (let i = 0; i < repays.length; i++) {
-        const fee = repays.at(i).clone().sub(loans.at(i));
-        if (!fee.isZero) {
-          funds.add(fee);
-        }
+        const loan = loans.at(i);
+        const repay = repays.at(i);
+
+        const fee = repay.clone().sub(loan);
+        funds.add(fee);
+
+        const callbackFee = await utilityFlashLoanAggregatorLogic.calcCallbackFee(protocolId, loan);
+        funds.add(callbackFee);
+        repay.add(callbackFee);
+
         flashLoanRouterLogics.push(
           await utilitySendTokenLogic.build({
-            input: repays.at(i),
+            input: repay,
             recipient: callback,
           })
         );
       }
 
       // 3. build router logics
-      let routerLogics: core.IParam.LogicStruct[] = [];
-      const erc20Funds = funds.erc20;
-      if (erc20Funds.length > 0) {
-        routerLogics = await utils.getPermitAndPullTokenRouterLogics(chainId, user, erc20Funds);
-      }
-
+      const routerLogics: core.IParam.LogicStruct[] = [];
       const callbackParams = core.newCallbackParams(flashLoanRouterLogics);
       routerLogics.push(await utilityFlashLoanAggregatorLogic.build({ protocolId, loans, params: callbackParams }));
 
-      // 4. send router tx
-      const transactionRequest = core.newRouterExecuteTransactionRequest({ chainId, routerLogics });
+      // 4. get router permit2 datas
+      const permit2Datas = await utils.getRouterPermit2Datas(chainId, user, funds.erc20);
+
+      // 5. send router tx
+      const routerKit = new core.RouterKit(chainId);
+      const transactionRequest = routerKit.buildExecuteTransactionRequest({ permit2Datas, routerLogics });
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
     });
   });
