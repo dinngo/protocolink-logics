@@ -1,5 +1,15 @@
 # @protocolink/logics
 
+## 0.3.0
+
+### Minor Changes
+
+- 150d405: update for new router contract
+
+### Patch Changes
+
+- 269bf7d: add how to contribute docs
+
 ## 0.2.16
 
 ### Patch Changes
