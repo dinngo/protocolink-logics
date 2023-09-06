@@ -1,4 +1,4 @@
-name: E2E Test Mainnet
+name: E2E Test
 
 on:
   push:
