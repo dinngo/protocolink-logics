@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 0.3.1
+
+### Patch Changes
+
+- 5139efc: paraswap v5 logic add excludeDEXS param
+
 ## 0.3.0
 
 ### Minor Changes
