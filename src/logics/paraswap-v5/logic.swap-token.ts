@@ -7,10 +7,10 @@ import { getTokenListUrls, supportedChainIds, tokenTransferProxyAddress } from '
 
 export type SwapTokenLogicTokenList = common.Token[];
 
-export type SwapTokenLogicParams = core.TokenToTokenParams<{ slippage?: number }>;
+export type SwapTokenLogicParams = core.TokenToTokenParams<{ slippage?: number; excludeDEXS?: string[] }>;
 
 export type SwapTokenLogicFields = core.TokenToTokenExactInFields<
-  Pick<BuildSwapTxInput, 'partner' | 'partnerAddress'> & { slippage?: number }
+  Pick<BuildSwapTxInput, 'partner' | 'partnerAddress'> & { slippage?: number; excludeDEXS?: string[] }
 >;
 
 export type SwapTokenLogicOptions = Pick<core.GlobalOptions, 'account'>;
@@ -51,7 +51,12 @@ export class SwapTokenLogic
     return tokenList;
   }
 
+  // If you wish to exclude quotes from specific DEXs, you can include the corresponding DEX Names
+  // in the 'excludeDEXS' parameter. You can retrieve DEX Names from the following API:
+  // https://api.paraswap.io/adapters/list?network={chainId}&namesOnly=true
   async quote(params: SwapTokenLogicParams) {
+    const { excludeDEXS } = params;
+
     let input: common.TokenAmount;
     let output: common.TokenAmount;
     if (core.isTokenToTokenExactInParams(params)) {
@@ -65,6 +70,7 @@ export class SwapTokenLogic
         destToken: tokenOut.elasticAddress,
         destDecimals: tokenOut.decimals,
         side: SwapSide.SELL,
+        options: { excludeDEXS },
       });
       output = new common.TokenAmount(tokenOut).setWei(destAmount);
     } else {
@@ -78,15 +84,16 @@ export class SwapTokenLogic
         destToken: output.token.elasticAddress,
         destDecimals: output.token.decimals,
         side: SwapSide.BUY,
+        options: { excludeDEXS },
       });
       input = new common.TokenAmount(tokenIn).setWei(srcAmount);
     }
 
-    return { input, output, slippage: params.slippage };
+    return { input, output, slippage: params.slippage, excludeDEXS };
   }
 
   async build(fields: SwapTokenLogicFields, options: SwapTokenLogicOptions) {
-    const { input, output, partner, partnerAddress, slippage } = fields;
+    const { input, output, partner, partnerAddress, slippage, excludeDEXS } = fields;
     const { account } = options;
 
     const priceRoute = await this.sdk.swap.getRate({
@@ -95,6 +102,7 @@ export class SwapTokenLogic
       amount: input.amountWei.toString(),
       destToken: output.token.elasticAddress,
       destDecimals: output.token.decimals,
+      options: { excludeDEXS },
     });
     const { srcToken, srcDecimals, srcAmount, destToken, destDecimals, destAmount } = priceRoute;
     output.setWei(destAmount);
