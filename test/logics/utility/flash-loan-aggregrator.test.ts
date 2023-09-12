@@ -8,7 +8,7 @@ import hre from 'hardhat';
 import * as utility from 'src/logics/utility';
 import * as utils from 'test/utils';
 
-describe('Test Utility FlashLoanAggregator Logic', function () {
+describe('mainnet: Test Utility FlashLoanAggregator Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
 

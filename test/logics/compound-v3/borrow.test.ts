@@ -7,7 +7,7 @@ import { expect } from 'chai';
 import * as helpers from './helpers';
 import hre from 'hardhat';
 
-describe('Test CompoundV3 Borrow Logic', function () {
+describe('mainnet: Test CompoundV3 Borrow Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
   let routerKit: core.RouterKit;

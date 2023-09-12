@@ -9,7 +9,7 @@ import hre from 'hardhat';
 import * as hrehelpers from '@nomicfoundation/hardhat-network-helpers';
 import * as utils from 'test/utils';
 
-describe('Test CompoundV2 Repay Logic', function () {
+describe('mainnet: Test CompoundV2 Repay Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
 

@@ -7,7 +7,7 @@ import hre from 'hardhat';
 import * as uniswapv3 from 'src/logics/uniswap-v3';
 import * as utils from 'test/utils';
 
-describe('Test UniswapV3 SwapToken Logic', function () {
+describe('mainnet: Test UniswapV3 SwapToken Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
 

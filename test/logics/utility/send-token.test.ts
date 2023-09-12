@@ -7,7 +7,7 @@ import hre from 'hardhat';
 import * as utility from 'src/logics/utility';
 import * as utils from 'test/utils';
 
-describe('Test Utility SendToken Logic', function () {
+describe('mainnet: Test Utility SendToken Logic', function () {
   let chainId: number;
   let user1: SignerWithAddress;
   let user2: SignerWithAddress;

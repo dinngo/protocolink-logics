@@ -7,7 +7,7 @@ import hre from 'hardhat';
 import * as paraswapv5 from 'src/logics/paraswap-v5';
 import * as utils from 'test/utils';
 
-describe('Test ParaswapV5 SwapToken Logic', function () {
+describe('mainnet: Test ParaswapV5 SwapToken Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
 

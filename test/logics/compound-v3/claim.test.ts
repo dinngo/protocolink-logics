@@ -8,7 +8,7 @@ import * as helpers from './helpers';
 import hre from 'hardhat';
 import * as hrehelpers from '@nomicfoundation/hardhat-network-helpers';
 
-describe('Test CompoundV3 Claim Logic', function () {
+describe('mainnet: Test CompoundV3 Claim Logic', function () {
   let chainId: number;
   let users: SignerWithAddress[];
   let service: compoundv3.Service;

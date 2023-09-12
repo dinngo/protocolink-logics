@@ -7,7 +7,7 @@ import { expect } from 'chai';
 import hre from 'hardhat';
 import * as utils from 'test/utils';
 
-describe('Test AaveV2 Deposit Logic', function () {
+describe('mainnet: Test AaveV2 Deposit Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
 

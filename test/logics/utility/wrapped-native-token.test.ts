@@ -7,7 +7,7 @@ import hre from 'hardhat';
 import * as utility from 'src/logics/utility';
 import * as utils from 'test/utils';
 
-describe('Test Utility WrappedNativeToken Logic', function () {
+describe('mainnet: Test Utility WrappedNativeToken Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
 

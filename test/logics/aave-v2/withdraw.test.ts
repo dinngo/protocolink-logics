@@ -8,7 +8,7 @@ import * as helpers from './helpers';
 import hre from 'hardhat';
 import * as utils from 'test/utils';
 
-describe('Test AaveV2 Withdraw Logic', function () {
+describe('mainnet: Test AaveV2 Withdraw Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
 

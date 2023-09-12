@@ -8,7 +8,7 @@ import hre from 'hardhat';
 import * as utility from 'src/logics/utility';
 import * as utils from 'test/utils';
 
-describe('Test AaveV2 FlashLoan Logic', function () {
+describe('mainnet: Test AaveV2 FlashLoan Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
 

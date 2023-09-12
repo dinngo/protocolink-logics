@@ -20,7 +20,10 @@
     "lint": "eslint --fix src",
     "prepublishOnly": "yarn build",
     "test": "mocha",
-    "test:e2e": "hardhat test",
+    "test:e2e": "yarn run test:e2e:mainnet && yarn run test:e2e:polygon && yarn run test:e2e:arbitrum",
+    "test:e2e:mainnet": "env-cmd -f .env.mainnet hardhat test --grep 'mainnet'",
+    "test:e2e:polygon": "env-cmd -f .env.polygon hardhat test --grep 'polygon'",
+    "test:e2e:arbitrum": "env-cmd -f .env.arbitrum hardhat test --grep 'arbitrum'",
     "test:unit": "mocha --recursive src"
   },
   "dependencies": {
@@ -58,6 +61,7 @@
     "@typescript-eslint/eslint-plugin": "^5.61.0",
     "@typescript-eslint/parser": "^5.61.0",
     "chai": "^4.3.7",
+    "env-cmd": "^10.1.0",
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
