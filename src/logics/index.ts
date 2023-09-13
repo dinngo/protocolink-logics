@@ -7,3 +7,4 @@ export * as paraswapv5 from './paraswap-v5';
 export * as syncswap from './syncswap';
 export * as uniswapv3 from './uniswap-v3';
 export * as utility from './utility';
+export * as radiantv2 from './radiant-v2';
