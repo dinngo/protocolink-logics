@@ -8,8 +8,7 @@ import * as radiantv2 from 'src/logics/radiant-v2';
 import * as utility from 'src/logics/utility';
 import * as utils from 'test/utils';
 
-// TODO: skip this because current FlashLoanCallback got some issue
-describe.skip('arbitrum: Test RadiantV2 FlashLoan Logic', () => {
+describe('arbitrum: Test RadiantV2 FlashLoan Logic', () => {
   let chainId: number;
   let user: SignerWithAddress;
 
