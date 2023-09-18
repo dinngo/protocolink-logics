@@ -1,5 +1,15 @@
 # @protocolink/logics
 
+## 0.4.0
+
+### Minor Changes
+
+- a9fbb7f: update for new router contract
+
+### Patch Changes
+
+- c2d146d: Support multi-chain e2e testing
+
 ## 0.3.1
 
 ### Patch Changes
