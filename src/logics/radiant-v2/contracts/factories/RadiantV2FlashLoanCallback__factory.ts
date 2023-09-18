@@ -16,7 +16,7 @@ const _abi = [
       },
       {
         internalType: 'address',
-        name: 'aaveV2Provider_',
+        name: 'radiantV2Provider_',
         type: 'address',
       },
       {
@@ -43,19 +43,6 @@ const _abi = [
     inputs: [],
     name: 'InvalidCaller',
     type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'aaveV2Provider',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
   },
   {
     inputs: [
@@ -117,6 +104,19 @@ const _abi = [
         internalType: 'bytes32',
         name: '',
         type: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'radiantV2Provider',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
       },
     ],
     stateMutability: 'view',

@@ -19,30 +19,30 @@ import type { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from './com
 
 export interface RadiantV2FlashLoanCallbackInterface extends utils.Interface {
   functions: {
-    'aaveV2Provider()': FunctionFragment;
     'executeOperation(address[],uint256[],uint256[],address,bytes)': FunctionFragment;
     'feeRate()': FunctionFragment;
     'metadata()': FunctionFragment;
+    'radiantV2Provider()': FunctionFragment;
     'router()': FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic: 'aaveV2Provider' | 'executeOperation' | 'feeRate' | 'metadata' | 'router'
+    nameOrSignatureOrTopic: 'executeOperation' | 'feeRate' | 'metadata' | 'radiantV2Provider' | 'router'
   ): FunctionFragment;
 
-  encodeFunctionData(functionFragment: 'aaveV2Provider', values?: undefined): string;
   encodeFunctionData(
     functionFragment: 'executeOperation',
     values: [string[], BigNumberish[], BigNumberish[], string, BytesLike]
   ): string;
   encodeFunctionData(functionFragment: 'feeRate', values?: undefined): string;
   encodeFunctionData(functionFragment: 'metadata', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'radiantV2Provider', values?: undefined): string;
   encodeFunctionData(functionFragment: 'router', values?: undefined): string;
 
-  decodeFunctionResult(functionFragment: 'aaveV2Provider', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'executeOperation', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'feeRate', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'metadata', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'radiantV2Provider', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'router', data: BytesLike): Result;
 
   events: {};
@@ -71,8 +71,6 @@ export interface RadiantV2FlashLoanCallback extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    aaveV2Provider(overrides?: CallOverrides): Promise<[string]>;
-
     executeOperation(
       assets: string[],
       amounts: BigNumberish[],
@@ -86,10 +84,10 @@ export interface RadiantV2FlashLoanCallback extends BaseContract {
 
     metadata(overrides?: CallOverrides): Promise<[string]>;
 
+    radiantV2Provider(overrides?: CallOverrides): Promise<[string]>;
+
     router(overrides?: CallOverrides): Promise<[string]>;
   };
-
-  aaveV2Provider(overrides?: CallOverrides): Promise<string>;
 
   executeOperation(
     assets: string[],
@@ -104,11 +102,11 @@ export interface RadiantV2FlashLoanCallback extends BaseContract {
 
   metadata(overrides?: CallOverrides): Promise<string>;
 
+  radiantV2Provider(overrides?: CallOverrides): Promise<string>;
+
   router(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
-    aaveV2Provider(overrides?: CallOverrides): Promise<string>;
-
     executeOperation(
       assets: string[],
       amounts: BigNumberish[],
@@ -122,14 +120,14 @@ export interface RadiantV2FlashLoanCallback extends BaseContract {
 
     metadata(overrides?: CallOverrides): Promise<string>;
 
+    radiantV2Provider(overrides?: CallOverrides): Promise<string>;
+
     router(overrides?: CallOverrides): Promise<string>;
   };
 
   filters: {};
 
   estimateGas: {
-    aaveV2Provider(overrides?: CallOverrides): Promise<BigNumber>;
-
     executeOperation(
       assets: string[],
       amounts: BigNumberish[],
@@ -143,12 +141,12 @@ export interface RadiantV2FlashLoanCallback extends BaseContract {
 
     metadata(overrides?: CallOverrides): Promise<BigNumber>;
 
+    radiantV2Provider(overrides?: CallOverrides): Promise<BigNumber>;
+
     router(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    aaveV2Provider(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     executeOperation(
       assets: string[],
       amounts: BigNumberish[],
@@ -161,6 +159,8 @@ export interface RadiantV2FlashLoanCallback extends BaseContract {
     feeRate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     metadata(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    radiantV2Provider(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     router(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
