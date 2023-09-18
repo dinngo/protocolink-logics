@@ -12,14 +12,14 @@ export const configs: Config[] = [
     chainId: common.ChainId.mainnet,
     contract: {
       ProtocolDataProvider: '0x057835Ad21a177dbdd3090bB1CAE03EaCF78Fc6d',
-      AaveV2FlashLoanCallback: '0xD1CA91bE788372275FB0FfC876465Bc0a5A31F86',
+      AaveV2FlashLoanCallback: '0x27BfAC5fb25C3853C2F48cF0e5B2F89Ea03C0104',
     },
   },
   {
     chainId: common.ChainId.polygon,
     contract: {
       ProtocolDataProvider: '0x7551b5D2763519d4e37e8B81929D336De671d46d',
-      AaveV2FlashLoanCallback: '0xD1CA91bE788372275FB0FfC876465Bc0a5A31F86',
+      AaveV2FlashLoanCallback: '0x27BfAC5fb25C3853C2F48cF0e5B2F89Ea03C0104',
     },
   },
 ];

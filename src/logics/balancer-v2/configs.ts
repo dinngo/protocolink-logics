@@ -12,7 +12,7 @@ export const configs: Config[] = [
     chainId: common.ChainId.mainnet,
     contract: {
       Vault: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-      BalancerV2FlashLoanCallback: '0x13431cd779FD770D55701B96F2675dFF63BDD756',
+      BalancerV2FlashLoanCallback: '0x08b3d2c773C08CF21746Cf16268d2E092881c208',
       ProtocolFeesCollector: '0xce88686553686DA562CE7Cea497CE749DA109f9F',
     },
   },
@@ -20,7 +20,7 @@ export const configs: Config[] = [
     chainId: common.ChainId.polygon,
     contract: {
       Vault: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-      BalancerV2FlashLoanCallback: '0x13431cd779FD770D55701B96F2675dFF63BDD756',
+      BalancerV2FlashLoanCallback: '0x08b3d2c773C08CF21746Cf16268d2E092881c208',
       ProtocolFeesCollector: '0xce88686553686DA562CE7Cea497CE749DA109f9F',
     },
   },
@@ -28,7 +28,7 @@ export const configs: Config[] = [
     chainId: common.ChainId.arbitrum,
     contract: {
       Vault: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-      BalancerV2FlashLoanCallback: '0x13431cd779FD770D55701B96F2675dFF63BDD756',
+      BalancerV2FlashLoanCallback: '0x08b3d2c773C08CF21746Cf16268d2E092881c208',
       ProtocolFeesCollector: '0xce88686553686DA562CE7Cea497CE749DA109f9F',
     },
   },

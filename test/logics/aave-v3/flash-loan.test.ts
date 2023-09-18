@@ -40,7 +40,7 @@ describe('mainnet: Test AaveV3 FlashLoan Logic', function () {
 
       // 2. build funds and router logics for flash loan by flash loan fee
       const funds = new common.TokenAmounts();
-      const flashLoanRouterLogics: core.IParam.LogicStruct[] = [];
+      const flashLoanRouterLogics: core.DataType.LogicStruct[] = [];
       const utilitySendTokenLogic = new utility.SendTokenLogic(chainId);
       for (let i = 0; i < repays.length; i++) {
         const loan = loans.at(i);
@@ -62,7 +62,7 @@ describe('mainnet: Test AaveV3 FlashLoan Logic', function () {
       }
 
       // 3. build router logics
-      const routerLogics: core.IParam.LogicStruct[] = [];
+      const routerLogics: core.DataType.LogicStruct[] = [];
       const callbackParams = core.newCallbackParams(flashLoanRouterLogics);
       routerLogics.push(await aaveV3FlashLoanLogic.build({ loans, params: callbackParams }));
 

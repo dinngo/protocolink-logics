@@ -77,7 +77,7 @@ describe('mainnet: Test ParaswapV5 SwapToken Logic', function () {
       const tokensReturn = [output.token.elasticAddress];
 
       // 3. build router logics
-      const routerLogics: core.IParam.LogicStruct[] = [];
+      const routerLogics: core.DataType.LogicStruct[] = [];
       routerLogics.push(await paraswapV5SwapTokenLogic.build(quotation, { account: user.address }));
 
       // 4. get router permit2 datas

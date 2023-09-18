@@ -89,7 +89,7 @@ describe('mainnet: Test CompoundV3 SupplyCollateral Logic', function () {
       }
 
       // 3. build router logics
-      const routerLogics: core.IParam.LogicStruct[] = [];
+      const routerLogics: core.DataType.LogicStruct[] = [];
       const compoundV3SupplyCollateralLogic = new compoundv3.SupplyCollateralLogic(chainId, hre.ethers.provider);
       routerLogics.push(
         await compoundV3SupplyCollateralLogic.build({ marketId, input, balanceBps }, { account: user.address })

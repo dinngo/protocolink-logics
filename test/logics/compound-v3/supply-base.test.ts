@@ -73,7 +73,7 @@ describe('mainnet: Test CompoundV3 SupplyBase Logic', function () {
       }
 
       // 3. build router logics
-      const routerLogics: core.IParam.LogicStruct[] = [];
+      const routerLogics: core.DataType.LogicStruct[] = [];
       routerLogics.push(await compoundV3SupplyBaseLogic.build({ marketId, input, output, balanceBps }));
 
       // 4. get router permit2 datas

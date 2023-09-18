@@ -290,7 +290,7 @@ describe('mainnet: Test CompoundV3 Repay Logic', function () {
       }
 
       // 4. build router logics
-      const routerLogics: core.IParam.LogicStruct[] = [];
+      const routerLogics: core.DataType.LogicStruct[] = [];
       routerLogics.push(await compoundV3RepayLogic.build({ marketId, borrower: borrower.address, input: repay }));
 
       // 5. get router permit2 datas

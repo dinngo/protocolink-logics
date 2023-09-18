@@ -57,7 +57,7 @@ describe('mainnet: Test CompoundV2 Supply Logic', function () {
       }
 
       // 3. build router logics
-      const routerLogics: core.IParam.LogicStruct[] = [];
+      const routerLogics: core.DataType.LogicStruct[] = [];
       routerLogics.push(await compoundV2SupplyLogic.build({ input, output, balanceBps }));
 
       // 4. get router permit2 datas

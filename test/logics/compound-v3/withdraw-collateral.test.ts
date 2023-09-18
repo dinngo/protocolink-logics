@@ -70,7 +70,7 @@ describe('mainnet: Test CompoundV3 WithdrawCollateral Logic', function () {
       const tokensReturn = [output.token.elasticAddress];
 
       // 5. build router logics
-      const routerLogics: core.IParam.LogicStruct[] = [];
+      const routerLogics: core.DataType.LogicStruct[] = [];
       const compoundV3WithdrawCollateralLogic = new compoundv3.WithdrawCollateralLogic(chainId, hre.ethers.provider);
       routerLogics.push(await compoundV3WithdrawCollateralLogic.build({ marketId, output }, { account: user.address }));
 

@@ -106,7 +106,7 @@ describe('mainnet: Test UniswapV3 SwapToken Logic', function () {
       }
 
       // 3. build router logics
-      const routerLogics: core.IParam.LogicStruct[] = [];
+      const routerLogics: core.DataType.LogicStruct[] = [];
       routerLogics.push(await uniswapV3SwapTokenLogic.build(quotation, { account: user.address }));
 
       // 4. get router permit2 datas

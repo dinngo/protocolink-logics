@@ -36,7 +36,7 @@ describe('mainnet: Test Utility CustomData Logic', function () {
     await approve(user1, agent, input);
 
     // 3. build router logics
-    const routerLogics: core.IParam.LogicStruct[] = [];
+    const routerLogics: core.DataType.LogicStruct[] = [];
     const utilityCustomDataLogic = new utility.CustomDataLogic(chainId);
     routerLogics.push(await utilityCustomDataLogic.build({ to, data }));
 

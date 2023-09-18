@@ -65,7 +65,7 @@ describe('mainnet: Test CompoundV2 Repay Logic', function () {
       const tokensReturn = [input.token.elasticAddress];
 
       // 4. build router logics
-      const routerLogics: core.IParam.LogicStruct[] = [];
+      const routerLogics: core.DataType.LogicStruct[] = [];
       routerLogics.push(await compoundV2RepayLogic.build({ input, balanceBps, borrower: user.address }));
 
       // 5. get router permit2 datas

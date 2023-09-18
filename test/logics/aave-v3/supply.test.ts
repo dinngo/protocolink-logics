@@ -67,7 +67,7 @@ describe('mainnet: Test AaveV3 Supply Logic', function () {
       }
 
       // 3. build router logics
-      const routerLogics: core.IParam.LogicStruct[] = [];
+      const routerLogics: core.DataType.LogicStruct[] = [];
       routerLogics.push(await aavev3SupplyLogic.build({ input, output, balanceBps }, { account: user.address }));
 
       // 4. get router permit2 datas

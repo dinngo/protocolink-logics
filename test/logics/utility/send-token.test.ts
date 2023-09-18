@@ -43,7 +43,7 @@ describe('mainnet: Test Utility SendToken Logic', function () {
       }
 
       // 2. build router logics
-      const routerLogics: core.IParam.LogicStruct[] = [];
+      const routerLogics: core.DataType.LogicStruct[] = [];
       const utilitySendTokenLogic = new utility.SendTokenLogic(chainId);
       routerLogics.push(await utilitySendTokenLogic.build({ input, recipient: user2.address }));
 

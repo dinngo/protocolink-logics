@@ -72,7 +72,7 @@ describe('mainnet: Test AaveV3 Withdraw Logic', function () {
       }
 
       // 4. build router logics
-      const routerLogics: core.IParam.LogicStruct[] = [];
+      const routerLogics: core.DataType.LogicStruct[] = [];
       routerLogics.push(await aaveV3WithdrawLogic.build({ input, output, balanceBps }, { account: user.address }));
 
       // 5. get router permit2 datas

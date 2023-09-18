@@ -44,7 +44,7 @@ describe('mainnet: Test Utility WrappedNativeToken Logic', function () {
       }
 
       // 3. build router logics
-      const routerLogics: core.IParam.LogicStruct[] = [];
+      const routerLogics: core.DataType.LogicStruct[] = [];
       routerLogics.push(await utilityWrappedNativeTokenLogic.build({ input, output, balanceBps }));
 
       // 4. get router permit2 datas

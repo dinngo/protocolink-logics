@@ -81,7 +81,7 @@ describe('mainnet: Test CompoundV3 Borrow Logic', function () {
       const funds = new common.TokenAmounts();
 
       // 5. build router logics
-      const routerLogics: core.IParam.LogicStruct[] = [];
+      const routerLogics: core.DataType.LogicStruct[] = [];
       const compoundV3BorrowLogic = new compoundv3.BorrowLogic(chainId, hre.ethers.provider);
       routerLogics.push(await compoundV3BorrowLogic.build({ marketId, output }, { account: user.address }));
 

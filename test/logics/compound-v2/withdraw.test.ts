@@ -63,7 +63,7 @@ describe('mainnet: Test CompoundV2 Withdraw Logic', function () {
       }
 
       // 4. build router logics
-      const routerLogics: core.IParam.LogicStruct[] = [];
+      const routerLogics: core.DataType.LogicStruct[] = [];
       routerLogics.push(await compoundV2WithdrawLogic.build({ input, output, balanceBps }));
 
       // 5. get router permit2 datas

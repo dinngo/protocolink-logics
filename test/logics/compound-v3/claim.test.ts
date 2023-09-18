@@ -83,7 +83,7 @@ describe('mainnet: Test CompoundV3 Claim Logic', function () {
       }
 
       // 4. build router logics
-      const routerLogics: core.IParam.LogicStruct[] = [];
+      const routerLogics: core.DataType.LogicStruct[] = [];
       routerLogics.push(
         await compoundV3ClaimLogic.build({ marketId, owner: owner.address, output }, { account: claimer.address })
       );

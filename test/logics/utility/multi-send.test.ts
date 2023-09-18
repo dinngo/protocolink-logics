@@ -80,7 +80,7 @@ describe('mainnet: Test Utility MultiSend Logic', function () {
       }
 
       // 2. build router logics
-      const routerLogics: core.IParam.LogicStruct[] = [];
+      const routerLogics: core.DataType.LogicStruct[] = [];
       const utilityMultiSendLogic = new utility.MultiSendLogic(chainId);
       routerLogics.push(...(await utilityMultiSendLogic.build(multiSendFields)));
 

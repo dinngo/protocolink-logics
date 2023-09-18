@@ -66,7 +66,7 @@ describe('mainnet: Test CompoundV2 Claim Logic', function () {
       expect(output.amountWei).to.be.gt(0);
 
       // 3. build router logics
-      const routerLogics: core.IParam.LogicStruct[] = [];
+      const routerLogics: core.DataType.LogicStruct[] = [];
       routerLogics.push(await compoundV2ClaimLogic.build({ owner: owner.address, output }));
 
       // 4. send router tx

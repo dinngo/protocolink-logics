@@ -64,7 +64,7 @@ describe('mainnet: Test CompoundV3 WithdrawBase Logic', function () {
       }
 
       // 4. build router logics
-      const routerLogics: core.IParam.LogicStruct[] = [];
+      const routerLogics: core.DataType.LogicStruct[] = [];
       routerLogics.push(await compoundV3WithdrawBaseLogic.build({ marketId, input, output, balanceBps }));
 
       // 5. get router permit2 datas

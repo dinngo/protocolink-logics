@@ -127,7 +127,7 @@ describe('mainnet: Test AaveV2 Repay Logic', function () {
       const tokensReturn = [input.token.elasticAddress];
 
       // 4. build router logics
-      const routerLogics: core.IParam.LogicStruct[] = [];
+      const routerLogics: core.DataType.LogicStruct[] = [];
       routerLogics.push(await aaveV2RepayLogic.build({ input, interestRateMode, borrower: user.address, balanceBps }));
 
       // 5. get router permit2 datas

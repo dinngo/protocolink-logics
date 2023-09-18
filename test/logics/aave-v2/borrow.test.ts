@@ -71,7 +71,7 @@ describe('mainnet: Test AaveV2 Borrow Logic', function () {
       const tokensReturn = [output.token.elasticAddress];
 
       // 3. build router logics
-      const routerLogics: core.IParam.LogicStruct[] = [];
+      const routerLogics: core.DataType.LogicStruct[] = [];
       const aaveV2BorrowLogic = new aavev2.BorrowLogic(chainId);
       routerLogics.push(await aaveV2BorrowLogic.build({ output, interestRateMode }, { account: user.address }));
 
