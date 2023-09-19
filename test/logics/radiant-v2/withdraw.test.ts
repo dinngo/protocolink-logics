@@ -72,7 +72,7 @@ describe('arbitrum: Test RadiantV2 Withdraw Logic', () => {
       }
 
       // 4. build router logics
-      const routerLogics: core.IParam.LogicStruct[] = [];
+      const routerLogics: core.DataType.LogicStruct[] = [];
       routerLogics.push(await radiantV2WithdrawLogic.build({ input, output, balanceBps }, { account: user.address }));
 
       // 5. get router permit2 datas
