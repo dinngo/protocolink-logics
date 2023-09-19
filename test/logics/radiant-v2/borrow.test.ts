@@ -59,7 +59,7 @@ describe('arbitrum: Test RadiantV2 Borrow Logic', () => {
       const tokensReturn = [output.token.elasticAddress];
 
       // 3. build router logics
-      const routerLogics: core.IParam.LogicStruct[] = [];
+      const routerLogics: core.DataType.LogicStruct[] = [];
       const radiantV2BorrowLogic = new radiantv2.BorrowLogic(chainId);
       routerLogics.push(await radiantV2BorrowLogic.build({ output, interestRateMode }, { account: user.address }));
 

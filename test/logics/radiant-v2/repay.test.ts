@@ -92,7 +92,7 @@ describe('arbitrum: Test RadiantV2 Repay Logic', () => {
       const tokensReturn = [input.token.elasticAddress];
 
       // 4. build router logics
-      const routerLogics: core.IParam.LogicStruct[] = [];
+      const routerLogics: core.DataType.LogicStruct[] = [];
       routerLogics.push(
         await radiantV2RepayLogic.build({ input, interestRateMode, borrower: user.address, balanceBps })
       );
