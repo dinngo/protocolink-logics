@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@protocolink/test-helpers';
+import { claimToken, getChainId, snapshotAndRevertEach } from '@protocolink/test-helpers';
 import * as common from '@protocolink/common';
 import * as compoundv2 from 'src/logics/compound-v2';
 import * as core from '@protocolink/core';
@@ -16,7 +16,8 @@ describe('mainnet: Test CompoundV2 Claim Logic', function () {
     chainId = await getChainId();
     const [, user1, user2] = await hre.ethers.getSigners();
     users = [user1, user2];
-    await claimToken(chainId, user1.address, mainnetTokens.USDC, '5000');
+    await claimToken(chainId, user1.address, compoundv2.underlyingTokens.USDC, '5000');
+    await claimToken(chainId, user1.address, compoundv2.underlyingTokens.DAI, '5000');
   });
 
   snapshotAndRevertEach();
@@ -26,26 +27,26 @@ describe('mainnet: Test CompoundV2 Claim Logic', function () {
     {
       ownerIndex: 0,
       claimerIndex: 0,
-      supply: new common.TokenAmount(compoundv2.underlyingTokens.ETH, '1'),
+      supply: new common.TokenAmount(compoundv2.underlyingTokens.DAI, '1000'),
       borrow: new common.TokenAmount(compoundv2.underlyingTokens.USDC, '100'),
     },
     {
       ownerIndex: 0,
       claimerIndex: 0,
       supply: new common.TokenAmount(compoundv2.underlyingTokens.USDC, '3000'),
-      borrow: new common.TokenAmount(compoundv2.underlyingTokens.ETH, '1'),
+      borrow: new common.TokenAmount(compoundv2.underlyingTokens.DAI, '100'),
     },
     {
       ownerIndex: 0,
       claimerIndex: 1,
-      supply: new common.TokenAmount(compoundv2.underlyingTokens.ETH, '1'),
+      supply: new common.TokenAmount(compoundv2.underlyingTokens.DAI, '1000'),
       borrow: new common.TokenAmount(compoundv2.underlyingTokens.USDC, '100'),
     },
     {
       ownerIndex: 0,
       claimerIndex: 1,
       supply: new common.TokenAmount(compoundv2.underlyingTokens.USDC, '3000'),
-      borrow: new common.TokenAmount(compoundv2.underlyingTokens.ETH, '1'),
+      borrow: new common.TokenAmount(compoundv2.underlyingTokens.DAI, '100'),
     },
   ];
 

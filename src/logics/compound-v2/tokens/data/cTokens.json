@@ -22,7 +22,7 @@
   },
   "cDAI": {
     "chainId": 1,
-    "address": "0xF5DCe57282A584D2746FaF1593d3121Fcac444dC",
+    "address": "0x5d3a536E4D6DbD6114cc1Ead35777bAB948E3643",
     "decimals": 8,
     "symbol": "cDAI",
     "name": "Compound Dai"
@@ -54,13 +54,6 @@
     "decimals": 8,
     "symbol": "cMKR",
     "name": "Compound Maker"
-  },
-  "cREP": {
-    "chainId": 1,
-    "address": "0x158079Ee67Fce2f58472A96584A73C7Ab9AC95c1",
-    "decimals": 8,
-    "symbol": "cREP",
-    "name": "Compound Augur"
   },
   "cSUSHI": {
     "chainId": 1,
