@@ -17,7 +17,13 @@ describe('mainnet: Test CompoundV2 Claim Logic', function () {
     const [, user1, user2] = await hre.ethers.getSigners();
     users = [user1, user2];
     await claimToken(chainId, user1.address, compoundv2.underlyingTokens.USDC, '5000');
-    await claimToken(chainId, user1.address, compoundv2.underlyingTokens.DAI, '5000');
+    await claimToken(
+      chainId,
+      user1.address,
+      compoundv2.underlyingTokens.DAI,
+      '5000',
+      '0x8A610c1C93da88c59F51A6264A4c70927814B320'
+    );
   });
 
   snapshotAndRevertEach();

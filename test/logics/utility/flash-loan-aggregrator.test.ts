@@ -19,7 +19,7 @@ describe('mainnet: Test Utility FlashLoanAggregator Logic', function () {
     await claimToken(chainId, user.address, mainnetTokens.WETH, '2');
     await claimToken(chainId, user.address, mainnetTokens.USDC, '2');
     await claimToken(chainId, user.address, mainnetTokens.USDT, '2');
-    await claimToken(chainId, user.address, mainnetTokens.DAI, '2');
+    await claimToken(chainId, user.address, mainnetTokens.DAI, '2', '0x8A610c1C93da88c59F51A6264A4c70927814B320');
   });
 
   snapshotAndRevertEach();

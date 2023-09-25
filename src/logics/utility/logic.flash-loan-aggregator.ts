@@ -94,6 +94,7 @@ export class FlashLoanAggregatorLogic
         quotation = quotations[i];
       }
     }
+
     invariant(!!quotation, 'no suitable flash loan found');
 
     return quotation;
