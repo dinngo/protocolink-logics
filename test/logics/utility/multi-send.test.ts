@@ -17,7 +17,7 @@ describe('mainnet: Test Utility MultiSend Logic', function () {
     [, user, recipients[0], recipients[1], recipients[2]] = await hre.ethers.getSigners();
     await claimToken(chainId, user.address, mainnetTokens.WETH, '100');
     await claimToken(chainId, user.address, mainnetTokens.USDC, '100');
-    await claimToken(chainId, user.address, mainnetTokens.DAI, '100');
+    await claimToken(chainId, user.address, mainnetTokens.DAI, '100', '0x8A610c1C93da88c59F51A6264A4c70927814B320');
   });
 
   snapshotAndRevertEach();
