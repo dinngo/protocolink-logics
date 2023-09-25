@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 0.4.1
+
+### Patch Changes
+
+- 3f0965f: add radiant v2 logics
+
 ## 0.4.0
 
 ### Minor Changes
