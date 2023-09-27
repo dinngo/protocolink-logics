@@ -4,6 +4,7 @@ type ContractNames = 'CometRewards';
 
 export enum MarketId {
   USDC = 'USDC',
+  USDCe = 'USDC.e',
   ETH = 'ETH',
 }
 
@@ -73,9 +74,14 @@ export const configs: Config[] = [
     },
     markets: [
       {
-        id: MarketId.USDC,
+        id: MarketId.USDCe,
         cometAddress: '0xA5EDBDD9646f8dFF606d7448e414884C7d905dCA',
         baseTokenAddress: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
+      },
+      {
+        id: MarketId.USDC,
+        cometAddress: '0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf',
+        baseTokenAddress: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
       },
     ],
     COMP: new common.Token(
