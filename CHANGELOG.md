@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 0.4.2
+
+### Patch Changes
+
+- fa30983: compound v3 support arbitrum usdc and usdc.e market
+
 ## 0.4.1
 
 ### Patch Changes
