@@ -21,21 +21,21 @@ describe('mainnet: Test CompoundV2 Supply Logic', function () {
 
   const testCases = [
     {
-      input: new common.TokenAmount(compoundv2.underlyingTokens.ETH, '1'),
-      tokenOut: compoundv2.cTokens.cETH,
+      input: new common.TokenAmount(mainnetTokens.ETH, '1'),
+      tokenOut: compoundv2.toCToken(mainnetTokens.ETH),
     },
     {
-      input: new common.TokenAmount(compoundv2.underlyingTokens.WBTC, '1'),
-      tokenOut: compoundv2.cTokens.cWBTC,
+      input: new common.TokenAmount(mainnetTokens.WBTC, '1'),
+      tokenOut: compoundv2.toCToken(mainnetTokens.WBTC),
     },
     {
-      input: new common.TokenAmount(compoundv2.underlyingTokens.ETH, '1'),
-      tokenOut: compoundv2.cTokens.cETH,
+      input: new common.TokenAmount(mainnetTokens.ETH, '1'),
+      tokenOut: compoundv2.toCToken(mainnetTokens.ETH),
       balanceBps: 5000,
     },
     {
-      input: new common.TokenAmount(compoundv2.underlyingTokens.WBTC, '1'),
-      tokenOut: compoundv2.cTokens.cWBTC,
+      input: new common.TokenAmount(mainnetTokens.WBTC, '1'),
+      tokenOut: compoundv2.toCToken(mainnetTokens.WBTC),
       balanceBps: 5000,
     },
   ];
