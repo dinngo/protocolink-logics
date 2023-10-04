@@ -2,8 +2,7 @@ import { BigNumber } from 'ethers';
 import { CErc20__factory } from './contracts';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
-import { supportedChainIds } from './configs';
-import { tokenPairs } from './tokens';
+import { supportedChainIds, tokenPairs } from './configs';
 
 export type WithdrawLogicTokenList = [common.Token, common.Token][];
 

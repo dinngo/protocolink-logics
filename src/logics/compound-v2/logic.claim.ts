@@ -1,8 +1,7 @@
-import { COMP } from './tokens';
+import { COMP, getContractAddress, supportedChainIds } from './configs';
 import { CompoundLens__factory, Comptroller__factory } from './contracts';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
-import { getContractAddress, supportedChainIds } from './configs';
 
 export type ClaimLogicTokenList = [common.Token];
 

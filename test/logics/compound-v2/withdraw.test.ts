@@ -22,21 +22,21 @@ describe('mainnet: Test CompoundV2 Withdraw Logic', function () {
 
   const testCases = [
     {
-      input: new common.TokenAmount(compoundv2.cTokens.cETH, '50'),
-      tokenOut: compoundv2.underlyingTokens.ETH,
+      input: new common.TokenAmount(compoundv2.toCToken(mainnetTokens.ETH), '50'),
+      tokenOut: mainnetTokens.ETH,
     },
     {
-      input: new common.TokenAmount(compoundv2.cTokens.cWBTC, '50'),
-      tokenOut: compoundv2.underlyingTokens.WBTC,
+      input: new common.TokenAmount(compoundv2.toCToken(mainnetTokens.WBTC), '50'),
+      tokenOut: mainnetTokens.WBTC,
     },
     {
-      input: new common.TokenAmount(compoundv2.cTokens.cETH, '50'),
-      tokenOut: compoundv2.underlyingTokens.ETH,
+      input: new common.TokenAmount(compoundv2.toCToken(mainnetTokens.ETH), '50'),
+      tokenOut: mainnetTokens.ETH,
       balanceBps: 5000,
     },
     {
-      input: new common.TokenAmount(compoundv2.cTokens.cWBTC, '50'),
-      tokenOut: compoundv2.underlyingTokens.WBTC,
+      input: new common.TokenAmount(compoundv2.toCToken(mainnetTokens.WBTC), '50'),
+      tokenOut: mainnetTokens.WBTC,
       balanceBps: 5000,
     },
   ];

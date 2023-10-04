@@ -1,11 +1,10 @@
-import { COMP } from './tokens';
+import { COMP, getContractAddress } from './configs';
 import { ClaimLogic, ClaimLogicFields } from './logic.claim';
 import { Comptroller__factory } from './contracts';
 import { LogicTestCase } from 'test/types';
 import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
 import { expect } from 'chai';
-import { getContractAddress } from './configs';
 
 describe('CompoundV2 ClaimLogic', function () {
   context('Test getTokenList', async function () {

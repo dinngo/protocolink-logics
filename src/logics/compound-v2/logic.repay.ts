@@ -2,8 +2,7 @@ import { BigNumberish } from 'ethers';
 import { CErc20__factory, CEther__factory } from './contracts';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
-import { supportedChainIds } from './configs';
-import { toCToken, underlyingTokens } from './tokens';
+import { supportedChainIds, toCToken, underlyingTokens } from './configs';
 
 export type RepayLogicTokenList = common.Token[];
 
@@ -19,8 +18,7 @@ export class RepayLogic
   static readonly supportedChainIds = supportedChainIds;
 
   getTokenList() {
-    const tokenList: RepayLogicTokenList = Object.values(underlyingTokens);
-    return tokenList;
+    return underlyingTokens;
   }
 
   async quote(params: RepayLogicParams) {

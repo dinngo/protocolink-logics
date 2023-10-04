@@ -23,21 +23,21 @@ describe('mainnet: Test CompoundV2 Repay Logic', function () {
 
   const testCases = [
     {
-      supply: new common.TokenAmount(compoundv2.underlyingTokens.ETH, '100'),
-      borrow: new common.TokenAmount(compoundv2.underlyingTokens.WBTC, '1'),
+      supply: new common.TokenAmount(mainnetTokens.ETH, '100'),
+      borrow: new common.TokenAmount(mainnetTokens.WBTC, '1'),
     },
     {
-      supply: new common.TokenAmount(compoundv2.underlyingTokens.WBTC, '1'),
-      borrow: new common.TokenAmount(compoundv2.underlyingTokens.ETH, '1'),
+      supply: new common.TokenAmount(mainnetTokens.WBTC, '1'),
+      borrow: new common.TokenAmount(mainnetTokens.ETH, '1'),
     },
     {
-      supply: new common.TokenAmount(compoundv2.underlyingTokens.ETH, '100'),
-      borrow: new common.TokenAmount(compoundv2.underlyingTokens.WBTC, '1'),
+      supply: new common.TokenAmount(mainnetTokens.ETH, '100'),
+      borrow: new common.TokenAmount(mainnetTokens.WBTC, '1'),
       balanceBps: 5000,
     },
     {
-      supply: new common.TokenAmount(compoundv2.underlyingTokens.WBTC, '1'),
-      borrow: new common.TokenAmount(compoundv2.underlyingTokens.ETH, '1'),
+      supply: new common.TokenAmount(mainnetTokens.WBTC, '1'),
+      borrow: new common.TokenAmount(mainnetTokens.ETH, '1'),
       balanceBps: 5000,
     },
   ];
