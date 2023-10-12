@@ -5,6 +5,7 @@ type ContractNames = 'CometRewards';
 export enum MarketId {
   USDC = 'USDC',
   USDCe = 'USDC.e',
+  USDbC = 'USDbC',
   ETH = 'ETH',
 }
 
@@ -66,6 +67,25 @@ export const configs: Config[] = [
       'COMP',
       '(PoS) Compound'
     ),
+  },
+  {
+    chainId: common.ChainId.base,
+    contract: {
+      CometRewards: '0x123964802e6ABabBE1Bc9547D72Ef1B69B00A6b1',
+    },
+    markets: [
+      {
+        id: MarketId.USDbC,
+        cometAddress: '0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf',
+        baseTokenAddress: '0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA',
+      },
+      {
+        id: MarketId.ETH,
+        cometAddress: '0x46e6b214b524310239732D51387075E0e70970bf',
+        baseTokenAddress: '0x4200000000000000000000000000000000000006',
+      },
+    ],
+    COMP: new common.Token(common.ChainId.base, '0x9e1028F5F1D5eDE59748FFceE5532509976840E0', 18, 'COMP', 'Compound'),
   },
   {
     chainId: common.ChainId.arbitrum,

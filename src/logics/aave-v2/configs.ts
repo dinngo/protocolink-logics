@@ -22,6 +22,13 @@ export const configs: Config[] = [
       AaveV2FlashLoanCallback: '0x27BfAC5fb25C3853C2F48cF0e5B2F89Ea03C0104',
     },
   },
+  {
+    chainId: common.ChainId.avalanche,
+    contract: {
+      ProtocolDataProvider: '0x65285E9dfab318f57051ab2b139ccCf232945451',
+      AaveV2FlashLoanCallback: '0x27BfAC5fb25C3853C2F48cF0e5B2F89Ea03C0104',
+    },
+  },
 ];
 
 export const [supportedChainIds, configMap] = configs.reduce(

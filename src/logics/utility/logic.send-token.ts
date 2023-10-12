@@ -1,7 +1,7 @@
 import { BigNumberish } from 'ethers';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
-import { get1InchTokens } from 'src/utils';
+import { get1InchTokens, getMetisTokens } from 'src/utils';
 
 export type SendTokenLogicTokenList = common.Token[];
 
@@ -12,6 +12,7 @@ export class SendTokenLogic extends core.Logic implements core.LogicTokenListInt
   static readonly supportedChainIds = common.networks.map(({ chainId }) => chainId);
 
   async getTokenList(): Promise<SendTokenLogicTokenList> {
+    if (this.chainId === 1088) return getMetisTokens();
     return get1InchTokens(this.chainId);
   }
 
