@@ -12,8 +12,7 @@ export class SendTokenLogic extends core.Logic implements core.LogicTokenListInt
   static readonly supportedChainIds = common.networks.map(({ chainId }) => chainId);
 
   async getTokenList(): Promise<SendTokenLogicTokenList> {
-    if (this.chainId === 1088) return getMetisTokens();
-    return get1InchTokens(this.chainId);
+    return this.chainId === common.ChainId.metis ? getMetisTokens() : get1InchTokens(this.chainId);
   }
 
   async build(fields: SendTokenLogicFields) {

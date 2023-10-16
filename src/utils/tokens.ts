@@ -16,15 +16,15 @@ export async function get1InchTokens(chainId: number) {
 }
 
 export async function getMetisTokens() {
-  const chainId = 1088;
-  const { data } = await axios.get<
-    Record<string, { tokens: { symbol: string; name: string; decimals: number; address: string } }>
-  >(`https://tokens.coingecko.com/metis-andromeda/all.json`);
-
-  const nativeToken = common.getNativeToken(chainId);
-  const elasticAddress = common.ELASTIC_ADDRESS.toLowerCase();
-  const tokens = Object.values(data.tokens).map(({ address, decimals, symbol, name }) =>
-    address === elasticAddress ? nativeToken : new common.Token(chainId, address, decimals, symbol, name)
+  const chainId = common.ChainId.metis;
+  const { data } = await axios.get<{ tokens: { symbol: string; name: string; decimals: number; address: string }[] }>(
+    `https://tokens.coingecko.com/metis-andromeda/all.json`
   );
+
+  const tokens = [common.getNativeToken(chainId)];
+  for (const { address, decimals, symbol, name } of data.tokens) {
+    tokens.push(new common.Token(chainId, address, decimals, symbol, name));
+  }
+
   return tokens;
 }

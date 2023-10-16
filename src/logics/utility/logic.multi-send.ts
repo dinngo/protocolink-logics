@@ -15,8 +15,7 @@ export class MultiSendLogic
   static readonly supportedChainIds = common.networks.map(({ chainId }) => chainId);
 
   async getTokenList(): Promise<MultiSendLogicTokenList> {
-    if (this.chainId === 1088) return getMetisTokens();
-    return get1InchTokens(this.chainId);
+    return this.chainId === common.ChainId.metis ? getMetisTokens() : get1InchTokens(this.chainId);
   }
 
   async build(fields: MultiSendLogicFields) {
