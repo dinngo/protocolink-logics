@@ -1,5 +1,12 @@
 # @protocolink/logics
 
+## 0.4.3
+
+### Patch Changes
+
+- 4e11ee3: support Optimism, Base, Metis and Avalanche
+- 975e860: refine compound v2 assets
+
 ## 0.4.2
 
 ### Patch Changes
