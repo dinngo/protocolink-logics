@@ -1,4 +1,11 @@
 {
+  "ARB": {
+    "chainId": 42161,
+    "address": "0x912CE59144191C1204E64559FE8253a0e49E6548",
+    "decimals": 18,
+    "symbol": "ARB",
+    "name": "Arbitrum"
+  },
   "WETH": {
     "chainId": 42161,
     "address": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",

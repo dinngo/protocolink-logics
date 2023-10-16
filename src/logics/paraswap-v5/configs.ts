@@ -17,6 +17,13 @@ export const configs: Config[] = [
     ],
   },
   {
+    chainId: common.ChainId.optimism,
+    tokenListUrls: [
+      'https://static.optimism.io/optimism.tokenlist.json',
+      'https://tokens.coingecko.com/optimistic-ethereum/all.json',
+    ],
+  },
+  {
     chainId: common.ChainId.polygon,
     tokenListUrls: [
       'https://unpkg.com/quickswap-default-token-list@1.2.74/build/quickswap-default.tokenlist.json',
@@ -25,11 +32,23 @@ export const configs: Config[] = [
     ],
   },
   {
+    chainId: common.ChainId.base,
+    tokenListUrls: ['https://static.optimism.io/optimism.tokenlist.json'],
+  },
+  {
     chainId: common.ChainId.arbitrum,
     tokenListUrls: [
       'https://raw.githubusercontent.com/paraswap/community-token-list/master/src/sources/paraswap.extralist.json',
       'https://tokenlist.arbitrum.io/ArbTokenLists/arbed_arb_whitelist_era.json',
       'https://tokens.coingecko.com/arbitrum-one/all.json',
+    ],
+  },
+  {
+    chainId: common.ChainId.avalanche,
+    tokenListUrls: [
+      'https://raw.githubusercontent.com/pangolindex/tokenlists/main/pangolin.tokenlist.json',
+      'https://raw.githubusercontent.com/traderjoe-xyz/joe-tokenlists/main/mc.tokenlist.json',
+      'https://tokens.coingecko.com/avalanche/all.json',
     ],
   },
 ];

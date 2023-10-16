@@ -17,6 +17,14 @@ export const configs: Config[] = [
     },
   },
   {
+    chainId: common.ChainId.optimism,
+    contract: {
+      Vault: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+      BalancerV2FlashLoanCallback: '0x08b3d2c773C08CF21746Cf16268d2E092881c208',
+      ProtocolFeesCollector: '0xce88686553686DA562CE7Cea497CE749DA109f9F',
+    },
+  },
+  {
     chainId: common.ChainId.polygon,
     contract: {
       Vault: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
@@ -25,7 +33,23 @@ export const configs: Config[] = [
     },
   },
   {
+    chainId: common.ChainId.base,
+    contract: {
+      Vault: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+      BalancerV2FlashLoanCallback: '0x08b3d2c773C08CF21746Cf16268d2E092881c208',
+      ProtocolFeesCollector: '0xce88686553686DA562CE7Cea497CE749DA109f9F',
+    },
+  },
+  {
     chainId: common.ChainId.arbitrum,
+    contract: {
+      Vault: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+      BalancerV2FlashLoanCallback: '0x08b3d2c773C08CF21746Cf16268d2E092881c208',
+      ProtocolFeesCollector: '0xce88686553686DA562CE7Cea497CE749DA109f9F',
+    },
+  },
+  {
+    chainId: common.ChainId.avalanche,
     contract: {
       Vault: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
       BalancerV2FlashLoanCallback: '0x08b3d2c773C08CF21746Cf16268d2E092881c208',

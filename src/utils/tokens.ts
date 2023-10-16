@@ -14,3 +14,17 @@ export async function get1InchTokens(chainId: number) {
 
   return tokens;
 }
+
+export async function getMetisTokens() {
+  const chainId = common.ChainId.metis;
+  const { data } = await axios.get<{ tokens: { symbol: string; name: string; decimals: number; address: string }[] }>(
+    `https://tokens.coingecko.com/metis-andromeda/all.json`
+  );
+
+  const tokens = [common.getNativeToken(chainId)];
+  for (const { address, decimals, symbol, name } of data.tokens) {
+    tokens.push(new common.Token(chainId, address, decimals, symbol, name));
+  }
+
+  return tokens;
+}
