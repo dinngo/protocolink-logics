@@ -1,5 +1,12 @@
 # @protocolink/logics
 
+## 0.4.4
+
+### Patch Changes
+
+- 7c2e0e8: remove UniswapV3 from Base and Avalanche
+- 799723b: refine tokenTransferProxyAddress for ParaswapV5
+
 ## 0.4.3
 
 ### Patch Changes
