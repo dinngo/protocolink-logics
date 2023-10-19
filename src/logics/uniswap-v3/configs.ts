@@ -1,5 +1,5 @@
 import { FeeAmount } from '@uniswap/v3-sdk';
-import { arbitrumTokens, avalancheTokens, baseTokens, mainnetTokens, optimismTokens, polygonTokens } from './tokens';
+import { arbitrumTokens, mainnetTokens, optimismTokens, polygonTokens } from './tokens';
 import * as common from '@protocolink/common';
 import * as univ3 from 'src/modules/univ3';
 
@@ -43,14 +43,6 @@ export const configs: univ3.Config[] = [
     bases: [polygonTokens.WETH, polygonTokens.USDC, polygonTokens.DAI, polygonTokens.USDT, polygonTokens.WBTC],
   },
   {
-    chainId: common.ChainId.base,
-    factoryAddress: '0x33128a8fC17869897dcE68Ed026d694621f6FDfD',
-    quoter: { address: '0x3d4e44Eb1374240CE5F1B871ab261CD16335B76a', isV2: true },
-    swapRouterAddress: '',
-    feeAmounts: [FeeAmount.LOWEST, FeeAmount.LOW, FeeAmount.MEDIUM, FeeAmount.HIGH],
-    bases: [baseTokens.WETH, baseTokens.USDbC],
-  },
-  {
     chainId: common.ChainId.arbitrum,
     factoryAddress: '0x1F98431c8aD98523631AE4a59f267346ea31F984',
     quoter: { address: '0x61fFE014bA17989E743c5F6cB21bF9697530B21e', isV2: true },
@@ -64,14 +56,6 @@ export const configs: univ3.Config[] = [
       arbitrumTokens.WBTC,
       arbitrumTokens.WETH,
     ],
-  },
-  {
-    chainId: common.ChainId.avalanche,
-    factoryAddress: '0x740b1c1de25031C31FF4fC9A62f554A55cdC1baD',
-    quoter: { address: '0xbe0F5544EC67e9B3b2D979aaA43f18Fd87E6257F', isV2: true },
-    swapRouterAddress: '',
-    feeAmounts: [FeeAmount.LOWEST, FeeAmount.LOW, FeeAmount.MEDIUM, FeeAmount.HIGH],
-    bases: [avalancheTokens.DAI, avalancheTokens.USDC, avalancheTokens.USDT, avalancheTokens.WETH],
   },
 ];
 

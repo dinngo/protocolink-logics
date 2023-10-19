@@ -1,7 +1,5 @@
 import { Token, WETH9 } from '@uniswap/sdk-core';
 import arbitrumTokensJSON from './data/arbitrum.json';
-import avalancheTokensJSON from './data/avalanche.json';
-import baseTokensJSON from './data/base.json';
 import * as common from '@protocolink/common';
 import mainnetTokensJSON from './data/mainnet.json';
 import optimismTokensJSON from './data/optimism.json';
@@ -24,26 +22,12 @@ export const WRAPPED_NATIVE_CURRENCY: Record<number, Token> = {
     'WMATIC',
     'Wrapped MATIC'
   ),
-  [common.ChainId.base]: new Token(
-    common.ChainId.base,
-    '0x4200000000000000000000000000000000000006',
-    18,
-    'WETH',
-    'Wrapped Ether'
-  ),
   [common.ChainId.arbitrum]: new Token(
     common.ChainId.arbitrum,
     '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1',
     18,
     'WETH',
     'Wrapped Ether'
-  ),
-  [common.ChainId.avalanche]: new Token(
-    common.ChainId.avalanche,
-    '0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7',
-    18,
-    'WAVAX',
-    'Wrapped AVAX'
   ),
 };
 
@@ -59,14 +43,6 @@ type PolygonTokenSymbols = keyof typeof polygonTokensJSON;
 
 export const polygonTokens = univ3.toTokenMap<PolygonTokenSymbols>(polygonTokensJSON);
 
-type BaseTokenSymbols = keyof typeof baseTokensJSON;
-
-export const baseTokens = univ3.toTokenMap<BaseTokenSymbols>(baseTokensJSON);
-
 type ArbitrumTokenSymbols = keyof typeof arbitrumTokensJSON;
 
 export const arbitrumTokens = univ3.toTokenMap<ArbitrumTokenSymbols>(arbitrumTokensJSON);
-
-type AvalancheTokenSymbols = keyof typeof avalancheTokensJSON;
-
-export const avalancheTokens = univ3.toTokenMap<AvalancheTokenSymbols>(avalancheTokensJSON);
