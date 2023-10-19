@@ -4,8 +4,8 @@ import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
+import { getTokenTransferProxyAddress } from './configs';
 import { mainnetTokens } from '@protocolink/test-helpers';
-import { tokenTransferProxyAddress } from './configs';
 
 describe('ParaswapV5 SwapTokenLogic', function () {
   context('Test getTokenList', async function () {
@@ -89,7 +89,7 @@ describe('ParaswapV5 SwapTokenLogic', function () {
         }
         expect(routerLogic.inputs[0].balanceBps).to.eq(core.BPS_NOT_USED);
         expect(routerLogic.inputs[0].amountOrOffset).to.eq(input.amountWei);
-        expect(routerLogic.approveTo).to.eq(tokenTransferProxyAddress);
+        expect(routerLogic.approveTo).to.eq(getTokenTransferProxyAddress(chainId));
         expect(routerLogic.callback).to.eq(constants.AddressZero);
       });
     });

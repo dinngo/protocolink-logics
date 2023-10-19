@@ -3,7 +3,7 @@ import { TokenList } from '@uniswap/token-lists';
 import { axios } from 'src/utils';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
-import { getTokenListUrls, supportedChainIds, tokenTransferProxyAddress } from './configs';
+import { getTokenListUrls, getTokenTransferProxyAddress, supportedChainIds } from './configs';
 
 export type SwapTokenLogicTokenList = common.Token[];
 
@@ -124,7 +124,7 @@ export class SwapTokenLogic
       { ignoreChecks: true, ignoreGasEstimate: true }
     );
     const inputs = [core.newLogicInput({ input })];
-    const approveTo = tokenTransferProxyAddress;
+    const approveTo = getTokenTransferProxyAddress(this.chainId);
 
     return core.newLogic({ to, data, inputs, approveTo });
   }
