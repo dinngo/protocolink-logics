@@ -20,9 +20,10 @@
     "lint": "eslint --fix src",
     "prepublishOnly": "yarn build",
     "test": "mocha",
-    "test:e2e": "yarn run test:e2e:mainnet && yarn run test:e2e:polygon && yarn run test:e2e:arbitrum",
+    "test:e2e": "yarn run test:e2e:mainnet && yarn run test:e2e:polygon && yarn run test:e2e:metis && yarn run test:e2e:arbitrum",
     "test:e2e:mainnet": "env-cmd -f .env.mainnet hardhat test --grep 'mainnet'",
     "test:e2e:polygon": "env-cmd -f .env.polygon hardhat test --grep 'polygon'",
+    "test:e2e:metis": "env-cmd -f .env.metis hardhat test --grep 'metis'",
     "test:e2e:arbitrum": "env-cmd -f .env.arbitrum hardhat test --grep 'arbitrum'",
     "test:unit": "mocha --recursive src"
   },

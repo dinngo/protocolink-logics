@@ -8,3 +8,4 @@ export * as syncswap from './syncswap';
 export * as uniswapv3 from './uniswap-v3';
 export * as utility from './utility';
 export * as radiantv2 from './radiant-v2';
+export * as openoceanv2 from './openocean-v2';
