@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 0.4.5
+
+### Patch Changes
+
+- d016d8c: support OpenOceanV2 on Metis
+
 ## 0.4.4
 
 ### Patch Changes
