@@ -14,7 +14,7 @@
     "name": "USDC Token"
   },
   "WETH": {
-    "chainId": 1,
+    "chainId": 1088,
     "address": "0x420000000000000000000000000000000000000a",
     "decimals": 18,
     "symbol": "WETH",
