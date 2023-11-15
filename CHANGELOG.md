@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 0.4.6
+
+### Patch Changes
+
+- 869759a: fix OpenOcean WETH chainId
+
 ## 0.4.5
 
 ### Patch Changes
