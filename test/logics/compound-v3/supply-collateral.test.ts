@@ -17,7 +17,13 @@ describe('mainnet: Test CompoundV3 SupplyCollateral Logic', function () {
     [, user] = await hre.ethers.getSigners();
     service = new compoundv3.Service(chainId, hre.ethers.provider);
     await claimToken(chainId, user.address, compoundv3.mainnetTokens.WETH, '10');
-    await claimToken(chainId, user.address, compoundv3.mainnetTokens.WBTC, '10');
+    await claimToken(
+      chainId,
+      user.address,
+      compoundv3.mainnetTokens.WBTC,
+      '10',
+      '0x9ff58f4ffb29fa2266ab25e75e2a8b3503311656'
+    );
     await claimToken(chainId, user.address, compoundv3.mainnetTokens.cbETH, '10');
     await claimToken(chainId, user.address, compoundv3.mainnetTokens.wstETH, '10');
   });

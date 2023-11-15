@@ -14,7 +14,7 @@ describe('mainnet: Test CompoundV2 Supply Logic', function () {
   before(async function () {
     chainId = await getChainId();
     [, user] = await hre.ethers.getSigners();
-    await claimToken(chainId, user.address, mainnetTokens.WBTC, '10');
+    await claimToken(chainId, user.address, mainnetTokens.WBTC, '10', '0x9ff58f4ffb29fa2266ab25e75e2a8b3503311656');
   });
 
   snapshotAndRevertEach();
