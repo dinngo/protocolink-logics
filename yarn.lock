@@ -1033,10 +1033,10 @@
     type-fest "^3.12.0"
     zksync-web3 "^0.14.3"
 
-"@protocolink/core@^0.4.3":
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/@protocolink/core/-/core-0.4.3.tgz#4c2533acf62092d1e76b3e7ac7c2f9c69ae3e355"
-  integrity sha512-7AyR5Mu/aAfP9rDXkpc70gK29JtMDXDdzRfTXWKf7OisXXqPUuOuC6D0s2zbZr5DCd/IzMURZOSQ4VjfGsspfQ==
+"@protocolink/core@^0.4.4":
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/@protocolink/core/-/core-0.4.4.tgz#f47e4e1897f9cd5dc82276762b5ccbb70398a8f7"
+  integrity sha512-NiSe3YFqqKrtyInyRjE2e3VBqB75SreMbHzh2HA381hVESClpP8lH7O/B+6hNcDDn8zDujMb1hE2TDPzGymZ9w==
   dependencies:
     "@protocolink/common" "^0.3.4"
     "@uniswap/permit2-sdk" "^1.2.0"
