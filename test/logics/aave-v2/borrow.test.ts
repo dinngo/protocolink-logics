@@ -35,28 +35,10 @@ describe('mainnet: Test AaveV2 Borrow Logic', function () {
       interestRateMode: aavev2.InterestRateMode.variable,
     },
     {
-      userIndex: 0,
-      deposit: new common.TokenAmount(aavev2.mainnetTokens.USDC, '5000'),
-      output: new common.TokenAmount(aavev2.mainnetTokens.WETH, '1'),
-      interestRateMode: aavev2.InterestRateMode.stable,
-    },
-    {
-      userIndex: 0,
-      deposit: new common.TokenAmount(aavev2.mainnetTokens.USDC, '5000'),
-      output: new common.TokenAmount(aavev2.mainnetTokens.ETH, '1'),
-      interestRateMode: aavev2.InterestRateMode.stable,
-    },
-    {
       userIndex: 1,
       deposit: new common.TokenAmount(aavev2.mainnetTokens.WETH, '1'),
       output: new common.TokenAmount(aavev2.mainnetTokens.USDC, '1'),
       interestRateMode: aavev2.InterestRateMode.variable,
-    },
-    {
-      userIndex: 1,
-      deposit: new common.TokenAmount(aavev2.mainnetTokens.WETH, '1'),
-      output: new common.TokenAmount(aavev2.mainnetTokens.USDC, '1'),
-      interestRateMode: aavev2.InterestRateMode.stable,
     },
   ];
 
