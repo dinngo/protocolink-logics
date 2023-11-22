@@ -1020,10 +1020,10 @@
     bignumber.js "^9.0.2"
     ts-essentials "^9.1.2"
 
-"@protocolink/common@^0.3.0", "@protocolink/common@^0.3.1", "@protocolink/common@^0.3.3":
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/@protocolink/common/-/common-0.3.3.tgz#63c3e34c9fbf25918847d8402aae5346924da2d4"
-  integrity sha512-izfqCopiNYDs0lafqplNRLIPXu/fbeaX9f2pwANw6LwhshOHBXi603fxmoPXTPYLvEDe6WdUDioclw/YHDKGeg==
+"@protocolink/common@^0.3.0", "@protocolink/common@^0.3.4":
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/@protocolink/common/-/common-0.3.4.tgz#cc7faeb6025c2da0231499a318e13a91093cfc0c"
+  integrity sha512-TnMn9ngY3w4RdKXuzIIazuBtEGpH+v2jHmpPDiBBmhAn4xIndQ5iFHggUfl7BpAkrw5ZIpwPJn5Gg542UNIk6g==
   dependencies:
     "@types/lodash" "^4.14.195"
     bignumber.js "^9.1.1"
@@ -1033,12 +1033,12 @@
     type-fest "^3.12.0"
     zksync-web3 "^0.14.3"
 
-"@protocolink/core@^0.4.2":
-  version "0.4.2"
-  resolved "https://registry.yarnpkg.com/@protocolink/core/-/core-0.4.2.tgz#19d07613ce355497eb13db82b3d68a44c3f4691e"
-  integrity sha512-WtapXfFgkb8jjNOYru+i00gCU23x0BR4i/2mGokQsKAGkeyuMymHIUTtsxN+5fL009t1NgrGhZe7Xt62wbX8Ug==
+"@protocolink/core@^0.4.3":
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/@protocolink/core/-/core-0.4.3.tgz#4c2533acf62092d1e76b3e7ac7c2f9c69ae3e355"
+  integrity sha512-7AyR5Mu/aAfP9rDXkpc70gK29JtMDXDdzRfTXWKf7OisXXqPUuOuC6D0s2zbZr5DCd/IzMURZOSQ4VjfGsspfQ==
   dependencies:
-    "@protocolink/common" "^0.3.1"
+    "@protocolink/common" "^0.3.4"
     "@uniswap/permit2-sdk" "^1.2.0"
     ethers "^5.7.2"
     tiny-invariant "^1.3.1"
