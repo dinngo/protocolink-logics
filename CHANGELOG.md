@@ -1,5 +1,16 @@
 # @protocolink/logics
 
+## 0.4.7
+
+### Patch Changes
+
+- 0f96ade: feat: update callback addresses for production use
+- 2fb70bf: Updated dependencies
+  - @protocolink/common@0.3.4
+  - @protocolink/core@0.4.3
+- ec5cb39: fix: remove AAVE V2 stable rate tests
+- 8cccf10: add Permit2 pull token logics
+
 ## 0.4.6
 
 ### Patch Changes
