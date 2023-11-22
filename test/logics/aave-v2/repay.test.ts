@@ -34,32 +34,14 @@ describe('mainnet: Test AaveV2 Repay Logic', function () {
     {
       userIndex: 0,
       deposit: new common.TokenAmount(aavev2.mainnetTokens.USDC, '5000'),
-      borrow: new common.TokenAmount(aavev2.mainnetTokens.ETH, '1'),
-      interestRateMode: aavev2.InterestRateMode.stable,
-    },
-    {
-      userIndex: 0,
-      deposit: new common.TokenAmount(aavev2.mainnetTokens.USDC, '5000'),
       borrow: new common.TokenAmount(aavev2.mainnetTokens.WETH, '1'),
       interestRateMode: aavev2.InterestRateMode.variable,
-    },
-    {
-      userIndex: 0,
-      deposit: new common.TokenAmount(aavev2.mainnetTokens.USDC, '5000'),
-      borrow: new common.TokenAmount(aavev2.mainnetTokens.WETH, '1'),
-      interestRateMode: aavev2.InterestRateMode.stable,
     },
     {
       userIndex: 1,
       deposit: new common.TokenAmount(aavev2.mainnetTokens.WETH, '1'),
       borrow: new common.TokenAmount(aavev2.mainnetTokens.USDC, '1'),
       interestRateMode: aavev2.InterestRateMode.variable,
-    },
-    {
-      userIndex: 1,
-      deposit: new common.TokenAmount(aavev2.mainnetTokens.WETH, '1'),
-      borrow: new common.TokenAmount(aavev2.mainnetTokens.USDC, '1'),
-      interestRateMode: aavev2.InterestRateMode.stable,
     },
     {
       userIndex: 0,
@@ -71,22 +53,8 @@ describe('mainnet: Test AaveV2 Repay Logic', function () {
     {
       userIndex: 0,
       deposit: new common.TokenAmount(aavev2.mainnetTokens.USDC, '5000'),
-      borrow: new common.TokenAmount(aavev2.mainnetTokens.ETH, '1'),
-      interestRateMode: aavev2.InterestRateMode.stable,
-      balanceBps: 5000,
-    },
-    {
-      userIndex: 0,
-      deposit: new common.TokenAmount(aavev2.mainnetTokens.USDC, '5000'),
       borrow: new common.TokenAmount(aavev2.mainnetTokens.WETH, '1'),
       interestRateMode: aavev2.InterestRateMode.variable,
-      balanceBps: 5000,
-    },
-    {
-      userIndex: 0,
-      deposit: new common.TokenAmount(aavev2.mainnetTokens.USDC, '5000'),
-      borrow: new common.TokenAmount(aavev2.mainnetTokens.WETH, '1'),
-      interestRateMode: aavev2.InterestRateMode.stable,
       balanceBps: 5000,
     },
     {
@@ -94,13 +62,6 @@ describe('mainnet: Test AaveV2 Repay Logic', function () {
       deposit: new common.TokenAmount(aavev2.mainnetTokens.WETH, '1'),
       borrow: new common.TokenAmount(aavev2.mainnetTokens.USDC, '1'),
       interestRateMode: aavev2.InterestRateMode.variable,
-      balanceBps: 5000,
-    },
-    {
-      userIndex: 1,
-      deposit: new common.TokenAmount(aavev2.mainnetTokens.WETH, '1'),
-      borrow: new common.TokenAmount(aavev2.mainnetTokens.USDC, '1'),
-      interestRateMode: aavev2.InterestRateMode.stable,
       balanceBps: 5000,
     },
   ];
