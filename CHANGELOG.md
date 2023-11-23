@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.0.0
+
+### Major Changes
+
+- release v1.0.0
+
 ## 0.4.8
 
 ### Patch Changes
