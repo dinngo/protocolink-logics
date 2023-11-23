@@ -1,5 +1,14 @@
 # @protocolink/logics
 
+## 0.4.8
+
+### Patch Changes
+
+- 035fa16: add Spark on Ethereum and Gnosis Chain
+- 8a38ff6: add Gnosis Chain in AaveV3 and BalancerV2
+- 3d09de4: add multichain to logics
+- 530f3c4: add getTokenList in Permit2 pull token logic
+
 ## 0.4.7
 
 ### Patch Changes
