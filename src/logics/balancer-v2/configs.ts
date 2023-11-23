@@ -25,6 +25,14 @@ export const configs: Config[] = [
     },
   },
   {
+    chainId: common.ChainId.gnosis,
+    contract: {
+      Vault: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+      BalancerV2FlashLoanCallback: '0xA15B9C132F29e91D99b51E3080020eF7c7F5E350',
+      ProtocolFeesCollector: '0xce88686553686DA562CE7Cea497CE749DA109f9F',
+    },
+  },
+  {
     chainId: common.ChainId.polygon,
     contract: {
       Vault: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',

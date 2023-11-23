@@ -7,10 +7,19 @@ import { expect } from 'chai';
 import { mainnetTokens } from '@protocolink/test-helpers';
 
 describe('Permit2 PullTokenLogic', function () {
-  const chainId = common.ChainId.mainnet;
-  const logic = new PullTokenLogic(chainId);
+  context('Test getTokenList', async function () {
+    PullTokenLogic.supportedChainIds.forEach((chainId) => {
+      it(`network: ${common.toNetworkId(chainId)}`, async function () {
+        const logic = new PullTokenLogic(chainId);
+        const tokenList = await logic.getTokenList();
+        expect(tokenList).to.have.lengthOf.above(0);
+      });
+    });
+  });
 
   context('Test build', function () {
+    const chainId = common.ChainId.mainnet;
+    const logic = new PullTokenLogic(chainId);
     const routerKit = new core.RouterKit(chainId);
     const account = '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa';
     const iface = routerKit.permit2Iface;

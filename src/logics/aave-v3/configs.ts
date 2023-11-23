@@ -23,6 +23,13 @@ export const configs: Config[] = [
     },
   },
   {
+    chainId: common.ChainId.gnosis,
+    contract: {
+      PoolDataProvider: '0x501B4c19dd9C2e06E94dA7b6D5Ed4ddA013EC741',
+      AaveV3FlashLoanCallback: '0x6f81cf774052D03873b32944a036BF0647bFB5bF',
+    },
+  },
+  {
     chainId: common.ChainId.polygon,
     contract: {
       PoolDataProvider: '0x9441B65EE553F70df9C77d45d3283B6BC24F222d',
