@@ -37,14 +37,17 @@ export class SupplyLogic
   async quote(params: SupplyLogicParams) {
     const { input, tokenOut } = params;
     const output = new common.TokenAmount(tokenOut, input.amount);
+
     return { input, output };
   }
 
   async build(fields: SupplyLogicFields, options: SupplyLogicOptions) {
     const { input, balanceBps, referralCode = 0 } = fields;
     const { account } = options;
+
     const tokenIn = input.token.wrapped;
     const agent = await this.calcAgent(account);
+
     const service = new Service(this.chainId, this.provider);
     const to = await service.getPoolAddress();
     const data = Pool__factory.createInterface().encodeFunctionData('supply', [
@@ -58,6 +61,7 @@ export class SupplyLogic
       core.newLogicInput({ input: new common.TokenAmount(tokenIn, input.amount), balanceBps, amountOffset }),
     ];
     const wrapMode = input.token.isNative ? core.WrapMode.wrapBefore : core.WrapMode.none;
+
     return core.newLogic({ to, data, inputs, wrapMode });
   }
 }
