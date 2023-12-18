@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.0.1
+
+### Patch Changes
+
+- 2185e54: Due to issues during webpack bundling, so removing the Core LogicDefinitionDecorator
+
 ## 1.0.0
 
 ### Major Changes
