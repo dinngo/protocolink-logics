@@ -15,8 +15,9 @@ export type FlashLoanLogicQuotation = core.FlashLoanQuotation;
 
 export type FlashLoanLogicFields = core.FlashLoanFields;
 
-@core.LogicDefinitionDecorator()
 export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicBuilderInterface {
+  static id = 'flash-loan';
+  static protocolId = 'balancer-v2';
   static readonly supportedChainIds = supportedChainIds;
 
   get callbackAddress() {

@@ -14,11 +14,12 @@ export type SwapTokenLogicFields = univ3.SwapTokenLogicFields;
 
 export type SwapTokenLogicOptions = univ3.SwapTokenLogicOptions;
 
-@core.LogicDefinitionDecorator()
 export class SwapTokenLogic
   extends univ3.SwapTokenLogic
   implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
 {
+  static id = 'swap-token';
+  static protocolId = 'uniswap-v3';
   static readonly supportedChainIds = supportedChainIds;
 
   constructor(chainId: number, provider?: providers.Provider) {

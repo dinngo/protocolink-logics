@@ -23,11 +23,12 @@ export type FlashLoanAggregatorLogicQuotation = core.FlashLoanQuotation<{ protoc
 
 export type FlashLoanAggregatorLogicFields = core.FlashLoanFields<{ protocolId: string; referralCode?: number }>;
 
-@core.LogicDefinitionDecorator()
 export class FlashLoanAggregatorLogic
   extends core.Logic
   implements core.LogicTokenListInterface, core.LogicBuilderInterface
 {
+  static id = 'flash-loan-aggregator';
+  static protocolId = 'utility';
   static readonly supportedChainIds = Array.from(
     supportedFlashLoanLogics.reduce((accumulator, FlashLoanLogic) => {
       for (const chainId of FlashLoanLogic.supportedChainIds) {

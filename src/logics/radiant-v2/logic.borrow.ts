@@ -11,8 +11,9 @@ export type BorrowLogicFields = core.TokenOutFields<{ interestRateMode: Interest
 
 export type BorrowLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
-@core.LogicDefinitionDecorator()
 export class BorrowLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicBuilderInterface {
+  static id = 'borrow';
+  static protocolId = 'radiant-v2';
   static readonly supportedChainIds = supportedChainIds;
 
   async getTokenList() {

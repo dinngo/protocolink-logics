@@ -14,11 +14,12 @@ export type SwapTokenLogicFields = core.TokenToTokenExactInFields<{ paths: SwapP
 
 export type SwapTokenLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
-@core.LogicDefinitionDecorator()
 export class SwapTokenLogic
   extends core.Logic
   implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
 {
+  static id = 'swap-token';
+  static protocolId = 'syncswap';
   static readonly supportedChainIds = supportedChainIds;
 
   async getTokenList() {

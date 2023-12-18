@@ -10,11 +10,12 @@ export type SupplyLogicParams = core.TokenToTokenExactInParams;
 
 export type SupplyLogicFields = core.TokenToTokenExactInFields;
 
-@core.LogicDefinitionDecorator()
 export class SupplyLogic
   extends core.Logic
   implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
 {
+  static id = 'supply';
+  static protocolId = 'compound-v2';
   static readonly supportedChainIds = supportedChainIds;
 
   getTokenList() {

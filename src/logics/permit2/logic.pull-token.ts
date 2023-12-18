@@ -9,8 +9,9 @@ export type PullTokenLogicFields = core.TokenInFields;
 
 export type PullTokenLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
-@core.LogicDefinitionDecorator()
 export class PullTokenLogic extends core.Logic implements core.LogicBuilderInterface {
+  static id = 'pull-token';
+  static protocolId = 'permit2';
   static readonly supportedChainIds = supportedChainIds;
 
   async getTokenList(): Promise<PullTokenLogicTokenList> {

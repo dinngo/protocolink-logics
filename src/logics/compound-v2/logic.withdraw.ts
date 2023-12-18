@@ -10,11 +10,12 @@ export type WithdrawLogicParams = core.TokenToTokenExactInParams;
 
 export type WithdrawLogicFields = core.TokenToTokenExactInFields;
 
-@core.LogicDefinitionDecorator()
 export class WithdrawLogic
   extends core.Logic
   implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
 {
+  static id = 'withdraw';
+  static protocolId = 'compound-v2';
   static readonly supportedChainIds = supportedChainIds;
 
   getTokenList() {

@@ -7,8 +7,9 @@ export type SendTokenLogicTokenList = common.Token[];
 
 export type SendTokenLogicFields = core.TokenToUserFields;
 
-@core.LogicDefinitionDecorator()
 export class SendTokenLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicBuilderInterface {
+  static id = 'send-token';
+  static protocolId = 'utility';
   static readonly supportedChainIds = common.networks.map(({ chainId }) => chainId);
 
   async getTokenList(): Promise<SendTokenLogicTokenList> {

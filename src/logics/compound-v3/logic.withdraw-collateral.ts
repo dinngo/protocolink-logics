@@ -10,11 +10,12 @@ export type WithdrawCollateralLogicFields = core.TokenOutFields<{ marketId: stri
 
 export type WithdrawCollateralLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
-@core.LogicDefinitionDecorator()
 export class WithdrawCollateralLogic
   extends core.Logic
   implements core.LogicTokenListInterface, core.LogicBuilderInterface
 {
+  static id = 'withdraw-collateral';
+  static protocolId = 'compound-v3';
   static readonly supportedChainIds = supportedChainIds;
 
   async getTokenList() {

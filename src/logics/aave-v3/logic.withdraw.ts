@@ -12,11 +12,12 @@ export type WithdrawLogicFields = core.TokenToTokenExactInFields;
 
 export type WithdrawLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
-@core.LogicDefinitionDecorator()
 export class WithdrawLogic
   extends core.Logic
   implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
 {
+  static id = 'withdraw';
+  static protocolId = 'aave-v3';
   static readonly supportedChainIds = supportedChainIds;
 
   async getTokenList() {

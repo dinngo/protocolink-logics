@@ -10,11 +10,12 @@ export type SupplyBaseLogicParams = core.TokenToTokenExactInParams<{ marketId: s
 
 export type SupplyBaseLogicFields = core.TokenToTokenExactInFields<{ marketId: string }>;
 
-@core.LogicDefinitionDecorator()
 export class SupplyBaseLogic
   extends core.Logic
   implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
 {
+  static id = 'supply-base';
+  static protocolId = 'compound-v3';
   static readonly supportedChainIds = supportedChainIds;
 
   async getTokenList() {

@@ -8,11 +8,12 @@ export type WrappedNativeTokenLogicParams = core.TokenToTokenExactInParams;
 
 export type WrappedNativeTokenLogicFields = core.TokenToTokenExactInFields;
 
-@core.LogicDefinitionDecorator()
 export class WrappedNativeTokenLogic
   extends core.Logic
   implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
 {
+  static id = 'wrapped-native-token';
+  static protocolId = 'utility';
   static readonly supportedChainIds = common.networks.map(({ chainId }) => chainId);
 
   getTokenList() {

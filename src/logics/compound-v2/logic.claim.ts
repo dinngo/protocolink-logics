@@ -9,11 +9,12 @@ export type ClaimLogicParams = core.ClaimParams;
 
 export type ClaimLogicFields = core.ClaimFields;
 
-@core.LogicDefinitionDecorator()
 export class ClaimLogic
   extends core.Logic
   implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
 {
+  static id = 'claim';
+  static protocolId = 'compound-v2';
   static readonly supportedChainIds = supportedChainIds;
 
   getTokenList() {

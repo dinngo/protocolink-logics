@@ -7,11 +7,12 @@ export type MultiSendLogicTokenList = common.Token[];
 
 export type MultiSendLogicFields = core.TokenToUserFields[];
 
-@core.LogicDefinitionDecorator()
 export class MultiSendLogic
   extends core.Logic
   implements core.LogicTokenListInterface, core.LogicMultiBuilderInterface
 {
+  static id = 'multi-send';
+  static protocolId = 'utility';
   static readonly supportedChainIds = common.networks.map(({ chainId }) => chainId);
 
   async getTokenList(): Promise<MultiSendLogicTokenList> {

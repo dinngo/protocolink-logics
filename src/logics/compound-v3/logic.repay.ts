@@ -11,8 +11,9 @@ export type RepayLogicParams = core.RepayParams<{ marketId: string }>;
 
 export type RepayLogicFields = core.RepayFields<{ marketId: string }>;
 
-@core.LogicDefinitionDecorator()
 export class RepayLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicBuilderInterface {
+  static id = 'repay';
+  static protocolId = 'compound-v3';
   static readonly supportedChainIds = supportedChainIds;
 
   async getTokenList() {

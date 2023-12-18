@@ -12,11 +12,12 @@ export type SupplyLogicFields = core.TokenToTokenExactInFields<{ referralCode?: 
 
 export type SupplyLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
-@core.LogicDefinitionDecorator()
 export class SupplyLogic
   extends core.Logic
   implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
 {
+  static id = 'supply';
+  static protocolId = 'spark';
   static readonly supportedChainIds = supportedChainIds;
 
   async getTokenList() {

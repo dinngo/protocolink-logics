@@ -12,11 +12,12 @@ export type ClaimLogicFields = core.ClaimFields<{ marketId: string }>;
 
 export type ClaimLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
-@core.LogicDefinitionDecorator()
 export class ClaimLogic
   extends core.Logic
   implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
 {
+  static id = 'claim';
+  static protocolId = 'compound-v3';
   static readonly supportedChainIds = supportedChainIds;
 
   async getTokenList() {

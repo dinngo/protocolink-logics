@@ -10,11 +10,12 @@ export type RepayLogicParams = core.RepayParams;
 
 export type RepayLogicFields = core.RepayFields;
 
-@core.LogicDefinitionDecorator()
 export class RepayLogic
   extends core.Logic
   implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
 {
+  static id = 'repay';
+  static protocolId = 'compound-v2';
   static readonly supportedChainIds = supportedChainIds;
 
   getTokenList() {

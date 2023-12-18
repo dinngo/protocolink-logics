@@ -10,11 +10,12 @@ export type SupplyCollateralLogicFields = core.TokenInFields<{ marketId: string 
 
 export type SupplyCollateralLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
-@core.LogicDefinitionDecorator()
 export class SupplyCollateralLogic
   extends core.Logic
   implements core.LogicTokenListInterface, core.LogicBuilderInterface
 {
+  static id = 'supply-collateral';
+  static protocolId = 'compound-v3';
   static readonly supportedChainIds = supportedChainIds;
 
   async getTokenList() {

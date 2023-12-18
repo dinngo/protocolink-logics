@@ -10,6 +10,8 @@ export interface CustomDataLogicFields {
 
 @core.LogicDefinitionDecorator()
 export class CustomDataLogic extends core.Logic implements core.LogicBuilderInterface {
+  static id = 'custom-data';
+  static protocolId = 'utility';
   static readonly supportedChainIds = common.networks.map(({ chainId }) => chainId);
 
   async build(fields: CustomDataLogicFields) {
