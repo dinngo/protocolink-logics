@@ -43,7 +43,7 @@ export class RepayLogic
       borrower
     );
     const currentDebt = interestRateMode === InterestRateMode.variable ? currentVariableDebt : currentStableDebt;
-    const amountWei = common.calcSlippage(currentDebt, -100); // slightly higher than the current borrowed amount
+    const amountWei = common.calcSlippage(currentDebt, -1); // slightly higher than the current borrowed amount
     const input = new common.TokenAmount(tokenIn).setWei(amountWei);
 
     return { borrower, interestRateMode, input };
