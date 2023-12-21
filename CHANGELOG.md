@@ -1,5 +1,15 @@
 # @protocolink/logics
 
+## 1.0.3
+
+### Patch Changes
+
+- 01bfa22: change repay tolerance of aave v2, aave v3, radiant v2 and spark
+- 69aec6d: Updated dependencies
+  - @protocolink/common@0.3.5
+  - @protocolink/core@0.4.5
+  - @protocolink/test-helpers@0.3.4
+
 ## 1.0.1
 
 ### Patch Changes
