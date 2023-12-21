@@ -8,7 +8,6 @@ export interface CustomDataLogicFields {
   data: string;
 }
 
-@core.LogicDefinitionDecorator()
 export class CustomDataLogic extends core.Logic implements core.LogicBuilderInterface {
   static id = 'custom-data';
   static protocolId = 'utility';

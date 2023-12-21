@@ -1,6 +1,6 @@
 {
   "name": "@protocolink/logics",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "An SDK that build protocol logics for Protocolink",
   "keywords": [
     "furucombo",
@@ -29,8 +29,8 @@
   },
   "dependencies": {
     "@paraswap/sdk": "^6.2.2",
-    "@protocolink/common": "^0.3.4",
-    "@protocolink/core": "^0.4.4",
+    "@protocolink/common": "^0.3.5",
+    "@protocolink/core": "^0.4.5",
     "@types/lodash": "^4.14.195",
     "@uniswap/sdk-core": "^3.2.6",
     "@uniswap/token-lists": "^1.0.0-beta.31",
@@ -47,7 +47,7 @@
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.6",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.8",
     "@nomiclabs/hardhat-ethers": "^2.2.3",
-    "@protocolink/test-helpers": "^0.3.0",
+    "@protocolink/test-helpers": "^0.3.4",
     "@typechain/ethers-v5": "^11.0.0",
     "@types/chai": "^4.3.5",
     "@types/fs-extra": "^11.0.1",
