@@ -81,10 +81,9 @@ describe('mainnet: Test CompoundV3 Borrow Logic', function () {
       const isAllowed = await service.isAllowed(marketId, user.address, agent);
       expect(isAllowed).to.be.true;
 
-      // 4. build funds, tokensReturn
+      // 4. build tokensReturn
       const output = borrow;
       const tokensReturn = [output.token.elasticAddress];
-      const funds = new common.TokenAmounts();
 
       // 5. build router logics
       const routerLogics: core.DataType.LogicStruct[] = [];
@@ -95,7 +94,6 @@ describe('mainnet: Test CompoundV3 Borrow Logic', function () {
       const transactionRequest = routerKit.buildExecuteTransactionRequest({
         routerLogics,
         tokensReturn,
-        value: funds.native?.amountWei ?? 0,
       });
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
       const borrowBalance = await service.getBorrowBalance(marketId, user.address);

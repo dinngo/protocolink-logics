@@ -64,8 +64,8 @@ describe('mainnet: Test CompoundV3 Claim Logic', function () {
         await helpers.borrow(chainId, owner, marketId, borrow); // USDC market supply apr 0%, borrow apr 3.69%
       }
 
-      // 2. get rewards amount after 1000 blocks
-      await hrehelpers.mine(1000);
+      // 2. get rewards amount after 10000 blocks
+      await hrehelpers.mine(10000);
       const compoundV3ClaimLogic = new compoundv3.ClaimLogic(chainId, hre.ethers.provider);
       const { output } = await compoundV3ClaimLogic.quote({ marketId, owner: owner.address });
       expect(output.amountWei).to.be.gt(0);
