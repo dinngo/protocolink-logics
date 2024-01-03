@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.0.4
+
+### Patch Changes
+
+- ffd0faa: support Morphoblue on Goerli
+
 ## 1.0.3
 
 ### Patch Changes
