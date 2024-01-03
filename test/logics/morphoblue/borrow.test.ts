@@ -6,7 +6,6 @@ import { expect } from 'chai';
 import * as helpers from './helpers';
 import hre from 'hardhat';
 import * as morphoblue from 'src/logics/morphoblue';
-import * as utils from 'test/utils';
 
 describe('goerli: Test Morphoblue Borrow Logic', function () {
   let chainId: number;
@@ -63,27 +62,19 @@ describe('goerli: Test Morphoblue Borrow Logic', function () {
       // 2. authorize userAgent to manage user positions
       await helpers.authorize(chainId, user);
 
-      // 3. get quotation
-      const morphoblueBorrowLogic = new morphoblue.BorrowLogic(chainId, hre.ethers.provider);
-
-      // 4. build funds, tokensReturn
+      // 3. build tokensReturn
       const tokensReturn = [output.token.elasticAddress];
-      const funds = new common.TokenAmounts();
 
-      // 5. build router logics
+      // 4. build router logics
       const routerLogics: core.DataType.LogicStruct[] = [];
+      const morphoblueBorrowLogic = new morphoblue.BorrowLogic(chainId, hre.ethers.provider);
       routerLogics.push(await morphoblueBorrowLogic.build({ marketId, output }, { account: user.address }));
 
-      // 6. get router permit2 datas
-      const permit2Datas = await utils.getRouterPermit2Datas(chainId, user, funds.erc20);
-
-      // 7. send router tx
+      // 5. send router tx
       const routerKit = new core.RouterKit(chainId);
       const transactionRequest = routerKit.buildExecuteTransactionRequest({
-        permit2Datas,
         routerLogics,
         tokensReturn,
-        value: funds.native?.amountWei ?? 0,
       });
 
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;

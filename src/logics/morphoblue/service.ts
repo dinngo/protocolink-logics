@@ -48,7 +48,6 @@ export class Service extends common.Web3Toolkit {
   private tokens?: Tokens[];
   async getMarketTokens(marketId: string) {
     if (!this.tokens) {
-      // TODO: get token address from chain or from config?
       const calls: common.Multicall3.CallStruct[] = [];
       calls.push({
         target: this.morpho.address,

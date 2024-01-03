@@ -18,7 +18,6 @@ export class WithdrawLogic extends core.Logic implements core.LogicTokenListInte
     const tokenList: WithdrawLogicTokenList = {};
     const service = new Service(this.chainId, this.provider);
 
-    // TODO: get all the markets vs whitelisted markets
     const markets = getMarkets(this.chainId);
 
     for (const market of markets) {

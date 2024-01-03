@@ -21,7 +21,6 @@ export class WithdrawCollateralLogic
     const tokenList: WithdrawCollateralLogicTokenList = {};
     const service = new Service(this.chainId, this.provider);
 
-    // TODO: get all the markets vs whitelisted markets
     const markets = getMarkets(this.chainId);
 
     for (const market of markets) {

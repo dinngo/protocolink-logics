@@ -59,7 +59,6 @@ describe('goerli: Test Morphoblue Supply Logic', function () {
       input: new common.TokenAmount(morphoblue.goerliTokens.USDC, '100'),
     },
     {
-      // TODO: transfer from failed when amount = 1000?
       marketId: '0x98ee9f294c961a5dbb9073c0fd2c2a6a66468f911e49baa935c0eab364499dbd',
       input: new common.TokenAmount(morphoblue.goerliTokens.USDC, '100'),
       balanceBps: 5000,
@@ -68,10 +67,7 @@ describe('goerli: Test Morphoblue Supply Logic', function () {
 
   testCases.forEach(({ marketId, input, balanceBps }, i) => {
     it(`case ${i + 1}`, async function () {
-      // 1. get quotation
-      const morphoblueSupplyLogic = new morphoblue.SupplyLogic(chainId, hre.ethers.provider);
-
-      // 2. build funds, tokensReturn
+      // 1. build funds, tokensReturn
       const tokensReturn = [];
       const funds = new common.TokenAmounts();
       if (balanceBps) {
@@ -81,14 +77,15 @@ describe('goerli: Test Morphoblue Supply Logic', function () {
         funds.add(input);
       }
 
-      // 3. build router logics
+      // 2. build router logics
       const routerLogics: core.DataType.LogicStruct[] = [];
+      const morphoblueSupplyLogic = new morphoblue.SupplyLogic(chainId, hre.ethers.provider);
       routerLogics.push(await morphoblueSupplyLogic.build({ marketId, input, balanceBps }, { account: user.address }));
 
-      // 4. get router permit2 datas
+      // 3. get router permit2 datas
       const permit2Datas = await utils.getRouterPermit2Datas(chainId, user, funds.erc20);
 
-      // 5. send router tx
+      // 4. send router tx
       const routerKit = new core.RouterKit(chainId);
       const transactionRequest = routerKit.buildExecuteTransactionRequest({
         permit2Datas,

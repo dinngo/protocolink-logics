@@ -21,8 +21,16 @@ describe('goerli: Test Morphoblue SupplyCollateral Logic', function () {
       chainId,
       user.address,
       morphoblue.goerliTokens.DAI,
-      '1000',
+      '5000',
       '0x112EC3b862AB061609Ef01D308109a6691Ee6a2d'
+    );
+
+    await claimToken(
+      chainId,
+      user.address,
+      morphoblue.goerliTokens.WETH,
+      '10',
+      '0x88124Ef4A9EC47e691F254F2E8e348fd1e341e9B'
     );
   });
 
@@ -34,9 +42,8 @@ describe('goerli: Test Morphoblue SupplyCollateral Logic', function () {
       input: new common.TokenAmount(morphoblue.goerliTokens.DAI, '1000'),
     },
     {
-      // TODO: transfer from failed when amount = 1000?
       marketId: '0x3098a46de09dd8d9a8c6fa1ab7b3f943b6f13e5ea72a4e475d9e48f222bfd5a0',
-      input: new common.TokenAmount(morphoblue.goerliTokens.DAI, '100'),
+      input: new common.TokenAmount(morphoblue.goerliTokens.DAI, '1000'),
       balanceBps: 5000,
     },
     {
@@ -61,10 +68,7 @@ describe('goerli: Test Morphoblue SupplyCollateral Logic', function () {
 
   testCases.forEach(({ marketId, input, balanceBps }, i) => {
     it(`case ${i + 1}`, async function () {
-      // 1. get quotation
-      const morphoblueSupplyCollateralLogic = new morphoblue.SupplyCollateralLogic(chainId, hre.ethers.provider);
-
-      // 2. build funds, tokensReturn
+      // 1. build funds, tokensReturn
       const tokensReturn = [];
       const funds = new common.TokenAmounts();
       if (balanceBps) {
@@ -74,16 +78,17 @@ describe('goerli: Test Morphoblue SupplyCollateral Logic', function () {
         funds.add(input);
       }
 
-      // 3. build router logics
+      // 2. build router logics
       const routerLogics: core.DataType.LogicStruct[] = [];
+      const morphoblueSupplyCollateralLogic = new morphoblue.SupplyCollateralLogic(chainId, hre.ethers.provider);
       routerLogics.push(
         await morphoblueSupplyCollateralLogic.build({ marketId, input, balanceBps }, { account: user.address })
       );
 
-      // 4. get router permit2 datas
+      // 3. get router permit2 datas
       const permit2Datas = await utils.getRouterPermit2Datas(chainId, user, funds.erc20);
 
-      // 5. send router tx
+      // 4. send router tx
       const routerKit = new core.RouterKit(chainId);
       const transactionRequest = routerKit.buildExecuteTransactionRequest({
         permit2Datas,
