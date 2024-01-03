@@ -1,5 +1,6 @@
 import { axios } from './http';
 import * as common from '@protocolink/common';
+import { goerliTokens } from 'src/logics/morphoblue';
 
 export async function get1InchTokens(chainId: number) {
   const { data } = await axios.get<Record<string, { symbol: string; name: string; decimals: number; address: string }>>(
@@ -25,6 +26,12 @@ export async function getMetisTokens() {
   for (const { address, decimals, symbol, name } of data.tokens) {
     tokens.push(new common.Token(chainId, address, decimals, symbol, name));
   }
+
+  return tokens;
+}
+
+export function getGoerliTokens() {
+  const tokens = [goerliTokens.ETH, goerliTokens.WETH, goerliTokens.USDC, goerliTokens.DAI];
 
   return tokens;
 }

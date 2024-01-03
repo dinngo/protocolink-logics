@@ -43,7 +43,7 @@ export class SupplyLogic extends core.Logic implements core.LogicTokenListInterf
     const service = new Service(this.chainId, this.provider);
     const to = service.morpho.address;
     const data = service.morphoIface.encodeFunctionData('supply', [
-      [loanToken.address, collateralTokenAddress, oracle, irm, lltv],
+      { loanToken: loanToken.address, collateralToken: collateralTokenAddress, oracle, irm, lltv },
       input.amountWei, // assets
       0, // shares
       account, // onBehalf

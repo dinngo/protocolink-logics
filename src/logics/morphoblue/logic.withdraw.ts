@@ -44,7 +44,7 @@ export class WithdrawLogic extends core.Logic implements core.LogicTokenListInte
     const service = new Service(this.chainId, this.provider);
     const to = service.morpho.address;
     const data = service.morphoIface.encodeFunctionData('withdraw', [
-      [loanToken.address, collateralTokenAddress, oracle, irm, lltv],
+      { loanToken: loanToken.address, collateralToken: collateralTokenAddress, oracle, irm, lltv },
       output.amountWei, // assets
       0, // shares
       account, // onBehalf

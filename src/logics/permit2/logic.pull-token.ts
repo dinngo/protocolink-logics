@@ -1,6 +1,6 @@
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
-import { get1InchTokens, getMetisTokens } from 'src/utils';
+import { get1InchTokens, getGoerliTokens, getMetisTokens } from 'src/utils';
 import { supportedChainIds } from './configs';
 
 export type PullTokenLogicTokenList = common.Token[];
@@ -15,7 +15,11 @@ export class PullTokenLogic extends core.Logic implements core.LogicBuilderInter
   static readonly supportedChainIds = supportedChainIds;
 
   async getTokenList(): Promise<PullTokenLogicTokenList> {
-    return this.chainId === common.ChainId.metis ? getMetisTokens() : get1InchTokens(this.chainId);
+    return this.chainId === common.ChainId.metis
+      ? await getMetisTokens()
+      : this.chainId === common.ChainId.goerli
+      ? getGoerliTokens()
+      : await get1InchTokens(this.chainId);
   }
 
   async build(fields: PullTokenLogicFields, options: PullTokenLogicOptions) {

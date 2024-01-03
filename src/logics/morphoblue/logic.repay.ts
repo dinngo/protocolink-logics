@@ -58,7 +58,7 @@ export class RepayLogic extends core.Logic implements core.LogicTokenListInterfa
 
     const to = service.morpho.address;
     const data = service.morphoIface.encodeFunctionData('repay', [
-      [loanToken.address, collateralTokenAddress, oracle, irm, lltv],
+      { loanToken: loanToken.address, collateralToken: collateralTokenAddress, oracle, irm, lltv },
       assets, // assets
       shares, // shares
       borrower, // onBehalf

@@ -47,7 +47,7 @@ export class WithdrawCollateralLogic
     const service = new Service(this.chainId, this.provider);
     const to = service.morpho.address;
     const data = service.morphoIface.encodeFunctionData('withdrawCollateral', [
-      [loanTokenAddress, collateralToken.address, oracle, irm, lltv],
+      { loanToken: loanTokenAddress, collateralToken: collateralToken.address, oracle, irm, lltv },
       output.amountWei, // assets
       account, // onBehalf
       agent, // receiver

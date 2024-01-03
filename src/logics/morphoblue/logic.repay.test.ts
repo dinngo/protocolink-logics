@@ -40,7 +40,7 @@ describe('MorphoBlue RepayLogic', function () {
         fields: {
           marketId: '0x3098a46de09dd8d9a8c6fa1ab7b3f943b6f13e5ea72a4e475d9e48f222bfd5a0',
           borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
-          input: new common.TokenAmount(goerliTokens.WETH, '1'),
+          input: new common.TokenAmount(goerliTokens.WETH, '0'),
           balanceBps: 5000,
         },
       },
@@ -55,7 +55,7 @@ describe('MorphoBlue RepayLogic', function () {
         fields: {
           marketId: '0x3098a46de09dd8d9a8c6fa1ab7b3f943b6f13e5ea72a4e475d9e48f222bfd5a0',
           borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
-          input: new common.TokenAmount(goerliTokens.ETH, '1'),
+          input: new common.TokenAmount(goerliTokens.ETH, '0'),
           balanceBps: 5000,
         },
       },

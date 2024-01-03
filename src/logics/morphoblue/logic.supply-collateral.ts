@@ -46,7 +46,7 @@ export class SupplyCollateralLogic
     const service = new Service(this.chainId, this.provider);
     const to = service.morpho.address;
     const data = service.morphoIface.encodeFunctionData('supplyCollateral', [
-      [loanTokenAddress, collateralToken.address, oracle, irm, lltv],
+      { loanToken: loanTokenAddress, collateralToken: collateralToken.address, oracle, irm, lltv },
       input.amountWei, // assets
       account, // onBehalf
       '0x', // data
