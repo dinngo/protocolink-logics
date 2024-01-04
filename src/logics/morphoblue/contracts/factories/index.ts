@@ -2,3 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export { Morpho__factory } from './Morpho__factory';
+export { MorphoFlashLoanCallback__factory } from './MorphoFlashLoanCallback__factory';

@@ -4,6 +4,7 @@ import * as balancerv2 from '../balancer-v2';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
 import invariant from 'tiny-invariant';
+import * as morphoblue from '../morphoblue';
 import * as radiantv2 from '../radiant-v2';
 import * as spark from '../spark';
 
@@ -11,6 +12,7 @@ export const supportedFlashLoanLogics = [
   aavev2.FlashLoanLogic,
   aavev3.FlashLoanLogic,
   balancerv2.FlashLoanLogic,
+  morphoblue.FlashLoanLogic,
   radiantv2.FlashLoanLogic,
   spark.FlashLoanLogic,
 ];
