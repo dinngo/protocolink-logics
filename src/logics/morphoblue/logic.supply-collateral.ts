@@ -24,12 +24,10 @@ export class SupplyCollateralLogic
     const markets = getMarkets(this.chainId);
 
     for (const market of markets) {
-      const collateralTokens = await service.getCollateralTokens(market.id);
-      for (const collateralToken of collateralTokens!) {
-        tokenList[market.id] = [];
-        if (collateralToken.isWrapped) tokenList[market.id].push(collateralToken.unwrapped);
-        tokenList[market.id].push(collateralToken);
-      }
+      const collateralToken = await service.getCollateralToken(market.id);
+      tokenList[market.id] = [];
+      if (collateralToken.isWrapped) tokenList[market.id].push(collateralToken.unwrapped);
+      tokenList[market.id].push(collateralToken);
     }
 
     return tokenList;

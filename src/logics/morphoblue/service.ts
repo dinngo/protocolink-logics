@@ -25,50 +25,34 @@ export class Service extends common.Web3Toolkit {
     return this._morphoIface;
   }
 
-  private loanTokens?: common.Token[];
-  async getLoanTokens(marketId: string) {
-    if (!this.loanTokens) {
-      await this.getMarketTokens(marketId);
-    }
-    return this.loanTokens;
+  async getLoanToken(marketId: string) {
+    const tokens = await this.getMarketTokens(marketId);
+    const loanToken = await this.getToken(tokens.loanToken);
+    return loanToken;
   }
 
-  private collateralTokens?: common.Token[];
-  async getCollateralTokens(marketId: string) {
-    if (!this.collateralTokens) {
-      await this.getMarketTokens(marketId);
-    }
-    return this.collateralTokens;
+  async getCollateralToken(marketId: string) {
+    const tokens = await this.getMarketTokens(marketId);
+    const collateralToken = await this.getToken(tokens.collateralToken);
+    return collateralToken;
   }
 
   async getMarket(marketId: string) {
     return getMarket(this.chainId, marketId);
   }
 
-  private tokens?: Tokens[];
   async getMarketTokens(marketId: string) {
-    if (!this.tokens) {
-      const calls: common.Multicall3.CallStruct[] = [];
-      calls.push({
-        target: this.morpho.address,
-        callData: this.morphoIface.encodeFunctionData('idToMarketParams', [marketId]),
-      });
-      const { returnData } = await this.multicall3.callStatic.aggregate(calls);
+    const calls: common.Multicall3.CallStruct[] = [];
+    calls.push({
+      target: this.morpho.address,
+      callData: this.morphoIface.encodeFunctionData('idToMarketParams', [marketId]),
+    });
+    const { returnData } = await this.multicall3.callStatic.aggregate(calls);
 
-      this.tokens = [];
-      this.loanTokens = [];
-      this.collateralTokens = [];
-      let { loanToken, collateralToken } = this.morphoIface.decodeFunctionResult('idToMarketParams', returnData[0]);
+    const { loanToken, collateralToken } = this.morphoIface.decodeFunctionResult('idToMarketParams', returnData[0]);
 
-      loanToken = await this.getToken(loanToken);
-      collateralToken = await this.getToken(collateralToken);
-
-      this.tokens.push({ loanToken, collateralToken });
-      this.loanTokens.push(loanToken);
-      this.collateralTokens.push(collateralToken);
-    }
-
-    return this.tokens;
+    const tokens: Tokens = { loanToken, collateralToken };
+    return tokens;
   }
 
   async getSupplyBalance(marketId: string, account: string) {
