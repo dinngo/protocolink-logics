@@ -1,7 +1,7 @@
 import { BigNumber } from 'ethers';
 import { Morpho, Morpho__factory } from './contracts';
 import { MorphoInterface } from './contracts/Morpho';
-import { Tokens } from './types';
+import { TokenAddresses } from './types';
 import * as common from '@protocolink/common';
 import { getContractAddress, getMarket } from './configs';
 
@@ -27,13 +27,13 @@ export class Service extends common.Web3Toolkit {
 
   async getLoanToken(marketId: string) {
     const tokens = await this.getMarketTokens(marketId);
-    const loanToken = await this.getToken(tokens.loanToken);
+    const loanToken = await this.getToken(tokens.loanTokenAddress);
     return loanToken;
   }
 
   async getCollateralToken(marketId: string) {
     const tokens = await this.getMarketTokens(marketId);
-    const collateralToken = await this.getToken(tokens.collateralToken);
+    const collateralToken = await this.getToken(tokens.collateralTokenAddress);
     return collateralToken;
   }
 
@@ -51,7 +51,7 @@ export class Service extends common.Web3Toolkit {
 
     const { loanToken, collateralToken } = this.morphoIface.decodeFunctionResult('idToMarketParams', returnData[0]);
 
-    const tokens: Tokens = { loanToken, collateralToken };
+    const tokens: TokenAddresses = { loanTokenAddress: loanToken, collateralTokenAddress: collateralToken };
     return tokens;
   }
 

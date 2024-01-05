@@ -31,17 +31,17 @@ export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInt
   }
 
   async getTokenList() {
-    const tokenSet = new Set<string>();
+    const tokenAddressSet = new Set<string>();
     const service = new Service(this.chainId, this.provider);
 
     const markets = getMarkets(this.chainId);
     for (const market of markets) {
       const tokens = await service.getMarketTokens(market.id);
-      tokenSet.add(tokens.loanToken);
-      tokenSet.add(tokens.collateralToken);
+      tokenAddressSet.add(tokens.loanTokenAddress);
+      tokenAddressSet.add(tokens.collateralTokenAddress);
     }
 
-    const tokenList: FlashLoanLogicTokenList = await service.getTokens([...tokenSet]);
+    const tokenList: FlashLoanLogicTokenList = await service.getTokens([...tokenAddressSet]);
     return tokenList;
   }
 

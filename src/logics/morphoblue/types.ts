@@ -1,4 +1,4 @@
-export interface Tokens {
-  loanToken: string;
-  collateralToken: string;
+export interface TokenAddresses {
+  loanTokenAddress: string;
+  collateralTokenAddress: string;
 }
