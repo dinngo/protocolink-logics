@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.0.5
+
+### Patch Changes
+
+- 76a650b: add Morphoblue flashloan
+
 ## 1.0.4
 
 ### Patch Changes
