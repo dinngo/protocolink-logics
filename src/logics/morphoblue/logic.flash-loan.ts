@@ -37,11 +37,14 @@ export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInt
     const markets = getMarkets(this.chainId);
 
     for (const market of markets) {
-      const loanTokens = await service.getLoanTokens(market.id);
-      tokenList.push(...loanTokens!);
-    }
+      const tokens = await service.getMarketTokens(market.id);
 
-    return tokenList;
+      for (const token of tokens) {
+        tokenList.push(token.loanToken, token.collateralToken);
+      }
+    }
+    const tokenSet = new Set(tokenList.map((token) => token));
+    return [...tokenSet];
   }
 
   async quote(params: FlashLoanLogicParams) {
@@ -60,8 +63,6 @@ export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInt
     ];
 
     const { returnData } = await this.multicall3.callStatic.aggregate(calls);
-
-    let j = 0;
     const feeBps = 0;
 
     let loans: common.TokenAmounts;
@@ -70,38 +71,32 @@ export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInt
       ({ loans } = params);
 
       repays = new common.TokenAmounts();
-      for (let i = 0; i < loans.length; i++) {
-        const loan = loans.at(i);
+      const loan = loans.at(0);
 
-        const [balance] = this.erc20Iface.decodeFunctionResult('balanceOf', returnData[j]);
-        const availableToBorrow = new common.TokenAmount(loan.token).setWei(balance);
-        invariant(availableToBorrow.gte(loan), `insufficient borrowing capacity for the asset: ${loan.token.address}`);
-        j++;
+      const [balance] = this.erc20Iface.decodeFunctionResult('balanceOf', returnData[0]);
+      const availableToBorrow = new common.TokenAmount(loan.token).setWei(balance);
+      invariant(availableToBorrow.gte(loan), `insufficient borrowing capacity for the asset: ${loan.token.address}`);
 
-        const feeAmountWei = common.calcFee(loan.amountWei, feeBps);
-        const fee = new common.TokenAmount(loan.token).setWei(feeAmountWei);
-        const repay = loan.clone().add(fee);
-        repays.add(repay);
-      }
+      const feeAmountWei = common.calcFee(loan.amountWei, feeBps);
+      const fee = new common.TokenAmount(loan.token).setWei(feeAmountWei);
+      const repay = loan.clone().add(fee);
+      repays.add(repay);
     } else {
       loans = new common.TokenAmounts();
       repays = new common.TokenAmounts();
-      for (let i = 0; i < params.repays.length; i++) {
-        const repay = params.repays.at(i);
+      const repay = params.repays.at(0);
 
-        const loanAmountWei = common.reverseAmountWithFee(repay.amountWei, feeBps);
-        const loan = new common.TokenAmount(repay.token).setWei(loanAmountWei);
-        loans.add(loan);
+      const loanAmountWei = common.reverseAmountWithFee(repay.amountWei, feeBps);
+      const loan = new common.TokenAmount(repay.token).setWei(loanAmountWei);
+      loans.add(loan);
 
-        const [balance] = this.erc20Iface.decodeFunctionResult('balanceOf', returnData[j]);
-        const availableToBorrow = new common.TokenAmount(loan.token).setWei(balance);
-        invariant(availableToBorrow.gte(loan), `insufficient borrowing capacity for the asset: ${loan.token.address}`);
-        j++;
+      const [balance] = this.erc20Iface.decodeFunctionResult('balanceOf', returnData[0]);
+      const availableToBorrow = new common.TokenAmount(loan.token).setWei(balance);
+      invariant(availableToBorrow.gte(loan), `insufficient borrowing capacity for the asset: ${loan.token.address}`);
 
-        const feeAmountWei = common.calcFee(loan.amountWei, feeBps);
-        const fee = new common.TokenAmount(loan.token).setWei(feeAmountWei);
-        repays.add(loan.clone().add(fee));
-      }
+      const feeAmountWei = common.calcFee(loan.amountWei, feeBps);
+      const fee = new common.TokenAmount(loan.token).setWei(feeAmountWei);
+      repays.add(loan.clone().add(fee));
     }
 
     const quotation: FlashLoanLogicQuotation = { loans, repays, feeBps };
