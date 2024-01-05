@@ -21,12 +21,10 @@ export class BorrowLogic extends core.Logic implements core.LogicTokenListInterf
     const markets = getMarkets(this.chainId);
 
     for (const market of markets) {
-      const loanTokens = await service.getLoanTokens(market.id);
-      for (const loanToken of loanTokens!) {
-        tokenList[market.id] = [];
-        if (loanToken.isWrapped) tokenList[market.id].push(loanToken.unwrapped);
-        tokenList[market.id].push(loanToken);
-      }
+      const loanToken = await service.getLoanToken(market.id);
+      tokenList[market.id] = [];
+      if (loanToken.isWrapped) tokenList[market.id].push(loanToken.unwrapped);
+      tokenList[market.id].push(loanToken);
     }
 
     return tokenList;

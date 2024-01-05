@@ -3,6 +3,7 @@ export * from './service';
 export * from './tokens';
 export * from './contracts';
 export * from './logic.borrow';
+export * from './logic.flash-loan';
 export * from './logic.supply';
 export * from './logic.supply-collateral';
 export * from './logic.repay';

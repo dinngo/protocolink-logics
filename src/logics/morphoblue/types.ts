@@ -1,6 +1,4 @@
-import * as common from '@protocolink/common';
-
-export interface Tokens {
-  loanToken: common.Token;
-  collateralToken: common.Token;
+export interface TokenAddresses {
+  loanTokenAddress: string;
+  collateralTokenAddress: string;
 }
