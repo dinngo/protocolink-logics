@@ -4,6 +4,7 @@ import { axios } from 'src/utils';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
 import { getTokenListUrls, getTokenTransferProxyAddress, supportedChainIds } from './configs';
+import invariant from 'tiny-invariant';
 
 export type SwapTokenLogicTokenList = common.Token[];
 
@@ -56,41 +57,45 @@ export class SwapTokenLogic
   // in the 'excludeDEXS' parameter. You can retrieve DEX Names from the following API:
   // https://api.paraswap.io/adapters/list?network={chainId}&namesOnly=true
   async quote(params: SwapTokenLogicParams) {
-    const { excludeDEXS } = params;
+    try {
+      const { excludeDEXS } = params;
 
-    let input: common.TokenAmount;
-    let output: common.TokenAmount;
-    if (core.isTokenToTokenExactInParams(params)) {
-      let tokenOut: common.Token;
-      ({ input, tokenOut } = params);
+      let input: common.TokenAmount;
+      let output: common.TokenAmount;
+      if (core.isTokenToTokenExactInParams(params)) {
+        let tokenOut: common.Token;
+        ({ input, tokenOut } = params);
 
-      const { destAmount } = await this.sdk.swap.getRate({
-        srcToken: input.token.elasticAddress,
-        srcDecimals: input.token.decimals,
-        amount: input.amountWei.toString(),
-        destToken: tokenOut.elasticAddress,
-        destDecimals: tokenOut.decimals,
-        side: SwapSide.SELL,
-        options: { excludeDEXS },
-      });
-      output = new common.TokenAmount(tokenOut).setWei(destAmount);
-    } else {
-      let tokenIn: common.Token;
-      ({ tokenIn, output } = params);
+        const { destAmount } = await this.sdk.swap.getRate({
+          srcToken: input.token.elasticAddress,
+          srcDecimals: input.token.decimals,
+          amount: input.amountWei.toString(),
+          destToken: tokenOut.elasticAddress,
+          destDecimals: tokenOut.decimals,
+          side: SwapSide.SELL,
+          options: { excludeDEXS },
+        });
+        output = new common.TokenAmount(tokenOut).setWei(destAmount);
+      } else {
+        let tokenIn: common.Token;
+        ({ tokenIn, output } = params);
 
-      const { srcAmount } = await this.sdk.swap.getRate({
-        srcToken: tokenIn.elasticAddress,
-        srcDecimals: tokenIn.decimals,
-        amount: output.amountWei.toString(),
-        destToken: output.token.elasticAddress,
-        destDecimals: output.token.decimals,
-        side: SwapSide.BUY,
-        options: { excludeDEXS },
-      });
-      input = new common.TokenAmount(tokenIn).setWei(srcAmount);
+        const { srcAmount } = await this.sdk.swap.getRate({
+          srcToken: tokenIn.elasticAddress,
+          srcDecimals: tokenIn.decimals,
+          amount: output.amountWei.toString(),
+          destToken: output.token.elasticAddress,
+          destDecimals: output.token.decimals,
+          side: SwapSide.BUY,
+          options: { excludeDEXS },
+        });
+        input = new common.TokenAmount(tokenIn).setWei(srcAmount);
+      }
+
+      return { input, output, slippage: params.slippage, excludeDEXS };
+    } catch {
+      invariant(false, 'no route found or price impact too high');
     }
-
-    return { input, output, slippage: params.slippage, excludeDEXS };
   }
 
   async build(fields: SwapTokenLogicFields, options: SwapTokenLogicOptions) {

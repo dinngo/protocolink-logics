@@ -2,6 +2,7 @@ import { axios } from 'src/utils';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
 import { getApiUrl, getGasPrice, supportedChainIds } from './configs';
+import invariant from 'tiny-invariant';
 import { slippageToOpenOcean, slippageToProtocolink } from './slippage';
 
 export type SwapTokenLogicTokenList = common.Token[];
@@ -56,6 +57,7 @@ export class SwapTokenLogic
         disabledDexIds,
       },
     });
+    invariant(resp.data.code === 200, 'no route found or price impact too high');
 
     slippage = slippageToProtocolink(slippage);
 
