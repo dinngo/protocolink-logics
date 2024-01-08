@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.0.6
+
+### Patch Changes
+
+- d859f04: paraswap v5, openocean v2 add quote error
+
 ## 1.0.5
 
 ### Patch Changes
