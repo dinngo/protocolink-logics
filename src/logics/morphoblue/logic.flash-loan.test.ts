@@ -5,7 +5,7 @@ import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
 import { expect } from 'chai';
 import { getContractAddress } from './configs';
-import { goerliTokens } from './tokens';
+import { mainnetTokens } from './tokens';
 
 describe('Morphoblue FlashLoanLogic', function () {
   context('Test getTokenList', async function () {
@@ -19,14 +19,14 @@ describe('Morphoblue FlashLoanLogic', function () {
   });
 
   context('Test build', function () {
-    const chainId = common.ChainId.goerli;
+    const chainId = common.ChainId.mainnet;
     const logic = new FlashLoanLogic(chainId);
     const iface = Morpho__factory.createInterface();
 
     const testCases: LogicTestCase<FlashLoanLogicFields>[] = [
       {
         fields: {
-          loans: new common.TokenAmounts([goerliTokens.WETH, '1']),
+          loans: new common.TokenAmounts([mainnetTokens.WETH, '1']),
           params: '0x',
         },
       },

@@ -6,7 +6,7 @@ import { constants, utils } from 'ethers';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
 import { getContractAddress } from './configs';
-import { goerliTokens } from './tokens';
+import { mainnetTokens } from './tokens';
 
 describe('MorphoBlue SupplyCollateralLogic', function () {
   context('Test getTokenList', async function () {
@@ -24,7 +24,7 @@ describe('MorphoBlue SupplyCollateralLogic', function () {
   });
 
   context('Test build', function () {
-    const chainId = common.ChainId.goerli;
+    const chainId = common.ChainId.mainnet;
     const logic = new SupplyCollateralLogic(chainId);
     const iface = Morpho__factory.createInterface();
     const account = '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa';
@@ -32,40 +32,14 @@ describe('MorphoBlue SupplyCollateralLogic', function () {
     const testCases: LogicTestCase<SupplyCollateralLogicFields>[] = [
       {
         fields: {
-          marketId: '0x3098a46de09dd8d9a8c6fa1ab7b3f943b6f13e5ea72a4e475d9e48f222bfd5a0',
-          input: new common.TokenAmount(goerliTokens.DAI, '1'),
+          marketId: '0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41',
+          input: new common.TokenAmount(mainnetTokens.wstETH, '1'),
         },
       },
       {
         fields: {
-          marketId: '0x3098a46de09dd8d9a8c6fa1ab7b3f943b6f13e5ea72a4e475d9e48f222bfd5a0',
-          input: new common.TokenAmount(goerliTokens.DAI, '1'),
-          balanceBps: 5000,
-        },
-      },
-      {
-        fields: {
-          marketId: '0x98ee9f294c961a5dbb9073c0fd2c2a6a66468f911e49baa935c0eab364499dbd',
-          input: new common.TokenAmount(goerliTokens.WETH, '1'),
-        },
-      },
-      {
-        fields: {
-          marketId: '0x98ee9f294c961a5dbb9073c0fd2c2a6a66468f911e49baa935c0eab364499dbd',
-          input: new common.TokenAmount(goerliTokens.WETH, '1'),
-          balanceBps: 5000,
-        },
-      },
-      {
-        fields: {
-          marketId: '0x98ee9f294c961a5dbb9073c0fd2c2a6a66468f911e49baa935c0eab364499dbd',
-          input: new common.TokenAmount(goerliTokens.ETH, '1'),
-        },
-      },
-      {
-        fields: {
-          marketId: '0x98ee9f294c961a5dbb9073c0fd2c2a6a66468f911e49baa935c0eab364499dbd',
-          input: new common.TokenAmount(goerliTokens.ETH, '1'),
+          marketId: '0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41',
+          input: new common.TokenAmount(mainnetTokens.wstETH, '1'),
           balanceBps: 5000,
         },
       },

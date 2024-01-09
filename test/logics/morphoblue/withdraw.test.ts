@@ -7,7 +7,7 @@ import * as helpers from './helpers';
 import hre from 'hardhat';
 import * as morphoblue from 'src/logics/morphoblue';
 
-describe('goerli: Test Morphoblue Withdraw Logic', function () {
+describe('mainnet: Test Morphoblue Withdraw Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
 
@@ -15,36 +15,19 @@ describe('goerli: Test Morphoblue Withdraw Logic', function () {
     chainId = await getChainId();
     [, user] = await hre.ethers.getSigners();
 
-    await claimToken(
-      chainId,
-      user.address,
-      morphoblue.goerliTokens.WETH,
-      '10',
-      '0x88124Ef4A9EC47e691F254F2E8e348fd1e341e9B'
-    );
-    await claimToken(
-      chainId,
-      user.address,
-      morphoblue.goerliTokens.USDC,
-      '1000',
-      '0x64c7044050Ba0431252df24fEd4d9635a275CB41'
-    );
+    await claimToken(chainId, user.address, morphoblue.mainnetTokens.WETH, '10');
   });
 
   snapshotAndRevertEach();
 
   const testCases = [
     {
-      marketId: '0x3098a46de09dd8d9a8c6fa1ab7b3f943b6f13e5ea72a4e475d9e48f222bfd5a0',
-      output: new common.TokenAmount(morphoblue.goerliTokens.WETH, '1'),
+      marketId: '0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41',
+      output: new common.TokenAmount(morphoblue.mainnetTokens.WETH, '1'),
     },
     {
-      marketId: '0x3098a46de09dd8d9a8c6fa1ab7b3f943b6f13e5ea72a4e475d9e48f222bfd5a0',
-      output: new common.TokenAmount(morphoblue.goerliTokens.ETH, '1'),
-    },
-    {
-      marketId: '0x98ee9f294c961a5dbb9073c0fd2c2a6a66468f911e49baa935c0eab364499dbd',
-      output: new common.TokenAmount(morphoblue.goerliTokens.USDC, '1000'),
+      marketId: '0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41',
+      output: new common.TokenAmount(morphoblue.mainnetTokens.ETH, '1'),
     },
   ];
 

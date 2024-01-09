@@ -1,5 +1,5 @@
 import * as common from '@protocolink/common';
-import { goerliTokens } from './tokens';
+import { goerliTokens, mainnetTokens } from './tokens';
 
 type ContractNames = 'Morpho' | 'MorphoFlashLoanCallback';
 
@@ -19,6 +19,34 @@ export interface Config {
 }
 
 export const configs: Config[] = [
+  {
+    chainId: common.ChainId.mainnet,
+    contract: {
+      Morpho: '0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb',
+      MorphoFlashLoanCallback: '0x24D5b6b712D1f0D0B628E21E39dBaDde3f28C56e',
+    },
+    // get meta morpho addresses from MetaMorphoFactory CreateMetaMorpho events
+    // get market ids from meta morpho supply/withdraw queues
+    // zero oracle address is excluded
+    markets: [
+      {
+        id: '0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41',
+        loanTokenAddress: mainnetTokens.WETH.address,
+        collateralTokenAddress: mainnetTokens.wstETH.address,
+        oracle: '0x2a01EB9496094dA03c4E364Def50f5aD1280AD72',
+        irm: '0x870aC11D48B15DB9a138Cf899d20F13F79Ba00BC',
+        lltv: '945000000000000000',
+      },
+      {
+        id: '0xb323495f7e4148be5643a4ea4a8221eef163e4bccfdedc2a6f4696baacbc86cc',
+        loanTokenAddress: mainnetTokens.USDC.address,
+        collateralTokenAddress: mainnetTokens.wstETH.address,
+        oracle: '0x48F7E36EB6B826B2dF4B2E630B62Cd25e89E40e2',
+        irm: '0x870aC11D48B15DB9a138Cf899d20F13F79Ba00BC',
+        lltv: '860000000000000000',
+      },
+    ],
+  },
   {
     chainId: common.ChainId.goerli,
     contract: {
@@ -40,7 +68,7 @@ export const configs: Config[] = [
         collateralTokenAddress: goerliTokens.USDC.address,
         oracle: '0xC801d09b2314D85dE751D03497E7a7482c91e4FB',
         irm: '0x9ee101eB4941d8D7A665fe71449360CEF3C8Bb87',
-        lltv: '900000000000000000', // 90%
+        lltv: '900000000000000000',
       },
       {
         id: '0x98ee9f294c961a5dbb9073c0fd2c2a6a66468f911e49baa935c0eab364499dbd',

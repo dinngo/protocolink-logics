@@ -1,7 +1,6 @@
 import { BigNumber } from 'ethers';
 import { Morpho, Morpho__factory } from './contracts';
 import { MorphoInterface } from './contracts/Morpho';
-import { TokenAddresses } from './types';
 import * as common from '@protocolink/common';
 import { getContractAddress, getMarket } from './configs';
 
@@ -26,38 +25,19 @@ export class Service extends common.Web3Toolkit {
   }
 
   async getLoanToken(marketId: string) {
-    const tokens = await this.getMarketTokens(marketId);
-    const loanToken = await this.getToken(tokens.loanTokenAddress);
+    const market = getMarket(this.chainId, marketId);
+    const loanToken = await this.getToken(market.loanTokenAddress);
     return loanToken;
   }
 
   async getCollateralToken(marketId: string) {
-    const tokens = await this.getMarketTokens(marketId);
-    const collateralToken = await this.getToken(tokens.collateralTokenAddress);
+    const market = getMarket(this.chainId, marketId);
+    const collateralToken = await this.getToken(market.collateralTokenAddress);
     return collateralToken;
   }
 
-  async getMarket(marketId: string) {
-    return getMarket(this.chainId, marketId);
-  }
-
-  async getMarketTokens(marketId: string) {
-    const calls: common.Multicall3.CallStruct[] = [];
-    calls.push({
-      target: this.morpho.address,
-      callData: this.morphoIface.encodeFunctionData('idToMarketParams', [marketId]),
-    });
-    const { returnData } = await this.multicall3.callStatic.aggregate(calls);
-
-    const { loanToken, collateralToken } = this.morphoIface.decodeFunctionResult('idToMarketParams', returnData[0]);
-
-    const tokens: TokenAddresses = { loanTokenAddress: loanToken, collateralTokenAddress: collateralToken };
-    return tokens;
-  }
-
   async getSupplyBalance(marketId: string, account: string) {
-    const market = getMarket(this.chainId, marketId);
-    const loanToken = await this.getToken(market.loanTokenAddress);
+    const loanToken = await this.getLoanToken(marketId);
     const { supplyShares } = await this.morpho.position(marketId, account);
     const { totalSupplyAssets, totalSupplyShares } = await this.morpho.market(marketId);
 
@@ -67,8 +47,7 @@ export class Service extends common.Web3Toolkit {
   }
 
   async getCollateralBalance(marketId: string, account: string) {
-    const market = getMarket(this.chainId, marketId);
-    const collateralToken = await this.getToken(market.collateralTokenAddress);
+    const collateralToken = await this.getCollateralToken(marketId);
     const { collateral } = await this.morpho.position(marketId, account);
 
     return new common.TokenAmount(collateralToken).setWei(collateral);
