@@ -73,9 +73,14 @@ export class FlashLoanAggregatorLogic
 
   async quote(params: FlashLoanAggregatorLogicParams) {
     const { protocolId, ...others } = params;
+    const flashLoanLength = core.isFlashLoanLoanParams(others) ? others.loans.length : others.repays.length;
 
     const flashLoanLogics = supportedFlashLoanLogics.filter((FlashLoanLogic) =>
-      protocolId ? FlashLoanLogic.protocolId === protocolId : FlashLoanLogic.supportedChainIds.includes(this.chainId)
+      protocolId
+        ? FlashLoanLogic.protocolId === protocolId
+        : flashLoanLength > 1
+        ? FlashLoanLogic.supportedChainIds.includes(this.chainId) && FlashLoanLogic.protocolId !== 'morphoblue'
+        : FlashLoanLogic.supportedChainIds.includes(this.chainId)
     );
 
     const quotations: FlashLoanAggregatorLogicQuotation[] = [];
