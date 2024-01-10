@@ -1,5 +1,12 @@
 # @protocolink/logics
 
+## 1.0.7
+
+### Patch Changes
+
+- d8fa010: add Morpho Ethereum
+- ba9bebd: exclude Morphoblue from flashloan aggregator when flashloan token length > 1
+
 ## 1.0.6
 
 ### Patch Changes
