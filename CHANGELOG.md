@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.0.8
+
+### Patch Changes
+
+- 6c64f91: fix Morphoblue repay tokenIn
+
 ## 1.0.7
 
 ### Patch Changes
