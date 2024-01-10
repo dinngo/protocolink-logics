@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import * as aavev3 from 'src/logics/aave-v3';
+import { aavev3, morphoblue } from 'src/logics';
 import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@protocolink/test-helpers';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
@@ -18,18 +18,20 @@ describe('mainnet: Test Utility FlashLoanAggregator Logic', function () {
     await claimToken(chainId, user.address, aavev3.mainnetTokens['1INCH'], '2');
     await claimToken(chainId, user.address, mainnetTokens.WETH, '2');
     await claimToken(chainId, user.address, mainnetTokens.USDC, '2');
-    await claimToken(chainId, user.address, mainnetTokens.USDT, '2');
-    await claimToken(chainId, user.address, mainnetTokens.DAI, '2', '0x8A610c1C93da88c59F51A6264A4c70927814B320');
+    await claimToken(chainId, user.address, morphoblue.mainnetTokens.wstETH, '2');
   });
 
   snapshotAndRevertEach();
 
   const testCases = [
+    // morphoblue
+    { loans: new common.TokenAmounts([morphoblue.mainnetTokens.wstETH, '0.01']) },
+    { repays: new common.TokenAmounts([morphoblue.mainnetTokens.wstETH, '0.01']) },
     // balancer-v2
     { loans: new common.TokenAmounts([mainnetTokens.WETH, '1'], [mainnetTokens.USDC, '1']) },
     { repays: new common.TokenAmounts([mainnetTokens.WETH, '1'], [mainnetTokens.USDC, '1']) },
-    { loans: new common.TokenAmounts([mainnetTokens.USDT, '1'], [mainnetTokens.DAI, '1']) },
-    { repays: new common.TokenAmounts([mainnetTokens.USDT, '1'], [mainnetTokens.DAI, '1']) },
+    { loans: new common.TokenAmounts([mainnetTokens.WETH, '0.01'], [morphoblue.mainnetTokens.wstETH, '0.01']) },
+    { repays: new common.TokenAmounts([mainnetTokens.WETH, '0.01'], [morphoblue.mainnetTokens.wstETH, '0.01']) },
     // aave-v3
     { loans: new common.TokenAmounts([aavev3.mainnetTokens['1INCH'], '1'], [aavev3.mainnetTokens.USDC, '1']) },
     { repays: new common.TokenAmounts([aavev3.mainnetTokens['1INCH'], '1'], [aavev3.mainnetTokens.USDC, '1']) },
@@ -44,6 +46,9 @@ describe('mainnet: Test Utility FlashLoanAggregator Logic', function () {
       const { protocolId, loans, repays, callback } = await utilityFlashLoanAggregatorLogic.quote(params);
       if (params.protocolId) {
         expect(protocolId).to.be.eq(params.protocolId);
+      }
+      if ((params.loans && params.loans.length > 1) || (params.repays && params.repays.length > 1)) {
+        expect(protocolId).to.be.not.eq(morphoblue.FlashLoanLogic.protocolId);
       }
 
       // 2. build funds and router logics for flash loan

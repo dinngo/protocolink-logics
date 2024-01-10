@@ -7,7 +7,7 @@ import * as helpers from './helpers';
 import hre from 'hardhat';
 import * as morphoblue from 'src/logics/morphoblue';
 
-describe('goerli: Test Morphoblue Borrow Logic', function () {
+describe('mainnet: Test Morphoblue Borrow Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
   let service: morphoblue.Service;
@@ -17,39 +17,21 @@ describe('goerli: Test Morphoblue Borrow Logic', function () {
     [, user] = await hre.ethers.getSigners();
     service = new morphoblue.Service(chainId, hre.ethers.provider);
 
-    await claimToken(
-      chainId,
-      user.address,
-      morphoblue.goerliTokens.USDC,
-      '5000',
-      '0x64c7044050Ba0431252df24fEd4d9635a275CB41'
-    );
-    await claimToken(
-      chainId,
-      user.address,
-      morphoblue.goerliTokens.WETH,
-      '10',
-      '0x88124Ef4A9EC47e691F254F2E8e348fd1e341e9B'
-    );
+    await claimToken(chainId, user.address, morphoblue.mainnetTokens.wstETH, '10');
   });
 
   snapshotAndRevertEach();
 
   const testCases = [
     {
-      marketId: '0x900d90c624f9bd1e1143059c14610bde45ff7d1746c52bf6c094d3568285b661',
-      output: new common.TokenAmount(morphoblue.goerliTokens.WETH, '1'),
-      collateral: new common.TokenAmount(morphoblue.goerliTokens.USDC, '3000'),
+      marketId: '0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41',
+      output: new common.TokenAmount(morphoblue.mainnetTokens.WETH, '0.01'),
+      collateral: new common.TokenAmount(morphoblue.mainnetTokens.wstETH, '1'),
     },
     {
-      marketId: '0x900d90c624f9bd1e1143059c14610bde45ff7d1746c52bf6c094d3568285b661',
-      output: new common.TokenAmount(morphoblue.goerliTokens.ETH, '1'),
-      collateral: new common.TokenAmount(morphoblue.goerliTokens.USDC, '3000'),
-    },
-    {
-      marketId: '0x98ee9f294c961a5dbb9073c0fd2c2a6a66468f911e49baa935c0eab364499dbd',
-      output: new common.TokenAmount(morphoblue.goerliTokens.USDC, '1000'),
-      collateral: new common.TokenAmount(morphoblue.goerliTokens.WETH, '1'),
+      marketId: '0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41',
+      output: new common.TokenAmount(morphoblue.mainnetTokens.ETH, '0.01'),
+      collateral: new common.TokenAmount(morphoblue.mainnetTokens.wstETH, '1'),
     },
   ];
 

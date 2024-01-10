@@ -8,7 +8,7 @@ import hre from 'hardhat';
 import * as morphoblue from 'src/logics/morphoblue';
 import * as utils from 'test/utils';
 
-describe('goerli: Test Morphoblue Borrow Logic', function () {
+describe('mainnet: Test Morphoblue Borrow Logic', function () {
   let chainId: number;
   let users: SignerWithAddress[];
   let service: morphoblue.Service;
@@ -19,152 +19,126 @@ describe('goerli: Test Morphoblue Borrow Logic', function () {
     users = [user1, user2];
     service = new morphoblue.Service(chainId, hre.ethers.provider);
 
-    await claimToken(
-      chainId,
-      user1.address,
-      morphoblue.goerliTokens.USDC,
-      '5000',
-      '0x64c7044050Ba0431252df24fEd4d9635a275CB41'
-    );
-    await claimToken(
-      chainId,
-      user1.address,
-      morphoblue.goerliTokens.WETH,
-      '10',
-      '0x88124Ef4A9EC47e691F254F2E8e348fd1e341e9B'
-    );
-    await claimToken(
-      chainId,
-      user2.address,
-      morphoblue.goerliTokens.USDC,
-      '5000',
-      '0x64c7044050Ba0431252df24fEd4d9635a275CB41'
-    );
-    await claimToken(
-      chainId,
-      user2.address,
-      morphoblue.goerliTokens.WETH,
-      '10',
-      '0x88124Ef4A9EC47e691F254F2E8e348fd1e341e9B'
-    );
+    await claimToken(chainId, user1.address, morphoblue.mainnetTokens.WETH, '10');
+    await claimToken(chainId, user1.address, morphoblue.mainnetTokens.wstETH, '10');
   });
 
   snapshotAndRevertEach();
 
   const testCases = [
     {
-      title: 'WETH-USDC market: repay fixed amount',
+      title: 'WETH-wstETH market: repay fixed amount',
       borrowerIndex: 0,
       repayerIndex: 0,
-      marketId: '0x900d90c624f9bd1e1143059c14610bde45ff7d1746c52bf6c094d3568285b661',
-      input: new common.TokenAmount(morphoblue.goerliTokens.WETH, '0.5'),
-      collateral: new common.TokenAmount(morphoblue.goerliTokens.USDC, '3000'),
-      borrow: new common.TokenAmount(morphoblue.goerliTokens.WETH, '1'),
+      marketId: '0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41',
+      input: new common.TokenAmount(morphoblue.mainnetTokens.WETH, '0.005'),
+      collateral: new common.TokenAmount(morphoblue.mainnetTokens.wstETH, '1'),
+      borrow: new common.TokenAmount(morphoblue.mainnetTokens.WETH, '0.01'),
     },
     {
-      title: 'WETH-USDC market: repay 50% amount',
+      title: 'WETH-wstETH market: repay 50% amount',
       borrowerIndex: 0,
       repayerIndex: 0,
-      marketId: '0x900d90c624f9bd1e1143059c14610bde45ff7d1746c52bf6c094d3568285b661',
-      input: new common.TokenAmount(morphoblue.goerliTokens.WETH, '0.5'),
-      collateral: new common.TokenAmount(morphoblue.goerliTokens.USDC, '3000'),
-      borrow: new common.TokenAmount(morphoblue.goerliTokens.WETH, '1'),
+      marketId: '0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41',
+      input: new common.TokenAmount(morphoblue.mainnetTokens.WETH, '0.005'),
+      collateral: new common.TokenAmount(morphoblue.mainnetTokens.wstETH, '1'),
+      borrow: new common.TokenAmount(morphoblue.mainnetTokens.WETH, '0.01'),
       balanceBps: 5000,
     },
     {
-      title: 'WETH-USDC market: repay 100% amount',
+      title: 'WETH-wstETH market: repay 100% amount',
       borrowerIndex: 0,
       repayerIndex: 0,
-      marketId: '0x900d90c624f9bd1e1143059c14610bde45ff7d1746c52bf6c094d3568285b661',
-      input: new common.TokenAmount(morphoblue.goerliTokens.WETH, '0.5'),
-      collateral: new common.TokenAmount(morphoblue.goerliTokens.USDC, '3000'),
-      borrow: new common.TokenAmount(morphoblue.goerliTokens.WETH, '1'),
+      marketId: '0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41',
+      input: new common.TokenAmount(morphoblue.mainnetTokens.WETH, '0.005'),
+      collateral: new common.TokenAmount(morphoblue.mainnetTokens.wstETH, '1'),
+      borrow: new common.TokenAmount(morphoblue.mainnetTokens.WETH, '0.01'),
       balanceBps: 10000,
     },
     {
-      title: 'WETH-USDC market: repay more amount',
+      title: 'WETH-wstETH market: repay more amount',
       borrowerIndex: 0,
       repayerIndex: 0,
-      marketId: '0x900d90c624f9bd1e1143059c14610bde45ff7d1746c52bf6c094d3568285b661',
-      input: new common.TokenAmount(morphoblue.goerliTokens.WETH, '2'),
-      collateral: new common.TokenAmount(morphoblue.goerliTokens.USDC, '3000'),
-      borrow: new common.TokenAmount(morphoblue.goerliTokens.WETH, '1'),
+      marketId: '0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41',
+      input: new common.TokenAmount(morphoblue.mainnetTokens.WETH, '1'),
+      collateral: new common.TokenAmount(morphoblue.mainnetTokens.wstETH, '1'),
+      borrow: new common.TokenAmount(morphoblue.mainnetTokens.WETH, '0.01'),
     },
     {
-      title: 'WETH-USDC market: repay native fixed amount',
+      title: 'WETH-wstETH market: repay native fixed amount',
       borrowerIndex: 0,
       repayerIndex: 0,
-      marketId: '0x900d90c624f9bd1e1143059c14610bde45ff7d1746c52bf6c094d3568285b661',
-      input: new common.TokenAmount(morphoblue.goerliTokens.ETH, '0.5'),
-      collateral: new common.TokenAmount(morphoblue.goerliTokens.USDC, '3000'),
-      borrow: new common.TokenAmount(morphoblue.goerliTokens.WETH, '1'),
+      marketId: '0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41',
+      input: new common.TokenAmount(morphoblue.mainnetTokens.ETH, '0.005'),
+      collateral: new common.TokenAmount(morphoblue.mainnetTokens.wstETH, '1'),
+      borrow: new common.TokenAmount(morphoblue.mainnetTokens.WETH, '0.01'),
     },
     {
-      title: 'WETH-USDC market: repay native 50% amount',
+      title: 'WETH-wstETH market: repay native 50% amount',
       borrowerIndex: 0,
       repayerIndex: 0,
-      marketId: '0x900d90c624f9bd1e1143059c14610bde45ff7d1746c52bf6c094d3568285b661',
-      input: new common.TokenAmount(morphoblue.goerliTokens.ETH, '0.5'),
-      collateral: new common.TokenAmount(morphoblue.goerliTokens.USDC, '3000'),
-      borrow: new common.TokenAmount(morphoblue.goerliTokens.WETH, '1'),
+      marketId: '0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41',
+      input: new common.TokenAmount(morphoblue.mainnetTokens.ETH, '0.005'),
+      collateral: new common.TokenAmount(morphoblue.mainnetTokens.wstETH, '1'),
+      borrow: new common.TokenAmount(morphoblue.mainnetTokens.WETH, '0.01'),
       balanceBps: 5000,
     },
     {
-      title: 'WETH-USDC market: repay native 100% amount',
+      title: 'WETH-wstETH market: repay native 100% amount',
       borrowerIndex: 0,
       repayerIndex: 0,
-      marketId: '0x900d90c624f9bd1e1143059c14610bde45ff7d1746c52bf6c094d3568285b661',
-      input: new common.TokenAmount(morphoblue.goerliTokens.ETH, '0.5'),
-      collateral: new common.TokenAmount(morphoblue.goerliTokens.USDC, '3000'),
-      borrow: new common.TokenAmount(morphoblue.goerliTokens.WETH, '1'),
+      marketId: '0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41',
+      input: new common.TokenAmount(morphoblue.mainnetTokens.ETH, '0.005'),
+      collateral: new common.TokenAmount(morphoblue.mainnetTokens.wstETH, '1'),
+      borrow: new common.TokenAmount(morphoblue.mainnetTokens.WETH, '0.01'),
       balanceBps: 10000,
     },
     {
-      title: 'WETH-USDC market: repay native more amount',
+      title: 'WETH-wstETH market: repay native more amount',
       borrowerIndex: 0,
       repayerIndex: 0,
-      marketId: '0x900d90c624f9bd1e1143059c14610bde45ff7d1746c52bf6c094d3568285b661',
-      input: new common.TokenAmount(morphoblue.goerliTokens.ETH, '2'),
-      collateral: new common.TokenAmount(morphoblue.goerliTokens.USDC, '3000'),
-      borrow: new common.TokenAmount(morphoblue.goerliTokens.WETH, '1'),
+      marketId: '0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41',
+      input: new common.TokenAmount(morphoblue.mainnetTokens.ETH, '1'),
+      collateral: new common.TokenAmount(morphoblue.mainnetTokens.wstETH, '1'),
+      borrow: new common.TokenAmount(morphoblue.mainnetTokens.WETH, '0.01'),
     },
     {
-      title: 'WETH-USDC market: help repay fixed amount',
+      title: 'WETH-wstETH market: help repay fixed amount',
       borrowerIndex: 0,
       repayerIndex: 1,
-      marketId: '0x900d90c624f9bd1e1143059c14610bde45ff7d1746c52bf6c094d3568285b661',
-      input: new common.TokenAmount(morphoblue.goerliTokens.ETH, '0.5'),
-      collateral: new common.TokenAmount(morphoblue.goerliTokens.USDC, '3000'),
-      borrow: new common.TokenAmount(morphoblue.goerliTokens.WETH, '1'),
+      marketId: '0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41',
+      input: new common.TokenAmount(morphoblue.mainnetTokens.ETH, '0.005'),
+      collateral: new common.TokenAmount(morphoblue.mainnetTokens.wstETH, '1'),
+      borrow: new common.TokenAmount(morphoblue.mainnetTokens.WETH, '0.01'),
     },
     {
-      title: 'WETH-USDC market: help repay 50% amount',
+      title: 'WETH-wstETH market: help repay 50% amount',
       borrowerIndex: 0,
       repayerIndex: 1,
-      marketId: '0x900d90c624f9bd1e1143059c14610bde45ff7d1746c52bf6c094d3568285b661',
-      input: new common.TokenAmount(morphoblue.goerliTokens.ETH, '0.5'),
-      collateral: new common.TokenAmount(morphoblue.goerliTokens.USDC, '3000'),
-      borrow: new common.TokenAmount(morphoblue.goerliTokens.WETH, '1'),
+      marketId: '0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41',
+      input: new common.TokenAmount(morphoblue.mainnetTokens.ETH, '0.005'),
+      collateral: new common.TokenAmount(morphoblue.mainnetTokens.wstETH, '1'),
+      borrow: new common.TokenAmount(morphoblue.mainnetTokens.WETH, '0.01'),
       balanceBps: 5000,
     },
     {
-      title: 'WETH-USDC market: help repay 100% amount',
+      title: 'WETH-wstETH market: help repay 100% amount',
       borrowerIndex: 0,
       repayerIndex: 1,
-      marketId: '0x900d90c624f9bd1e1143059c14610bde45ff7d1746c52bf6c094d3568285b661',
-      input: new common.TokenAmount(morphoblue.goerliTokens.ETH, '0.5'),
-      collateral: new common.TokenAmount(morphoblue.goerliTokens.USDC, '3000'),
-      borrow: new common.TokenAmount(morphoblue.goerliTokens.WETH, '1'),
+      marketId: '0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41',
+      input: new common.TokenAmount(morphoblue.mainnetTokens.ETH, '0.005'),
+      collateral: new common.TokenAmount(morphoblue.mainnetTokens.wstETH, '1'),
+      borrow: new common.TokenAmount(morphoblue.mainnetTokens.WETH, '0.01'),
       balanceBps: 10000,
     },
     {
-      title: 'WETH-USDC market: help repay more amount',
+      title: 'WETH-wstETH  market: help repay more amount',
       borrowerIndex: 0,
       repayerIndex: 1,
-      marketId: '0x900d90c624f9bd1e1143059c14610bde45ff7d1746c52bf6c094d3568285b661',
-      input: new common.TokenAmount(morphoblue.goerliTokens.ETH, '2'),
-      collateral: new common.TokenAmount(morphoblue.goerliTokens.USDC, '3000'),
-      borrow: new common.TokenAmount(morphoblue.goerliTokens.WETH, '1'),
+      marketId: '0xc54d7acf14de29e0e5527cabd7a576506870346a78a11a6762e2cca66322ec41',
+      input: new common.TokenAmount(morphoblue.mainnetTokens.ETH, '1'),
+      collateral: new common.TokenAmount(morphoblue.mainnetTokens.wstETH, '1'),
+      borrow: new common.TokenAmount(morphoblue.mainnetTokens.WETH, '0.01'),
     },
   ];
 

@@ -8,7 +8,7 @@ import * as morphoblue from 'src/logics/morphoblue';
 import * as utility from 'src/logics/utility';
 import * as utils from 'test/utils';
 
-describe('goerli: Test Morphoblue FlashLoan Logic', function () {
+describe('mainnet: Test Morphoblue FlashLoan Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
 
@@ -16,29 +16,17 @@ describe('goerli: Test Morphoblue FlashLoan Logic', function () {
     chainId = await getChainId();
     [, user] = await hre.ethers.getSigners();
 
-    await claimToken(
-      chainId,
-      user.address,
-      morphoblue.goerliTokens.WETH,
-      '2',
-      '0x88124Ef4A9EC47e691F254F2E8e348fd1e341e9B'
-    );
-    await claimToken(
-      chainId,
-      user.address,
-      morphoblue.goerliTokens.USDC,
-      '2',
-      '0x64c7044050Ba0431252df24fEd4d9635a275CB41'
-    );
+    await claimToken(chainId, user.address, morphoblue.mainnetTokens.WETH, '1');
+    await claimToken(chainId, user.address, morphoblue.mainnetTokens.wstETH, '1');
   });
 
   snapshotAndRevertEach();
 
   const testCases = [
-    { loans: new common.TokenAmounts([morphoblue.goerliTokens.WETH, '1']) },
-    { repays: new common.TokenAmounts([morphoblue.goerliTokens.WETH, '1']) },
-    { loans: new common.TokenAmounts([morphoblue.goerliTokens.USDC, '1']) },
-    { repays: new common.TokenAmounts([morphoblue.goerliTokens.USDC, '1']) },
+    { loans: new common.TokenAmounts([morphoblue.mainnetTokens.WETH, '0.01']) },
+    { repays: new common.TokenAmounts([morphoblue.mainnetTokens.WETH, '0.01']) },
+    { loans: new common.TokenAmounts([morphoblue.mainnetTokens.wstETH, '0.01']) },
+    { repays: new common.TokenAmounts([morphoblue.mainnetTokens.wstETH, '0.01']) },
   ];
 
   testCases.forEach((params, i) => {
