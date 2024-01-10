@@ -60,7 +60,7 @@ export const configs: Config[] = [
         collateralTokenAddress: goerliTokens.DAI.address,
         oracle: '0x2bCd59a5fc4Eb21eD6c906702E471922fABbe9a9',
         irm: '0x9ee101eB4941d8D7A665fe71449360CEF3C8Bb87',
-        lltv: '900000000000000000', // 90%
+        lltv: '900000000000000000',
       },
       {
         id: '0x900d90c624f9bd1e1143059c14610bde45ff7d1746c52bf6c094d3568285b661',
