@@ -162,6 +162,8 @@ describe('mainnet: Test Morphoblue Borrow Logic', function () {
         tokenIn: input.token,
       });
 
+      expect(quotation.input.token).to.be.eq(input.token);
+
       // 4. build funds, tokensReturn
       const tokensReturn = [input.token.elasticAddress];
       const funds = new common.TokenAmounts();

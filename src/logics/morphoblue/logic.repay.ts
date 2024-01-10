@@ -31,10 +31,10 @@ export class RepayLogic extends core.Logic implements core.LogicTokenListInterfa
   }
 
   async quote(params: RepayLogicParams) {
-    const { marketId, borrower } = params;
+    const { marketId, borrower, tokenIn } = params;
 
     const service = new Service(this.chainId, this.provider);
-    const borrowBalance = await service.getBorrowBalance(marketId, borrower);
+    const borrowBalance = await service.getBorrowBalance(marketId, borrower, tokenIn);
     borrowBalance.setWei(common.calcSlippage(borrowBalance.amountWei, -1)); // slightly higher than borrowed amount
 
     return { marketId, borrower, input: borrowBalance };
@@ -48,7 +48,7 @@ export class RepayLogic extends core.Logic implements core.LogicTokenListInterfa
 
     const service = new Service(this.chainId, this.provider);
     const borrowShares = await service.getBorrowShares(marketId, borrower);
-    const borrowBalance = await service.getBorrowBalance(marketId, borrower);
+    const borrowBalance = await service.getBorrowBalance(marketId, borrower, input.token);
     const repayAll = input.gt(borrowBalance); // morpho accrues interests before repay
     const assets = repayAll ? 0 : input.amountWei;
     const shares = repayAll ? borrowShares : 0;

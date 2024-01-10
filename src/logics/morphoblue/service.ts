@@ -53,9 +53,11 @@ export class Service extends common.Web3Toolkit {
     return new common.TokenAmount(collateralToken).setWei(collateral);
   }
 
-  async getBorrowBalance(marketId: string, account: string) {
-    const market = getMarket(this.chainId, marketId);
-    const loanToken = await this.getToken(market.loanTokenAddress);
+  async getBorrowBalance(marketId: string, account: string, loanToken?: common.Token) {
+    if (!loanToken) {
+      loanToken = await this.getLoanToken(marketId);
+    }
+
     const borrowShares = await this.getBorrowShares(marketId, account);
     const { totalBorrowAssets, totalBorrowShares } = await this.morpho.market(marketId);
 
