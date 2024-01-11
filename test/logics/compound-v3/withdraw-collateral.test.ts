@@ -7,7 +7,7 @@ import { expect } from 'chai';
 import * as helpers from './helpers';
 import hre from 'hardhat';
 
-describe('mainnet: Test CompoundV3 WithdrawCollateral Logic', function () {
+describe('mainnet-pb: Test CompoundV3 WithdrawCollateral Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
   let routerKit: core.RouterKit;

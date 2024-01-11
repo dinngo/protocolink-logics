@@ -7,7 +7,7 @@ import hre from 'hardhat';
 import * as utility from 'src/logics/utility';
 import * as utils from 'test/utils';
 
-describe('mainnet: Test Utility MultiSend Logic', function () {
+describe('mainnet-pb: Test Utility MultiSend Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
   const recipients: SignerWithAddress[] = [];

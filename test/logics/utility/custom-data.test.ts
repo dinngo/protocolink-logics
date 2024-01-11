@@ -6,7 +6,7 @@ import { expect } from 'chai';
 import hre from 'hardhat';
 import * as utility from 'src/logics/utility';
 
-describe('mainnet: Test Utility CustomData Logic', function () {
+describe('mainnet-pb: Test Utility CustomData Logic', function () {
   let chainId: number;
   let routerKit: core.RouterKit;
   let user1: SignerWithAddress;

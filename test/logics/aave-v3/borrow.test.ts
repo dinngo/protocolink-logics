@@ -7,7 +7,7 @@ import { expect } from 'chai';
 import * as helpers from './helpers';
 import hre from 'hardhat';
 
-describe('mainnet: Test AaveV3 Borrow Logic', function () {
+describe('mainnet-pb: Test AaveV3 Borrow Logic', function () {
   let chainId: number;
   let users: SignerWithAddress[];
 

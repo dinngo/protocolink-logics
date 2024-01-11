@@ -8,7 +8,7 @@ import hre from 'hardhat';
 import * as spark from 'src/logics/spark';
 import * as utils from 'test/utils';
 
-describe('mainnet: Test Spark Repay Logic', function () {
+describe('mainnet-pb: Test Spark Repay Logic', function () {
   let chainId: number;
   let users: SignerWithAddress[];
 

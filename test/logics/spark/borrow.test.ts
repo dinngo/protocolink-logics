@@ -7,7 +7,7 @@ import * as helpers from './helpers';
 import hre from 'hardhat';
 import * as spark from 'src/logics/spark';
 
-describe('mainnet: Test Spark Borrow Logic', function () {
+describe('mainnet-pb: Test Spark Borrow Logic', function () {
   let chainId: number;
   let users: SignerWithAddress[];
 

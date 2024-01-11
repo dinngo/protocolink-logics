@@ -8,7 +8,7 @@ import hre from 'hardhat';
 import * as utility from 'src/logics/utility';
 import * as utils from 'test/utils';
 
-describe('mainnet: Test BalancerV2 FlashLoan Logic', function () {
+describe('mainnet-pb: Test BalancerV2 FlashLoan Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
 

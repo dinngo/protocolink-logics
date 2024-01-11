@@ -7,7 +7,7 @@ import hre from 'hardhat';
 import * as uniswapv3 from 'src/logics/uniswap-v3';
 import * as utils from 'test/utils';
 
-describe('mainnet: Test UniswapV3 SwapToken Logic', function () {
+describe('mainnet-pb: Test UniswapV3 SwapToken Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
 
@@ -123,9 +123,9 @@ describe('mainnet: Test UniswapV3 SwapToken Logic', function () {
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
       if (tradeType === core.TradeType.exactIn) {
         await expect(user.address).to.changeBalance(input.token, -input.amount);
-        await expect(user.address).to.changeBalance(output.token, output.amount, 100);
+        await expect(user.address).to.changeBalance(output.token, output.amount, params.slippage);
       } else {
-        await expect(user.address).to.changeBalance(input.token, -input.amount, 100);
+        await expect(user.address).to.changeBalance(input.token, -input.amount, params.slippage);
         await expect(user.address).to.changeBalance(output.token, output.amount);
       }
     });

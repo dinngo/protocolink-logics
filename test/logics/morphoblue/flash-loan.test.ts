@@ -8,7 +8,7 @@ import * as morphoblue from 'src/logics/morphoblue';
 import * as utility from 'src/logics/utility';
 import * as utils from 'test/utils';
 
-describe('mainnet: Test Morphoblue FlashLoan Logic', function () {
+describe('mainnet-pb: Test Morphoblue FlashLoan Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
 
