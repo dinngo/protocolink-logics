@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { claimToken, getChainId, snapshotAndRevertEach } from '@protocolink/test-helpers';
+import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@protocolink/test-helpers';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
@@ -8,26 +8,26 @@ import * as radiantv2 from 'src/logics/radiant-v2';
 import * as utility from 'src/logics/utility';
 import * as utils from 'test/utils';
 
-describe('arbitrum: Test RadiantV2 FlashLoan Logic', () => {
+describe('mainnet-pb: Test RadiantV2 FlashLoan Logic', () => {
   let chainId: number;
   let user: SignerWithAddress;
 
   before(async () => {
     chainId = await getChainId();
     [, user] = await hre.ethers.getSigners();
-    await claimToken(chainId, user.address, radiantv2.arbitrumTokens.WETH, '2');
-    await claimToken(chainId, user.address, radiantv2.arbitrumTokens.USDC, '2');
-    await claimToken(chainId, user.address, radiantv2.arbitrumTokens.USDT, '2');
-    await claimToken(chainId, user.address, radiantv2.arbitrumTokens.DAI, '2');
+    await claimToken(chainId, user.address, mainnetTokens.WETH, '2');
+    await claimToken(chainId, user.address, mainnetTokens.USDC, '2');
+    await claimToken(chainId, user.address, mainnetTokens.USDT, '2');
+    await claimToken(chainId, user.address, radiantv2.mainnetTokens.wstETH, '2');
   });
 
   snapshotAndRevertEach();
 
   const testCases = [
-    { loans: new common.TokenAmounts([radiantv2.arbitrumTokens.WETH, '1'], [radiantv2.arbitrumTokens.USDC, '1']) },
-    { repays: new common.TokenAmounts([radiantv2.arbitrumTokens.WETH, '1'], [radiantv2.arbitrumTokens.USDC, '1']) },
-    { loans: new common.TokenAmounts([radiantv2.arbitrumTokens.USDT, '1'], [radiantv2.arbitrumTokens.DAI, '1']) },
-    { repays: new common.TokenAmounts([radiantv2.arbitrumTokens.USDT, '1'], [radiantv2.arbitrumTokens.DAI, '1']) },
+    { loans: new common.TokenAmounts([mainnetTokens.WETH, '1'], [mainnetTokens.USDC, '1']) },
+    { repays: new common.TokenAmounts([mainnetTokens.WETH, '1'], [mainnetTokens.USDC, '1']) },
+    { loans: new common.TokenAmounts([mainnetTokens.USDT, '1'], [radiantv2.mainnetTokens.wstETH, '1']) },
+    { repays: new common.TokenAmounts([mainnetTokens.USDT, '1'], [radiantv2.mainnetTokens.wstETH, '1']) },
   ];
 
   testCases.forEach((params, i) => {

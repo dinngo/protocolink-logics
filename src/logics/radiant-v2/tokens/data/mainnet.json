@@ -1,0 +1,23 @@
+{
+  "rWETH": {
+    "chainId": 1,
+    "address": "0xd10c315293872851184F484E9431dAf4dE6AA992",
+    "decimals": 18,
+    "symbol": "rWETH",
+    "name": "Radiant interest bearing WETH"
+  },
+  "rUSDC": {
+    "chainId": 1,
+    "address": "0x9E85DF2B42b2aE5e666D7263ED81a744a534BF1f",
+    "decimals": 6,
+    "symbol": "rUSDC",
+    "name": "Radiant interest bearing USDC"
+  },
+  "wstETH": {
+    "chainId": 1,
+    "address": "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0",
+    "decimals": 18,
+    "symbol": "wstETH",
+    "name": "Wrapped liquid staked Ether 2.0"
+  }
+}
