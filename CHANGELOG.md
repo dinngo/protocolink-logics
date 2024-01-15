@@ -1,5 +1,12 @@
 # @protocolink/logics
 
+## 1.0.9
+
+### Patch Changes
+
+- 87a5374: reorganize ci
+- e528032: change Radiant test from Arbitrum to Mainnet
+
 ## 1.0.8
 
 ### Patch Changes
