@@ -7,7 +7,7 @@ import hre from 'hardhat';
 import * as spark from 'src/logics/spark';
 import * as utils from 'test/utils';
 
-describe('mainnet: Test Spark Supply Logic', function () {
+describe('mainnet-pb: Test Spark Supply Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
 

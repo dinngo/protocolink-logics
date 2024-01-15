@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { claimToken, getChainId, snapshotAndRevertEach } from '@protocolink/test-helpers';
+import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@protocolink/test-helpers';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
@@ -8,7 +8,7 @@ import hre from 'hardhat';
 import * as radiantv2 from 'src/logics/radiant-v2';
 import * as utils from 'test/utils';
 
-describe('arbitrum: Test RadiantV2 Repay Logic', () => {
+describe('mainnet-pb: Test RadiantV2 Repay Logic', () => {
   let chainId: number;
   let users: SignerWithAddress[];
 
@@ -16,10 +16,10 @@ describe('arbitrum: Test RadiantV2 Repay Logic', () => {
     chainId = await getChainId();
     const [, user1, user2] = await hre.ethers.getSigners();
     users = [user1, user2];
-    await claimToken(chainId, user1.address, radiantv2.arbitrumTokens.USDC, '40000');
-    await claimToken(chainId, user1.address, radiantv2.arbitrumTokens.WETH, '100');
-    await claimToken(chainId, user2.address, radiantv2.arbitrumTokens.USDC, '100');
-    await claimToken(chainId, user2.address, radiantv2.arbitrumTokens.WETH, '100');
+    await claimToken(chainId, user1.address, mainnetTokens.USDC, '40000');
+    await claimToken(chainId, user1.address, mainnetTokens.WETH, '100');
+    await claimToken(chainId, user2.address, mainnetTokens.USDC, '100');
+    await claimToken(chainId, user2.address, mainnetTokens.WETH, '100');
   });
 
   snapshotAndRevertEach();
@@ -27,40 +27,40 @@ describe('arbitrum: Test RadiantV2 Repay Logic', () => {
   const testCases = [
     {
       userIndex: 0,
-      deposit: new common.TokenAmount(radiantv2.arbitrumTokens.USDC, '5000'),
-      borrow: new common.TokenAmount(radiantv2.arbitrumTokens.ETH, '1'),
+      deposit: new common.TokenAmount(mainnetTokens.USDC, '5000'),
+      borrow: new common.TokenAmount(mainnetTokens.ETH, '1'),
       interestRateMode: radiantv2.InterestRateMode.variable,
     },
     {
       userIndex: 0,
-      deposit: new common.TokenAmount(radiantv2.arbitrumTokens.USDC, '5000'),
-      borrow: new common.TokenAmount(radiantv2.arbitrumTokens.WETH, '1'),
+      deposit: new common.TokenAmount(mainnetTokens.USDC, '5000'),
+      borrow: new common.TokenAmount(mainnetTokens.WETH, '1'),
       interestRateMode: radiantv2.InterestRateMode.variable,
     },
     {
       userIndex: 1,
-      deposit: new common.TokenAmount(radiantv2.arbitrumTokens.WETH, '1'),
-      borrow: new common.TokenAmount(radiantv2.arbitrumTokens.USDC, '1'),
+      deposit: new common.TokenAmount(mainnetTokens.WETH, '1'),
+      borrow: new common.TokenAmount(mainnetTokens.USDC, '1'),
       interestRateMode: radiantv2.InterestRateMode.variable,
     },
     {
       userIndex: 0,
-      deposit: new common.TokenAmount(radiantv2.arbitrumTokens.USDC, '5000'),
-      borrow: new common.TokenAmount(radiantv2.arbitrumTokens.ETH, '1'),
+      deposit: new common.TokenAmount(mainnetTokens.USDC, '5000'),
+      borrow: new common.TokenAmount(mainnetTokens.ETH, '1'),
       interestRateMode: radiantv2.InterestRateMode.variable,
       balanceBps: 5000,
     },
     {
       userIndex: 0,
-      deposit: new common.TokenAmount(radiantv2.arbitrumTokens.USDC, '5000'),
-      borrow: new common.TokenAmount(radiantv2.arbitrumTokens.WETH, '1'),
+      deposit: new common.TokenAmount(mainnetTokens.USDC, '5000'),
+      borrow: new common.TokenAmount(mainnetTokens.WETH, '1'),
       interestRateMode: radiantv2.InterestRateMode.variable,
       balanceBps: 5000,
     },
     {
       userIndex: 1,
-      deposit: new common.TokenAmount(radiantv2.arbitrumTokens.WETH, '1'),
-      borrow: new common.TokenAmount(radiantv2.arbitrumTokens.USDC, '1'),
+      deposit: new common.TokenAmount(mainnetTokens.WETH, '1'),
+      borrow: new common.TokenAmount(mainnetTokens.USDC, '1'),
       interestRateMode: radiantv2.InterestRateMode.variable,
       balanceBps: 5000,
     },

@@ -7,7 +7,7 @@ import hre from 'hardhat';
 import * as permit2 from 'src/logics/permit2';
 import * as utils from 'test/utils';
 
-describe('mainnet: Test Permit2 PullToken Logic', function () {
+describe('mainnet-pb: Test Permit2 PullToken Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
   let routerKit: core.RouterKit;

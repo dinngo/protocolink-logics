@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { claimToken, getChainId, snapshotAndRevertEach } from '@protocolink/test-helpers';
+import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@protocolink/test-helpers';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
@@ -7,45 +7,45 @@ import hre from 'hardhat';
 import * as radiantv2 from 'src/logics/radiant-v2';
 import * as utils from 'test/utils';
 
-describe('arbitrum: Test RadiantV2 Deposit Logic', () => {
+describe('mainnet-pb: Test RadiantV2 Deposit Logic', () => {
   let chainId: number;
   let user: SignerWithAddress;
 
   before(async () => {
     chainId = await getChainId();
     [, user] = await hre.ethers.getSigners();
-    await claimToken(chainId, user.address, radiantv2.arbitrumTokens.USDC, '100');
-    await claimToken(chainId, user.address, radiantv2.arbitrumTokens.WETH, '100');
+    await claimToken(chainId, user.address, mainnetTokens.USDC, '100');
+    await claimToken(chainId, user.address, mainnetTokens.WETH, '100');
   });
 
   snapshotAndRevertEach();
 
   const testCases = [
     {
-      input: new common.TokenAmount(radiantv2.arbitrumTokens.ETH, '1'),
-      tokenOut: radiantv2.arbitrumTokens.rWETH,
+      input: new common.TokenAmount(mainnetTokens.ETH, '1'),
+      tokenOut: radiantv2.mainnetTokens.rWETH,
     },
     {
-      input: new common.TokenAmount(radiantv2.arbitrumTokens.WETH, '1'),
-      tokenOut: radiantv2.arbitrumTokens.rWETH,
+      input: new common.TokenAmount(mainnetTokens.WETH, '1'),
+      tokenOut: radiantv2.mainnetTokens.rWETH,
     },
     {
-      input: new common.TokenAmount(radiantv2.arbitrumTokens.USDC, '1'),
-      tokenOut: radiantv2.arbitrumTokens.rUSDC,
+      input: new common.TokenAmount(mainnetTokens.USDC, '1'),
+      tokenOut: radiantv2.mainnetTokens.rUSDC,
     },
     {
-      input: new common.TokenAmount(radiantv2.arbitrumTokens.ETH, '1'),
-      tokenOut: radiantv2.arbitrumTokens.rWETH,
+      input: new common.TokenAmount(mainnetTokens.ETH, '1'),
+      tokenOut: radiantv2.mainnetTokens.rWETH,
       balanceBps: 5000,
     },
     {
-      input: new common.TokenAmount(radiantv2.arbitrumTokens.WETH, '1'),
-      tokenOut: radiantv2.arbitrumTokens.rWETH,
+      input: new common.TokenAmount(mainnetTokens.WETH, '1'),
+      tokenOut: radiantv2.mainnetTokens.rWETH,
       balanceBps: 5000,
     },
     {
-      input: new common.TokenAmount(radiantv2.arbitrumTokens.USDC, '1'),
-      tokenOut: radiantv2.arbitrumTokens.rUSDC,
+      input: new common.TokenAmount(mainnetTokens.USDC, '1'),
+      tokenOut: radiantv2.mainnetTokens.rUSDC,
       balanceBps: 5000,
     },
   ];

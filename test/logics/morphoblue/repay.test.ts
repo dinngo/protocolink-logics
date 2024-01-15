@@ -8,7 +8,7 @@ import hre from 'hardhat';
 import * as morphoblue from 'src/logics/morphoblue';
 import * as utils from 'test/utils';
 
-describe('mainnet: Test Morphoblue Borrow Logic', function () {
+describe('mainnet-pb: Test Morphoblue Borrow Logic', function () {
   let chainId: number;
   let users: SignerWithAddress[];
   let service: morphoblue.Service;

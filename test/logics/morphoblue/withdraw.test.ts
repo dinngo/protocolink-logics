@@ -7,7 +7,7 @@ import * as helpers from './helpers';
 import hre from 'hardhat';
 import * as morphoblue from 'src/logics/morphoblue';
 
-describe('mainnet: Test Morphoblue Withdraw Logic', function () {
+describe('mainnet-pb: Test Morphoblue Withdraw Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
 

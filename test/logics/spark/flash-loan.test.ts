@@ -8,7 +8,7 @@ import * as spark from 'src/logics/spark';
 import * as utility from 'src/logics/utility';
 import * as utils from 'test/utils';
 
-describe('mainnet: Test Spark FlashLoan Logic', function () {
+describe('mainnet-pb: Test Spark FlashLoan Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
 

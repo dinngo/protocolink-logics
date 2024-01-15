@@ -8,7 +8,7 @@ import * as helpers from './helpers';
 import hre from 'hardhat';
 import * as utils from 'test/utils';
 
-describe('mainnet: Test CompoundV3 WithdrawBase Logic', function () {
+describe('mainnet-pb: Test CompoundV3 WithdrawBase Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
 
