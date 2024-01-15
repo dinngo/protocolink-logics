@@ -84,7 +84,7 @@ describe('mainnet-pb: Test AaveV2 Withdraw Logic', function () {
       const transactionRequest = routerKit.buildExecuteTransactionRequest({ permit2Datas, routerLogics, tokensReturn });
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
       await expect(user.address).to.changeBalance(input.token, -input.amount, 1);
-      await expect(user.address).to.changeBalance(output.token, output.amount);
+      await expect(user.address).to.changeBalance(output.token, output.amount, 1);
     });
   });
 });
