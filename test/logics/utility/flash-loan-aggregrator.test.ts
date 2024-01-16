@@ -33,12 +33,9 @@ describe('mainnet-pb: Test Utility FlashLoanAggregator Logic', function () {
     { loans: new common.TokenAmounts([mainnetTokens.WETH, '0.01'], [morphoblue.mainnetTokens.wstETH, '0.01']) },
     { repays: new common.TokenAmounts([mainnetTokens.WETH, '0.01'], [morphoblue.mainnetTokens.wstETH, '0.01']) },
     // aave-v3
-    // TODO: consider server_error even run as single file
-    // TODOL: unknown block bnumber
     { loans: new common.TokenAmounts([aavev3.mainnetTokens['1INCH'], '1'], [aavev3.mainnetTokens.USDC, '1']) },
     { repays: new common.TokenAmounts([aavev3.mainnetTokens['1INCH'], '1'], [aavev3.mainnetTokens.USDC, '1']) },
     { protocolId: 'aave-v3', loans: new common.TokenAmounts([mainnetTokens.WETH, '1'], [mainnetTokens.USDC, '1']) },
-    // TODOL: unknown block bnumber
     { protocolId: 'aave-v3', repays: new common.TokenAmounts([mainnetTokens.WETH, '1'], [mainnetTokens.USDC, '1']) },
   ];
 
