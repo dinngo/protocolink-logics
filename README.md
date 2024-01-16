@@ -2,7 +2,8 @@
 
 [![Lint](https://github.com/dinngo/protocolink-logics/actions/workflows/lint.yml/badge.svg)](https://github.com/dinngo/protocolink-logics/actions/workflows/lint.yml)
 [![Unit Test](https://github.com/dinngo/protocolink-logics/actions/workflows/unit-test.yml/badge.svg)](https://github.com/dinngo/protocolink-logics/actions/workflows/unit-test.yml)
-[![E2E Test](https://github.com/dinngo/protocolink-logics/actions/workflows/e2e-test.yml/badge.svg)](https://github.com/dinngo/protocolink-logics/actions/workflows/e2e-test.yml)
+[![E2E Latest Block](https://github.com/dinngo/protocolink-logics/actions/workflows/e2e-test-latest.yml/badge.svg)](https://github.com/dinngo/protocolink-logics/actions/workflows/e2e-test-latest.yml)
+[![E2E Pinned Block](https://github.com/dinngo/protocolink-logics/actions/workflows/e2e-test-mainnet-pb.yml/badge.svg)](https://github.com/dinngo/protocolink-logics/actions/workflows/e2e-test-mainnet-pb.yml)
 
 An SDK that build protocol logics for Protocolink
 
