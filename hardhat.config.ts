@@ -17,7 +17,7 @@ const config: HardhatUserConfig = {
         initialIndex: 0,
       },
       forking: {
-        url: process.env.HTTP_RPC_URL ?? process.env.MAINNET_RPC_URL ?? 'https://eth.llamarpc.com',
+        url: process.env.HTTP_RPC_URL || process.env.MAINNET_RPC_URL || 'https://eth.llamarpc.com',
         blockNumber: process.env.BLOCK_NUMBER ? parseInt(process.env.BLOCK_NUMBER) : undefined,
       },
     },
