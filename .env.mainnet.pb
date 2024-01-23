@@ -1,3 +1,2 @@
 CHAIN_ID=1
-HTTP_RPC_URL=https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161
 BLOCK_NUMBER=18989101

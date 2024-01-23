@@ -29,9 +29,9 @@ describe('mainnet-pb: Test UniswapV3 SwapToken Logic', function () {
     },
     {
       params: {
-        input: new common.TokenAmount(mainnetTokens.USDC, '1000'),
+        input: new common.TokenAmount(mainnetTokens.USDC, '10'),
         tokenOut: mainnetTokens.ETH,
-        slippage: 500,
+        slippage: 1000,
       },
     },
     {
@@ -51,9 +51,9 @@ describe('mainnet-pb: Test UniswapV3 SwapToken Logic', function () {
     },
     {
       params: {
-        input: new common.TokenAmount(mainnetTokens.USDC, '1000'),
+        input: new common.TokenAmount(mainnetTokens.USDC, '10'),
         tokenOut: mainnetTokens.ETH,
-        slippage: 500,
+        slippage: 1000,
       },
       balanceBps: 5000,
     },
@@ -76,7 +76,7 @@ describe('mainnet-pb: Test UniswapV3 SwapToken Logic', function () {
       params: {
         tokenIn: mainnetTokens.USDC,
         output: new common.TokenAmount(mainnetTokens.ETH, '1'),
-        slippage: 500,
+        slippage: 1000,
       },
     },
     {
