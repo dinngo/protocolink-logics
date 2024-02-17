@@ -1,5 +1,16 @@
 # @protocolink/logics
 
+## 1.0.10
+
+### Patch Changes
+
+- 8d8fa5e: fix readme CI link
+- c20e36d: fix init.ts rpc url
+- f6d6c43: fix uniswap v3 slippage in e2e test
+- a9de9d4: fix metis e2e and uniswapV3 e2e
+- 582ad02: fix uniswap v3 swap token e2e
+- ce90494: add Morphoblue markets
+
 ## 1.0.9
 
 ### Patch Changes
