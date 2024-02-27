@@ -27,7 +27,6 @@
     "test:unit": "mocha --recursive src"
   },
   "dependencies": {
-    "@paraswap/sdk": "^6.2.2",
     "@protocolink/common": "^0.3.6",
     "@protocolink/core": "^0.4.6",
     "@types/lodash": "^4.14.195",
