@@ -15,7 +15,7 @@ describe('mainnet: Test ParaswapV5 SwapToken Logic', function () {
     chainId = await getChainId();
     [, user] = await hre.ethers.getSigners();
     await claimToken(chainId, user.address, mainnetTokens.ETH, '100');
-    await claimToken(chainId, user.address, mainnetTokens.USDC, '3000');
+    await claimToken(chainId, user.address, mainnetTokens.USDC, '10000');
   });
 
   snapshotAndRevertEach();

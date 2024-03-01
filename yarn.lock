@@ -1006,20 +1006,6 @@
   resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-3.4.2-solc-0.7.tgz#38f4dbab672631034076ccdf2f3201fab1726635"
   integrity sha512-W6QmqgkADuFcTLzHL8vVoNBtkwjvQRpYIAom7KiUNoLKghyx3FgH0GBjt8NRvigV1ZmMOBllvE1By1C+bi8WpA==
 
-"@paraswap/core@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@paraswap/core/-/core-1.1.0.tgz#5ec7415be69dc657a9d82b0fde4e20f632cca1b6"
-  integrity sha512-ecnX8ezlhYWFwolZxYEz+K+RfLr8xaxQqiJKlxJ8Yf00tXTGxDGn6/Acy00t4+9Kv0apewd7++J33eJt9yNfwg==
-
-"@paraswap/sdk@^6.2.2":
-  version "6.2.2"
-  resolved "https://registry.yarnpkg.com/@paraswap/sdk/-/sdk-6.2.2.tgz#c34eef61ab4cb8e0ad284f2259a25b9a61b4bb9a"
-  integrity sha512-W0sAIf/T4zAmI7Yp4TcAuQr68NtaopeuYOWop20piAGoko4K9eLY4DYwWgkXf9fw9bAeeGofwP+GYJJC8Q24xg==
-  dependencies:
-    "@paraswap/core" "1.1.0"
-    bignumber.js "^9.0.2"
-    ts-essentials "^9.1.2"
-
 "@protocolink/common@^0.3.6":
   version "0.3.6"
   resolved "https://registry.yarnpkg.com/@protocolink/common/-/common-0.3.6.tgz#2f4d32608b53c5d4499d419064f17169f5b3cc76"
@@ -1885,7 +1871,7 @@ bigint-mod-arith@^3.1.0:
   resolved "https://registry.yarnpkg.com/bigint-mod-arith/-/bigint-mod-arith-3.1.2.tgz#658e416bc593a463d97b59766226d0a3021a76b1"
   integrity sha512-nx8J8bBeiRR+NlsROFH9jHswW5HO8mgfOSqW0AmjicMMvaONDa8AO+5ViKDUUNytBPWiwfvZP4/Bj4Y3lUfvgQ==
 
-bignumber.js@^9.0.2, bignumber.js@^9.1.1:
+bignumber.js@^9.1.1:
   version "9.1.1"
   resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-9.1.1.tgz#c4df7dc496bd849d4c9464344c1aa74228b4dac6"
   integrity sha512-pHm4LsMJ6lzgNGVfZHjMoO8sdoRhOzOH4MLmY65Jg70bpxCKu5iOHNJyfF6OyvYw7t8Fpf35RuzUyqnQsj8Vig==
@@ -5340,11 +5326,6 @@ ts-essentials@^7.0.1:
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/ts-essentials/-/ts-essentials-7.0.3.tgz#686fd155a02133eedcc5362dc8b5056cde3e5a38"
   integrity sha512-8+gr5+lqO3G84KdiTSMRLtuyJ+nTBVRKuCrK4lidMPdVeEp0uqC875uE5NMcaA7YYMN7XsNiFQuMvasF8HT/xQ==
-
-ts-essentials@^9.1.2:
-  version "9.3.1"
-  resolved "https://registry.yarnpkg.com/ts-essentials/-/ts-essentials-9.3.1.tgz#f2d1e1584ef53c0251012258338421d7cf78a4d0"
-  integrity sha512-9CChSvQMyVRo29Vb1A2jbs+LKo3d/bAf+ndSaX0T8cEiy/HChVaRN/HY5DqUryZ8hZ6uol9bEgCnGmnDbwBR9Q==
 
 ts-node@^10.9.1:
   version "10.9.1"
