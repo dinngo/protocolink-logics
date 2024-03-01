@@ -52,7 +52,7 @@ describe('mainnet: Test ParaswapV5 SwapToken Logic', function () {
     {
       params: {
         tokenIn: mainnetTokens.USDC,
-        output: new common.TokenAmount(mainnetTokens.ETH, '1'),
+        output: new common.TokenAmount(mainnetTokens.ETH, '0.1'),
         slippage: 500,
       },
     },
