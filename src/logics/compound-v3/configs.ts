@@ -55,7 +55,7 @@ export const configs: Config[] = [
     },
     markets: [
       {
-        id: MarketId.USDC,
+        id: MarketId.USDCe,
         cometAddress: '0xF25212E676D1F7F89Cd72fFEe66158f541246445',
         baseTokenAddress: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
       },
