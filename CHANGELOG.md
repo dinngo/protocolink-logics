@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.0.11
+
+### Patch Changes
+
+- 82de208: fix compound v3 polygon market id
+
 ## 1.0.10
 
 ### Patch Changes
