@@ -1,41 +1,41 @@
 import * as common from '@protocolink/common';
 import { getDefaultTokenListUrls } from 'src/utils/tokens';
 
-export interface Config {
+export interface Configs {
   chainId: number;
-  tokenTransferProxyAddress: string;
+  exchangeProxyAddress: string;
   tokenListUrls: string[];
 }
 
-export const configs: Config[] = [
+export const configs: Configs[] = [
   {
     chainId: common.ChainId.mainnet,
-    tokenTransferProxyAddress: '0x216B4B4Ba9F3e719726886d34a177484278Bfcae',
+    exchangeProxyAddress: '0xdef1c0ded9bec7f1a1670819833240f027b25eff',
     tokenListUrls: getDefaultTokenListUrls(common.ChainId.mainnet),
   },
   {
     chainId: common.ChainId.optimism,
-    tokenTransferProxyAddress: '0x216B4B4Ba9F3e719726886d34a177484278Bfcae',
+    exchangeProxyAddress: '0xdef1abe32c034e558cdd535791643c58a13acc10',
     tokenListUrls: getDefaultTokenListUrls(common.ChainId.optimism),
   },
   {
     chainId: common.ChainId.polygon,
-    tokenTransferProxyAddress: '0x216B4B4Ba9F3e719726886d34a177484278Bfcae',
+    exchangeProxyAddress: '0xdef1c0ded9bec7f1a1670819833240f027b25eff',
     tokenListUrls: getDefaultTokenListUrls(common.ChainId.polygon),
   },
   {
     chainId: common.ChainId.base,
-    tokenTransferProxyAddress: '0x93aAAe79a53759cD164340E4C8766E4Db5331cD7',
+    exchangeProxyAddress: '0xdef1c0ded9bec7f1a1670819833240f027b25eff',
     tokenListUrls: getDefaultTokenListUrls(common.ChainId.base),
   },
   {
     chainId: common.ChainId.arbitrum,
-    tokenTransferProxyAddress: '0x216B4B4Ba9F3e719726886d34a177484278Bfcae',
+    exchangeProxyAddress: '0xdef1c0ded9bec7f1a1670819833240f027b25eff',
     tokenListUrls: getDefaultTokenListUrls(common.ChainId.arbitrum),
   },
   {
     chainId: common.ChainId.avalanche,
-    tokenTransferProxyAddress: '0x216B4B4Ba9F3e719726886d34a177484278Bfcae',
+    exchangeProxyAddress: '0xdef1c0ded9bec7f1a1670819833240f027b25eff',
     tokenListUrls: getDefaultTokenListUrls(common.ChainId.avalanche),
   },
 ];
@@ -46,13 +46,13 @@ export const [supportedChainIds, configMap] = configs.reduce(
     accumulator[1][config.chainId] = config;
     return accumulator;
   },
-  [[], {}] as [number[], Record<number, Config>]
+  [[], {}] as [number[], Record<number, Configs>]
 );
 
 export function getTokenListUrls(chainId: number) {
   return configMap[chainId].tokenListUrls;
 }
 
-export function getTokenTransferProxyAddress(chainId: number) {
-  return configMap[chainId].tokenTransferProxyAddress;
+export function getExchangeProxyAddress(chainId: number) {
+  return configMap[chainId].exchangeProxyAddress;
 }

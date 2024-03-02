@@ -1,10 +1,10 @@
 import { BuildSwapTxInput, SwapSide, constructSimpleSDK } from '@paraswap/sdk';
-import { TokenList } from '@uniswap/token-lists';
 import { axios } from 'src/utils';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
 import { getTokenListUrls, getTokenTransferProxyAddress, supportedChainIds } from './configs';
 import invariant from 'tiny-invariant';
+import { getTokenList as getTokenListBase } from 'src/utils/tokens';
 
 export type SwapTokenLogicTokenList = common.Token[];
 
@@ -29,28 +29,7 @@ export class SwapTokenLogic
   }
 
   async getTokenList() {
-    const tokenListUrls = getTokenListUrls(this.chainId);
-    const tokenLists: TokenList[] = [];
-    await Promise.all(
-      tokenListUrls.map(async (tokenListUrl) => {
-        try {
-          const { data } = await axios.get<TokenList>(tokenListUrl);
-          tokenLists.push(data);
-        } catch {}
-      })
-    );
-
-    const tmp: Record<string, boolean> = { [this.nativeToken.address]: true };
-    const tokenList: SwapTokenLogicTokenList = [this.nativeToken];
-    for (const { tokens } of tokenLists) {
-      for (const { chainId, address, decimals, symbol, name } of tokens) {
-        if (tmp[address] || chainId !== this.chainId || !name || !symbol || !decimals) continue;
-        tokenList.push(new common.Token(chainId, address, decimals, symbol, name));
-        tmp[address] = true;
-      }
-    }
-
-    return tokenList;
+    return getTokenListBase(getTokenListUrls(this.chainId), this.chainId, [this.nativeToken]);
   }
 
   // If you wish to exclude quotes from specific DEXs, you can include the corresponding DEX Names
