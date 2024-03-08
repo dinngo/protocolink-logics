@@ -6,7 +6,6 @@ import { mainnetTokens } from '@protocolink/test-helpers';
 import { constants, utils } from 'ethers';
 import * as core from '@protocolink/core';
 import { getExchangeProxyAddress } from './configs';
-import process from 'process';
 
 const apiKey = process.env.ZEROEX_API_KEY as string;
 

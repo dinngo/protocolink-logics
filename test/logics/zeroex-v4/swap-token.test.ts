@@ -6,7 +6,6 @@ import * as core from '@protocolink/core';
 import * as utils from 'test/utils';
 import { expect } from 'chai';
 import * as zeroexv4 from 'src/logics/zeroex-v4';
-import * as process from 'process';
 
 const apiKey = process.env.ZEROEX_API_KEY as string;
 
