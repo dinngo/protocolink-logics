@@ -12,3 +12,4 @@ export * as spark from './spark';
 export * as syncswap from './syncswap';
 export * as uniswapv3 from './uniswap-v3';
 export * as utility from './utility';
+export * as zeroexv4 from './zeroex-v4';
