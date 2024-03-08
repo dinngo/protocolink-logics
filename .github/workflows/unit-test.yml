@@ -4,6 +4,9 @@ on:
   push:
   pull_request:
 
+env:
+  ZEROEX_API_KEY: ${{ secrets.ZEROEX_API_KEY }}
+
 jobs:
   run-unit-test:
     name: Run unit test

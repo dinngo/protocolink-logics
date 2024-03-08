@@ -1,21 +1,22 @@
 import * as core from '@protocolink/core';
-import { getExchangeProxyAddress, supportedChainIds } from './configs';
+import { getExchangeProxyAddress, getTokenListUrls, supportedChainIds } from './configs';
 import * as common from '@protocolink/common';
 import { axios } from 'src/utils/http';
 import { getTokenList as getTokenListBase } from 'src/utils';
-import { getTokenListUrls, SwapTokenLogicOptions } from 'src/logics/paraswap-v5';
 import invariant from 'tiny-invariant';
 
 export type SwapTokenLogicParams = core.TokenToTokenExactInParams<{
   slippagePercentage?: number;
   excludedSources?: string[];
   includedSources?: string[];
+  apiKey: string;
 }>;
 
 export type SwapTokenLogicFields = core.TokenToTokenExactInFields<{
   slippagePercentage?: number;
   excludedSources?: string[];
   includedSources?: string[];
+  apiKey: string;
 }>;
 
 export type ZeroExQuote = {
@@ -24,6 +25,8 @@ export type ZeroExQuote = {
   data: string;
   to: string;
 };
+
+export type SwapTokenLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
 export class SwapTokenLogic
   extends core.Logic
@@ -56,25 +59,33 @@ export class SwapTokenLogic
     }
   }
 
+  getAPIHeaders(apiKey: string) {
+    return {
+      '0x-api-key': apiKey,
+    };
+  }
+
   async quote(params: SwapTokenLogicParams) {
     try {
-      const { tokenOut, excludedSources, includedSources, input, slippagePercentage } = params;
+      const { tokenOut, excludedSources, includedSources, input, slippagePercentage, apiKey } = params;
       const url = this.getAPIBaseUrl(this.chainId) + `swap/v1/quote`;
       const {
         data: { buyAmount },
       } = await axios.get<ZeroExQuote>(url, {
         params: {
-          slippagePercentage: slippagePercentage,
+          slippagePercentage,
           excludedSources: excludedSources?.join(','),
           includedSources: includedSources?.join(','),
           sellToken: input.token.elasticAddress,
           buyToken: tokenOut.elasticAddress,
           sellAmount: input.amountWei.toString(),
         },
+        headers: this.getAPIHeaders(apiKey),
       });
 
       return {
         input,
+        apiKey,
         excludedSources,
         includedSources,
         slippagePercentage,
@@ -85,24 +96,28 @@ export class SwapTokenLogic
     }
   }
 
-  async build(fields: SwapTokenLogicFields, options: SwapTokenLogicOptions) {
-    const { input, output, excludedSources, includedSources, slippagePercentage } = fields;
-    const { account } = options;
+  async build(fields: SwapTokenLogicFields, _: SwapTokenLogicOptions) {
+    const { input, output, excludedSources, includedSources, slippagePercentage, apiKey } = fields;
 
     const url = this.getAPIBaseUrl(this.chainId) + `swap/v1/quote`;
     const {
       data: { buyAmount, data, to },
-    } = await axios.get<ZeroExQuote>(url, {
-      params: {
-        slippagePercentage: slippagePercentage,
-        excludedSources: excludedSources?.join(','),
-        includedSources: includedSources?.join(','),
-        sellToken: input.token.elasticAddress,
-        buyToken: output.token.elasticAddress,
-        sellAmount: input.amountWei.toString(),
-        takerAddress: account,
-      },
-    });
+    } = await axios
+      .get<ZeroExQuote>(url, {
+        params: {
+          slippagePercentage,
+          excludedSources: excludedSources?.join(','),
+          includedSources: includedSources?.join(','),
+          sellToken: input.token.elasticAddress,
+          buyToken: output.token.elasticAddress,
+          sellAmount: input.amountWei.toString(),
+        },
+        headers: this.getAPIHeaders(apiKey),
+      })
+      .catch((e) => {
+        console.log(e);
+        return e;
+      });
     output.setWei(buyAmount);
 
     const inputs = [core.newLogicInput({ input })];
