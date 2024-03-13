@@ -4,16 +4,16 @@ import * as common from '@protocolink/common';
 import { axios } from 'src/utils/http';
 import { getTokenList as getTokenListBase } from 'src/utils';
 import invariant from 'tiny-invariant';
+import { slippageToProtocolink, slippageToZeroEx } from 'src/logics/zeroex-v4/slippage';
+import { isWrapOrUnwrap } from 'src/logics/zeroex-v4/utils';
 
 export type SwapTokenLogicParams = core.TokenToTokenExactInParams<{
-  slippagePercentage?: number;
   excludedSources?: string[];
-  includedSources?: string[];
   apiKey: string;
 }>;
 
 export type SwapTokenLogicFields = core.TokenToTokenExactInFields<{
-  slippagePercentage?: number;
+  slippage?: number;
   excludedSources?: string[];
   includedSources?: string[];
   apiKey: string;
@@ -24,6 +24,7 @@ export type ZeroExQuote = {
   buyAmount: string;
   data: string;
   to: string;
+  expectedSlippage: string;
 };
 
 export type SwapTokenLogicOptions = Pick<core.GlobalOptions, 'account'>;
@@ -48,10 +49,10 @@ export class SwapTokenLogic
         return 'https://optimism.api.0x.org/';
       case common.ChainId.polygon:
         return 'https://polygon.api.0x.org/';
-      case common.ChainId.arbitrum:
-        return 'https://arbitrum.api.0x.org/';
       case common.ChainId.base:
         return 'https://base.api.0x.org/';
+      case common.ChainId.arbitrum:
+        return 'https://arbitrum.api.0x.org/';
       case common.ChainId.avalanche:
         return 'https://avalanche.api.0x.org/';
       default:
@@ -67,15 +68,13 @@ export class SwapTokenLogic
 
   async quote(params: SwapTokenLogicParams) {
     try {
-      const { tokenOut, excludedSources, includedSources, input, slippagePercentage, apiKey } = params;
-      const url = this.getAPIBaseUrl(this.chainId) + `swap/v1/quote`;
+      const { tokenOut, excludedSources, input, apiKey } = params;
+      const url = this.getAPIBaseUrl(this.chainId) + `swap/v1/price`;
       const {
-        data: { buyAmount },
+        data: { buyAmount, expectedSlippage },
       } = await axios.get<ZeroExQuote>(url, {
         params: {
-          slippagePercentage,
           excludedSources: excludedSources?.join(','),
-          includedSources: includedSources?.join(','),
           sellToken: input.token.elasticAddress,
           buyToken: tokenOut.elasticAddress,
           sellAmount: input.amountWei.toString(),
@@ -87,8 +86,7 @@ export class SwapTokenLogic
         input,
         apiKey,
         excludedSources,
-        includedSources,
-        slippagePercentage,
+        slippage: slippageToProtocolink(expectedSlippage),
         output: new common.TokenAmount(params.tokenOut).setWei(buyAmount),
       };
     } catch (e) {
@@ -97,8 +95,8 @@ export class SwapTokenLogic
   }
 
   async build(fields: SwapTokenLogicFields, _: SwapTokenLogicOptions) {
-    const { input, output, excludedSources, includedSources, slippagePercentage, apiKey } = fields;
-
+    const { input, output, excludedSources, includedSources, slippage, apiKey } = fields;
+    const slippagePercentage = slippageToZeroEx(slippage ?? 0);
     const url = this.getAPIBaseUrl(this.chainId) + `swap/v1/quote`;
     const {
       data: { buyAmount, data, to },
@@ -115,14 +113,17 @@ export class SwapTokenLogic
         headers: this.getAPIHeaders(apiKey),
       })
       .catch((e) => {
-        console.log(e);
         return e;
       });
     output.setWei(buyAmount);
 
     const inputs = [core.newLogicInput({ input })];
-    const approveTo = getExchangeProxyAddress(this.chainId);
+    // if it's a wrap or an unwrap transaction we don't need to approve the exchange proxy
+    // since it will be a plain deposit/withdraw on the WETH contract that's returned from the API
+    const approveTo = isWrapOrUnwrap(input, output, this.nativeToken, this.wrappedNativeToken)
+      ? undefined
+      : getExchangeProxyAddress(this.chainId);
 
-    return core.newLogic({ data, to, approveTo, inputs });
+    return core.newLogic({ to, data, inputs, approveTo });
   }
 }

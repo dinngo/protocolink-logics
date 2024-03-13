@@ -18,11 +18,11 @@ describe('Test tokens', function () {
 
 const chainsToTest = [
   common.ChainId.mainnet,
-  common.ChainId.arbitrum,
+  common.ChainId.optimism,
   common.ChainId.polygon,
   common.ChainId.base,
+  common.ChainId.arbitrum,
   common.ChainId.avalanche,
-  common.ChainId.optimism,
 ];
 
 describe('Test getDefaultTokenListUrls', function () {

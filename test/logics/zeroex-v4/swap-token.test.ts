@@ -28,7 +28,6 @@ describe('mainnet: Test ZeroExV4 SwapToken Logic', function () {
       params: {
         input: new common.TokenAmount(mainnetTokens.ETH, '1'),
         tokenOut: mainnetTokens.USDC,
-        slippagePercentage: 0.01,
         apiKey,
       },
     },
@@ -36,7 +35,6 @@ describe('mainnet: Test ZeroExV4 SwapToken Logic', function () {
       params: {
         input: new common.TokenAmount(mainnetTokens.USDC, '1'),
         tokenOut: mainnetTokens.ETH,
-        slippagePercentage: 0.05,
         apiKey,
       },
     },
@@ -44,7 +42,6 @@ describe('mainnet: Test ZeroExV4 SwapToken Logic', function () {
       params: {
         input: new common.TokenAmount(mainnetTokens.USDC, '1'),
         tokenOut: mainnetTokens.DAI,
-        slippagePercentage: 0.05,
         apiKey,
       },
     },
@@ -52,7 +49,6 @@ describe('mainnet: Test ZeroExV4 SwapToken Logic', function () {
       params: {
         input: new common.TokenAmount(mainnetTokens.WETH, '1'),
         tokenOut: mainnetTokens.ETH,
-        slippagePercentage: 0.05,
         apiKey,
       },
     },
@@ -60,7 +56,6 @@ describe('mainnet: Test ZeroExV4 SwapToken Logic', function () {
       params: {
         input: new common.TokenAmount(mainnetTokens.ETH, '1'),
         tokenOut: mainnetTokens.WETH,
-        slippagePercentage: 0.05,
         apiKey,
       },
     },
@@ -98,7 +93,7 @@ describe('mainnet: Test ZeroExV4 SwapToken Logic', function () {
         output.token,
         output.amount,
         // the default slippage is 0.01 in the 0x quote API endpoint request
-        (quotation.slippagePercentage || 0.01) * 10000
+        quotation.slippage
       );
     });
   });

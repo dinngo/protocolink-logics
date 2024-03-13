@@ -27,7 +27,7 @@ describe('0x SwapTokenLogic', () => {
         fields: {
           input: new common.TokenAmount(mainnetTokens.ETH, '1'),
           output: new common.TokenAmount(mainnetTokens.USDC, '0'),
-          slippagePercentage: 0.05,
+          slippage: 500,
           apiKey,
         },
         options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa' },
@@ -37,7 +37,7 @@ describe('0x SwapTokenLogic', () => {
         fields: {
           input: new common.TokenAmount(mainnetTokens.USDC, '1'),
           output: new common.TokenAmount(mainnetTokens.ETH, '0'),
-          slippagePercentage: 0.05,
+          slippage: 500,
           apiKey,
         },
         options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa' },
@@ -47,7 +47,7 @@ describe('0x SwapTokenLogic', () => {
         fields: {
           input: new common.TokenAmount(mainnetTokens.USDC, '1'),
           output: new common.TokenAmount(mainnetTokens.DAI, '0'),
-          slippagePercentage: 0.05,
+          slippage: 500,
           apiKey,
         },
         options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa' },
@@ -75,7 +75,7 @@ describe('0x SwapTokenLogic', () => {
             },
             '1'
           ),
-          slippagePercentage: 0.01,
+          slippage: 100,
           apiKey,
         },
         options: { account: '0x4F5ef03E870332A1B42453bBf57B8A041E89eFe8' },

@@ -2,6 +2,7 @@ import { axios } from './http';
 import * as common from '@protocolink/common';
 import { goerliTokens } from 'src/logics/morphoblue';
 import { TokenList } from '@uniswap/token-lists';
+import { ethers } from 'ethers';
 
 export async function get1InchTokens(chainId: number) {
   const { data } = await axios.get<Record<string, { symbol: string; name: string; decimals: number; address: string }>>(
@@ -45,11 +46,24 @@ export function getDefaultTokenListUrls(chainId: number) {
         'https://wispy-bird-88a7.uniswap.workers.dev/?url=http://tokenlist.aave.eth.link',
         'https://gateway.ipfs.io/ipns/tokens.uniswap.org',
       ];
+    case common.ChainId.optimism:
+      return [
+        'https://static.optimism.io/optimism.tokenlist.json',
+        'https://tokens.coingecko.com/optimistic-ethereum/all.json',
+      ];
     case common.ChainId.polygon:
       return [
         'https://unpkg.com/quickswap-default-token-list@1.2.74/build/quickswap-default.tokenlist.json',
         'https://unpkg.com/@cometh-game/default-token-list@1.0.40/build/comethswap-default.tokenlist.json',
         'https://tokens.coingecko.com/polygon-pos/all.json',
+      ];
+    case common.ChainId.base:
+      return ['https://tokens.coingecko.com/base/all.json'];
+    case common.ChainId.arbitrum:
+      return [
+        'https://raw.githubusercontent.com/paraswap/community-token-list/master/src/sources/paraswap.extralist.json',
+        'https://tokenlist.arbitrum.io/ArbTokenLists/arbed_arb_whitelist_era.json',
+        'https://tokens.coingecko.com/arbitrum-one/all.json',
       ];
     case common.ChainId.avalanche:
       return [
@@ -57,19 +71,6 @@ export function getDefaultTokenListUrls(chainId: number) {
         'https://raw.githubusercontent.com/traderjoe-xyz/joe-tokenlists/main/mc.tokenlist.json',
         'https://tokens.coingecko.com/avalanche/all.json',
       ];
-    case common.ChainId.arbitrum:
-      return [
-        'https://raw.githubusercontent.com/paraswap/community-token-list/master/src/sources/paraswap.extralist.json',
-        'https://tokenlist.arbitrum.io/ArbTokenLists/arbed_arb_whitelist_era.json',
-        'https://tokens.coingecko.com/arbitrum-one/all.json',
-      ];
-    case common.ChainId.optimism:
-      return [
-        'https://static.optimism.io/optimism.tokenlist.json',
-        'https://tokens.coingecko.com/optimistic-ethereum/all.json',
-      ];
-    case common.ChainId.base:
-      return ['https://tokens.coingecko.com/base/all.json'];
     default:
       return [];
   }
@@ -94,7 +95,8 @@ export async function getTokenList(
   const tokenList: common.Token[] = [...defaultTokenList];
   for (const { tokens } of tokenLists) {
     for (const { chainId, address, decimals, symbol, name } of tokens) {
-      if (tmp[address] || chainId !== chainIdInput || !name || !symbol || !decimals) continue;
+      if (tmp[address] || chainId !== chainIdInput || !name || !symbol || !decimals || !ethers.utils.isAddress(address))
+        continue;
       tokenList.push(new common.Token(chainId, address, decimals, symbol, name));
       tmp[address] = true;
     }
