@@ -28,6 +28,7 @@ describe('mainnet: Test ZeroExV4 SwapToken Logic', function () {
       params: {
         input: new common.TokenAmount(mainnetTokens.ETH, '1'),
         tokenOut: mainnetTokens.USDC,
+        slippage: 100,
         apiKey,
       },
     },
@@ -35,6 +36,7 @@ describe('mainnet: Test ZeroExV4 SwapToken Logic', function () {
       params: {
         input: new common.TokenAmount(mainnetTokens.USDC, '1'),
         tokenOut: mainnetTokens.ETH,
+        slippage: 500,
         apiKey,
       },
     },
@@ -42,6 +44,7 @@ describe('mainnet: Test ZeroExV4 SwapToken Logic', function () {
       params: {
         input: new common.TokenAmount(mainnetTokens.USDC, '1'),
         tokenOut: mainnetTokens.DAI,
+        slippage: 500,
         apiKey,
       },
     },
@@ -49,6 +52,7 @@ describe('mainnet: Test ZeroExV4 SwapToken Logic', function () {
       params: {
         input: new common.TokenAmount(mainnetTokens.WETH, '1'),
         tokenOut: mainnetTokens.ETH,
+        slippage: 0,
         apiKey,
       },
     },
@@ -56,6 +60,7 @@ describe('mainnet: Test ZeroExV4 SwapToken Logic', function () {
       params: {
         input: new common.TokenAmount(mainnetTokens.ETH, '1'),
         tokenOut: mainnetTokens.WETH,
+        slippage: 0,
         apiKey,
       },
     },
@@ -89,12 +94,7 @@ describe('mainnet: Test ZeroExV4 SwapToken Logic', function () {
       });
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
       await expect(user.address).to.changeBalance(input.token, -input.amount);
-      await expect(user.address).to.changeBalance(
-        output.token,
-        output.amount,
-        // the default slippage is 0.01 in the 0x quote API endpoint request
-        quotation.slippage
-      );
+      await expect(user.address).to.changeBalance(output.token, output.amount, quotation.slippage);
     });
   });
 });

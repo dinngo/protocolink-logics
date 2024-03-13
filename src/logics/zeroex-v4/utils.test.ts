@@ -19,14 +19,17 @@ describe('Test isWrapOrUnwrap', () => {
     wrappedNativeTokenRaw.symbol,
     wrappedNativeTokenRaw.name
   );
-  const randomToken = new common.Token(1, '0x226de9B08e19908668C63185a635218005999999', 18, 'ABC', 'ABC');
-  const randomTokenAmount = new common.TokenAmount(randomToken, '100');
   const nativeTokens = {
     nativeToken,
     wrappedNativeToken,
   };
+
+  const randomToken = new common.Token(1, '0x226de9B08e19908668C63185a635218005999999', 18, 'ABC', 'ABC');
+  const randomTokenAmount = new common.TokenAmount(randomToken, '100');
+
   const nativeTokenAmount = new common.TokenAmount(nativeToken, '1');
   const wrappedNativeTokenAmount = new common.TokenAmount(wrappedNativeToken, '1');
+
   const testCases = [
     {
       title: 'wrap',

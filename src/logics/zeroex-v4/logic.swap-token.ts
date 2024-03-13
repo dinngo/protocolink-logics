@@ -4,27 +4,32 @@ import * as common from '@protocolink/common';
 import { axios } from 'src/utils/http';
 import { getTokenList as getTokenListBase } from 'src/utils';
 import invariant from 'tiny-invariant';
-import { slippageToProtocolink, slippageToZeroEx } from 'src/logics/zeroex-v4/slippage';
 import { isWrapOrUnwrap } from 'src/logics/zeroex-v4/utils';
+import { slippageToZeroEx } from 'src/logics/zeroex-v4/slippage';
 
 export type SwapTokenLogicParams = core.TokenToTokenExactInParams<{
-  excludedSources?: string[];
   apiKey: string;
-}>;
-
-export type SwapTokenLogicFields = core.TokenToTokenExactInFields<{
   slippage?: number;
   excludedSources?: string[];
   includedSources?: string[];
+  skipValidation?: boolean;
+  takerAddress?: string;
+}>;
+
+export type SwapTokenLogicFields = core.TokenToTokenExactInFields<{
   apiKey: string;
+  slippage?: number;
+  excludedSources?: string[];
+  includedSources?: string[];
+  skipValidation?: boolean;
+  takerAddress?: string;
 }>;
 
 export type ZeroExQuote = {
-  sellAmount: string;
   buyAmount: string;
   data: string;
   to: string;
-  expectedSlippage: string;
+  expectedSlippage?: string;
 };
 
 export type SwapTokenLogicOptions = Pick<core.GlobalOptions, 'account'>;
@@ -68,26 +73,35 @@ export class SwapTokenLogic
 
   async quote(params: SwapTokenLogicParams) {
     try {
-      const { tokenOut, excludedSources, input, apiKey } = params;
+      const { input, tokenOut, slippage, excludedSources, includedSources, apiKey, takerAddress, skipValidation } =
+        params;
+      const slippagePercentage = slippage != null ? slippageToZeroEx(slippage) : undefined;
       const url = this.getAPIBaseUrl(this.chainId) + `swap/v1/price`;
       const {
-        data: { buyAmount, expectedSlippage },
+        data: { buyAmount },
       } = await axios.get<ZeroExQuote>(url, {
         params: {
-          excludedSources: excludedSources?.join(','),
+          slippagePercentage,
           sellToken: input.token.elasticAddress,
           buyToken: tokenOut.elasticAddress,
           sellAmount: input.amountWei.toString(),
+          excludedSources: excludedSources?.join(','),
+          includedSources: includedSources?.join(','),
+          takerAddress,
+          skipValidation,
         },
         headers: this.getAPIHeaders(apiKey),
       });
 
       return {
         input,
-        apiKey,
-        excludedSources,
-        slippage: slippageToProtocolink(expectedSlippage),
         output: new common.TokenAmount(params.tokenOut).setWei(buyAmount),
+        slippage,
+        excludedSources,
+        includedSources,
+        apiKey,
+        takerAddress,
+        skipValidation,
       };
     } catch (e) {
       invariant(false, 'no route found or price impact too high');
@@ -95,26 +109,24 @@ export class SwapTokenLogic
   }
 
   async build(fields: SwapTokenLogicFields, _: SwapTokenLogicOptions) {
-    const { input, output, excludedSources, includedSources, slippage, apiKey } = fields;
-    const slippagePercentage = slippageToZeroEx(slippage ?? 0);
+    const { input, output, slippage, excludedSources, includedSources, apiKey, takerAddress, skipValidation } = fields;
+    const slippagePercentage = slippage != null ? slippageToZeroEx(slippage) : undefined;
     const url = this.getAPIBaseUrl(this.chainId) + `swap/v1/quote`;
     const {
       data: { buyAmount, data, to },
-    } = await axios
-      .get<ZeroExQuote>(url, {
-        params: {
-          slippagePercentage,
-          excludedSources: excludedSources?.join(','),
-          includedSources: includedSources?.join(','),
-          sellToken: input.token.elasticAddress,
-          buyToken: output.token.elasticAddress,
-          sellAmount: input.amountWei.toString(),
-        },
-        headers: this.getAPIHeaders(apiKey),
-      })
-      .catch((e) => {
-        return e;
-      });
+    } = await axios.get<ZeroExQuote>(url, {
+      params: {
+        slippagePercentage,
+        sellToken: input.token.elasticAddress,
+        buyToken: output.token.elasticAddress,
+        sellAmount: input.amountWei.toString(),
+        excludedSources: excludedSources?.join(','),
+        includedSources: includedSources?.join(','),
+        takerAddress,
+        skipValidation,
+      },
+      headers: this.getAPIHeaders(apiKey),
+    });
     output.setWei(buyAmount);
 
     const inputs = [core.newLogicInput({ input })];
