@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { SwapTokenLogic, SwapTokenLogicFields, SwapTokenLogicOptions } from './logic.swap-token';
 import { LogicTestCaseWithChainId } from 'test/types';
 import { mainnetTokens } from '@protocolink/test-helpers';
-import { constants, utils } from 'ethers';
+import { constants, ethers, utils } from 'ethers';
 import * as core from '@protocolink/core';
 import { getExchangeProxyAddress } from './configs';
 
@@ -53,6 +53,26 @@ describe('0x SwapTokenLogic', () => {
         options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa' },
       },
       {
+        chainId: common.ChainId.mainnet,
+        fields: {
+          input: new common.TokenAmount(mainnetTokens.WETH, '1'),
+          output: new common.TokenAmount(mainnetTokens.ETH, '0'),
+          slippage: 500,
+          apiKey,
+        },
+        options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa' },
+      },
+      {
+        chainId: common.ChainId.mainnet,
+        fields: {
+          input: new common.TokenAmount(mainnetTokens.ETH, '1'),
+          output: new common.TokenAmount(mainnetTokens.WETH, '0'),
+          slippage: 500,
+          apiKey,
+        },
+        options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa' },
+      },
+      {
         chainId: common.ChainId.arbitrum,
         fields: {
           input: new common.TokenAmount(
@@ -86,16 +106,26 @@ describe('0x SwapTokenLogic', () => {
       it(`${fields.input.token.symbol} to ${fields.output.token.symbol}`, async function () {
         const logic = new SwapTokenLogic(chainId);
         const routerLogic = await logic.build(fields, options);
-        const { input } = fields;
+        const { input, output } = fields;
 
-        expect(routerLogic.to).to.eq(getExchangeProxyAddress(chainId));
+        const isWrapOrUnwrap =
+          (input.token.isNative && output.token.isWrapped) || (input.token.isWrapped && output.token.isNative);
+        const exchangeProxyAddress = getExchangeProxyAddress(chainId);
+
+        // if input is native, or it is a wrap or unwrap native token transaction, approveTo should be void...
+        const expectedApproveTo =
+          input.token.isNative || isWrapOrUnwrap ? ethers.constants.AddressZero : exchangeProxyAddress;
+        // ...and to is the wrapped native token address and not the exchange proxy address
+        const to = isWrapOrUnwrap ? common.getWrappedNativeToken(chainId).address.toLowerCase() : exchangeProxyAddress;
+
+        expect(routerLogic.to).to.eq(to);
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         if (input.token.isNative) {
           expect(routerLogic.inputs[0].token).to.eq(common.ELASTIC_ADDRESS);
         }
         expect(routerLogic.inputs[0].balanceBps).to.eq(core.BPS_NOT_USED);
         expect(routerLogic.inputs[0].amountOrOffset).to.eq(input.amountWei);
-        expect(routerLogic.approveTo).to.eq(getExchangeProxyAddress(chainId));
+        expect(routerLogic.approveTo).to.eq(expectedApproveTo);
         expect(routerLogic.callback).to.eq(constants.AddressZero);
       });
     });

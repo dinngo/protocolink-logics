@@ -1,10 +1,9 @@
 import * as core from '@protocolink/core';
-import { getExchangeProxyAddress, getTokenListUrls, supportedChainIds } from './configs';
+import { getTokenListUrls, supportedChainIds } from './configs';
 import * as common from '@protocolink/common';
 import { axios } from 'src/utils/http';
 import { getTokenList as getTokenListBase } from 'src/utils';
 import invariant from 'tiny-invariant';
-import { isWrapOrUnwrap } from 'src/logics/zeroex-v4/utils';
 import { slippageToZeroEx } from 'src/logics/zeroex-v4/slippage';
 
 export type SwapTokenLogicParams = core.TokenToTokenExactInParams<{
@@ -12,7 +11,6 @@ export type SwapTokenLogicParams = core.TokenToTokenExactInParams<{
   slippage?: number;
   excludedSources?: string[];
   includedSources?: string[];
-  skipValidation?: boolean;
   takerAddress?: string;
 }>;
 
@@ -21,15 +19,13 @@ export type SwapTokenLogicFields = core.TokenToTokenExactInFields<{
   slippage?: number;
   excludedSources?: string[];
   includedSources?: string[];
-  skipValidation?: boolean;
-  takerAddress?: string;
 }>;
 
 export type ZeroExQuote = {
   buyAmount: string;
   data: string;
   to: string;
-  expectedSlippage?: string;
+  allowanceTarget: string;
 };
 
 export type SwapTokenLogicOptions = Pick<core.GlobalOptions, 'account'>;
@@ -73,9 +69,17 @@ export class SwapTokenLogic
 
   async quote(params: SwapTokenLogicParams) {
     try {
-      const { input, tokenOut, slippage, excludedSources, includedSources, apiKey, takerAddress, skipValidation } =
-        params;
+      const {
+        input,
+        tokenOut,
+        slippage,
+        excludedSources,
+        includedSources,
+        apiKey,
+        takerAddress: takerAddressInput,
+      } = params;
       const slippagePercentage = slippage != null ? slippageToZeroEx(slippage) : undefined;
+      const takerAddress = takerAddressInput && (await this.calcAgent(takerAddressInput));
       const url = this.getAPIBaseUrl(this.chainId) + `swap/v1/price`;
       const {
         data: { buyAmount },
@@ -88,7 +92,6 @@ export class SwapTokenLogic
           excludedSources: excludedSources?.join(','),
           includedSources: includedSources?.join(','),
           takerAddress,
-          skipValidation,
         },
         headers: this.getAPIHeaders(apiKey),
       });
@@ -100,20 +103,19 @@ export class SwapTokenLogic
         excludedSources,
         includedSources,
         apiKey,
-        takerAddress,
-        skipValidation,
       };
     } catch (e) {
       invariant(false, 'no route found or price impact too high');
     }
   }
 
-  async build(fields: SwapTokenLogicFields, _: SwapTokenLogicOptions) {
-    const { input, output, slippage, excludedSources, includedSources, apiKey, takerAddress, skipValidation } = fields;
+  async build(fields: SwapTokenLogicFields, { account }: SwapTokenLogicOptions) {
+    const { input, output, slippage, excludedSources, includedSources, apiKey } = fields;
     const slippagePercentage = slippage != null ? slippageToZeroEx(slippage) : undefined;
+    const takerAddress = await this.calcAgent(account);
     const url = this.getAPIBaseUrl(this.chainId) + `swap/v1/quote`;
     const {
-      data: { buyAmount, data, to },
+      data: { buyAmount, data, to, allowanceTarget: approveTo },
     } = await axios.get<ZeroExQuote>(url, {
       params: {
         slippagePercentage,
@@ -123,18 +125,13 @@ export class SwapTokenLogic
         excludedSources: excludedSources?.join(','),
         includedSources: includedSources?.join(','),
         takerAddress,
-        skipValidation,
+        skipValidation: true,
       },
       headers: this.getAPIHeaders(apiKey),
     });
     output.setWei(buyAmount);
 
     const inputs = [core.newLogicInput({ input })];
-    // if it's a wrap or an unwrap transaction we don't need to approve the exchange proxy
-    // since it will be a plain deposit/withdraw on the WETH contract that's returned from the API
-    const approveTo = isWrapOrUnwrap(input, output, this.nativeToken, this.wrappedNativeToken)
-      ? undefined
-      : getExchangeProxyAddress(this.chainId);
 
     return core.newLogic({ to, data, inputs, approveTo });
   }
