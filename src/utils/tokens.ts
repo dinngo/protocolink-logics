@@ -95,10 +95,19 @@ export async function getTokenList(
   const tokenList: common.Token[] = [...defaultTokenList];
   for (const { tokens } of tokenLists) {
     for (const { chainId, address, decimals, symbol, name } of tokens) {
-      if (tmp[address] || chainId !== chainIdInput || !name || !symbol || !decimals || !ethers.utils.isAddress(address))
+      const lowerCaseAddress = address.toLowerCase();
+
+      if (
+        tmp[lowerCaseAddress] ||
+        chainId !== chainIdInput ||
+        !name ||
+        !symbol ||
+        !decimals ||
+        !ethers.utils.isAddress(address)
+      )
         continue;
       tokenList.push(new common.Token(chainId, address, decimals, symbol, name));
-      tmp[address] = true;
+      tmp[lowerCaseAddress] = true;
     }
   }
 
