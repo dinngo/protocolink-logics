@@ -1,7 +1,6 @@
+import { TokenList } from '@uniswap/token-lists';
 import { axios } from './http';
 import * as common from '@protocolink/common';
-import { goerliTokens } from 'src/logics/morphoblue';
-import { TokenList } from '@uniswap/token-lists';
 import { ethers } from 'ethers';
 
 export async function get1InchTokens(chainId: number) {
@@ -28,12 +27,6 @@ export async function getMetisTokens() {
   for (const { address, decimals, symbol, name } of data.tokens) {
     tokens.push(new common.Token(chainId, address, decimals, symbol, name));
   }
-
-  return tokens;
-}
-
-export function getGoerliTokens() {
-  const tokens = [goerliTokens.ETH, goerliTokens.WETH, goerliTokens.USDC, goerliTokens.DAI];
 
   return tokens;
 }
