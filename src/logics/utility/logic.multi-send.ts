@@ -1,7 +1,7 @@
 import { SendTokenLogic } from './logic.send-token';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
-import { get1InchTokens, getGoerliTokens, getMetisTokens } from 'src/utils';
+import { get1InchTokens, getMetisTokens } from 'src/utils';
 
 export type MultiSendLogicTokenList = common.Token[];
 
@@ -16,11 +16,7 @@ export class MultiSendLogic
   static readonly supportedChainIds = common.networks.map(({ chainId }) => chainId);
 
   async getTokenList(): Promise<MultiSendLogicTokenList> {
-    return this.chainId === common.ChainId.metis
-      ? await getMetisTokens()
-      : this.chainId === common.ChainId.goerli
-      ? getGoerliTokens()
-      : await get1InchTokens(this.chainId);
+    return this.chainId === common.ChainId.metis ? await getMetisTokens() : await get1InchTokens(this.chainId);
   }
 
   async build(fields: MultiSendLogicFields) {
