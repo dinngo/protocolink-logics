@@ -1,5 +1,13 @@
 # @protocolink/logics
 
+## 1.0.12
+
+### Patch Changes
+
+- 664e5e9: add 0x
+- 8b9f216: remove Goerli
+- 5a75b5f: fix paraswap token list
+
 ## 1.0.11
 
 ### Patch Changes
