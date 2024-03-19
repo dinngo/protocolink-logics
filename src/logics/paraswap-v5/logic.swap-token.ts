@@ -2,9 +2,9 @@ import { BuildSwapTxInput, SwapSide, constructSimpleSDK } from '@paraswap/sdk';
 import { axios } from 'src/utils';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
+import { getTokenList as getTokenListBase } from 'src/utils/tokens';
 import { getTokenListUrls, getTokenTransferProxyAddress, supportedChainIds } from './configs';
 import invariant from 'tiny-invariant';
-import { getTokenList as getTokenListBase } from 'src/utils/tokens';
 
 export type SwapTokenLogicTokenList = common.Token[];
 
@@ -28,7 +28,7 @@ export class SwapTokenLogic
     return constructSimpleSDK({ chainId: this.chainId, axios });
   }
 
-  async getTokenList() {
+  async getTokenList(): Promise<SwapTokenLogicTokenList> {
     return getTokenListBase(getTokenListUrls(this.chainId), this.chainId, [this.nativeToken]);
   }
 
