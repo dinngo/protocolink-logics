@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.0.13
+
+### Patch Changes
+
+- 4f86f5f: fix swap token list in zeroex and paraswap
+
 ## 1.0.12
 
 ### Patch Changes
