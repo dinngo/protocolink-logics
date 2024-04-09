@@ -71,17 +71,8 @@ export class SwapTokenLogic
 
   async quote(params: SwapTokenLogicParams) {
     try {
-      const {
-        input,
-        tokenOut,
-        slippage,
-        excludedSources,
-        includedSources,
-        apiKey,
-        takerAddress: takerAddressInput,
-      } = params;
+      const { input, tokenOut, slippage, excludedSources, includedSources, apiKey, takerAddress } = params;
       const slippagePercentage = slippage != null ? slippageToZeroEx(slippage) : undefined;
-      const takerAddress = takerAddressInput && (await this.calcAgent(takerAddressInput));
       const url = this.getAPIBaseUrl(this.chainId) + `swap/v1/price`;
       const {
         data: { buyAmount },
@@ -114,7 +105,7 @@ export class SwapTokenLogic
   async build(fields: SwapTokenLogicFields, { account }: SwapTokenLogicOptions) {
     const { input, output, slippage, excludedSources, includedSources, apiKey } = fields;
     const slippagePercentage = slippage != null ? slippageToZeroEx(slippage) : undefined;
-    const takerAddress = await this.calcAgent(account);
+    const takerAddress = account;
     const url = this.getAPIBaseUrl(this.chainId) + `swap/v1/quote`;
     const {
       data: { buyAmount, data, to, allowanceTarget: approveTo },
