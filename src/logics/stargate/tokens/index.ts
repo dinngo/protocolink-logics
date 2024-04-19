@@ -1,5 +1,6 @@
 import arbitrumTokensJSON from './data/arbitrum.json';
 import avalancheTokensJSON from './data/avalanche.json';
+import baseTokensJSON from './data/base.json';
 import * as common from '@protocolink/common';
 import mainnetTokensJSON from './data/mainnet.json';
 import metisTokensJSON from './data/metis.json';
@@ -21,6 +22,10 @@ export const polygonTokens = common.toTokenMap<PolygonTokenSymbols>(polygonToken
 type MetisTokenSymbols = keyof typeof metisTokensJSON;
 
 export const metisTokens = common.toTokenMap<MetisTokenSymbols>(metisTokensJSON);
+
+type BaseTokenSymbols = keyof typeof baseTokensJSON;
+
+export const baseTokens = common.toTokenMap<BaseTokenSymbols>(baseTokensJSON);
 
 type ArbitrumTokenSymbols = keyof typeof arbitrumTokensJSON;
 

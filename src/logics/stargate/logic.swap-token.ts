@@ -136,7 +136,7 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
           balanceBps,
           amountOffset,
         }),
-        core.newLogicInput({ input: new common.TokenAmount(getNativeToken(this.chainId)).setWei(fee.toString()) }),
+        core.newLogicInput({ input: new common.TokenAmount(getNativeToken(this.chainId)).setWei(fee) }),
       ];
     } else if (input.token.isNative && getContractAddress(this.chainId, 'RouterETH')) {
       to = getContractAddress(this.chainId, 'RouterETH');
@@ -156,7 +156,7 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
           balanceBps,
           amountOffset,
         }),
-        core.newLogicInput({ input: new common.TokenAmount(getNativeToken(this.chainId)).setWei(fee.toString()) }),
+        core.newLogicInput({ input: new common.TokenAmount(getNativeToken(this.chainId)).setWei(fee) }),
       ];
     } else {
       to = getContractAddress(this.chainId, 'Router');
@@ -186,7 +186,7 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
           balanceBps,
           amountOffset,
         }),
-        core.newLogicInput({ input: new common.TokenAmount(getNativeToken(this.chainId)).setWei(fee.toString()) }),
+        core.newLogicInput({ input: new common.TokenAmount(getNativeToken(this.chainId)).setWei(fee) }),
       ];
     }
 

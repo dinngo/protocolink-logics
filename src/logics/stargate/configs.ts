@@ -1,4 +1,12 @@
-import { arbitrumTokens, avalancheTokens, mainnetTokens, metisTokens, optimismTokens, polygonTokens } from './tokens';
+import {
+  arbitrumTokens,
+  avalancheTokens,
+  baseTokens,
+  mainnetTokens,
+  metisTokens,
+  optimismTokens,
+  polygonTokens,
+} from './tokens';
 import * as common from '@protocolink/common';
 
 type ContractNames = 'Router' | 'RouterETH' | 'FeeLibrary' | 'LayerZeroEndpoint';
@@ -54,7 +62,7 @@ export const configs: Config[] = [
     contract: {
       Router: '0x8731d54E9D02c286767d56ac03e8037C07e01e98',
       RouterETH: '0x150f94B44927F078737562f0fcF3C95c01Cc2376',
-      FeeLibrary: '0x6FaF1AB85FFbe7B3A557F4864046ff861734afd0',
+      FeeLibrary: '0x8C3085D9a554884124C998CDB7f6d7219E9C1e6F',
       LayerZeroEndpoint: '0x66A71Dcef29A0fFBDBE3c6a460a3B5BC225Cd675',
     },
     STG: mainnetTokens.STG,
@@ -66,6 +74,7 @@ export const configs: Config[] = [
         paths: [
           { chainId: common.ChainId.optimism, poolIds: [PoolId.USDC] },
           { chainId: common.ChainId.polygon, poolIds: [PoolId.USDC, PoolId.USDT] },
+          { chainId: common.ChainId.base, poolIds: [PoolId.USDC] },
           { chainId: common.ChainId.arbitrum, poolIds: [PoolId.USDC, PoolId.USDT] },
           { chainId: common.ChainId.avalanche, poolIds: [PoolId.USDC, PoolId.USDT] },
         ],
@@ -77,6 +86,7 @@ export const configs: Config[] = [
         paths: [
           { chainId: common.ChainId.optimism, poolIds: [PoolId.USDC] },
           { chainId: common.ChainId.polygon, poolIds: [PoolId.USDC, PoolId.USDT] },
+          { chainId: common.ChainId.base, poolIds: [PoolId.USDC] },
           { chainId: common.ChainId.arbitrum, poolIds: [PoolId.USDC, PoolId.USDT] },
           { chainId: common.ChainId.avalanche, poolIds: [PoolId.USDC, PoolId.USDT] },
         ],
@@ -106,6 +116,7 @@ export const configs: Config[] = [
         decimals: 18,
         paths: [
           { chainId: common.ChainId.optimism, poolIds: [PoolId.ETH] },
+          { chainId: common.ChainId.base, poolIds: [PoolId.ETH] },
           { chainId: common.ChainId.arbitrum, poolIds: [PoolId.ETH] },
         ],
       },
@@ -155,7 +166,7 @@ export const configs: Config[] = [
     contract: {
       Router: '0xB0D502E938ed5f4df2E681fE6E419ff29631d62b',
       RouterETH: '0xB49c4e680174E331CB0A7fF3Ab58afC9738d5F8b',
-      FeeLibrary: '0xaE8d00e43adB49d14Fa07C93b27cdB3Ee94C4675',
+      FeeLibrary: '0x505eCDF2f14Cd4f1f413d04624b009A449D38D7E',
       LayerZeroEndpoint: '0x3c2269811836af69497E5F486A85D7316753cf62',
     },
     STG: optimismTokens.STG,
@@ -167,6 +178,7 @@ export const configs: Config[] = [
         paths: [
           { chainId: common.ChainId.mainnet, poolIds: [PoolId.USDC, PoolId.USDT] },
           { chainId: common.ChainId.polygon, poolIds: [PoolId.USDC, PoolId.USDT] },
+          { chainId: common.ChainId.base, poolIds: [PoolId.USDC] },
           { chainId: common.ChainId.arbitrum, poolIds: [PoolId.USDC, PoolId.USDT] },
           { chainId: common.ChainId.avalanche, poolIds: [PoolId.USDC, PoolId.USDT] },
         ],
@@ -196,6 +208,7 @@ export const configs: Config[] = [
         decimals: 18,
         paths: [
           { chainId: common.ChainId.mainnet, poolIds: [PoolId.ETH] },
+          { chainId: common.ChainId.base, poolIds: [PoolId.ETH] },
           { chainId: common.ChainId.arbitrum, poolIds: [PoolId.ETH] },
         ],
       },
@@ -233,7 +246,7 @@ export const configs: Config[] = [
     contract: {
       Router: '0x45A01E4e04F14f7A4a6702c74187c5F6222033cd',
       RouterETH: '',
-      FeeLibrary: '0xA0732186f556F034CF9930B7796Bc3a03E614750',
+      FeeLibrary: '0xb279b324Ea5648bE6402ABc727173A225383494C',
       LayerZeroEndpoint: '0x3c2269811836af69497E5F486A85D7316753cf62',
     },
     STG: polygonTokens.STG,
@@ -245,6 +258,7 @@ export const configs: Config[] = [
         paths: [
           { chainId: common.ChainId.mainnet, poolIds: [PoolId.USDC, PoolId.USDT] },
           { chainId: common.ChainId.optimism, poolIds: [PoolId.USDC] },
+          { chainId: common.ChainId.base, poolIds: [PoolId.USDC] },
           { chainId: common.ChainId.arbitrum, poolIds: [PoolId.USDC, PoolId.USDT] },
           { chainId: common.ChainId.avalanche, poolIds: [PoolId.USDC, PoolId.USDT] },
         ],
@@ -256,6 +270,7 @@ export const configs: Config[] = [
         paths: [
           { chainId: common.ChainId.mainnet, poolIds: [PoolId.USDC, PoolId.USDT] },
           { chainId: common.ChainId.optimism, poolIds: [PoolId.USDC] },
+          { chainId: common.ChainId.base, poolIds: [PoolId.USDC] },
           { chainId: common.ChainId.arbitrum, poolIds: [PoolId.USDC, PoolId.USDT] },
           { chainId: common.ChainId.avalanche, poolIds: [PoolId.USDC, PoolId.USDT] },
         ],
@@ -288,7 +303,7 @@ export const configs: Config[] = [
     contract: {
       Router: '0x2F6F07CDcf3588944Bf4C42aC74ff24bF56e7590',
       RouterETH: '',
-      FeeLibrary: '0x9d1B1669c73b033DFe47ae5a0164Ab96df25B944',
+      FeeLibrary: '0x55bDb4164D28FBaF0898e0eF14a589ac09Ac9970',
       LayerZeroEndpoint: '0x9740FF91F1985D8d2B71494aE1A2f723bb3Ed9E4',
     },
     pools: [
@@ -310,12 +325,47 @@ export const configs: Config[] = [
     ],
   },
   {
+    id: ChainId.BASE,
+    chainId: common.ChainId.base,
+    contract: {
+      Router: '0x45f1A95A4D3f3836523F5c83673c797f4d4d263B',
+      RouterETH: '0x50B6EbC2103BFEc165949CC946d739d5650d7ae4',
+      FeeLibrary: '0x9d1b1669c73b033dfe47ae5a0164ab96df25b944',
+      LayerZeroEndpoint: '0xb6319cC6c8c27A8F5dAF0dD3DF91EA35C4720dd7',
+    },
+    STG: baseTokens.STG,
+    pools: [
+      {
+        id: PoolId.USDC,
+        token: baseTokens.USDbC,
+        decimals: 6,
+        paths: [
+          { chainId: common.ChainId.mainnet, poolIds: [PoolId.USDC, PoolId.USDT] },
+          { chainId: common.ChainId.optimism, poolIds: [PoolId.USDC] },
+          { chainId: common.ChainId.polygon, poolIds: [PoolId.USDC] },
+          { chainId: common.ChainId.arbitrum, poolIds: [PoolId.USDC] },
+          { chainId: common.ChainId.avalanche, poolIds: [PoolId.USDC, PoolId.USDT] },
+        ],
+      },
+      {
+        id: PoolId.ETH,
+        token: baseTokens.ETH,
+        decimals: 18,
+        paths: [
+          { chainId: common.ChainId.mainnet, poolIds: [PoolId.ETH] },
+          { chainId: common.ChainId.optimism, poolIds: [PoolId.ETH] },
+          { chainId: common.ChainId.arbitrum, poolIds: [PoolId.ETH] },
+        ],
+      },
+    ],
+  },
+  {
     id: ChainId.ARBITRUM,
     chainId: common.ChainId.arbitrum,
     contract: {
       Router: '0x53Bf833A5d6c4ddA888F69c22C88C9f356a41614',
       RouterETH: '0xbf22f0f184bCcbeA268dF387a49fF5238dD23E40',
-      FeeLibrary: '0xB1641D94684225B72F97E52b2b02Ad07F7bA9089',
+      FeeLibrary: '0x1cF31666c06ac3401ed0C1c6346C4A9425dd7De4',
       LayerZeroEndpoint: '0x3c2269811836af69497E5F486A85D7316753cf62',
     },
     STG: arbitrumTokens.STG,
@@ -328,6 +378,7 @@ export const configs: Config[] = [
           { chainId: common.ChainId.mainnet, poolIds: [PoolId.USDC, PoolId.USDT] },
           { chainId: common.ChainId.optimism, poolIds: [PoolId.USDC] },
           { chainId: common.ChainId.polygon, poolIds: [PoolId.USDC, PoolId.USDT] },
+          { chainId: common.ChainId.base, poolIds: [PoolId.USDC] },
           { chainId: common.ChainId.avalanche, poolIds: [PoolId.USDC, PoolId.USDT] },
         ],
       },
@@ -338,6 +389,7 @@ export const configs: Config[] = [
         paths: [
           { chainId: common.ChainId.mainnet, poolIds: [PoolId.USDC, PoolId.USDT] },
           { chainId: common.ChainId.optimism, poolIds: [PoolId.USDC] },
+          { chainId: common.ChainId.base, poolIds: [PoolId.USDC] },
           { chainId: common.ChainId.polygon, poolIds: [PoolId.USDC, PoolId.USDT] },
           { chainId: common.ChainId.avalanche, poolIds: [PoolId.USDC, PoolId.USDT] },
         ],
@@ -359,6 +411,7 @@ export const configs: Config[] = [
         paths: [
           { chainId: common.ChainId.mainnet, poolIds: [PoolId.ETH] },
           { chainId: common.ChainId.optimism, poolIds: [PoolId.ETH] },
+          { chainId: common.ChainId.base, poolIds: [PoolId.ETH] },
         ],
       },
       {
@@ -389,7 +442,7 @@ export const configs: Config[] = [
     contract: {
       Router: '0x45A01E4e04F14f7A4a6702c74187c5F6222033cd',
       RouterETH: '',
-      FeeLibrary: '0x7f0369206D8a700514574dAAa0634B8A1F7149d7',
+      FeeLibrary: '0x5E8eC15ACB5Aa94D5f0589E54441b31c5e0B992d',
       LayerZeroEndpoint: '0x3c2269811836af69497E5F486A85D7316753cf62',
     },
     STG: avalancheTokens.STG,
@@ -402,6 +455,7 @@ export const configs: Config[] = [
           { chainId: common.ChainId.mainnet, poolIds: [PoolId.USDC, PoolId.USDT] },
           { chainId: common.ChainId.optimism, poolIds: [PoolId.USDC] },
           { chainId: common.ChainId.polygon, poolIds: [PoolId.USDC, PoolId.USDT] },
+          { chainId: common.ChainId.base, poolIds: [PoolId.USDC] },
           { chainId: common.ChainId.arbitrum, poolIds: [PoolId.USDC, PoolId.USDT] },
         ],
       },
@@ -413,6 +467,7 @@ export const configs: Config[] = [
           { chainId: common.ChainId.mainnet, poolIds: [PoolId.USDC, PoolId.USDT] },
           { chainId: common.ChainId.optimism, poolIds: [PoolId.USDC] },
           { chainId: common.ChainId.polygon, poolIds: [PoolId.USDC, PoolId.USDT] },
+          { chainId: common.ChainId.base, poolIds: [PoolId.USDC] },
           { chainId: common.ChainId.arbitrum, poolIds: [PoolId.USDC, PoolId.USDT] },
         ],
       },
