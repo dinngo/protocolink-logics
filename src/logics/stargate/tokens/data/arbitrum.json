@@ -40,12 +40,5 @@
     "decimals": 18,
     "symbol": "LUSD",
     "name": "LUSD Stablecoin"
-  },
-  "MAI": {
-    "chainId": 42161,
-    "address": "0x3F56e0c36d275367b8C502090EDF38289b3dEa0d",
-    "decimals": 18,
-    "symbol": "MAI",
-    "name": "Mai Stablecoin"
   }
 }

@@ -26,12 +26,5 @@
     "decimals": 18,
     "symbol": "FRAX",
     "name": "Frax"
-  },
-  "MAI": {
-    "chainId": 43114,
-    "address": "0x5c49b268c9841AFF1Cc3B0a418ff5c3442eE3F3b",
-    "decimals": 18,
-    "symbol": "MAI",
-    "name": "Mai Stablecoin"
   }
 }

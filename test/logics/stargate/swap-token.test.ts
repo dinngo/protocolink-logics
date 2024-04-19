@@ -17,6 +17,7 @@ describe('mainnet: Test Stargate SwapToken Logic', function () {
     chainId = await getChainId();
     [, user] = await hre.ethers.getSigners();
     await claimToken(chainId, user.address, mainnetTokens.USDC, '5000');
+    await claimToken(chainId, user.address, mainnetTokens.DAI, '500');
     await claimToken(chainId, user.address, mainnetTokens.STG, '10', '0x65bb797c2B9830d891D87288F029ed8dACc19705');
   });
 
@@ -35,6 +36,14 @@ describe('mainnet: Test Stargate SwapToken Logic', function () {
       params: {
         input: new common.TokenAmount(mainnetTokens.USDC, '100'),
         tokenOut: optimismTokens['USDC.e'],
+        dstChainId: common.ChainId.optimism,
+        slippage: 500,
+      },
+    },
+    {
+      params: {
+        input: new common.TokenAmount(mainnetTokens.DAI, '100'),
+        tokenOut: optimismTokens.DAI,
         dstChainId: common.ChainId.optimism,
         slippage: 500,
       },

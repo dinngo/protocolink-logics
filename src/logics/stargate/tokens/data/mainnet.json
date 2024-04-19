@@ -48,13 +48,6 @@
     "symbol": "DAI",
     "name": "Dai Stablecoin"
   },
-  "MAI": {
-    "chainId": 1,
-    "address": "0x8D6CeBD76f18E1558D4DB88138e2DeFB3909fAD6",
-    "decimals": 18,
-    "symbol": "MAI",
-    "name": "Mai Stablecoin"
-  },
   "FRAX": {
     "chainId": 1,
     "address": "0x853d955aCEf822Db058eb8505911ED77F175b99e",

@@ -11,6 +11,7 @@ import * as core from '@protocolink/core';
 import {
   getContractAddress,
   getMarkets,
+  getPoolDecimals,
   getPoolIds,
   getStargateChainId,
   isSTGToken,
@@ -81,7 +82,8 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
       );
     } else {
       const [srcPoolId, dstPoolId] = getPoolIds(this.chainId, input.token, dstChainId, tokenOut);
-      const amountIn = input.amountWei;
+      const poolDecimals = getPoolDecimals(this.chainId, srcPoolId);
+      const amountIn = common.toSmallUnit(input.amount, poolDecimals);
 
       const feeLibrary = FeeLibrary__factory.connect(getContractAddress(this.chainId, 'FeeLibrary'), this.provider);
       const { eqFee, eqReward, lpFee, protocolFee } = await feeLibrary.getFees(
@@ -91,8 +93,11 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
         receiver,
         amountIn
       );
-      const totalFee = eqFee.add(lpFee).add(protocolFee);
-      output = new common.TokenAmount(tokenOut).setWei(amountIn.sub(totalFee).add(eqReward));
+      const totalFee = eqFee.add(lpFee).add(protocolFee).sub(eqReward);
+      let amountOut = amountIn.sub(totalFee);
+      if (tokenOut.decimals !== poolDecimals) {
+        amountOut = common.toSmallUnit(common.toBigUnit(amountOut, poolDecimals), tokenOut.decimals);
+      }
       feeBps = totalFee.mul(10000).div(amountIn).toNumber();
 
       const router = Router__factory.connect(getContractAddress(this.chainId, 'Router'), this.provider);
@@ -101,6 +106,8 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
         dstNativeAmount: 0, // amount of dust dropped in destination wallet
         dstNativeAddr: '0x', // destination wallet for dust
       });
+
+      output = new common.TokenAmount(tokenOut).setWei(amountOut);
     }
 
     return { input, output, fee, feeBps, dstChainId, receiver, slippage };

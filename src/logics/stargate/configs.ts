@@ -30,10 +30,7 @@ export enum PoolId {
   ETH = 13,
   sUSD = 14,
   LUSD = 15,
-  MAI = 16,
   METIS = 17,
-  metisUSDT = 19,
-  mETH = 22,
 }
 
 export interface Pool {
@@ -85,10 +82,10 @@ export const configs: Config[] = [
         decimals: 6,
         paths: [
           { chainId: common.ChainId.optimism, poolIds: [PoolId.USDC] },
-          { chainId: common.ChainId.polygon, poolIds: [PoolId.USDC, PoolId.USDT] },
+          { chainId: common.ChainId.polygon, poolIds: [PoolId.USDT, PoolId.USDC] },
           { chainId: common.ChainId.base, poolIds: [PoolId.USDC] },
-          { chainId: common.ChainId.arbitrum, poolIds: [PoolId.USDC, PoolId.USDT] },
-          { chainId: common.ChainId.avalanche, poolIds: [PoolId.USDC, PoolId.USDT] },
+          { chainId: common.ChainId.arbitrum, poolIds: [PoolId.USDT, PoolId.USDC] },
+          { chainId: common.ChainId.avalanche, poolIds: [PoolId.USDT, PoolId.USDC] },
         ],
       },
       {
@@ -136,27 +133,10 @@ export const configs: Config[] = [
         ],
       },
       {
-        id: PoolId.MAI,
-        token: mainnetTokens.MAI,
-        decimals: 6,
-        paths: [
-          { chainId: common.ChainId.optimism, poolIds: [PoolId.MAI] },
-          { chainId: common.ChainId.polygon, poolIds: [PoolId.MAI] },
-          { chainId: common.ChainId.arbitrum, poolIds: [PoolId.MAI] },
-          { chainId: common.ChainId.avalanche, poolIds: [PoolId.MAI] },
-        ],
-      },
-      {
         id: PoolId.METIS,
         token: mainnetTokens.Metis,
         decimals: 18,
         paths: [{ chainId: common.ChainId.metis, poolIds: [PoolId.METIS] }],
-      },
-      {
-        id: PoolId.metisUSDT,
-        token: mainnetTokens.USDT,
-        decimals: 6,
-        paths: [{ chainId: common.ChainId.metis, poolIds: [PoolId.metisUSDT] }],
       },
     ],
   },
@@ -227,17 +207,6 @@ export const configs: Config[] = [
           { chainId: common.ChainId.arbitrum, poolIds: [PoolId.LUSD] },
         ],
       },
-      {
-        id: PoolId.MAI,
-        token: optimismTokens.MAI,
-        decimals: 6,
-        paths: [
-          { chainId: common.ChainId.mainnet, poolIds: [PoolId.MAI] },
-          { chainId: common.ChainId.polygon, poolIds: [PoolId.MAI] },
-          { chainId: common.ChainId.arbitrum, poolIds: [PoolId.MAI] },
-          { chainId: common.ChainId.avalanche, poolIds: [PoolId.MAI] },
-        ],
-      },
     ],
   },
   {
@@ -268,11 +237,11 @@ export const configs: Config[] = [
         token: polygonTokens.USDT,
         decimals: 6,
         paths: [
-          { chainId: common.ChainId.mainnet, poolIds: [PoolId.USDC, PoolId.USDT] },
+          { chainId: common.ChainId.mainnet, poolIds: [PoolId.USDT, PoolId.USDC] },
           { chainId: common.ChainId.optimism, poolIds: [PoolId.USDC] },
           { chainId: common.ChainId.base, poolIds: [PoolId.USDC] },
-          { chainId: common.ChainId.arbitrum, poolIds: [PoolId.USDC, PoolId.USDT] },
-          { chainId: common.ChainId.avalanche, poolIds: [PoolId.USDC, PoolId.USDT] },
+          { chainId: common.ChainId.arbitrum, poolIds: [PoolId.USDT, PoolId.USDC] },
+          { chainId: common.ChainId.avalanche, poolIds: [PoolId.USDT, PoolId.USDC] },
         ],
       },
       {
@@ -282,17 +251,6 @@ export const configs: Config[] = [
         paths: [
           { chainId: common.ChainId.mainnet, poolIds: [PoolId.DAI] },
           { chainId: common.ChainId.optimism, poolIds: [PoolId.DAI] },
-        ],
-      },
-      {
-        id: PoolId.MAI,
-        token: polygonTokens.miMATIC,
-        decimals: 6,
-        paths: [
-          { chainId: common.ChainId.mainnet, poolIds: [PoolId.MAI] },
-          { chainId: common.ChainId.optimism, poolIds: [PoolId.MAI] },
-          { chainId: common.ChainId.arbitrum, poolIds: [PoolId.MAI] },
-          { chainId: common.ChainId.avalanche, poolIds: [PoolId.MAI] },
         ],
       },
     ],
@@ -312,15 +270,6 @@ export const configs: Config[] = [
         token: metisTokens['METIS(ERC20)'],
         decimals: 18,
         paths: [{ chainId: common.ChainId.mainnet, poolIds: [PoolId.METIS] }],
-      },
-      {
-        id: PoolId.metisUSDT,
-        token: metisTokens['m.USDT'],
-        decimals: 6,
-        paths: [
-          { chainId: common.ChainId.mainnet, poolIds: [PoolId.metisUSDT] },
-          { chainId: common.ChainId.avalanche, poolIds: [PoolId.metisUSDT] },
-        ],
       },
     ],
   },
@@ -387,11 +336,11 @@ export const configs: Config[] = [
         token: arbitrumTokens.USDT,
         decimals: 6,
         paths: [
-          { chainId: common.ChainId.mainnet, poolIds: [PoolId.USDC, PoolId.USDT] },
+          { chainId: common.ChainId.mainnet, poolIds: [PoolId.USDT, PoolId.USDC] },
           { chainId: common.ChainId.optimism, poolIds: [PoolId.USDC] },
           { chainId: common.ChainId.base, poolIds: [PoolId.USDC] },
-          { chainId: common.ChainId.polygon, poolIds: [PoolId.USDC, PoolId.USDT] },
-          { chainId: common.ChainId.avalanche, poolIds: [PoolId.USDC, PoolId.USDT] },
+          { chainId: common.ChainId.polygon, poolIds: [PoolId.USDT, PoolId.USDC] },
+          { chainId: common.ChainId.avalanche, poolIds: [PoolId.USDT, PoolId.USDC] },
         ],
       },
       {
@@ -421,17 +370,6 @@ export const configs: Config[] = [
         paths: [
           { chainId: common.ChainId.mainnet, poolIds: [PoolId.LUSD] },
           { chainId: common.ChainId.optimism, poolIds: [PoolId.LUSD] },
-        ],
-      },
-      {
-        id: PoolId.MAI,
-        token: arbitrumTokens.MAI,
-        decimals: 6,
-        paths: [
-          { chainId: common.ChainId.mainnet, poolIds: [PoolId.MAI] },
-          { chainId: common.ChainId.optimism, poolIds: [PoolId.MAI] },
-          { chainId: common.ChainId.polygon, poolIds: [PoolId.MAI] },
-          { chainId: common.ChainId.avalanche, poolIds: [PoolId.MAI] },
         ],
       },
     ],
@@ -464,11 +402,11 @@ export const configs: Config[] = [
         token: avalancheTokens.USDt,
         decimals: 6,
         paths: [
-          { chainId: common.ChainId.mainnet, poolIds: [PoolId.USDC, PoolId.USDT] },
+          { chainId: common.ChainId.mainnet, poolIds: [PoolId.USDT, PoolId.USDC] },
           { chainId: common.ChainId.optimism, poolIds: [PoolId.USDC] },
-          { chainId: common.ChainId.polygon, poolIds: [PoolId.USDC, PoolId.USDT] },
+          { chainId: common.ChainId.polygon, poolIds: [PoolId.USDT, PoolId.USDC] },
           { chainId: common.ChainId.base, poolIds: [PoolId.USDC] },
-          { chainId: common.ChainId.arbitrum, poolIds: [PoolId.USDC, PoolId.USDT] },
+          { chainId: common.ChainId.arbitrum, poolIds: [PoolId.USDT, PoolId.USDC] },
         ],
       },
       {
@@ -480,23 +418,6 @@ export const configs: Config[] = [
           { chainId: common.ChainId.optimism, poolIds: [PoolId.FRAX] },
           { chainId: common.ChainId.arbitrum, poolIds: [PoolId.FRAX] },
         ],
-      },
-      {
-        id: PoolId.MAI,
-        token: avalancheTokens.MAI,
-        decimals: 6,
-        paths: [
-          { chainId: common.ChainId.mainnet, poolIds: [PoolId.MAI] },
-          { chainId: common.ChainId.optimism, poolIds: [PoolId.MAI] },
-          { chainId: common.ChainId.polygon, poolIds: [PoolId.MAI] },
-          { chainId: common.ChainId.arbitrum, poolIds: [PoolId.MAI] },
-        ],
-      },
-      {
-        id: PoolId.metisUSDT,
-        token: avalancheTokens.USDt,
-        decimals: 6,
-        paths: [{ chainId: common.ChainId.metis, poolIds: [PoolId.metisUSDT] }],
       },
     ],
   },
