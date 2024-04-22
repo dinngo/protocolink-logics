@@ -1,5 +1,13 @@
 # @protocolink/logics
 
+## 1.0.14
+
+### Patch Changes
+
+- 45d2a5b: fix ZeroEx takerAddress
+- 3090b97: add Morphoblue markets
+- 5ecd3ad: add Stargate logics
+
 ## 1.0.13
 
 ### Patch Changes
