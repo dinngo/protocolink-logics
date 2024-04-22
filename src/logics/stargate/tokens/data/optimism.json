@@ -1,0 +1,51 @@
+{
+  "ETH": {
+    "chainId": 10,
+    "address": "0x0000000000000000000000000000000000000000",
+    "decimals": 18,
+    "name": "Ethereum",
+    "symbol": "ETH"
+  },
+  "STG": {
+    "chainId": 10,
+    "address": "0x296F55F8Fb28E498B858d0BcDA06D955B2Cb3f97",
+    "decimals": 18,
+    "symbol": "STG",
+    "name": "StargateToken"
+  },
+  "USDC.e": {
+    "chainId": 10,
+    "address": "0x7F5c764cBc14f9669B88837ca1490cCa17c31607",
+    "decimals": 6,
+    "symbol": "USDC.e",
+    "name": "USD Coin (Bridged from Ethereum)"
+  },
+  "sUSD": {
+    "chainId": 10,
+    "address": "0x8c6f28f2F1A3C87F0f938b96d27520d9751ec8d9",
+    "decimals": 18,
+    "symbol": "sUSD",
+    "name": "Synth sUSD"
+  },
+  "LUSD": {
+    "chainId": 10,
+    "address": "0xc40F949F8a4e094D1b49a23ea9241D289B7b2819",
+    "decimals": 18,
+    "symbol": "LUSD",
+    "name": "LUSD Stablecoin"
+  },
+  "DAI": {
+    "chainId": 10,
+    "address": "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
+    "decimals": 18,
+    "symbol": "DAI",
+    "name": "Dai Stablecoin"
+  },
+  "FRAX": {
+    "chainId": 10,
+    "address": "0x2E3D870790dC77A83DD1d18184Acc7439A53f475",
+    "decimals": 18,
+    "symbol": "FRAX",
+    "name": "Frax"
+  }
+}
