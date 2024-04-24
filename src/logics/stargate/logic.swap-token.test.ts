@@ -1,8 +1,8 @@
-import { BigNumber, constants, utils } from 'ethers';
 import { LogicTestCase } from 'test/types';
 import { RouterETH__factory, Router__factory, StargateToken__factory } from './contracts';
 import { SwapTokenLogic, SwapTokenLogicFields, SwapTokenLogicOptions } from './logic.swap-token';
 import * as common from '@protocolink/common';
+import { constants, utils } from 'ethers';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
 import { getContractAddress, getSTGToken, isSTGToken } from './configs';
@@ -42,7 +42,7 @@ describe('Stargate SwapTokenLogic', function () {
           output: new common.TokenAmount(optimismTokens.ETH, '1'),
           dstChainId,
           receiver: account,
-          fee: BigNumber.from('0'),
+          fee: '0.1',
           slippage: 500,
         },
         options: { account },
@@ -53,7 +53,7 @@ describe('Stargate SwapTokenLogic', function () {
           output: new common.TokenAmount(optimismTokens['USDC.e'], '1'),
           dstChainId,
           receiver: account,
-          fee: BigNumber.from('0'),
+          fee: '0',
           slippage: 500,
         },
         options: { account },
@@ -64,7 +64,7 @@ describe('Stargate SwapTokenLogic', function () {
           output: new common.TokenAmount(optimismTokens.STG, '1'),
           dstChainId,
           receiver: account,
-          fee: BigNumber.from('0'),
+          fee: '0',
           slippage: 500,
         },
         options: { account },
@@ -75,7 +75,7 @@ describe('Stargate SwapTokenLogic', function () {
           output: new common.TokenAmount(optimismTokens.STG, '1'),
           dstChainId,
           receiver: account,
-          fee: BigNumber.from('0'),
+          fee: '0',
           slippage: 500,
           balanceBps: 5000,
         },
@@ -87,7 +87,7 @@ describe('Stargate SwapTokenLogic', function () {
       it(`${fields.input.token.symbol} to ${fields.output.token.symbol}`, async function () {
         const routerLogic = await logic.build(fields, options);
         const sig = routerLogic.data.substring(0, 10);
-        const { input, balanceBps } = fields;
+        const { input, balanceBps, fee } = fields;
 
         let paramOffsetIndex;
 
@@ -108,6 +108,8 @@ describe('Stargate SwapTokenLogic', function () {
           expect(routerLogic.inputs[0].token).to.eq(input.token.wrapped.address);
         }
 
+        expect(routerLogic.inputs[1].token).to.eq(mainnetTokens.ETH.elasticAddress);
+        expect(routerLogic.inputs[1].amountOrOffset).to.eq(common.toSmallUnit(fee, mainnetTokens.ETH.decimals));
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;
 
         if (balanceBps) {
