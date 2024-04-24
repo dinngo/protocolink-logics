@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.0.16
+
+### Patch Changes
+
+- c00fd1e: fix stargate fee type
+
 ## 1.0.15
 
 ### Patch Changes
