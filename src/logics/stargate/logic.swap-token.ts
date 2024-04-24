@@ -30,7 +30,7 @@ export type SwapTokenLogicParams = core.TokenToTokenExactInParams<{
 export type SwapTokenLogicFields = core.TokenToTokenExactInFields<{
   dstChainId: number;
   receiver: string;
-  fee: BigNumber;
+  fee: string;
   slippage?: number;
 }>;
 
@@ -110,7 +110,15 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
       output = new common.TokenAmount(tokenOut).setWei(amountOut);
     }
 
-    return { input, output, fee, feeBps, dstChainId, receiver, slippage };
+    return {
+      input,
+      output,
+      fee: common.toBigUnit(fee, getNativeToken(this.chainId).decimals),
+      feeBps,
+      dstChainId,
+      receiver,
+      slippage,
+    };
   }
 
   async build(fields: SwapTokenLogicFields, options: SwapTokenLogicOptions) {
@@ -143,7 +151,7 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
           balanceBps,
           amountOffset,
         }),
-        core.newLogicInput({ input: new common.TokenAmount(getNativeToken(this.chainId)).setWei(fee) }),
+        core.newLogicInput({ input: new common.TokenAmount(getNativeToken(this.chainId), fee) }),
       ];
     } else if (input.token.isNative && getContractAddress(this.chainId, 'RouterETH')) {
       to = getContractAddress(this.chainId, 'RouterETH');
@@ -163,7 +171,7 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
           balanceBps,
           amountOffset,
         }),
-        core.newLogicInput({ input: new common.TokenAmount(getNativeToken(this.chainId)).setWei(fee) }),
+        core.newLogicInput({ input: new common.TokenAmount(getNativeToken(this.chainId), fee) }),
       ];
     } else {
       to = getContractAddress(this.chainId, 'Router');
@@ -193,7 +201,7 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
           balanceBps,
           amountOffset,
         }),
-        core.newLogicInput({ input: new common.TokenAmount(getNativeToken(this.chainId)).setWei(fee) }),
+        core.newLogicInput({ input: new common.TokenAmount(getNativeToken(this.chainId), fee) }),
       ];
     }
 

@@ -75,7 +75,7 @@ describe('mainnet: Test Stargate SwapToken Logic', function () {
       const { input, fee } = quotation;
 
       // 2. build funds, tokensReturn
-      const feeTokenAmount = new common.TokenAmount(getNativeToken(chainId)).setWei(fee);
+      const feeTokenAmount = new common.TokenAmount(getNativeToken(chainId), fee);
       const funds = new common.TokenAmounts([feeTokenAmount]);
       const tokensReturn = [input.token.elasticAddress];
       if (balanceBps) {
