@@ -22,17 +22,13 @@ import {
 } from './configs';
 import { getNativeToken } from '@protocolink/common';
 
-interface DstTokenList {
-  chainId: number;
-  tokens: common.Token[];
-}
-
-interface StargateTokenList {
+export type SwapTokenLogicTokenList = {
   srcToken: common.Token;
-  dstTokenLists: DstTokenList[];
-}
-
-export type SwapTokenLogicTokenList = StargateTokenList[];
+  dstTokenLists: {
+    chainId: number;
+    tokens: common.Token[];
+  }[];
+}[];
 
 export type SwapTokenLogicParams = core.TokenToTokenExactInParams<{
   receiver: string;
@@ -69,7 +65,7 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
 
     // find destination ids and tokens
     for (const srcToken of srcTokens) {
-      const dstTokenLists: DstTokenList[] = [];
+      const dstTokenLists = [];
 
       const dstChainIds = getDstChainIds(this.chainId, srcToken);
       for (const dstChainId of dstChainIds) {
