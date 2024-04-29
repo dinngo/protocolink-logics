@@ -18,9 +18,9 @@ describe('Stargate SwapTokenLogic', function () {
         expect(tokenLists).to.have.lengthOf.above(0);
 
         for (const tokenList of tokenLists) {
-          expect(tokenList.dstTokenLists).to.have.lengthOf.above(0);
-          for (const dstTokenList of tokenList.dstTokenLists) {
-            expect(dstTokenList.tokens).to.have.lengthOf.above(0);
+          expect(tokenList.destTokenLists).to.have.lengthOf.above(0);
+          for (const destTokenList of tokenList.destTokenLists) {
+            expect(destTokenList.tokens).to.have.lengthOf.above(0);
           }
         }
       });

@@ -2,4 +2,4 @@
 '@protocolink/logics': patch
 ---
 
-remove Stargate dstChainId
+remove Stargate destChainId

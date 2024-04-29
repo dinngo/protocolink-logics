@@ -500,37 +500,37 @@ export function getPoolDecimals(chainId: number, poolId: number) {
   return poolConfigMapById[chainId][poolId].decimals;
 }
 
-export function getDstChainIds(srcChainId: number, srcToken: common.Token) {
-  const dstChainIds = new Set<number>();
+export function getDestChainIds(srcChainId: number, srcToken: common.Token) {
+  const destChainIds = new Set<number>();
   if (isSTGToken(srcChainId, srcToken)) {
     for (const config of configs) {
       if (config.chainId !== srcChainId && config.STG) {
-        dstChainIds.add(config.chainId);
+        destChainIds.add(config.chainId);
       }
     }
   } else {
     const srcPoolConfigs = poolConfigsMapByToken[srcChainId][srcToken.address] ?? [];
     for (const srcPoolConfig of srcPoolConfigs) {
       for (const path of srcPoolConfig.paths) {
-        path.poolIds.length > 0 && dstChainIds.add(path.chainId);
+        path.poolIds.length > 0 && destChainIds.add(path.chainId);
       }
     }
   }
 
-  return [...dstChainIds];
+  return [...destChainIds];
 }
 
-export function getDstTokens(srcChainId: number, srcToken: common.Token, dstChainId: number) {
-  const dstTokens: common.Token[] = [];
+export function getDestTokens(srcChainId: number, srcToken: common.Token, destChainId: number) {
+  const destTokens: common.Token[] = [];
   if (isSTGToken(srcChainId, srcToken)) {
-    dstTokens.push(getSTGToken(dstChainId));
+    destTokens.push(getSTGToken(destChainId));
   } else {
     const srcPoolConfigs = poolConfigsMapByToken[srcChainId][srcToken.address] ?? [];
     for (const srcPoolConfig of srcPoolConfigs) {
       for (const path of srcPoolConfig.paths) {
-        if (path.chainId === dstChainId) {
+        if (path.chainId === destChainId) {
           for (const poolId of path.poolIds) {
-            dstTokens.push(getTokenByPoolId(dstChainId, poolId));
+            destTokens.push(getTokenByPoolId(destChainId, poolId));
           }
           break;
         }
@@ -538,16 +538,16 @@ export function getDstTokens(srcChainId: number, srcToken: common.Token, dstChai
     }
   }
 
-  return dstTokens;
+  return destTokens;
 }
 
-export function getPoolIds(srcChainId: number, srcToken: common.Token, dstChainId: number, dstToken: common.Token) {
+export function getPoolIds(srcChainId: number, srcToken: common.Token, destChainId: number, destToken: common.Token) {
   const srcPoolConfigs = poolConfigsMapByToken[srcChainId][srcToken.address];
   for (const srcPoolConfig of srcPoolConfigs) {
     for (const path of srcPoolConfig.paths) {
-      if (path.chainId === dstChainId) {
+      if (path.chainId === destChainId) {
         for (const poolId of path.poolIds) {
-          if (getTokenByPoolId(dstChainId, poolId).is(dstToken)) {
+          if (getTokenByPoolId(destChainId, poolId).is(destToken)) {
             return [srcPoolConfig.id, poolId];
           }
         }
