@@ -154,7 +154,6 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
     const refundAddress = account;
     const amountIn = input.amountWei;
     const amountOutMin = slippage ? common.calcSlippage(output.amountWei, slippage) : output.amountWei;
-    const dstTo = utils.defaultAbiCoder.encode(['address'], [receiver]);
     const dstPayload = '0x'; // no payload
     const dstStargateChainId = getStargateChainId(dstChainId);
 
@@ -164,7 +163,7 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
       to = input.token.address;
       data = StargateToken__factory.createInterface().encodeFunctionData('sendTokens', [
         dstStargateChainId,
-        dstTo,
+        receiver,
         amountIn,
         constants.AddressZero,
         utils.solidityPack(['uint16', 'uint256'], [1, 85000]), // adapterParameters {version, dstGas}
@@ -185,7 +184,7 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
       data = RouterETH__factory.createInterface().encodeFunctionData('swapETH', [
         dstStargateChainId,
         refundAddress,
-        dstTo,
+        receiver,
         amountIn,
         amountOutMin,
       ]);
@@ -216,7 +215,7 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
           dstNativeAmount: 0, // amount of dust dropped in destination wallet
           dstNativeAddr: '0x', // destination wallet for dust
         },
-        dstTo,
+        receiver,
         dstPayload,
       ]);
 
