@@ -10,16 +10,29 @@ import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
 import {
   getContractAddress,
+  getDstChainIds,
+  getDstTokens,
   getMarkets,
   getPoolDecimals,
   getPoolIds,
+  getSTGToken,
   getStargateChainId,
   isSTGToken,
   supportedChainIds,
 } from './configs';
 import { getNativeToken } from '@protocolink/common';
 
-export type SwapTokenLogicTokenList = Record<string, common.Token[]>;
+interface DstTokenList {
+  chainId: number;
+  tokens: common.Token[];
+}
+
+interface StargateTokenList {
+  srcToken: common.Token;
+  dstTokenLists: DstTokenList[];
+}
+
+export type SwapTokenLogicTokenList = StargateTokenList[];
 
 export type SwapTokenLogicParams = core.TokenToTokenExactInParams<{
   receiver: string;
@@ -40,19 +53,34 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
   static readonly supportedChainIds = supportedChainIds;
 
   async getTokenList() {
-    const tokenList: SwapTokenLogicTokenList = {};
+    const tokenLists: SwapTokenLogicTokenList = [];
+    const srcTokens = [];
+
+    // collect src tokens
+    const STG = getSTGToken(this.chainId);
+    if (STG) {
+      srcTokens.push(STG);
+    }
 
     const markets = getMarkets(this.chainId);
     for (const market of markets) {
-      const token = market.token;
-      tokenList[market.id] = [];
-      if (token.isWrapped) {
-        tokenList[market.id].push(market.token.unwrapped);
-      }
-      tokenList[market.id].push(token);
+      srcTokens.push(market.token);
     }
 
-    return tokenList;
+    // find destination ids and tokens
+    for (const srcToken of srcTokens) {
+      const dstTokenLists: DstTokenList[] = [];
+
+      const dstChainIds = getDstChainIds(this.chainId, srcToken);
+      for (const dstChainId of dstChainIds) {
+        const dstTokens = getDstTokens(this.chainId, srcToken, dstChainId);
+        dstTokenLists.push({ chainId: dstChainId, tokens: dstTokens });
+      }
+
+      tokenLists.push({ srcToken, dstTokenLists });
+    }
+
+    return tokenLists;
   }
 
   public async quote(params: SwapTokenLogicParams) {

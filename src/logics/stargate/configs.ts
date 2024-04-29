@@ -479,6 +479,10 @@ export function getContractAddress(chainId: number, name: ContractNames) {
   return configMap[chainId].contract[name];
 }
 
+export function getTokens(chainId: number) {
+  return [...tokensMap[chainId]];
+}
+
 export function getSTGToken(chainId: number) {
   return STGTokenMap[chainId];
 }
@@ -494,6 +498,47 @@ export function getTokenByPoolId(chainId: number, poolId: number) {
 
 export function getPoolDecimals(chainId: number, poolId: number) {
   return poolConfigMapById[chainId][poolId].decimals;
+}
+
+export function getDstChainIds(srcChainId: number, srcToken: common.Token) {
+  const dstChainIds = new Set<number>();
+  if (isSTGToken(srcChainId, srcToken)) {
+    for (const config of configs) {
+      if (config.chainId !== srcChainId && config.STG) {
+        dstChainIds.add(config.chainId);
+      }
+    }
+  } else {
+    const srcPoolConfigs = poolConfigsMapByToken[srcChainId][srcToken.address] ?? [];
+    for (const srcPoolConfig of srcPoolConfigs) {
+      for (const path of srcPoolConfig.paths) {
+        path.poolIds.length > 0 && dstChainIds.add(path.chainId);
+      }
+    }
+  }
+
+  return [...dstChainIds];
+}
+
+export function getDstTokens(srcChainId: number, srcToken: common.Token, dstChainId: number) {
+  const dstTokens: common.Token[] = [];
+  if (isSTGToken(srcChainId, srcToken)) {
+    dstTokens.push(getSTGToken(dstChainId));
+  } else {
+    const srcPoolConfigs = poolConfigsMapByToken[srcChainId][srcToken.address] ?? [];
+    for (const srcPoolConfig of srcPoolConfigs) {
+      for (const path of srcPoolConfig.paths) {
+        if (path.chainId === dstChainId) {
+          for (const poolId of path.poolIds) {
+            dstTokens.push(getTokenByPoolId(dstChainId, poolId));
+          }
+          break;
+        }
+      }
+    }
+  }
+
+  return dstTokens;
 }
 
 export function getPoolIds(srcChainId: number, srcToken: common.Token, dstChainId: number, dstToken: common.Token) {

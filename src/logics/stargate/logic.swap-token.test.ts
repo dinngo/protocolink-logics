@@ -13,11 +13,15 @@ describe('Stargate SwapTokenLogic', function () {
     SwapTokenLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.toNetworkId(chainId)}`, async function () {
         const logic = new SwapTokenLogic(chainId);
-        const tokenList = await logic.getTokenList();
-        const marketIds = Object.keys(tokenList);
-        expect(marketIds).to.have.lengthOf.above(0);
-        for (const marketId of marketIds) {
-          expect(tokenList[marketId]).to.have.lengthOf.above(0);
+        const tokenLists = await logic.getTokenList();
+
+        expect(tokenLists).to.have.lengthOf.above(0);
+
+        for (const tokenList of tokenLists) {
+          expect(tokenList.dstTokenLists).to.have.lengthOf.above(0);
+          for (const dstTokenList of tokenList.dstTokenLists) {
+            expect(dstTokenList.tokens).to.have.lengthOf.above(0);
+          }
         }
       });
     });
