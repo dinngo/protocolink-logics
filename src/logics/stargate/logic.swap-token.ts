@@ -10,25 +10,32 @@ import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
 import {
   getContractAddress,
+  getDestChainIds,
+  getDestTokens,
   getMarkets,
   getPoolDecimals,
   getPoolIds,
+  getSTGToken,
   getStargateChainId,
   isSTGToken,
   supportedChainIds,
 } from './configs';
 import { getNativeToken } from '@protocolink/common';
 
-export type SwapTokenLogicTokenList = Record<string, common.Token[]>;
+export type SwapTokenLogicTokenList = {
+  srcToken: common.Token;
+  destTokenLists: {
+    chainId: number;
+    tokens: common.Token[];
+  }[];
+}[];
 
 export type SwapTokenLogicParams = core.TokenToTokenExactInParams<{
-  dstChainId: number;
   receiver: string;
   slippage?: number;
 }>;
 
 export type SwapTokenLogicFields = core.TokenToTokenExactInFields<{
-  dstChainId: number;
   receiver: string;
   fee: string;
   slippage?: number;
@@ -42,31 +49,47 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
   static readonly supportedChainIds = supportedChainIds;
 
   async getTokenList() {
-    const tokenList: SwapTokenLogicTokenList = {};
+    const tokenLists: SwapTokenLogicTokenList = [];
+    const srcTokens = [];
+
+    // collect src tokens
+    const STG = getSTGToken(this.chainId);
+    if (STG) {
+      srcTokens.push(STG);
+    }
 
     const markets = getMarkets(this.chainId);
     for (const market of markets) {
-      const token = market.token;
-      tokenList[market.id] = [];
-      if (token.isWrapped) {
-        tokenList[market.id].push(market.token.unwrapped);
-      }
-      tokenList[market.id].push(token);
+      srcTokens.push(market.token);
     }
 
-    return tokenList;
+    // find destination ids and tokens
+    for (const srcToken of srcTokens) {
+      const destTokenLists = [];
+
+      const destChainIds = getDestChainIds(this.chainId, srcToken);
+      for (const destChainId of destChainIds) {
+        const destTokens = getDestTokens(this.chainId, srcToken, destChainId);
+        destTokenLists.push({ chainId: destChainId, tokens: destTokens });
+      }
+
+      tokenLists.push({ srcToken, destTokenLists });
+    }
+
+    return tokenLists;
   }
 
   public async quote(params: SwapTokenLogicParams) {
     let output, fee;
     let feeBps = 0;
 
-    const { input, tokenOut, dstChainId, receiver, slippage } = params;
+    const { input, tokenOut, receiver, slippage } = params;
+    const destChainId = tokenOut.chainId;
 
-    const dstStargateChainId = getStargateChainId(dstChainId);
+    const destStargateChainId = getStargateChainId(destChainId);
     if (isSTGToken(this.chainId, input.token)) {
       const amountOut = input.amountWei;
-      output = input;
+      output = new common.TokenAmount(tokenOut, input.amount);
 
       const layerZeroEndpoint = LayerZeroEndpoint__factory.connect(
         getContractAddress(this.chainId, 'LayerZeroEndpoint'),
@@ -74,22 +97,22 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
       );
 
       [fee] = await layerZeroEndpoint.estimateFees(
-        dstStargateChainId,
+        destStargateChainId,
         input.token.address,
         utils.defaultAbiCoder.encode(['bytes', 'uint256'], [utils.solidityPack(['address'], [receiver]), amountOut]),
         false,
         utils.solidityPack(['uint16', 'uint256'], [1, 85000])
       );
     } else {
-      const [srcPoolId, dstPoolId] = getPoolIds(this.chainId, input.token, dstChainId, tokenOut);
+      const [srcPoolId, destPoolId] = getPoolIds(this.chainId, input.token, destChainId, tokenOut);
       const poolDecimals = getPoolDecimals(this.chainId, srcPoolId);
       const amountIn = common.toSmallUnit(input.amount, poolDecimals);
 
       const feeLibrary = FeeLibrary__factory.connect(getContractAddress(this.chainId, 'FeeLibrary'), this.provider);
       const { eqFee, eqReward, lpFee, protocolFee } = await feeLibrary.getFees(
         srcPoolId,
-        dstPoolId,
-        getStargateChainId(dstChainId),
+        destPoolId,
+        getStargateChainId(destChainId),
         receiver,
         amountIn
       );
@@ -101,7 +124,7 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
       feeBps = totalFee.mul(10000).div(amountIn).toNumber();
 
       const router = Router__factory.connect(getContractAddress(this.chainId, 'Router'), this.provider);
-      [fee] = await router.quoteLayerZeroFee(dstStargateChainId, 1, receiver, '0x', {
+      [fee] = await router.quoteLayerZeroFee(destStargateChainId, 1, receiver, '0x', {
         dstGasForCall: BigNumber.from(0), // extra gas, if calling smart contract,
         dstNativeAmount: 0, // amount of dust dropped in destination wallet
         dstNativeAddr: '0x', // destination wallet for dust
@@ -115,29 +138,28 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
       output,
       fee: common.toBigUnit(fee, getNativeToken(this.chainId).decimals),
       feeBps,
-      dstChainId,
       receiver,
       slippage,
     };
   }
 
   async build(fields: SwapTokenLogicFields, options: SwapTokenLogicOptions) {
-    const { dstChainId, input, output, fee, slippage, receiver, balanceBps } = fields;
+    const { input, output, fee, slippage, receiver, balanceBps } = fields;
+    const destChainId = output.token.chainId;
     const { account } = options;
     const refundAddress = account;
     const amountIn = input.amountWei;
     const amountOutMin = slippage ? common.calcSlippage(output.amountWei, slippage) : output.amountWei;
-    const dstTo = utils.defaultAbiCoder.encode(['address'], [receiver]);
-    const dstPayload = '0x'; // no payload
-    const dstStargateChainId = getStargateChainId(dstChainId);
+    const destPayload = '0x'; // no payload
+    const destStargateChainId = getStargateChainId(destChainId);
 
     let to, data, inputs;
 
     if (isSTGToken(this.chainId, input.token)) {
       to = input.token.address;
       data = StargateToken__factory.createInterface().encodeFunctionData('sendTokens', [
-        dstStargateChainId,
-        dstTo,
+        destStargateChainId,
+        receiver,
         amountIn,
         constants.AddressZero,
         utils.solidityPack(['uint16', 'uint256'], [1, 85000]), // adapterParameters {version, dstGas}
@@ -156,9 +178,9 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
     } else if (input.token.isNative && getContractAddress(this.chainId, 'RouterETH')) {
       to = getContractAddress(this.chainId, 'RouterETH');
       data = RouterETH__factory.createInterface().encodeFunctionData('swapETH', [
-        dstStargateChainId,
+        destStargateChainId,
         refundAddress,
-        dstTo,
+        receiver,
         amountIn,
         amountOutMin,
       ]);
@@ -176,11 +198,11 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
     } else {
       to = getContractAddress(this.chainId, 'Router');
 
-      const [srcPoolId, dstPoolId] = getPoolIds(this.chainId, input.token, dstChainId, output.token);
+      const [srcPoolId, destPoolId] = getPoolIds(this.chainId, input.token, destChainId, output.token);
       data = Router__factory.createInterface().encodeFunctionData('swap', [
-        dstStargateChainId,
+        destStargateChainId,
         srcPoolId,
-        dstPoolId,
+        destPoolId,
         refundAddress,
         amountIn,
         amountOutMin,
@@ -189,8 +211,8 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
           dstNativeAmount: 0, // amount of dust dropped in destination wallet
           dstNativeAddr: '0x', // destination wallet for dust
         },
-        dstTo,
-        dstPayload,
+        receiver,
+        destPayload,
       ]);
 
       const amountOffset = balanceBps ? common.getParamOffset(4) : undefined;
