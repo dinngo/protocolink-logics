@@ -28,7 +28,6 @@ describe('mainnet: Test Stargate SwapToken Logic', function () {
       params: {
         input: new common.TokenAmount(mainnetTokens.ETH, '1'),
         tokenOut: optimismTokens.ETH,
-        dstChainId: common.ChainId.optimism,
         slippage: 500,
       },
     },
@@ -36,7 +35,6 @@ describe('mainnet: Test Stargate SwapToken Logic', function () {
       params: {
         input: new common.TokenAmount(mainnetTokens.USDC, '100'),
         tokenOut: optimismTokens['USDC.e'],
-        dstChainId: common.ChainId.optimism,
         slippage: 500,
       },
     },
@@ -44,7 +42,6 @@ describe('mainnet: Test Stargate SwapToken Logic', function () {
       params: {
         input: new common.TokenAmount(mainnetTokens.DAI, '100'),
         tokenOut: optimismTokens.DAI,
-        dstChainId: common.ChainId.optimism,
         slippage: 500,
       },
     },
@@ -52,7 +49,6 @@ describe('mainnet: Test Stargate SwapToken Logic', function () {
       params: {
         input: new common.TokenAmount(mainnetTokens.STG, '1'),
         tokenOut: optimismTokens.STG,
-        dstChainId: common.ChainId.optimism,
         slippage: 500,
       },
     },
@@ -60,7 +56,6 @@ describe('mainnet: Test Stargate SwapToken Logic', function () {
       params: {
         input: new common.TokenAmount(mainnetTokens.STG, '1'),
         tokenOut: optimismTokens.STG,
-        dstChainId: common.ChainId.optimism,
         slippage: 500,
       },
       balanceBps: 5000,

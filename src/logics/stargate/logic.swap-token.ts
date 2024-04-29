@@ -22,13 +22,11 @@ import { getNativeToken } from '@protocolink/common';
 export type SwapTokenLogicTokenList = Record<string, common.Token[]>;
 
 export type SwapTokenLogicParams = core.TokenToTokenExactInParams<{
-  dstChainId: number;
   receiver: string;
   slippage?: number;
 }>;
 
 export type SwapTokenLogicFields = core.TokenToTokenExactInFields<{
-  dstChainId: number;
   receiver: string;
   fee: string;
   slippage?: number;
@@ -61,7 +59,8 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
     let output, fee;
     let feeBps = 0;
 
-    const { input, tokenOut, dstChainId, receiver, slippage } = params;
+    const { input, tokenOut, receiver, slippage } = params;
+    const dstChainId = tokenOut.chainId;
 
     const dstStargateChainId = getStargateChainId(dstChainId);
     if (isSTGToken(this.chainId, input.token)) {
@@ -115,14 +114,14 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
       output,
       fee: common.toBigUnit(fee, getNativeToken(this.chainId).decimals),
       feeBps,
-      dstChainId,
       receiver,
       slippage,
     };
   }
 
   async build(fields: SwapTokenLogicFields, options: SwapTokenLogicOptions) {
-    const { dstChainId, input, output, fee, slippage, receiver, balanceBps } = fields;
+    const { input, output, fee, slippage, receiver, balanceBps } = fields;
+    const dstChainId = output.token.chainId;
     const { account } = options;
     const refundAddress = account;
     const amountIn = input.amountWei;

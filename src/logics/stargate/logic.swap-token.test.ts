@@ -25,7 +25,6 @@ describe('Stargate SwapTokenLogic', function () {
 
   context('Test build', function () {
     const chainId = common.ChainId.mainnet;
-    const dstChainId = common.ChainId.optimism;
     const logic = new SwapTokenLogic(chainId);
     const routerAddress = getContractAddress(chainId, 'Router');
     const routerETHAddress = getContractAddress(chainId, 'RouterETH');
@@ -40,7 +39,6 @@ describe('Stargate SwapTokenLogic', function () {
         fields: {
           input: new common.TokenAmount(mainnetTokens.ETH, '1'),
           output: new common.TokenAmount(optimismTokens.ETH, '1'),
-          dstChainId,
           receiver: account,
           fee: '0.1',
           slippage: 500,
@@ -51,7 +49,6 @@ describe('Stargate SwapTokenLogic', function () {
         fields: {
           input: new common.TokenAmount(mainnetTokens.USDC, '1'),
           output: new common.TokenAmount(optimismTokens['USDC.e'], '1'),
-          dstChainId,
           receiver: account,
           fee: '0',
           slippage: 500,
@@ -62,7 +59,6 @@ describe('Stargate SwapTokenLogic', function () {
         fields: {
           input: new common.TokenAmount(mainnetTokens.STG, '1'),
           output: new common.TokenAmount(optimismTokens.STG, '1'),
-          dstChainId,
           receiver: account,
           fee: '0',
           slippage: 500,
@@ -73,7 +69,6 @@ describe('Stargate SwapTokenLogic', function () {
         fields: {
           input: new common.TokenAmount(mainnetTokens.STG, '1'),
           output: new common.TokenAmount(optimismTokens.STG, '1'),
-          dstChainId,
           receiver: account,
           fee: '0',
           slippage: 500,
