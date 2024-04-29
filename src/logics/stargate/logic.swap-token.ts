@@ -89,7 +89,7 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
     const dstStargateChainId = getStargateChainId(dstChainId);
     if (isSTGToken(this.chainId, input.token)) {
       const amountOut = input.amountWei;
-      output = input;
+      output = new common.TokenAmount(tokenOut, input.amount);
 
       const layerZeroEndpoint = LayerZeroEndpoint__factory.connect(
         getContractAddress(this.chainId, 'LayerZeroEndpoint'),
