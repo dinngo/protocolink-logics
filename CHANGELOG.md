@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.1.0
+
+### Minor Changes
+
+- 93bf8c4: fix Stargate destTo
+
 ## 1.0.17
 
 ### Patch Changes
