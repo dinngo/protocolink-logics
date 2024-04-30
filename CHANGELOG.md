@@ -1,5 +1,13 @@
 # @protocolink/logics
 
+## 1.0.17
+
+### Patch Changes
+
+- 0f0b780: fix Stargate getTokenList
+- d32b8c0: fix Stargate receiver
+- 9cf2900: remove Stargate destChainId
+
 ## 1.0.16
 
 ### Patch Changes
