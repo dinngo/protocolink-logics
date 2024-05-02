@@ -5,5 +5,12 @@
     "decimals": 18,
     "symbol": "METIS(ERC20)",
     "name": "Metis ERC20"
+  },
+  "m.USDT": {
+    "chainId": 1088,
+    "address": "0xbB06DCA3AE6887fAbF931640f67cab3e3a16F4dC",
+    "decimals": 6,
+    "symbol": "m.USDT",
+    "name": "USDT Token"
   }
 }
