@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.1.2
+
+### Patch Changes
+
+- 8fe4c3e: add stargate m.USDT
+
 ## 1.1.1
 
 ### Patch Changes
