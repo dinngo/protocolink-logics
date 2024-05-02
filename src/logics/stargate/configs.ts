@@ -31,6 +31,7 @@ export enum PoolId {
   sUSD = 14,
   LUSD = 15,
   METIS = 17,
+  metisUSDT = 19,
 }
 
 export interface Pool {
@@ -137,6 +138,12 @@ export const configs: Config[] = [
         token: mainnetTokens.Metis,
         decimals: 18,
         paths: [{ chainId: common.ChainId.metis, poolIds: [PoolId.METIS] }],
+      },
+      {
+        id: PoolId.metisUSDT,
+        token: mainnetTokens.USDT,
+        decimals: 6,
+        paths: [{ chainId: common.ChainId.metis, poolIds: [PoolId.metisUSDT] }],
       },
     ],
   },
@@ -270,6 +277,15 @@ export const configs: Config[] = [
         token: metisTokens['METIS(ERC20)'],
         decimals: 18,
         paths: [{ chainId: common.ChainId.mainnet, poolIds: [PoolId.METIS] }],
+      },
+      {
+        id: PoolId.metisUSDT,
+        token: metisTokens['m.USDT'],
+        decimals: 6,
+        paths: [
+          { chainId: common.ChainId.mainnet, poolIds: [PoolId.metisUSDT] },
+          { chainId: common.ChainId.avalanche, poolIds: [PoolId.metisUSDT] },
+        ],
       },
     ],
   },
@@ -418,6 +434,12 @@ export const configs: Config[] = [
           { chainId: common.ChainId.optimism, poolIds: [PoolId.FRAX] },
           { chainId: common.ChainId.arbitrum, poolIds: [PoolId.FRAX] },
         ],
+      },
+      {
+        id: PoolId.metisUSDT,
+        token: avalancheTokens.USDt,
+        decimals: 6,
+        paths: [{ chainId: common.ChainId.metis, poolIds: [PoolId.metisUSDT] }],
       },
     ],
   },
