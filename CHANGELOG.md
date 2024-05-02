@@ -1,5 +1,12 @@
 # @protocolink/logics
 
+## 1.1.1
+
+### Patch Changes
+
+- 97c8ec9: Updated dependencies
+  - @protocolink/core@0.4.9
+
 ## 1.1.0
 
 ### Minor Changes
