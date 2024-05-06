@@ -1,5 +1,7 @@
 import { Token, WETH9 } from '@uniswap/sdk-core';
 import arbitrumTokensJSON from './data/arbitrum.json';
+import avalancheTokensJSON from './data/avalanche.json';
+import baseTokensJSON from './data/base.json';
 import * as common from '@protocolink/common';
 import mainnetTokensJSON from './data/mainnet.json';
 import optimismTokensJSON from './data/optimism.json';
@@ -43,6 +45,14 @@ type PolygonTokenSymbols = keyof typeof polygonTokensJSON;
 
 export const polygonTokens = univ3.toTokenMap<PolygonTokenSymbols>(polygonTokensJSON);
 
+type BaseTokenSymbols = keyof typeof baseTokensJSON;
+
+export const baseTokens = univ3.toTokenMap<BaseTokenSymbols>(baseTokensJSON);
+
 type ArbitrumTokenSymbols = keyof typeof arbitrumTokensJSON;
 
 export const arbitrumTokens = univ3.toTokenMap<ArbitrumTokenSymbols>(arbitrumTokensJSON);
+
+type AvalancheTokenSymbols = keyof typeof avalancheTokensJSON;
+
+export const avalancheTokens = univ3.toTokenMap<AvalancheTokenSymbols>(avalancheTokensJSON);

@@ -8,13 +8,13 @@ import {
 } from './types';
 import { Currency, CurrencyAmount, Token, TradeType } from '@uniswap/sdk-core';
 import { FeeAmount, Pool, Route, SwapQuoter, computePoolAddress, encodeRouteToPath } from '@uniswap/v3-sdk';
-import { ISwapRouter } from './contracts/SwapRouter';
+import { IV3SwapRouter } from './contracts/SwapRouter02';
 import JSBI from 'jsbi';
-import { Pool__factory, SwapRouter__factory } from './contracts';
+import { Pool__factory, SwapRouter02__factory } from './contracts';
 import { UNSUPPORTED_TOKEN_ERROR } from './errors';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
-import { getDeadline, toUniToken } from './utils';
+import { toUniToken } from './utils';
 
 export interface LogicOptions {
   chainId: number;
@@ -68,26 +68,24 @@ export class SwapTokenLogic extends core.Logic {
     const { account } = options;
 
     const recipient = await this.calcAgent(account);
-    const deadline = getDeadline(this.chainId);
     const amountIn = input.amountWei;
     const amountOut =
       tradeType === core.TradeType.exactIn && slippage
         ? common.calcSlippage(output.amountWei, slippage)
         : output.amountWei;
 
-    const iface = SwapRouter__factory.createInterface();
+    const iface = SwapRouter02__factory.createInterface();
     let data: string;
     let amountOffset: BigNumberish | undefined;
     if (isSwapTokenLogicSingleHopFields(fields)) {
       const tokenIn = input.token.wrapped.address;
       const tokenOut = output.token.wrapped.address;
       if (tradeType === core.TradeType.exactIn) {
-        const params: ISwapRouter.ExactInputSingleParamsStruct = {
+        const params: IV3SwapRouter.ExactInputSingleParamsStruct = {
           tokenIn,
           tokenOut,
           fee: fields.fee,
           recipient,
-          deadline,
           amountIn,
           amountOutMinimum: amountOut,
           sqrtPriceLimitX96: 0,
@@ -95,12 +93,11 @@ export class SwapTokenLogic extends core.Logic {
         data = iface.encodeFunctionData('exactInputSingle', [params]);
         if (balanceBps) amountOffset = common.getParamOffset(5);
       } else {
-        const params: ISwapRouter.ExactOutputSingleParamsStruct = {
+        const params: IV3SwapRouter.ExactOutputSingleParamsStruct = {
           tokenIn,
           tokenOut,
           fee: fields.fee,
           recipient,
-          deadline,
           amountOut,
           amountInMaximum: amountIn,
           sqrtPriceLimitX96: 0,
@@ -109,20 +106,18 @@ export class SwapTokenLogic extends core.Logic {
       }
     } else {
       if (tradeType === core.TradeType.exactIn) {
-        const params: ISwapRouter.ExactInputParamsStruct = {
+        const params: IV3SwapRouter.ExactInputParamsStruct = {
           path: fields.path,
           recipient,
-          deadline,
           amountIn,
           amountOutMinimum: amountOut,
         };
         data = iface.encodeFunctionData('exactInput', [params]);
         if (balanceBps) amountOffset = common.getParamOffset(3);
       } else {
-        const params: ISwapRouter.ExactOutputParamsStruct = {
+        const params: IV3SwapRouter.ExactOutputParamsStruct = {
           path: fields.path,
           recipient,
-          deadline,
           amountOut,
           amountInMaximum: amountIn,
         };

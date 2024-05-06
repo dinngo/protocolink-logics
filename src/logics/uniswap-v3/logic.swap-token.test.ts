@@ -23,7 +23,7 @@ describe('UniswapV3 SwapTokenLogic', function () {
     const chainId = common.ChainId.mainnet;
     const config = getConfig(chainId);
     const logic = new SwapTokenLogic(chainId);
-    const iface = univ3.SwapRouter__factory.createInterface();
+    const iface = univ3.SwapRouter02__factory.createInterface();
 
     const testCases: LogicTestCase<SwapTokenLogicFields, SwapTokenLogicOptions>[] = [
       {

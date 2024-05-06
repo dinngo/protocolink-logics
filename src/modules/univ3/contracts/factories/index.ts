@@ -3,3 +3,4 @@
 /* eslint-disable */
 export { Pool__factory } from './Pool__factory';
 export { SwapRouter__factory } from './SwapRouter__factory';
+export { SwapRouter02__factory } from './SwapRouter02__factory';
