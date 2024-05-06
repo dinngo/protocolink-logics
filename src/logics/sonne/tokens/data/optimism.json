@@ -1,0 +1,184 @@
+{
+  "SONNE": {
+    "chainId": 10,
+    "address": "0x1DB2466d9F5e10D7090E7152B68d62703a2245F0",
+    "decimals": 18,
+    "symbol": "SONNE",
+    "name": "Sonne"
+  },
+  "OP": {
+    "chainId": 10,
+    "address": "0x4200000000000000000000000000000000000042",
+    "decimals": 18,
+    "symbol": "OP",
+    "name": "Optimism"
+  },
+  "USDC.e": {
+    "chainId": 10,
+    "address": "0x7F5c764cBc14f9669B88837ca1490cCa17c31607",
+    "decimals": 6,
+    "symbol": "USDC.e",
+    "name": "USD Coin (Bridged from Ethereum)"
+  },
+  "USDT": {
+    "chainId": 10,
+    "address": "0x94b008aA00579c1307B0EF2c499aD98a8ce58e58",
+    "decimals": 6,
+    "symbol": "USDT",
+    "name": "Tether USD"
+  },
+  "DAI": {
+    "chainId": 10,
+    "address": "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
+    "decimals": 18,
+    "symbol": "DAI",
+    "name": "Dai Stablecoin"
+  },
+  "sUSD": {
+    "chainId": 10,
+    "address": "0x8c6f28f2F1A3C87F0f938b96d27520d9751ec8d9",
+    "decimals": 18,
+    "symbol": "sUSD",
+    "name": "Synth sUSD"
+  },
+  "WETH": {
+    "chainId": 10,
+    "address": "0x4200000000000000000000000000000000000006",
+    "decimals": 18,
+    "symbol": "WETH",
+    "name": "Wrapped Ether"
+  },
+  "SNX": {
+    "chainId": 10,
+    "address": "0x8700dAec35aF8Ff88c16BdF0418774CB3D7599B4",
+    "decimals": 18,
+    "symbol": "SNX",
+    "name": "Synthetix Network Token"
+  },
+  "WBTC": {
+    "chainId": 10,
+    "address": "0x68f180fcCe6836688e9084f035309E29Bf0A2095",
+    "decimals": 8,
+    "symbol": "WBTC",
+    "name": "Wrapped BTC"
+  },
+  "LUSD": {
+    "chainId": 10,
+    "address": "0xc40F949F8a4e094D1b49a23ea9241D289B7b2819",
+    "decimals": 18,
+    "symbol": "LUSD",
+    "name": "LUSD Stablecoin"
+  },
+  "wstETH": {
+    "chainId": 10,
+    "address": "0x1F32b1c2345538c0c6f582fCB022739c4A194Ebb",
+    "decimals": 18,
+    "symbol": "wstETH",
+    "name": "Wrapped liquid staked Ether 2.0"
+  },
+  "MAI": {
+    "chainId": 10,
+    "address": "0xdFA46478F9e5EA86d57387849598dbFB2e964b02",
+    "decimals": 18,
+    "symbol": "MAI",
+    "name": "Mai Stablecoin"
+  },
+  "USDC": {
+    "chainId": 10,
+    "address": "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85",
+    "decimals": 6,
+    "symbol": "USDC",
+    "name": "USD Coin"
+  },
+  "soWETH": {
+    "chainId": 10,
+    "address": "0xf7B5965f5C117Eb1B5450187c9DcFccc3C317e8E",
+    "decimals": 8,
+    "symbol": "soWETH",
+    "name": "Sonne Wrapped Ether"
+  },
+  "soDAI": {
+    "chainId": 10,
+    "address": "0x5569b83de187375d43FBd747598bfe64fC8f6436",
+    "decimals": 8,
+    "symbol": "soDAI",
+    "name": "Sonne DAI"
+  },
+  "soUSDC.e": {
+    "chainId": 10,
+    "address": "0xEC8FEa79026FfEd168cCf5C627c7f486D77b765F",
+    "decimals": 8,
+    "symbol": "soUSDC.e",
+    "name": "Sonne USDC"
+  },
+  "soUSDT": {
+    "chainId": 10,
+    "address": "0x5Ff29E4470799b982408130EFAaBdeeAE7f66a10",
+    "decimals": 8,
+    "symbol": "soUSDT",
+    "name": "Sonne USDT"
+  },
+  "soOP": {
+    "chainId": 10,
+    "address": "0x8cD6b19A07d754bF36AdEEE79EDF4F2134a8F571",
+    "decimals": 8,
+    "symbol": "soOP",
+    "name": "Sonne OP"
+  },
+  "soSUSD": {
+    "chainId": 10,
+    "address": "0xd14451E0Fa44B18f08aeB1E4a4d092B823CaCa68",
+    "decimals": 8,
+    "symbol": "soSUSD",
+    "name": "Sonne SUSD"
+  },
+  "uSONNE": {
+    "chainId": 10,
+    "address": "0x41279e29586eb20f9a4f65e031af09fced171166",
+    "decimals": 18,
+    "symbol": "uSONNE",
+    "name": "Staked Sonne"
+  },
+  "soSNX": {
+    "chainId": 10,
+    "address": "0xD7dAabd899D1fAbbC3A9ac162568939CEc0393Cc",
+    "decimals": 8,
+    "symbol": "soSNX",
+    "name": "Sonne Synthetix Network Token"
+  },
+  "soWBTC": {
+    "chainId": 10,
+    "address": "0x33865E09A572d4F1CC4d75Afc9ABcc5D3d4d867D",
+    "decimals": 8,
+    "symbol": "soWBTC",
+    "name": "Sonne Wrapped Bitcoin"
+  },
+  "soLUSD": {
+    "chainId": 10,
+    "address": "0xAFdf91f120DEC93c65fd63DBD5ec372e5dcA5f82",
+    "decimals": 8,
+    "symbol": "soLUSD",
+    "name": "Sonne Liquity USD"
+  },
+  "sowstETH": {
+    "chainId": 10,
+    "address": "0x26AaB17f27CD1c8d06a0Ad8E4a1Af8B1032171d5",
+    "decimals": 8,
+    "symbol": "sowstETH",
+    "name": "Sonne Wrapped liquid staked Ether 2.0"
+  },
+  "soMAI": {
+    "chainId": 10,
+    "address": "0xE7De932d50EfC9ea0a7a409Fc015B4f71443528e",
+    "decimals": 8,
+    "symbol": "soMAI",
+    "name": "Sonne miMatic"
+  },
+  "soUSDCnative": {
+    "chainId": 10,
+    "address": "0x1AfD1fF9E441973B7D34c7B8AbE91d94F1B23ce0",
+    "decimals": 8,
+    "symbol": "soUSDCnative",
+    "name": "Sonne USD Coin"
+  }
+}

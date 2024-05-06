@@ -23,6 +23,7 @@
     "test:e2e:latest": "yarn run test:e2e:mainnet && yarn run test:e2e:metis",
     "test:e2e:mainnet": "env-cmd -f .env.mainnet hardhat test --grep 'mainnet:'",
     "test:e2e:mainnet:pb": "env-cmd -f .env.mainnet.pb hardhat test --grep 'mainnet-pb:'",
+    "test:e2e:optimism": "env-cmd -f .env.optimism hardhat test --grep 'optimism:'",
     "test:e2e:metis": "env-cmd -f .env.metis hardhat test --grep 'metis:'",
     "test:unit": "mocha --recursive src"
   },
