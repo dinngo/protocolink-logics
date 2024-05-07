@@ -69,7 +69,7 @@ export const configs: univ3.Config[] = [
     chainId: common.ChainId.avalanche,
     factoryAddress: '0x740b1c1de25031C31FF4fC9A62f554A55cdC1baD',
     quoter: { address: '0xbe0F5544EC67e9B3b2D979aaA43f18Fd87E6257F', isV2: true },
-    swapRouterAddress: '0xbb00FF08d01D300023C629E8fFfFcb65A5a578cE', // swapRouterV2
+    swapRouterAddress: '0xbb00FF08d01D300023C629E8fFfFcb65A5a578cE', // swapRouter02
     feeAmounts: [FeeAmount.LOWEST, FeeAmount.LOW, FeeAmount.MEDIUM, FeeAmount.HIGH],
     bases: [
       avalancheTokens.WAVAX,
