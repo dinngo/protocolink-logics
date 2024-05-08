@@ -42,11 +42,13 @@ export class SupplyLogic
   async build(fields: SupplyLogicFields) {
     const { input, output, balanceBps } = fields;
 
+    const tokenIn = new common.TokenAmount(input.token.wrapped, input.amount);
+
     const to = output.token.address;
-    const data = CErc20Immutable__factory.createInterface().encodeFunctionData('mint', [input.amountWei]);
+    const data = CErc20Immutable__factory.createInterface().encodeFunctionData('mint', [tokenIn.amountWei]);
 
     const amountOffset = balanceBps ? common.getParamOffset(0) : undefined;
-    const inputs = [core.newLogicInput({ input, balanceBps, amountOffset })];
+    const inputs = [core.newLogicInput({ input: tokenIn, balanceBps, amountOffset })];
     const wrapMode = input.token.isNative ? core.WrapMode.wrapBefore : core.WrapMode.none;
 
     return core.newLogic({ to, data, inputs, wrapMode });

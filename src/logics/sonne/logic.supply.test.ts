@@ -27,8 +27,8 @@ describe('Sonne SupplyLogic', function () {
     const testCases: LogicTestCase<SupplyLogicFields>[] = [
       {
         fields: {
-          input: new common.TokenAmount(optimismTokens.WETH, '1'),
-          output: new common.TokenAmount(toCToken(chainId, optimismTokens.WETH), '0'),
+          input: new common.TokenAmount(optimismTokens.ETH, '1'),
+          output: new common.TokenAmount(toCToken(chainId, optimismTokens.ETH.wrapped), '0'),
         },
       },
       {
@@ -39,8 +39,8 @@ describe('Sonne SupplyLogic', function () {
       },
       {
         fields: {
-          input: new common.TokenAmount(optimismTokens.WETH, '1'),
-          output: new common.TokenAmount(toCToken(chainId, optimismTokens.WETH), '0'),
+          input: new common.TokenAmount(optimismTokens.ETH, '1'),
+          output: new common.TokenAmount(toCToken(chainId, optimismTokens.ETH.wrapped), '0'),
           balanceBps: 5000,
         },
       },
@@ -67,7 +67,7 @@ describe('Sonne SupplyLogic', function () {
 
         if (balanceBps) {
           expect(routerLogic.inputs[0].balanceBps).to.eq(balanceBps);
-          expect(routerLogic.inputs[0].amountOrOffset).to.eq(input.token.isNative ? core.OFFSET_NOT_USED : 0);
+          expect(routerLogic.inputs[0].amountOrOffset).to.eq(common.getParamOffset(0));
         } else {
           expect(routerLogic.inputs[0].balanceBps).to.eq(core.BPS_NOT_USED);
           expect(routerLogic.inputs[0].amountOrOffset).to.eq(input.amountWei);

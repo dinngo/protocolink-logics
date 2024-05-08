@@ -1,11 +1,10 @@
 import { BorrowLogic, BorrowLogicFields, BorrowLogicOptions } from './logic.borrow';
 import { LogicTestCase } from 'test/types';
-import { ProtocolinkCallbackExecutor__factory } from './contracts';
 import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
 import { expect } from 'chai';
 import { optimismTokens } from './tokens';
-import { toExecutor } from './configs';
+import * as smartAccounts from '@protocolink/smart-accounts';
 
 describe('Sonne BorrowLogic', function () {
   context('Test getTokenList', async function () {
@@ -21,13 +20,21 @@ describe('Sonne BorrowLogic', function () {
   context('Test build', function () {
     const chainId = common.ChainId.optimism;
     const logic = new BorrowLogic(chainId);
-    const ifaceExecutor = ProtocolinkCallbackExecutor__factory.createInterface();
 
     const testCases: LogicTestCase<BorrowLogicFields, BorrowLogicOptions>[] = [
       {
         fields: {
-          output: new common.TokenAmount(optimismTokens.WETH, '1'),
-          smartId: '1',
+          tokenIn: optimismTokens.WBTC,
+          output: new common.TokenAmount(optimismTokens.ETH, '1'),
+          smartAccountId: smartAccounts.SmartAccountId.PORTUS,
+        },
+        options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa' },
+      },
+      {
+        fields: {
+          tokenIn: optimismTokens.WBTC,
+          output: new common.TokenAmount(optimismTokens.USDC, '1'),
+          smartAccountId: smartAccounts.SmartAccountId.PORTUS,
         },
         options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa' },
       },
@@ -36,12 +43,9 @@ describe('Sonne BorrowLogic', function () {
     testCases.forEach(({ fields, options }) => {
       it(`borrow ${fields.output.token.symbol}`, async function () {
         const routerLogic = await logic.build(fields, options);
-        const sig = routerLogic.data.substring(0, 10);
 
-        expect(routerLogic.to).to.eq(toExecutor(chainId, fields.smartId));
+        expect(routerLogic.to).to.eq(smartAccounts.getSmartAccount(chainId, fields.smartAccountId).executor);
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;
-
-        expect(sig).to.eq(ifaceExecutor.getSighash('executeFromAgent'));
 
         expect(routerLogic.approveTo).to.eq(constants.AddressZero);
         expect(routerLogic.callback).to.eq(constants.AddressZero);

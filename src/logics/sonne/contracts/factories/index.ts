@@ -2,5 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export { Comptroller__factory } from './Comptroller__factory';
-export { ProtocolinkCallbackExecutor__factory } from './ProtocolinkCallbackExecutor__factory';
 export { CErc20Immutable__factory } from './CErc20Immutable__factory';

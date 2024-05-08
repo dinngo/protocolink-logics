@@ -1,4 +1,11 @@
 {
+  "ETH": {
+    "chainId": 10,
+    "address": "0x0000000000000000000000000000000000000000",
+    "decimals": 18,
+    "name": "Ethereum",
+    "symbol": "ETH"
+  },
   "SONNE": {
     "chainId": 10,
     "address": "0x1DB2466d9F5e10D7090E7152B68d62703a2245F0",

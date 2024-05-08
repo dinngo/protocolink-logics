@@ -18,6 +18,13 @@ describe('optimism: Test Sonne Withdraw Logic', function () {
     await claimToken(
       chainId,
       user.address,
+      sonne.optimismTokens.WBTC,
+      '10',
+      '0x078f358208685046a11C85e8ad32895DED33A249'
+    );
+    await claimToken(
+      chainId,
+      user.address,
       sonne.optimismTokens.WETH,
       '10',
       '0x86Bb63148d17d445Ed5398ef26Aa05Bf76dD5b59'
@@ -29,11 +36,20 @@ describe('optimism: Test Sonne Withdraw Logic', function () {
   const testCases = [
     {
       tokenIn: new common.TokenAmount(sonne.optimismTokens.WETH, '1'),
-      tokenOut: sonne.optimismTokens.WETH,
+      tokenOut: sonne.optimismTokens.ETH,
+    },
+    {
+      tokenIn: new common.TokenAmount(sonne.optimismTokens.WBTC, '1'),
+      tokenOut: sonne.optimismTokens.WBTC,
     },
     {
       tokenIn: new common.TokenAmount(sonne.optimismTokens.WETH, '1'),
-      tokenOut: sonne.optimismTokens.WETH,
+      tokenOut: sonne.optimismTokens.ETH,
+      balanceBps: 5000,
+    },
+    {
+      tokenIn: new common.TokenAmount(sonne.optimismTokens.WBTC, '1'),
+      tokenOut: sonne.optimismTokens.WBTC,
       balanceBps: 5000,
     },
   ];
@@ -50,7 +66,7 @@ describe('optimism: Test Sonne Withdraw Logic', function () {
       });
 
       // 2. supply
-      const underlyingToken = output.token;
+      const underlyingToken = output.token.wrapped;
       const supplyAmount = new common.TokenAmount(underlyingToken, '3');
       await helpers.supply(chainId, user, supplyAmount);
 

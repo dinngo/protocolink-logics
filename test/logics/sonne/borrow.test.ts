@@ -6,6 +6,7 @@ import { expect } from 'chai';
 import * as hardhatHelpers from '@nomicfoundation/hardhat-network-helpers';
 import * as helpers from './helpers';
 import hre from 'hardhat';
+import * as smartAccounts from '@protocolink/smart-accounts';
 import * as sonne from 'src/logics/sonne';
 
 describe('optimism: Test Sonne Borrow Logic', function () {
@@ -33,21 +34,26 @@ describe('optimism: Test Sonne Borrow Logic', function () {
 
   const testCases = [
     {
-      tokenIn: new common.TokenAmount(sonne.optimismTokens.WBTC, '1'),
-      output: new common.TokenAmount(sonne.optimismTokens.DAI, '1'),
-      smartId: '1',
+      supply: new common.TokenAmount(sonne.optimismTokens.WBTC, '1'),
+      output: new common.TokenAmount(sonne.optimismTokens.ETH, '1'),
+      smartAccountId: smartAccounts.SmartAccountId.PORTUS,
+    },
+    {
+      supply: new common.TokenAmount(sonne.optimismTokens.WBTC, '1'),
+      output: new common.TokenAmount(sonne.optimismTokens.USDC, '1'),
+      smartAccountId: smartAccounts.SmartAccountId.PORTUS,
     },
   ];
 
-  testCases.forEach(({ tokenIn, output, smartId }, i) => {
+  testCases.forEach(({ supply, output, smartAccountId }, i) => {
     it(`case ${i + 1}`, async function () {
       const user = wallet;
       const userAddress = walletAddress;
+      const tokenIn = supply.token;
 
       // 1. supply and enterMarkets first
-      const supplyAmount = tokenIn;
-      await helpers.supply(chainId, user, supplyAmount);
-      await helpers.enterMarkets(chainId, user, [tokenIn.token]);
+      await helpers.supply(chainId, user, supply);
+      await helpers.enterMarkets(chainId, user, [supply.token]);
 
       // 2. get output
       const sonneBorrowLogic = new sonne.BorrowLogic(chainId, hre.ethers.provider);
@@ -57,7 +63,7 @@ describe('optimism: Test Sonne Borrow Logic', function () {
 
       // 4. build router logics
       const routerLogics: core.DataType.LogicStruct[] = [];
-      routerLogics.push(await sonneBorrowLogic.build({ output, smartId }, { account: userAddress }));
+      routerLogics.push(await sonneBorrowLogic.build({ tokenIn, output, smartAccountId }, { account: userAddress }));
 
       // 5. send router tx
       const routerKit = new core.RouterKit(chainId);

@@ -1043,6 +1043,15 @@
     ethers "^5.7.2"
     tiny-invariant "^1.3.1"
 
+"@protocolink/smart-accounts@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@protocolink/smart-accounts/-/smart-accounts-0.1.2.tgz#68c43133747b93c9fa40df9adc8957e9107e6421"
+  integrity sha512-p8UVRbIl6oMD8Njv5csNLYlgO0vBM9pi7ldia/qM7EkVKuK+Xi8RxIzXpglwAK5+0lcrjJZQ7XTJ3sGzKqoO7g==
+  dependencies:
+    "@protocolink/common" "^0.3.9"
+    ethers "^5.7.2"
+    tiny-invariant "^1.3.1"
+
 "@protocolink/test-helpers@^0.3.7":
   version "0.3.7"
   resolved "https://registry.yarnpkg.com/@protocolink/test-helpers/-/test-helpers-0.3.7.tgz#0a5478bec2978c89b8cfdd5a4f0cc4440e1c7bfc"

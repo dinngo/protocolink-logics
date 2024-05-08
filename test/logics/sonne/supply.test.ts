@@ -27,7 +27,7 @@ describe('optimism: Test Sonne Supply Logic', function () {
 
   const testCases = [
     {
-      input: new common.TokenAmount(sonne.optimismTokens.WETH, '1'),
+      input: new common.TokenAmount(sonne.optimismTokens.ETH, '1'),
       tokenOut: sonne.optimismTokens.WETH,
     },
     {

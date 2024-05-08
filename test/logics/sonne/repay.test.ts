@@ -27,7 +27,7 @@ describe('optimism: Test Sonne Repay Logic', function () {
       chainId,
       user.address,
       sonne.optimismTokens.WETH,
-      '10',
+      '100',
       '0x86Bb63148d17d445Ed5398ef26Aa05Bf76dD5b59'
     );
   });
@@ -36,17 +36,21 @@ describe('optimism: Test Sonne Repay Logic', function () {
 
   const testCases = [
     {
-      supply: new common.TokenAmount(sonne.optimismTokens.WBTC, '1'),
-      borrow: new common.TokenAmount(sonne.optimismTokens.WETH, '1'),
+      supply: new common.TokenAmount(sonne.optimismTokens.WETH, '100'),
+      borrow: new common.TokenAmount(sonne.optimismTokens.WBTC, '1'),
     },
     {
       supply: new common.TokenAmount(sonne.optimismTokens.WBTC, '1'),
-      borrow: new common.TokenAmount(sonne.optimismTokens.WETH, '1'),
+      borrow: new common.TokenAmount(sonne.optimismTokens.ETH, '1'),
+    },
+    {
+      supply: new common.TokenAmount(sonne.optimismTokens.WETH, '100'),
+      borrow: new common.TokenAmount(sonne.optimismTokens.WBTC, '1'),
       balanceBps: 5000,
     },
     {
       supply: new common.TokenAmount(sonne.optimismTokens.WBTC, '1'),
-      borrow: new common.TokenAmount(sonne.optimismTokens.WETH, '1'),
+      borrow: new common.TokenAmount(sonne.optimismTokens.ETH, '1'),
       balanceBps: 5000,
     },
   ];

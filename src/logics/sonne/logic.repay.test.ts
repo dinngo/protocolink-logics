@@ -28,7 +28,20 @@ describe('Sonne RepayLogic', function () {
       {
         fields: {
           borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
+          input: new common.TokenAmount(optimismTokens.ETH, '1'),
+        },
+      },
+      {
+        fields: {
+          borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
           input: new common.TokenAmount(optimismTokens.WETH, '1'),
+        },
+      },
+      {
+        fields: {
+          borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
+          input: new common.TokenAmount(optimismTokens.ETH, '1'),
+          balanceBps: 5000,
         },
       },
       {
@@ -46,13 +59,13 @@ describe('Sonne RepayLogic', function () {
         const sig = routerLogic.data.substring(0, 10);
         const { input, balanceBps } = fields;
 
-        expect(routerLogic.to).to.eq(toCToken(chainId, input.token).address);
+        expect(routerLogic.to).to.eq(toCToken(chainId, input.token.wrapped).address);
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(sig).to.eq(ifaceCErc20.getSighash('repayBorrowBehalf'));
 
         if (balanceBps) {
           expect(routerLogic.inputs[0].balanceBps).to.eq(balanceBps);
-          expect(routerLogic.inputs[0].amountOrOffset).to.eq(input.token.isNative ? core.OFFSET_NOT_USED : 32);
+          expect(routerLogic.inputs[0].amountOrOffset).to.eq(common.getParamOffset(1));
         } else {
           expect(routerLogic.inputs[0].balanceBps).to.eq(core.BPS_NOT_USED);
           expect(routerLogic.inputs[0].amountOrOffset).to.eq(input.amountWei);

@@ -28,13 +28,26 @@ describe('Sonne WithdrawLogic', function () {
       {
         fields: {
           input: new common.TokenAmount(toCToken(chainId, optimismTokens.WETH), '1'),
-          output: new common.TokenAmount(optimismTokens.WETH, '0'),
+          output: new common.TokenAmount(optimismTokens.ETH, '0'),
+        },
+      },
+      {
+        fields: {
+          input: new common.TokenAmount(toCToken(chainId, optimismTokens.USDC), '1'),
+          output: new common.TokenAmount(optimismTokens.USDC, '0'),
         },
       },
       {
         fields: {
           input: new common.TokenAmount(toCToken(chainId, optimismTokens.WETH), '1'),
-          output: new common.TokenAmount(optimismTokens.WETH, '0'),
+          output: new common.TokenAmount(optimismTokens.ETH, '0'),
+          balanceBps: 5000,
+        },
+      },
+      {
+        fields: {
+          input: new common.TokenAmount(toCToken(chainId, optimismTokens.USDC), '1'),
+          output: new common.TokenAmount(optimismTokens.USDC, '0'),
           balanceBps: 5000,
         },
       },

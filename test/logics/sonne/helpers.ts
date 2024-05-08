@@ -10,9 +10,10 @@ export async function supply(
   user: SignerWithAddress | JsonRpcSigner,
   supplyAmount: common.TokenAmount
 ) {
-  const cToken = sonne.toCToken(chainId, supplyAmount.token);
-  await approve(user, cToken.address, supplyAmount);
-  await expect(sonne.CErc20Immutable__factory.connect(cToken.address, user).mint(supplyAmount.amountWei)).to.not.be
+  const supplyTokenAmount = new common.TokenAmount(supplyAmount.token.wrapped, supplyAmount.amount);
+  const cToken = sonne.toCToken(chainId, supplyTokenAmount.token);
+  await approve(user, cToken.address, supplyTokenAmount);
+  await expect(sonne.CErc20Immutable__factory.connect(cToken.address, user).mint(supplyTokenAmount.amountWei)).to.not.be
     .reverted;
 }
 
@@ -35,7 +36,7 @@ export async function enterMarkets(
   user: SignerWithAddress | JsonRpcSigner,
   collaterals: common.Token[]
 ) {
-  const cTokenAddresses = collaterals.map((collateral) => sonne.toCToken(chainId, collateral).address);
+  const cTokenAddresses = collaterals.map((collateral) => sonne.toCToken(chainId, collateral.wrapped).address);
   await expect(
     sonne.Comptroller__factory.connect(sonne.getContractAddress(chainId, 'Comptroller'), user).enterMarkets(
       cTokenAddresses
@@ -48,7 +49,7 @@ export async function borrow(
   user: SignerWithAddress | JsonRpcSigner,
   borrowAmount: common.TokenAmount
 ) {
-  const cToken = sonne.toCToken(chainId, borrowAmount.token);
+  const cToken = sonne.toCToken(chainId, borrowAmount.token.wrapped);
   await expect(sonne.CErc20Immutable__factory.connect(cToken.address, user).borrow(borrowAmount.amountWei)).to.not.be
     .reverted;
 }

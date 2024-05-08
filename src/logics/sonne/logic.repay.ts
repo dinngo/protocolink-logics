@@ -1,9 +1,9 @@
 import { CErc20Immutable__factory } from './contracts';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
-import { supportedChainIds, toCToken, tokenPairs } from './configs';
+import { supportedChainIds, toCToken, underlyingTokens } from './configs';
 
-export type RepayLogicTokenList = [common.Token][];
+export type RepayLogicTokenList = common.Token[];
 
 export type RepayLogicParams = core.RepayParams;
 
@@ -18,26 +18,26 @@ export class RepayLogic
   static readonly supportedChainIds = supportedChainIds;
 
   getTokenList() {
-    const tokenList: RepayLogicTokenList = tokenPairs[this.chainId].map(({ underlyingToken }) => [underlyingToken]);
-    return tokenList;
+    return underlyingTokens;
   }
 
   async quote(params: RepayLogicParams) {
     const { borrower, tokenIn } = params;
 
-    const cToken = toCToken(this.chainId, tokenIn);
+    const cToken = toCToken(this.chainId, tokenIn.wrapped);
     const borrowBalanceWei = await CErc20Immutable__factory.connect(
       cToken.address,
       this.provider
     ).callStatic.borrowBalanceCurrent(borrower);
     const input = new common.TokenAmount(tokenIn).setWei(borrowBalanceWei);
-
     return { borrower, input };
   }
 
   async build(fields: RepayLogicFields) {
     const { borrower, input, balanceBps } = fields;
-    const cToken = toCToken(this.chainId, input.token);
+
+    const tokenIn = new common.TokenAmount(input.token.wrapped, input.amount);
+    const cToken = toCToken(this.chainId, tokenIn.token);
 
     const to = cToken.address;
     const data = CErc20Immutable__factory.createInterface().encodeFunctionData('repayBorrowBehalf', [
@@ -46,7 +46,7 @@ export class RepayLogic
     ]);
 
     const amountOffset = balanceBps ? common.getParamOffset(1) : undefined;
-    const inputs = [core.newLogicInput({ input, balanceBps, amountOffset })];
+    const inputs = [core.newLogicInput({ input: tokenIn, balanceBps, amountOffset })];
     const wrapMode = input.token.isNative ? core.WrapMode.wrapBefore : core.WrapMode.none;
 
     return core.newLogic({ to, data, inputs, wrapMode });
