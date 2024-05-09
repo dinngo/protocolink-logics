@@ -36,27 +36,61 @@ describe('optimism-pb: Test Sonne Repay Logic', function () {
 
   const testCases = [
     {
+      title: 'ERC20: repay fixed amount',
       supply: new common.TokenAmount(sonne.optimismTokens.WETH, '100'),
       borrow: new common.TokenAmount(sonne.optimismTokens.WBTC, '1'),
+      repay: new common.TokenAmount(sonne.optimismTokens.WBTC, '1'),
     },
     {
+      title: 'Native: repay fixed amount',
       supply: new common.TokenAmount(sonne.optimismTokens.WBTC, '1'),
-      borrow: new common.TokenAmount(sonne.optimismTokens.ETH, '1'),
+      borrow: new common.TokenAmount(sonne.optimismTokens.WETH, '1'),
+      repay: new common.TokenAmount(sonne.optimismTokens.ETH, '1'),
     },
     {
+      title: 'ERC20: repay 50% amount',
       supply: new common.TokenAmount(sonne.optimismTokens.WETH, '100'),
       borrow: new common.TokenAmount(sonne.optimismTokens.WBTC, '1'),
+      repay: new common.TokenAmount(sonne.optimismTokens.WBTC, '1'),
       balanceBps: 5000,
     },
     {
+      title: 'Native: repay 50% amount',
       supply: new common.TokenAmount(sonne.optimismTokens.WBTC, '1'),
-      borrow: new common.TokenAmount(sonne.optimismTokens.ETH, '1'),
+      borrow: new common.TokenAmount(sonne.optimismTokens.WETH, '1'),
+      repay: new common.TokenAmount(sonne.optimismTokens.ETH, '1'),
       balanceBps: 5000,
+    },
+    {
+      title: 'ERC20: repay 100% amount',
+      supply: new common.TokenAmount(sonne.optimismTokens.WETH, '100'),
+      borrow: new common.TokenAmount(sonne.optimismTokens.WBTC, '1'),
+      repay: new common.TokenAmount(sonne.optimismTokens.WBTC, '2'),
+      balanceBps: 10000,
+    },
+    {
+      title: 'Native: repay 100% amount',
+      supply: new common.TokenAmount(sonne.optimismTokens.WBTC, '1'),
+      borrow: new common.TokenAmount(sonne.optimismTokens.WETH, '1'),
+      repay: new common.TokenAmount(sonne.optimismTokens.ETH, '2'),
+      balanceBps: 10000,
+    },
+    {
+      title: 'ERC20: repay more amount',
+      supply: new common.TokenAmount(sonne.optimismTokens.WETH, '100'),
+      borrow: new common.TokenAmount(sonne.optimismTokens.WBTC, '1'),
+      repay: new common.TokenAmount(sonne.optimismTokens.WBTC, '2'),
+    },
+    {
+      title: 'Native: repay more amount',
+      supply: new common.TokenAmount(sonne.optimismTokens.WBTC, '1'),
+      borrow: new common.TokenAmount(sonne.optimismTokens.WETH, '1'),
+      repay: new common.TokenAmount(sonne.optimismTokens.ETH, '2'),
     },
   ];
 
-  testCases.forEach(({ supply, borrow, balanceBps }, i) => {
-    it(`case ${i + 1}`, async function () {
+  testCases.forEach(({ title, supply, borrow, repay, balanceBps }, i) => {
+    it(`case ${i + 1}: ${title}`, async function () {
       // 1. supply, enterMarkets and borrow first
       await helpers.supply(chainId, user, supply);
       await helpers.enterMarkets(chainId, user, [supply.token]);
@@ -65,21 +99,21 @@ describe('optimism-pb: Test Sonne Repay Logic', function () {
       // 2. get borrow balance after 1000 blocks
       await hrehelpers.mine(1000);
       const sonneRepayLogic = new sonne.RepayLogic(chainId, hre.ethers.provider);
-      const { input } = await sonneRepayLogic.quote({ borrower: user.address, tokenIn: borrow.token });
+      const { input } = await sonneRepayLogic.quote({ borrower: user.address, tokenIn: repay.token });
       expect(input.amountWei).to.be.gt(borrow.amountWei);
 
       // 3. build input, funds, tokensReturn
       const funds = new common.TokenAmounts();
       if (balanceBps) {
-        funds.add(utils.calcRequiredAmountByBalanceBps(input, balanceBps));
+        funds.add(utils.calcRequiredAmountByBalanceBps(repay, balanceBps));
       } else {
-        funds.add(input);
+        funds.add(repay);
       }
-      const tokensReturn = [input.token.elasticAddress];
+      const tokensReturn = [repay.token.elasticAddress];
 
       // 4. build router logics
       const routerLogics: core.DataType.LogicStruct[] = [];
-      routerLogics.push(await sonneRepayLogic.build({ input, balanceBps, borrower: user.address }));
+      routerLogics.push(await sonneRepayLogic.build({ input: repay, balanceBps, borrower: user.address }));
 
       // 5. get router permit2 datas
       const permit2Datas = await utils.getRouterPermit2Datas(chainId, user, funds.erc20);
@@ -93,7 +127,17 @@ describe('optimism-pb: Test Sonne Repay Logic', function () {
         value: funds.native?.amountWei ?? 0,
       });
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
-      await expect(user.address).to.changeBalance(input.token, -input.amount, 1);
+
+      if (balanceBps === common.BPS_BASE || repay.amountWei.gte(input.amountWei)) {
+        const borrowBalanceWei = await sonne.CErc20Immutable__factory.connect(
+          sonne.toCToken(chainId, borrow.token).address,
+          user
+        ).callStatic.borrowBalanceCurrent(user.address);
+        expect(borrowBalanceWei).to.eq(0);
+        await expect(user.address).to.changeBalance(repay.token, -borrow.amount, 1);
+      } else {
+        await expect(user.address).to.changeBalance(repay.token, -repay.amount);
+      }
     });
   });
 });

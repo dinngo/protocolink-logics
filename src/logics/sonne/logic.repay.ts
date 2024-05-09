@@ -1,5 +1,6 @@
 import { CErc20Immutable__factory } from './contracts';
 import * as common from '@protocolink/common';
+import { constants } from 'ethers';
 import * as core from '@protocolink/core';
 import { supportedChainIds, toCToken, underlyingTokens } from './configs';
 
@@ -38,7 +39,8 @@ export class RepayLogic
       cToken.address,
       this.provider
     ).callStatic.borrowBalanceCurrent(borrower);
-    const input = new common.TokenAmount(tokenIn).setWei(borrowBalanceWei);
+    const amountWei = common.calcSlippage(borrowBalanceWei, -1); // slightly higher than the current borrowed amount
+    const input = new common.TokenAmount(tokenIn).setWei(amountWei);
     return { borrower, input };
   }
 
@@ -47,21 +49,25 @@ export class RepayLogic
 
     const tokenIn = input.token.wrapped;
     const cToken = toCToken(this.chainId, tokenIn);
+    const borrowBalanceWei = await CErc20Immutable__factory.connect(
+      cToken.address,
+      this.provider
+    ).callStatic.borrowBalanceCurrent(borrower);
+    const repayAll = input.amountWei.gte(borrowBalanceWei);
 
     const to = cToken.address;
     const data = CErc20Immutable__factory.createInterface().encodeFunctionData('repayBorrowBehalf', [
       borrower,
-      input.amountWei,
+      repayAll ? constants.MaxUint256 : input.amountWei,
     ]);
 
-    const amountOffset = balanceBps ? common.getParamOffset(1) : undefined;
-    const inputs = [
-      core.newLogicInput({
-        input: new common.TokenAmount(tokenIn, input.amount),
-        balanceBps,
-        amountOffset,
-      }),
-    ];
+    const options: core.NewLogicInputOptions = { input: new common.TokenAmount(tokenIn, input.amount) };
+    if (balanceBps && !repayAll) {
+      options.balanceBps = balanceBps;
+      options.amountOffset = common.getParamOffset(1);
+    }
+
+    const inputs = [core.newLogicInput(options)];
     const wrapMode = input.token.isNative ? core.WrapMode.wrapBefore : core.WrapMode.none;
 
     return core.newLogic({ to, data, inputs, wrapMode });

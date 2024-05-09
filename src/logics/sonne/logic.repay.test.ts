@@ -41,14 +41,14 @@ describe('Sonne RepayLogic', function () {
         fields: {
           borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
           input: new common.TokenAmount(optimismTokens.ETH, '1'),
-          balanceBps: 5000,
+          balanceBps: 10000,
         },
       },
       {
         fields: {
           borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
           input: new common.TokenAmount(optimismTokens.WETH, '1'),
-          balanceBps: 5000,
+          balanceBps: 10000,
         },
       },
     ];
@@ -62,8 +62,9 @@ describe('Sonne RepayLogic', function () {
         expect(routerLogic.to).to.eq(toCToken(chainId, input.token.wrapped).address);
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(sig).to.eq(ifaceCErc20.getSighash('repayBorrowBehalf'));
+        expect(routerLogic.inputs[0].token).to.eq(input.token.wrapped.address);
 
-        if (balanceBps) {
+        if (balanceBps && balanceBps !== common.BPS_BASE) {
           expect(routerLogic.inputs[0].balanceBps).to.eq(balanceBps);
           expect(routerLogic.inputs[0].amountOrOffset).to.eq(common.getParamOffset(1));
         } else {
