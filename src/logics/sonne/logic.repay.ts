@@ -18,7 +18,10 @@ export class RepayLogic
   static readonly supportedChainIds = supportedChainIds;
 
   getTokenList() {
-    return underlyingTokens;
+    const tokenList = underlyingTokens[this.chainId];
+    const nativeToken = common.getNativeToken(this.chainId);
+    tokenList.push(nativeToken);
+    return tokenList;
   }
 
   async quote(params: RepayLogicParams) {
@@ -36,8 +39,8 @@ export class RepayLogic
   async build(fields: RepayLogicFields) {
     const { borrower, input, balanceBps } = fields;
 
-    const tokenIn = new common.TokenAmount(input.token.wrapped, input.amount);
-    const cToken = toCToken(this.chainId, tokenIn.token);
+    const tokenIn = input.token.wrapped;
+    const cToken = toCToken(this.chainId, tokenIn);
 
     const to = cToken.address;
     const data = CErc20Immutable__factory.createInterface().encodeFunctionData('repayBorrowBehalf', [
@@ -46,7 +49,13 @@ export class RepayLogic
     ]);
 
     const amountOffset = balanceBps ? common.getParamOffset(1) : undefined;
-    const inputs = [core.newLogicInput({ input: tokenIn, balanceBps, amountOffset })];
+    const inputs = [
+      core.newLogicInput({
+        input: new common.TokenAmount(tokenIn, input.amount),
+        balanceBps,
+        amountOffset,
+      }),
+    ];
     const wrapMode = input.token.isNative ? core.WrapMode.wrapBefore : core.WrapMode.none;
 
     return core.newLogic({ to, data, inputs, wrapMode });

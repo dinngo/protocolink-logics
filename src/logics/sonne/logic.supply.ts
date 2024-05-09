@@ -2,7 +2,7 @@ import { BigNumber } from 'ethers';
 import { CErc20Immutable__factory } from './contracts';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
-import { supportedChainIds, tokenPairs } from './configs';
+import { supportedChainIds, toCToken, tokenPairs } from './configs';
 
 export type SupplyLogicTokenList = [common.Token, common.Token][];
 
@@ -23,6 +23,10 @@ export class SupplyLogic
       underlyingToken,
       cToken,
     ]);
+
+    const nativeToken = common.getNativeToken(this.chainId);
+    tokenList.push([nativeToken, toCToken(this.chainId, nativeToken)]);
+
     return tokenList;
   }
 
@@ -42,13 +46,19 @@ export class SupplyLogic
   async build(fields: SupplyLogicFields) {
     const { input, output, balanceBps } = fields;
 
-    const tokenIn = new common.TokenAmount(input.token.wrapped, input.amount);
+    const tokenIn = input.token.wrapped;
 
     const to = output.token.address;
-    const data = CErc20Immutable__factory.createInterface().encodeFunctionData('mint', [tokenIn.amountWei]);
+    const data = CErc20Immutable__factory.createInterface().encodeFunctionData('mint', [input.amountWei]);
 
     const amountOffset = balanceBps ? common.getParamOffset(0) : undefined;
-    const inputs = [core.newLogicInput({ input: tokenIn, balanceBps, amountOffset })];
+    const inputs = [
+      core.newLogicInput({
+        input: new common.TokenAmount(tokenIn, input.amount),
+        balanceBps,
+        amountOffset,
+      }),
+    ];
     const wrapMode = input.token.isNative ? core.WrapMode.wrapBefore : core.WrapMode.none;
 
     return core.newLogic({ to, data, inputs, wrapMode });

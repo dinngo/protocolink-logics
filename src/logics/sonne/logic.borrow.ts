@@ -16,7 +16,10 @@ export class BorrowLogic extends core.Logic implements core.LogicTokenListInterf
   static readonly supportedChainIds = supportedChainIds;
 
   getTokenList() {
-    return underlyingTokens;
+    const tokenList = underlyingTokens[this.chainId];
+    const nativeToken = common.getNativeToken(this.chainId);
+    tokenList.push(nativeToken);
+    return tokenList;
   }
 
   async build(fields: BorrowLogicFields, options: BorrowLogicOptions) {
@@ -43,8 +46,8 @@ export class BorrowLogic extends core.Logic implements core.LogicTokenListInterf
     );
     values.push('0');
 
-    const wrapMode = output.token.isNative ? core.WrapMode.unwrapAfter : core.WrapMode.none;
     const { to, data } = smartAccounts.encodeSmartAccount(this.chainId, smartAccountId, tos, datas, values);
+    const wrapMode = output.token.isNative ? core.WrapMode.unwrapAfter : core.WrapMode.none;
 
     return core.newLogic({ to, data, wrapMode });
   }
