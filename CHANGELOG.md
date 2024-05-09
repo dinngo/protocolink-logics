@@ -1,5 +1,12 @@
 # @protocolink/logics
 
+## 1.1.3
+
+### Patch Changes
+
+- b1cf591: add Sonne
+- db9e7a3: add UniswapV3 on Base and Avalanche
+
 ## 1.1.2
 
 ### Patch Changes
