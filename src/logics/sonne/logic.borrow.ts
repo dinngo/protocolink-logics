@@ -14,6 +14,7 @@ export class BorrowLogic extends core.Logic implements core.LogicTokenListInterf
   static id = 'borrow';
   static protocolId = 'sonne';
   static readonly supportedChainIds = supportedChainIds;
+  static readonly isEoaNotSupported = true;
 
   getTokenList() {
     const tokens = underlyingTokens[this.chainId];
