@@ -16,9 +16,15 @@ export class BorrowLogic extends core.Logic implements core.LogicTokenListInterf
   static readonly supportedChainIds = supportedChainIds;
 
   getTokenList() {
-    const tokenList = underlyingTokens[this.chainId];
-    const nativeToken = common.getNativeToken(this.chainId);
-    tokenList.push(nativeToken);
+    const tokens = underlyingTokens[this.chainId];
+
+    const tokenList: BorrowLogicTokenList = [];
+    for (const token of tokens) {
+      if (token.isWrapped) {
+        tokenList.push(token.unwrapped);
+      }
+      tokenList.push(token);
+    }
     return tokenList;
   }
 

@@ -2,7 +2,7 @@ import { BigNumber } from 'ethers';
 import { CErc20Immutable__factory } from './contracts';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
-import { supportedChainIds, toCToken, tokenPairs } from './configs';
+import { supportedChainIds, tokenPairs } from './configs';
 
 export type SupplyLogicTokenList = [common.Token, common.Token][];
 
@@ -19,13 +19,15 @@ export class SupplyLogic
   static readonly supportedChainIds = supportedChainIds;
 
   getTokenList() {
-    const tokenList: SupplyLogicTokenList = tokenPairs[this.chainId].map(({ underlyingToken, cToken }) => [
-      underlyingToken,
-      cToken,
-    ]);
+    const tokens = tokenPairs[this.chainId];
 
-    const nativeToken = common.getNativeToken(this.chainId);
-    tokenList.push([nativeToken, toCToken(this.chainId, nativeToken)]);
+    const tokenList: SupplyLogicTokenList = [];
+    for (const token of tokens) {
+      if (token.underlyingToken.isWrapped) {
+        tokenList.push([token.underlyingToken.unwrapped, token.cToken]);
+      }
+      tokenList.push([token.underlyingToken, token.cToken]);
+    }
 
     return tokenList;
   }

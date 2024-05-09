@@ -6,13 +6,6 @@
     "name": "Ethereum",
     "symbol": "ETH"
   },
-  "SONNE": {
-    "chainId": 10,
-    "address": "0x1DB2466d9F5e10D7090E7152B68d62703a2245F0",
-    "decimals": 18,
-    "symbol": "SONNE",
-    "name": "Sonne"
-  },
   "OP": {
     "chainId": 10,
     "address": "0x4200000000000000000000000000000000000042",

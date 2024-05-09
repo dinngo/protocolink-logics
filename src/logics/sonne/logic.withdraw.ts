@@ -2,7 +2,7 @@ import { BigNumber } from 'ethers';
 import { CErc20Immutable__factory } from './contracts';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
-import { supportedChainIds, toCToken, tokenPairs } from './configs';
+import { supportedChainIds, tokenPairs } from './configs';
 
 export type WithdrawLogicTokenList = [common.Token, common.Token][];
 
@@ -19,13 +19,15 @@ export class WithdrawLogic
   static readonly supportedChainIds = supportedChainIds;
 
   getTokenList() {
-    const tokenList: WithdrawLogicTokenList = tokenPairs[this.chainId].map(({ underlyingToken, cToken }) => [
-      cToken,
-      underlyingToken,
-    ]);
+    const tokens = tokenPairs[this.chainId];
 
-    const nativeToken = common.getNativeToken(this.chainId);
-    tokenList.push([toCToken(this.chainId, nativeToken), nativeToken]);
+    const tokenList: WithdrawLogicTokenList = [];
+    for (const token of tokens) {
+      if (token.underlyingToken.isWrapped) {
+        tokenList.push([token.cToken, token.underlyingToken.unwrapped]);
+      }
+      tokenList.push([token.cToken, token.underlyingToken]);
+    }
 
     return tokenList;
   }
