@@ -9,7 +9,7 @@ import hre from 'hardhat';
 import * as smartAccounts from '@protocolink/smart-accounts';
 import * as sonne from 'src/logics/sonne';
 
-describe('optimism: Test Sonne Borrow Logic', function () {
+describe('optimism-pb: Test Sonne Borrow Logic', function () {
   let chainId: number;
   let wallet: JsonRpcSigner;
   let walletAddress: string;

@@ -7,7 +7,7 @@ import hre from 'hardhat';
 import * as sonne from 'src/logics/sonne';
 import * as utils from 'test/utils';
 
-describe('optimism: Test Sonne Supply Logic', function () {
+describe('optimism-pb: Test Sonne Supply Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
 

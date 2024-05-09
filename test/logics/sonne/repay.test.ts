@@ -9,7 +9,7 @@ import * as hrehelpers from '@nomicfoundation/hardhat-network-helpers';
 import * as sonne from 'src/logics/sonne';
 import * as utils from 'test/utils';
 
-describe('optimism: Test Sonne Repay Logic', function () {
+describe('optimism-pb: Test Sonne Repay Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
 
