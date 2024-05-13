@@ -5,3 +5,4 @@ export * from './logic.repay';
 export * from './logic.supply';
 export * from './logic.withdraw';
 export * from './tokens';
+export * from './service';
