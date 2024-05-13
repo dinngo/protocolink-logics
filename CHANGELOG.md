@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.1.4
+
+### Patch Changes
+
+- d41a9ac: add Sonne service
+
 ## 1.1.3
 
 ### Patch Changes
