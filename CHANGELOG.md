@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.1.5
+
+### Patch Changes
+
+- b4b9ffe: fix sonne service index
+
 ## 1.1.4
 
 ### Patch Changes
