@@ -1,5 +1,12 @@
 # @protocolink/logics
 
+## 1.1.6
+
+### Patch Changes
+
+- aafb64a: add BNB Chain configs to protocols
+- 92d74d4: remove tokenIn from Sonne BorrowLogicFields
+
 ## 1.1.5
 
 ### Patch Changes
