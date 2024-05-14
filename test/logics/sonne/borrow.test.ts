@@ -49,7 +49,6 @@ describe('optimism-pb: Test Sonne Borrow Logic', function () {
     it(`case ${i + 1}`, async function () {
       const user = wallet;
       const userAddress = walletAddress;
-      const tokenIn = supply.token;
 
       // 1. supply and enterMarkets first
       await helpers.supply(chainId, user, supply);
@@ -63,7 +62,7 @@ describe('optimism-pb: Test Sonne Borrow Logic', function () {
 
       // 4. build router logics
       const routerLogics: core.DataType.LogicStruct[] = [];
-      routerLogics.push(await sonneBorrowLogic.build({ tokenIn, output, smartAccountId }, { account: userAddress }));
+      routerLogics.push(await sonneBorrowLogic.build({ output, smartAccountId }, { account: userAddress }));
 
       // 5. send router tx
       const routerKit = new core.RouterKit(chainId);

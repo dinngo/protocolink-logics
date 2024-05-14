@@ -6,7 +6,7 @@ import { supportedChainIds, toCToken, underlyingTokens } from './configs';
 
 export type BorrowLogicTokenList = common.Token[];
 
-export type BorrowLogicFields = core.TokenToTokenExactOutParams<{ smartAccountId: string }>;
+export type BorrowLogicFields = core.TokenOutFields<{ smartAccountId: string }>;
 
 export type BorrowLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
