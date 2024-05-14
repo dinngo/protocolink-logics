@@ -19,6 +19,11 @@ export const configs: Config[] = [
     tokenListUrls: getDefaultTokenListUrls(common.ChainId.optimism),
   },
   {
+    chainId: common.ChainId.bnb,
+    tokenTransferProxyAddress: '0x216B4B4Ba9F3e719726886d34a177484278Bfcae',
+    tokenListUrls: getDefaultTokenListUrls(common.ChainId.bnb),
+  },
+  {
     chainId: common.ChainId.polygon,
     tokenTransferProxyAddress: '0x216B4B4Ba9F3e719726886d34a177484278Bfcae',
     tokenListUrls: getDefaultTokenListUrls(common.ChainId.polygon),

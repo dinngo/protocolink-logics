@@ -44,6 +44,8 @@ export function getDefaultTokenListUrls(chainId: number) {
         'https://static.optimism.io/optimism.tokenlist.json',
         'https://tokens.coingecko.com/optimistic-ethereum/all.json',
       ];
+    case common.ChainId.bnb:
+      return ['https://tokens.pancakeswap.finance/pancakeswap-extended.json'];
     case common.ChainId.polygon:
       return [
         'https://unpkg.com/quickswap-default-token-list@1.2.74/build/quickswap-default.tokenlist.json',
