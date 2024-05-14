@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.1.7
+
+### Patch Changes
+
+- 601f804: remove Sonne service
+
 ## 1.1.6
 
 ### Patch Changes
