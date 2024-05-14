@@ -24,7 +24,6 @@ describe('Sonne BorrowLogic', function () {
     const testCases: LogicTestCase<BorrowLogicFields, BorrowLogicOptions>[] = [
       {
         fields: {
-          tokenIn: optimismTokens.WBTC,
           output: new common.TokenAmount(optimismTokens.ETH, '1'),
           smartAccountId: smartAccounts.SmartAccountId.PORTUS,
         },
@@ -32,7 +31,6 @@ describe('Sonne BorrowLogic', function () {
       },
       {
         fields: {
-          tokenIn: optimismTokens.WBTC,
           output: new common.TokenAmount(optimismTokens.USDC, '1'),
           smartAccountId: smartAccounts.SmartAccountId.PORTUS,
         },
