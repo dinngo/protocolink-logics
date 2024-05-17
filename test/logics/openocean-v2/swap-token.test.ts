@@ -25,7 +25,7 @@ describe('metis: Test OpenOceanV2 SwapToken Logic', function () {
     {
       params: {
         input: new common.TokenAmount(metisTokens.METIS, '1'),
-        tokenOut: metisTokens.USDC,
+        tokenOut: metisTokens.DAI,
         slippage: 100,
       },
     },
