@@ -28,7 +28,7 @@
     "test:unit": "mocha --recursive src"
   },
   "dependencies": {
-    "@paraswap/sdk": "^6.2.2",
+    "@paraswap/sdk": "^6.6.0",
     "@protocolink/common": "^0.3.10",
     "@protocolink/core": "^0.4.11",
     "@protocolink/smart-accounts": "^0.1.2",
