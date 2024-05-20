@@ -1,5 +1,13 @@
 # @protocolink/logics
 
+## 1.1.8
+
+### Patch Changes
+
+- 95469ec: remove WRAPPED_NATIVE_CURRENCY from Uniswap V3
+- dfea25b: add takeSurplus to Paraswap V5
+- c34226c: fix OpenOcean swap test
+
 ## 1.1.7
 
 ### Patch Changes
