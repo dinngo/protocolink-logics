@@ -11,7 +11,7 @@ export type SwapTokenLogicTokenList = common.Token[];
 export type SwapTokenLogicParams = core.TokenToTokenParams<{ slippage?: number; excludeDEXS?: string[] }>;
 
 export type SwapTokenLogicFields = core.TokenToTokenExactInFields<
-  Pick<BuildSwapTxInput, 'partner' | 'partnerAddress'> & { slippage?: number; excludeDEXS?: string[] }
+  Pick<BuildSwapTxInput, 'partner' | 'partnerAddress' | 'takeSurplus'> & { slippage?: number; excludeDEXS?: string[] }
 >;
 
 export type SwapTokenLogicOptions = Pick<core.GlobalOptions, 'account'>;
@@ -78,7 +78,7 @@ export class SwapTokenLogic
   }
 
   async build(fields: SwapTokenLogicFields, options: SwapTokenLogicOptions) {
-    const { input, output, partner, partnerAddress, slippage, excludeDEXS } = fields;
+    const { input, output, partner, partnerAddress, takeSurplus, slippage, excludeDEXS } = fields;
     const { account } = options;
 
     const priceRoute = await this.sdk.swap.getRate({
@@ -105,6 +105,7 @@ export class SwapTokenLogic
         slippage: slippage ?? 0,
         deadline: (Math.floor(Date.now() / 1000) + 1200).toString(),
         priceRoute,
+        takeSurplus,
       },
       { ignoreChecks: true, ignoreGasEstimate: true }
     );
