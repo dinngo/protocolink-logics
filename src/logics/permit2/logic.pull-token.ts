@@ -15,7 +15,9 @@ export class PullTokenLogic extends core.Logic implements core.LogicBuilderInter
   static readonly supportedChainIds = supportedChainIds;
 
   async getTokenList(): Promise<PullTokenLogicTokenList> {
-    return this.chainId === common.ChainId.metis ? await getMetisTokens() : await get1InchTokens(this.chainId);
+    const tokenList =
+      this.chainId === common.ChainId.metis ? await getMetisTokens() : await get1InchTokens(this.chainId);
+    return tokenList.filter((token) => !token.is(common.getNativeToken(this.chainId)));
   }
 
   async build(fields: PullTokenLogicFields, options: PullTokenLogicOptions) {

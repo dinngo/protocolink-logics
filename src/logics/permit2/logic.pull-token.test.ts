@@ -13,6 +13,7 @@ describe('Permit2 PullTokenLogic', function () {
         const logic = new PullTokenLogic(chainId);
         const tokenList = await logic.getTokenList();
         expect(tokenList).to.have.lengthOf.above(0);
+        expect(tokenList.includes(common.getNativeToken(chainId))).to.be.false;
       });
     });
   });
