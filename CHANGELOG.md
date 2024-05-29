@@ -1,5 +1,13 @@
 # @protocolink/logics
 
+## 1.1.9
+
+### Patch Changes
+
+- 8e7fec5: exclude native token from permit2:pull-token token list
+- a6f9e18: fix getTokenList text plain content type
+- ec043d2: sort flashloan aggregator chain id
+
 ## 1.1.8
 
 ### Patch Changes
