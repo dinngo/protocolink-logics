@@ -38,7 +38,7 @@ export class FlashLoanAggregatorLogic
       }
       return accumulator;
     }, new Set<number>())
-  );
+  ).sort((id1, id2) => id1 - id2);
 
   async calcCallbackFee(protocolId: string, loan: common.TokenAmount) {
     const FlashLoanLogic = supportedFlashLoanLogics.find((Logic) => Logic.protocolId === protocolId)!;
