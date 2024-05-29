@@ -30,7 +30,7 @@
   "dependencies": {
     "@paraswap/sdk": "^6.6.0",
     "@protocolink/common": "^0.3.10",
-    "@protocolink/core": "^0.4.11",
+    "@protocolink/core": "^0.4.12",
     "@protocolink/smart-accounts": "^0.1.2",
     "@types/lodash": "^4.14.195",
     "@uniswap/sdk-core": "^3.2.6",
