@@ -80,9 +80,10 @@ export async function getTokenList(
   await Promise.all(
     tokenListUrls.map(async (tokenListUrl) => {
       try {
-        const { data, headers } = await axios.get(tokenListUrl);
-        if ((headers['content-type'] as string).includes('text/plain')) {
-          eval(data);
+        const resp = await axios.get(tokenListUrl);
+        let data = resp.data;
+        if ((resp.headers['content-type'] as string).includes('text/plain')) {
+          data = JSON.parse(data);
         }
         tokenLists.push(data);
       } catch {}
