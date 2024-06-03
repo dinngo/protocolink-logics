@@ -25,7 +25,7 @@ export class WithdrawCollateralLogic
     const markets = getMarkets(this.chainId);
     for (const market of markets) {
       const collaterals = await service.getCollaterals(market.id);
-      tokenList[market.id] = collaterals.map((collateral) => collateral.wrapped);
+      tokenList[market.id] = collaterals;
     }
 
     return tokenList;
