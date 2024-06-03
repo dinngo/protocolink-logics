@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.1.11
+
+### Patch Changes
+
+- fa1c23e: fix compound v3 withdraw collateral token list
+
 ## 1.1.10
 
 ### Patch Changes
