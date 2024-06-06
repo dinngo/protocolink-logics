@@ -32,8 +32,8 @@ export class SwapTokenLogic
     const resp = await axios.get(url + '/tokenList');
     const tokens = resp.data.data;
     const tokenList: SwapTokenLogicTokenList = [];
-    for (const { address, decimals, symbol, name } of tokens) {
-      tokenList.push(new common.Token(this.chainId, address, decimals, symbol, name));
+    for (const { address, decimals, symbol, name, icon } of tokens) {
+      tokenList.push(new common.Token(this.chainId, address, decimals, symbol, name, icon));
     }
     return tokenList;
   }

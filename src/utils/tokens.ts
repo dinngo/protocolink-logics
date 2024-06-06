@@ -4,14 +4,14 @@ import * as common from '@protocolink/common';
 import { ethers } from 'ethers';
 
 export async function get1InchTokens(chainId: number) {
-  const { data } = await axios.get<Record<string, { symbol: string; name: string; decimals: number; address: string }>>(
-    `https://tokens.1inch.io/v1.2/${chainId}`
-  );
+  const { data } = await axios.get<
+    Record<string, { symbol: string; name: string; decimals: number; address: string; logoURI: string }>
+  >(`https://tokens.1inch.io/v1.2/${chainId}`);
 
   const nativeToken = common.getNativeToken(chainId);
   const elasticAddress = common.ELASTIC_ADDRESS.toLowerCase();
-  const tokens = Object.values(data).map(({ address, decimals, symbol, name }) =>
-    address === elasticAddress ? nativeToken : new common.Token(chainId, address, decimals, symbol, name)
+  const tokens = Object.values(data).map(({ address, decimals, symbol, name, logoURI }) =>
+    address === elasticAddress ? nativeToken : new common.Token(chainId, address, decimals, symbol, name, logoURI)
   );
 
   return tokens;
@@ -19,13 +19,13 @@ export async function get1InchTokens(chainId: number) {
 
 export async function getMetisTokens() {
   const chainId = common.ChainId.metis;
-  const { data } = await axios.get<{ tokens: { symbol: string; name: string; decimals: number; address: string }[] }>(
-    `https://tokens.coingecko.com/metis-andromeda/all.json`
-  );
+  const { data } = await axios.get<{
+    tokens: { symbol: string; name: string; decimals: number; address: string; logoURI: string }[];
+  }>(`https://tokens.coingecko.com/metis-andromeda/all.json`);
 
   const tokens = [common.getNativeToken(chainId)];
-  for (const { address, decimals, symbol, name } of data.tokens) {
-    tokens.push(new common.Token(chainId, address, decimals, symbol, name));
+  for (const { address, decimals, symbol, name, logoURI } of data.tokens) {
+    tokens.push(new common.Token(chainId, address, decimals, symbol, name, logoURI));
   }
 
   return tokens;
@@ -93,7 +93,7 @@ export async function getTokenList(
   const tmp: Record<string, boolean> = defaultTokenList.reduce((acc, token) => ({ [token.address]: true }), {});
   const tokenList: common.Token[] = [...defaultTokenList];
   for (const { tokens } of tokenLists) {
-    for (const { chainId, address, decimals, symbol, name } of tokens) {
+    for (const { chainId, address, decimals, symbol, name, logoURI } of tokens) {
       const lowerCaseAddress = address.toLowerCase();
 
       if (
@@ -105,7 +105,7 @@ export async function getTokenList(
         !ethers.utils.isAddress(address)
       )
         continue;
-      tokenList.push(new common.Token(chainId, address, decimals, symbol, name));
+      tokenList.push(new common.Token(chainId, address, decimals, symbol, name, logoURI));
       tmp[lowerCaseAddress] = true;
     }
   }
