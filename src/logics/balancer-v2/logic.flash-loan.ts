@@ -39,9 +39,9 @@ export class FlashLoanLogic extends core.Logic implements core.LogicTokenListInt
 
     const tmp: Record<string, boolean> = {};
     const tokenList: FlashLoanLogicTokenList = [];
-    for (const { chainId, address, decimals, symbol, name } of data.tokens) {
+    for (const { chainId, address, decimals, symbol, name, logoURI } of data.tokens) {
       if (tmp[address] || chainId !== this.chainId || !name || !symbol || !decimals) continue;
-      tokenList.push(new common.Token(chainId, address, decimals, symbol, name));
+      tokenList.push(new common.Token(chainId, address, decimals, symbol, name, logoURI));
       tmp[address] = true;
     }
 

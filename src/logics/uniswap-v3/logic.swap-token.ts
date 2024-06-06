@@ -31,9 +31,9 @@ export class SwapTokenLogic
 
     const tmp: Record<string, boolean> = { [this.nativeToken.address]: true };
     const tokenList: SwapTokenLogicTokenList = [this.nativeToken];
-    for (const { chainId, address, decimals, symbol, name } of data.tokens) {
+    for (const { chainId, address, decimals, symbol, name, logoURI } of data.tokens) {
       if (tmp[address] || chainId !== this.chainId) continue;
-      tokenList.push(new common.Token(chainId, address, decimals, symbol, name));
+      tokenList.push(new common.Token(chainId, address, decimals, symbol, name, logoURI));
       tmp[address] = true;
     }
 
