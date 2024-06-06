@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.1.12
+
+### Patch Changes
+
+- 40c1d04: support token list logoUri
+
 ## 1.1.11
 
 ### Patch Changes
