@@ -49,6 +49,26 @@ export const configs: Config[] = [
     ),
   },
   {
+    chainId: common.ChainId.optimism,
+    contract: {
+      CometRewards: '0x443EA0340cb75a160F31A440722dec7b5bc3C2E9',
+    },
+    markets: [
+      {
+        id: MarketId.USDC,
+        cometAddress: '0x2e44e174f7D53F0212823acC11C01A11d58c5bCB',
+        baseTokenAddress: '0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85',
+      },
+    ],
+    COMP: new common.Token(
+      common.ChainId.optimism,
+      '0x7e7d4467112689329f7E06571eD0E8CbAd4910eE',
+      18,
+      'COMP',
+      'Compound'
+    ),
+  },
+  {
     chainId: common.ChainId.polygon,
     contract: {
       CometRewards: '0x45939657d1CA34A8FA39A924B71D28Fe8431e581',
@@ -74,6 +94,11 @@ export const configs: Config[] = [
       CometRewards: '0x123964802e6ABabBE1Bc9547D72Ef1B69B00A6b1',
     },
     markets: [
+      {
+        id: MarketId.USDC,
+        cometAddress: '0xb125E6687d4313864e53df431d5425969c15Eb2F',
+        baseTokenAddress: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
+      },
       {
         id: MarketId.USDbC,
         cometAddress: '0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf',

@@ -48,6 +48,27 @@
     "symbol": "apxETH",
     "name": "Autocompounding Pirex Ether"
   },
+  "WOETH": {
+    "chainId": 1,
+    "address": "0xDcEe70654261AF21C44c093C300eD3Bb97b78192",
+    "decimals": 18,
+    "symbol": "WOETH",
+    "name": "Wrapped OETH"
+  },
+  "rsETH": {
+    "chainId": 1,
+    "address": "0xA1290d69c65A6Fe4DF752f95823fae25cB99e5A7",
+    "decimals": 18,
+    "symbol": "rsETH",
+    "name": "rsETH"
+  },
+  "USDA": {
+    "chainId": 1,
+    "address": "0x0000206329b97DB379d5E1Bf586BbDB969C63274",
+    "decimals": 18,
+    "symbol": "USDA",
+    "name": "USDA"
+  },
   "USDC": {
     "chainId": 1,
     "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
@@ -61,6 +82,13 @@
     "decimals": 6,
     "symbol": "USDT",
     "name": "Tether USD"
+  },
+  "Re7USDT": {
+    "chainId": 1,
+    "address": "0x95EeF579155cd2C5510F312c8fA39208c3Be01a8",
+    "decimals": 18,
+    "symbol": "Re7USDT",
+    "name": "Re7 USDT"
   },
   "PYUSD": {
     "chainId": 1,
@@ -110,5 +138,12 @@
     "decimals": 18,
     "symbol": "MKR",
     "name": "Maker"
+  },
+  "mTBILL": {
+    "chainId": 1,
+    "address": "0xDD629E5241CbC5919847783e6C96B2De4754e438",
+    "decimals": 18,
+    "symbol": "mTBILL",
+    "name": "mTBILL"
   }
 }
