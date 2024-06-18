@@ -45,13 +45,13 @@ export class ClaimLogic
     if (owner === account) {
       const agent = await this.calcAgent(account);
       data = CometRewards__factory.createInterface().encodeFunctionData('claimTo', [
-        market.cometAddress,
+        market.comet.address,
         owner,
         agent,
         true,
       ]);
     } else {
-      data = CometRewards__factory.createInterface().encodeFunctionData('claim', [market.cometAddress, owner, true]);
+      data = CometRewards__factory.createInterface().encodeFunctionData('claim', [market.comet.address, owner, true]);
     }
 
     return core.newLogic({ to, data });

@@ -26,13 +26,13 @@ export class Service extends common.Web3Toolkit {
 
   async getLoanToken(marketId: string) {
     const market = getMarket(this.chainId, marketId);
-    const loanToken = await this.getToken(market.loanTokenAddress);
+    const loanToken = await this.getToken(market.loanToken.address);
     return loanToken;
   }
 
   async getCollateralToken(marketId: string) {
     const market = getMarket(this.chainId, marketId);
-    const collateralToken = await this.getToken(market.collateralTokenAddress);
+    const collateralToken = await this.getToken(market.collateralToken.address);
     return collateralToken;
   }
 

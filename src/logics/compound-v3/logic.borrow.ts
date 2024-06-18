@@ -40,7 +40,7 @@ export class BorrowLogic extends core.Logic implements core.LogicTokenListInterf
     const tokenOut = output.token.wrapped;
     const agent = await this.calcAgent(account);
 
-    const to = market.cometAddress;
+    const to = market.comet.address;
     const data = Comet__factory.createInterface().encodeFunctionData('withdrawFrom', [
       account,
       agent,

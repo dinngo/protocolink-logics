@@ -34,13 +34,13 @@ export class SupplyLogic extends core.Logic implements core.LogicTokenListInterf
     const { marketId, input, balanceBps } = fields;
     const { account } = options;
 
-    const { collateralTokenAddress, oracle, irm, lltv } = getMarket(this.chainId, marketId);
+    const { collateralToken, oracle, irm, lltv } = getMarket(this.chainId, marketId);
     const loanToken = input.token.wrapped;
 
     const service = new Service(this.chainId, this.provider);
     const to = service.morpho.address;
     const data = service.morphoIface.encodeFunctionData('supply', [
-      { loanToken: loanToken.address, collateralToken: collateralTokenAddress, oracle, irm, lltv },
+      { loanToken: loanToken.address, collateralToken: collateralToken.address, oracle, irm, lltv },
       input.amountWei, // assets
       0, // shares
       account, // onBehalf

@@ -37,13 +37,13 @@ export class SupplyCollateralLogic
     const { marketId, input, balanceBps } = fields;
     const { account } = options;
 
-    const { loanTokenAddress, oracle, irm, lltv } = getMarket(this.chainId, marketId);
+    const { loanToken, oracle, irm, lltv } = getMarket(this.chainId, marketId);
     const collateralToken = input.token.wrapped;
 
     const service = new Service(this.chainId, this.provider);
     const to = service.morpho.address;
     const data = service.morphoIface.encodeFunctionData('supplyCollateral', [
-      { loanToken: loanTokenAddress, collateralToken: collateralToken.address, oracle, irm, lltv },
+      { loanToken: loanToken.address, collateralToken: collateralToken.address, oracle, irm, lltv },
       input.amountWei, // assets
       account, // onBehalf
       '0x', // data

@@ -13,7 +13,7 @@ export async function authorize(chainId: number, user: SignerWithAddress) {
   const service = new morphoblue.Service(chainId, hre.ethers.provider);
   const isAuthorized = await service.isAuthorized(user.address, agent);
   if (!isAuthorized) {
-    const tx = await service.buildAuthorizeTransactionRequest(agent, true);
+    const tx = service.buildAuthorizeTransactionRequest(agent, true);
     await expect(user.sendTransaction(tx)).to.not.be.reverted;
   }
 }
@@ -25,8 +25,8 @@ export async function supply(chainId: number, user: SignerWithAddress, marketId:
   await expect(
     morphoblue.Morpho__factory.connect(morphoAddress, user).supply(
       {
-        loanToken: market.loanTokenAddress,
-        collateralToken: market.collateralTokenAddress,
+        loanToken: market.loanToken.address,
+        collateralToken: market.collateralToken.address,
         oracle: market.oracle,
         irm: market.irm,
         lltv: market.lltv,
@@ -52,8 +52,8 @@ export async function supplyCollateral(
   await expect(
     morphoblue.Morpho__factory.connect(morphoAddress, user).supplyCollateral(
       {
-        loanToken: market.loanTokenAddress,
-        collateralToken: market.collateralTokenAddress,
+        loanToken: market.loanToken.address,
+        collateralToken: market.collateralToken.address,
         oracle: market.oracle,
         irm: market.irm,
         lltv: market.lltv,
@@ -74,8 +74,8 @@ export async function borrow(chainId: number, user: SignerWithAddress, marketId:
   await expect(
     morphoblue.Morpho__factory.connect(morphoAddress, user).borrow(
       {
-        loanToken: market.loanTokenAddress,
-        collateralToken: market.collateralTokenAddress,
+        loanToken: market.loanToken.address,
+        collateralToken: market.collateralToken.address,
         oracle: market.oracle,
         irm: market.irm,
         lltv: market.lltv,

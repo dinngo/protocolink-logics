@@ -34,14 +34,14 @@ export class BorrowLogic extends core.Logic implements core.LogicTokenListInterf
     const { marketId, output } = fields;
     const { account } = options;
 
-    const { collateralTokenAddress, oracle, irm, lltv } = getMarket(this.chainId, marketId);
+    const { collateralToken, oracle, irm, lltv } = getMarket(this.chainId, marketId);
     const loanToken = output.token.wrapped;
     const agent = await this.calcAgent(account);
 
     const service = new Service(this.chainId, this.provider);
     const to = service.morpho.address;
     const data = service.morphoIface.encodeFunctionData('borrow', [
-      { loanToken: loanToken.address, collateralToken: collateralTokenAddress, oracle, irm, lltv },
+      { loanToken: loanToken.address, collateralToken: collateralToken.address, oracle, irm, lltv },
       output.amountWei, // assets
       0, // shares
       account, // onBehalf

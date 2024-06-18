@@ -48,7 +48,7 @@ export class SupplyBaseLogic
     const market = getMarket(this.chainId, marketId);
     const tokenIn = input.token.wrapped;
 
-    const to = market.cometAddress;
+    const to = market.comet.address;
     const data = Comet__factory.createInterface().encodeFunctionData('supply', [tokenIn.address, input.amountWei]);
     const amountOffset = balanceBps ? common.getParamOffset(1) : undefined;
     const inputs = [
