@@ -20,15 +20,15 @@ export async function allow(chainId: number, user: SignerWithAddress, marketId: 
 
 export async function supply(chainId: number, user: SignerWithAddress, marketId: string, supply: common.TokenAmount) {
   const market = compoundv3.getMarket(chainId, marketId);
-  await approve(user, market.cometAddress, supply);
+  await approve(user, market.comet.address, supply);
   await expect(
-    compoundv3.Comet__factory.connect(market.cometAddress, user).supply(supply.token.address, supply.amountWei)
+    compoundv3.Comet__factory.connect(market.comet.address, user).supply(supply.token.address, supply.amountWei)
   ).to.not.be.reverted;
 }
 
 export async function borrow(chainId: number, user: SignerWithAddress, marketId: string, borrow: common.TokenAmount) {
   const market = compoundv3.getMarket(chainId, marketId);
   await expect(
-    compoundv3.Comet__factory.connect(market.cometAddress, user).withdraw(borrow.token.address, borrow.amountWei)
+    compoundv3.Comet__factory.connect(market.comet.address, user).withdraw(borrow.token.address, borrow.amountWei)
   ).to.not.be.reverted;
 }

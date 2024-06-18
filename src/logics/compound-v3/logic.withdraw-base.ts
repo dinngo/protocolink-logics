@@ -50,7 +50,7 @@ export class WithdrawBaseLogic
     const market = getMarket(this.chainId, marketId);
     const tokenOut = output.token.wrapped;
 
-    const to = market.cometAddress;
+    const to = market.comet.address;
     const data = Comet__factory.createInterface().encodeFunctionData('withdraw', [tokenOut.address, input.amountWei]);
     const amountOffset = balanceBps ? common.getParamOffset(1) : undefined;
     const inputs = [core.newLogicInput({ input, balanceBps, amountOffset })];

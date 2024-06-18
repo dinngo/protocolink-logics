@@ -1,0 +1,51 @@
+{
+  "COMP": {
+    "chainId": 10,
+    "address": "0x7e7d4467112689329f7E06571eD0E8CbAd4910eE",
+    "decimals": 18,
+    "symbol": "COMP",
+    "name": "Compound"
+  },
+  "cUSDCv3": {
+    "chainId": 10,
+    "address": "0x2e44e174f7D53F0212823acC11C01A11d58c5bCB",
+    "decimals": 6,
+    "symbol": "cUSDCv3",
+    "name": "Compound USDC"
+  },
+  "USDC": {
+    "chainId": 10,
+    "address": "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85",
+    "decimals": 6,
+    "symbol": "USDC",
+    "name": "USD Coin"
+  },
+  "OP": {
+    "chainId": 10,
+    "address": "0x4200000000000000000000000000000000000042",
+    "decimals": 18,
+    "symbol": "OP",
+    "name": "Optimism"
+  },
+  "ETH": {
+    "chainId": 10,
+    "address": "0x0000000000000000000000000000000000000000",
+    "decimals": 18,
+    "symbol": "ETH",
+    "name": "Ethereum"
+  },
+  "WETH": {
+    "chainId": 10,
+    "address": "0x4200000000000000000000000000000000000006",
+    "decimals": 18,
+    "symbol": "WETH",
+    "name": "Wrapped Ether"
+  },
+  "WBTC": {
+    "chainId": 10,
+    "address": "0x68f180fcCe6836688e9084f035309E29Bf0A2095",
+    "decimals": 8,
+    "symbol": "WBTC",
+    "name": "Wrapped BTC"
+  }
+}

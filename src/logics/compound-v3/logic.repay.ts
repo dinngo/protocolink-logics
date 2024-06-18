@@ -54,7 +54,7 @@ export class RepayLogic extends core.Logic implements core.LogicTokenListInterfa
     const borrowBalance = await service.getBorrowBalance(marketId, borrower, tokenIn);
     const repayAll = input.gte(borrowBalance);
 
-    const to = market.cometAddress;
+    const to = market.comet.address;
     const data = Comet__factory.createInterface().encodeFunctionData('supplyTo', [
       borrower,
       tokenIn.address,

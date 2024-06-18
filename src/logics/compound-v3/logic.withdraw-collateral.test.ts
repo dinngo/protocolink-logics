@@ -43,7 +43,7 @@ describe('CompoundV3 WithdrawCollateralLogic', function () {
         const { marketId, output } = fields;
         const market = getMarket(chainId, marketId);
 
-        expect(routerLogic.to).to.eq(market.cometAddress);
+        expect(routerLogic.to).to.eq(market.comet.address);
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(sig).to.eq(iface.getSighash('withdrawFrom'));
         expect(routerLogic.inputs).to.deep.eq([]);

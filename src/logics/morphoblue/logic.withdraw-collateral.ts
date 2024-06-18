@@ -37,14 +37,14 @@ export class WithdrawCollateralLogic
     const { marketId, output } = fields;
     const { account } = options;
 
-    const { loanTokenAddress, oracle, irm, lltv } = getMarket(this.chainId, marketId);
+    const { loanToken, oracle, irm, lltv } = getMarket(this.chainId, marketId);
     const collateralToken = output.token.wrapped;
     const agent = await this.calcAgent(account);
 
     const service = new Service(this.chainId, this.provider);
     const to = service.morpho.address;
     const data = service.morphoIface.encodeFunctionData('withdrawCollateral', [
-      { loanToken: loanTokenAddress, collateralToken: collateralToken.address, oracle, irm, lltv },
+      { loanToken: loanToken.address, collateralToken: collateralToken.address, oracle, irm, lltv },
       output.amountWei, // assets
       account, // onBehalf
       agent, // receiver

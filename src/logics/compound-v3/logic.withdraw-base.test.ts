@@ -87,7 +87,7 @@ describe('CompoundV3 WithdrawBaseLogic', function () {
         const { marketId, input, output, balanceBps } = fields;
         const market = getMarket(chainId, marketId);
 
-        expect(routerLogic.to).to.eq(market.cometAddress);
+        expect(routerLogic.to).to.eq(market.comet.address);
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(sig).to.eq(iface.getSighash('withdraw'));
         if (balanceBps) {

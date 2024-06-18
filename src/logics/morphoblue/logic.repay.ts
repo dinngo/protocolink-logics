@@ -43,7 +43,7 @@ export class RepayLogic extends core.Logic implements core.LogicTokenListInterfa
   async build(fields: RepayLogicFields) {
     const { marketId, borrower, input, balanceBps } = fields;
 
-    const { collateralTokenAddress, oracle, irm, lltv } = getMarket(this.chainId, marketId);
+    const { collateralToken, oracle, irm, lltv } = getMarket(this.chainId, marketId);
     const loanToken = input.token.wrapped;
 
     const service = new Service(this.chainId, this.provider);
@@ -55,7 +55,7 @@ export class RepayLogic extends core.Logic implements core.LogicTokenListInterfa
 
     const to = service.morpho.address;
     const data = service.morphoIface.encodeFunctionData('repay', [
-      { loanToken: loanToken.address, collateralToken: collateralTokenAddress, oracle, irm, lltv },
+      { loanToken: loanToken.address, collateralToken: collateralToken.address, oracle, irm, lltv },
       assets, // assets
       shares, // shares
       borrower, // onBehalf

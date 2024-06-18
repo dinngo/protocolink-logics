@@ -38,7 +38,7 @@ export class SupplyCollateralLogic
     const market = getMarket(this.chainId, marketId);
     const tokenIn = input.token.wrapped;
 
-    const to = market.cometAddress;
+    const to = market.comet.address;
     const data = Comet__factory.createInterface().encodeFunctionData('supplyTo', [
       account,
       tokenIn.address,

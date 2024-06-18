@@ -5,33 +5,33 @@ import * as common from '@protocolink/common';
 export class Service extends common.Web3Toolkit {
   async getCToken(marketId: string) {
     const market = getMarket(this.chainId, marketId);
-    const cToken = await this.getToken(market.cometAddress);
+    const cToken = await this.getToken(market.comet.address);
 
     return cToken;
   }
 
   async getBaseToken(marketId: string) {
     const market = getMarket(this.chainId, marketId);
-    const baseToken = await this.getToken(market.baseTokenAddress);
+    const baseToken = await this.getToken(market.baseToken.address);
 
     return baseToken;
   }
 
   async getCometTokens(marketId: string) {
     const market = getMarket(this.chainId, marketId);
-    const tokens = await this.getTokens([market.cometAddress, market.baseTokenAddress]);
+    const tokens = await this.getTokens([market.comet.address, market.baseToken.address]);
 
     return { cToken: tokens[0], baseToken: tokens[1] };
   }
 
   async getCollaterals(marketId: string) {
     const market = getMarket(this.chainId, marketId);
-    const numAssets = await Comet__factory.connect(market.cometAddress, this.provider).numAssets();
+    const numAssets = await Comet__factory.connect(market.comet.address, this.provider).numAssets();
 
     const iface = Comet__factory.createInterface();
     const calls: common.Multicall3.CallStruct[] = [];
     for (let i = 0; i < numAssets; i++) {
-      calls.push({ target: market.cometAddress, callData: iface.encodeFunctionData('getAssetInfo', [i]) });
+      calls.push({ target: market.comet.address, callData: iface.encodeFunctionData('getAssetInfo', [i]) });
     }
     const { returnData } = await this.multicall3.callStatic.aggregate(calls);
 
@@ -50,14 +50,14 @@ export class Service extends common.Web3Toolkit {
 
   async isAllowed(marketId: string, owner: string, manager: string) {
     const market = getMarket(this.chainId, marketId);
-    const isAllowed = await Comet__factory.connect(market.cometAddress, this.provider).isAllowed(owner, manager);
+    const isAllowed = await Comet__factory.connect(market.comet.address, this.provider).isAllowed(owner, manager);
 
     return isAllowed;
   }
 
   buildAllowTransactionRequest(marketId: string, manager: string, isAllowed: boolean): common.TransactionRequest {
     const market = getMarket(this.chainId, marketId);
-    const to = market.cometAddress;
+    const to = market.comet.address;
     const iface = Comet__factory.createInterface();
     const data = iface.encodeFunctionData('allow', [manager, isAllowed]);
 
@@ -66,7 +66,7 @@ export class Service extends common.Web3Toolkit {
 
   async getCollateralBalance(marketId: string, account: string, asset: common.Token) {
     const market = getMarket(this.chainId, marketId);
-    const collateralBalance = await Comet__factory.connect(market.cometAddress, this.provider).collateralBalanceOf(
+    const collateralBalance = await Comet__factory.connect(market.comet.address, this.provider).collateralBalanceOf(
       account,
       asset.wrapped.address
     );
@@ -79,7 +79,7 @@ export class Service extends common.Web3Toolkit {
     if (!baseToken) {
       baseToken = await this.getBaseToken(market.id);
     }
-    const borrowBalance = await Comet__factory.connect(market.cometAddress, this.provider).borrowBalanceOf(borrower);
+    const borrowBalance = await Comet__factory.connect(market.comet.address, this.provider).borrowBalanceOf(borrower);
 
     return new common.TokenAmount(baseToken).setWei(borrowBalance);
   }
@@ -89,7 +89,7 @@ export class Service extends common.Web3Toolkit {
     if (!baseToken) {
       baseToken = await this.getBaseToken(market.id);
     }
-    const userBasic = await Comet__factory.connect(market.cometAddress, this.provider).userBasic(account);
+    const userBasic = await Comet__factory.connect(market.comet.address, this.provider).userBasic(account);
 
     return new common.TokenAmount(baseToken).setWei(userBasic.principal);
   }
@@ -99,7 +99,7 @@ export class Service extends common.Web3Toolkit {
     const { owed } = await CometRewards__factory.connect(
       getContractAddress(this.chainId, 'CometRewards'),
       this.provider
-    ).callStatic.getRewardOwed(market.cometAddress, owner);
+    ).callStatic.getRewardOwed(market.comet.address, owner);
 
     return new common.TokenAmount(COMP(this.chainId)).setWei(owed);
   }
@@ -111,11 +111,11 @@ export class Service extends common.Web3Toolkit {
     const iface = Comet__factory.createInterface();
     const calls: common.Multicall3.CallStruct[] = [
       {
-        target: market.cometAddress,
+        target: market.comet.address,
         callData: iface.encodeFunctionData('getAssetInfoByAddress', [asset]),
       },
       {
-        target: market.cometAddress,
+        target: market.comet.address,
         callData: iface.encodeFunctionData('totalsCollateral', [asset]),
       },
     ];

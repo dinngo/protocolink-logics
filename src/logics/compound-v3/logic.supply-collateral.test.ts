@@ -70,7 +70,7 @@ describe('CompoundV3 SupplyCollateralLogic', function () {
         const { marketId, input, balanceBps } = fields;
         const market = getMarket(chainId, marketId);
 
-        expect(routerLogic.to).to.eq(market.cometAddress);
+        expect(routerLogic.to).to.eq(market.comet.address);
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         expect(sig).to.eq(iface.getSighash('supplyTo'));
         expect(routerLogic.inputs[0].token).to.eq(input.token.wrapped.address);
