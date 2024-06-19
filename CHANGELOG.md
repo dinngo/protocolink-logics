@@ -1,5 +1,16 @@
 # @protocolink/logics
 
+## 1.2.0
+
+### Minor Changes
+
+- 2602953: add Morphoblue markets
+- 2cd5b34: add Compound V3 USDC market on Optimism and Base
+
+### Patch Changes
+
+- 2eb924d: fix token configs of compound v3 and morphoblue
+
 ## 1.1.12
 
 ### Patch Changes
