@@ -3,32 +3,9 @@ import { axios } from './http';
 import * as common from '@protocolink/common';
 import { ethers } from 'ethers';
 
-export async function get1InchTokens(chainId: number) {
-  const { data } = await axios.get<
-    Record<string, { symbol: string; name: string; decimals: number; address: string; logoURI: string }>
-  >(`https://tokens.1inch.io/v1.2/${chainId}`);
-
-  const nativeToken = common.getNativeToken(chainId);
-  const elasticAddress = common.ELASTIC_ADDRESS.toLowerCase();
-  const tokens = Object.values(data).map(({ address, decimals, symbol, name, logoURI }) =>
-    address === elasticAddress ? nativeToken : new common.Token(chainId, address, decimals, symbol, name, logoURI)
-  );
-
-  return tokens;
-}
-
-export async function getMetisTokens() {
-  const chainId = common.ChainId.metis;
-  const { data } = await axios.get<{
-    tokens: { symbol: string; name: string; decimals: number; address: string; logoURI: string }[];
-  }>(`https://tokens.coingecko.com/metis-andromeda/all.json`);
-
-  const tokens = [common.getNativeToken(chainId)];
-  for (const { address, decimals, symbol, name, logoURI } of data.tokens) {
-    tokens.push(new common.Token(chainId, address, decimals, symbol, name, logoURI));
-  }
-
-  return tokens;
+export async function getUnifiedTokens(chainId: number, { isSkipNative = false } = {}) {
+  const tokenList = Object.values(await common.getUnifiedTokens(chainId));
+  return isSkipNative ? tokenList.filter((token) => !token.is(common.getNativeToken(chainId))) : tokenList;
 }
 
 export function getDefaultTokenListUrls(chainId: number) {

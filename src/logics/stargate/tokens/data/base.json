@@ -1,18 +1,4 @@
 {
-  "ETH": {
-    "chainId": 8453,
-    "address": "0x0000000000000000000000000000000000000000",
-    "decimals": 18,
-    "symbol": "ETH",
-    "name": "Ethereum"
-  },
-  "USDbC": {
-    "chainId": 8453,
-    "address": "0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA",
-    "decimals": 6,
-    "symbol": "USDbC",
-    "name": "USD Base Coin"
-  },
   "STG": {
     "chainId": 8453,
     "address": "0xE3B53AF74a4BF62Ae5511055290838050bf764Df",

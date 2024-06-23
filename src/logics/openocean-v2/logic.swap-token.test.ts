@@ -5,7 +5,6 @@ import { constants, utils } from 'ethers';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
 import { getExchangeAddress } from './configs';
-import { metisTokens } from 'src/logics/openocean-v2/tokens';
 
 describe('OpenOceanV2 SwapTokenLogic', function () {
   context('Test getTokenList', async function () {
@@ -23,8 +22,8 @@ describe('OpenOceanV2 SwapTokenLogic', function () {
       {
         chainId: common.ChainId.metis,
         fields: {
-          input: new common.TokenAmount(metisTokens.WETH, '1'),
-          output: new common.TokenAmount(metisTokens.USDC, '0'),
+          input: new common.TokenAmount(common.metisTokens.WETH, '1'),
+          output: new common.TokenAmount(common.metisTokens['m.USDC'], '0'),
           slippage: 100,
         },
         options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa' },
@@ -32,8 +31,8 @@ describe('OpenOceanV2 SwapTokenLogic', function () {
       {
         chainId: common.ChainId.metis,
         fields: {
-          input: new common.TokenAmount(metisTokens.METIS, '1'),
-          output: new common.TokenAmount(metisTokens.USDC, '0'),
+          input: new common.TokenAmount(common.metisTokens['METIS(ERC20)'], '1'),
+          output: new common.TokenAmount(common.metisTokens['m.USDC'], '0'),
           slippage: 100,
         },
         options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa' },
@@ -41,8 +40,8 @@ describe('OpenOceanV2 SwapTokenLogic', function () {
       {
         chainId: common.ChainId.metis,
         fields: {
-          input: new common.TokenAmount(metisTokens.USDC, '1'),
-          output: new common.TokenAmount(metisTokens.METIS, '0'),
+          input: new common.TokenAmount(common.metisTokens['m.USDC'], '1'),
+          output: new common.TokenAmount(common.metisTokens['METIS(ERC20)'], '0'),
           slippage: 100,
         },
         options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa' },

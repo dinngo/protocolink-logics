@@ -12,40 +12,5 @@
     "decimals": 6,
     "symbol": "cUSDCv3",
     "name": "Compound USDC"
-  },
-  "USDC": {
-    "chainId": 10,
-    "address": "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85",
-    "decimals": 6,
-    "symbol": "USDC",
-    "name": "USD Coin"
-  },
-  "OP": {
-    "chainId": 10,
-    "address": "0x4200000000000000000000000000000000000042",
-    "decimals": 18,
-    "symbol": "OP",
-    "name": "Optimism"
-  },
-  "ETH": {
-    "chainId": 10,
-    "address": "0x0000000000000000000000000000000000000000",
-    "decimals": 18,
-    "symbol": "ETH",
-    "name": "Ethereum"
-  },
-  "WETH": {
-    "chainId": 10,
-    "address": "0x4200000000000000000000000000000000000006",
-    "decimals": 18,
-    "symbol": "WETH",
-    "name": "Wrapped Ether"
-  },
-  "WBTC": {
-    "chainId": 10,
-    "address": "0x68f180fcCe6836688e9084f035309E29Bf0A2095",
-    "decimals": 8,
-    "symbol": "WBTC",
-    "name": "Wrapped BTC"
   }
 }
