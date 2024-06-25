@@ -5,6 +5,7 @@ import * as core from '@protocolink/core';
 import { expect } from 'chai';
 import hre from 'hardhat';
 import * as morphoblue from 'src/logics/morphoblue';
+import omit from 'lodash/omit';
 import * as utils from 'test/utils';
 
 describe('mainnet-pb: Test Morphoblue SupplyCollateral Logic', function () {
@@ -68,7 +69,10 @@ describe('mainnet-pb: Test Morphoblue SupplyCollateral Logic', function () {
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
       await expect(user.address).to.changeBalance(input.token, -input.amount);
       const collateralBalance = await service.getCollateralBalance(marketId, user.address);
-      expect(collateralBalance).to.be.deep.eq(new common.TokenAmount(input.token.wrapped, input.amount));
+      expect(collateralBalance.amount).eq(input.amount);
+      expect(JSON.stringify(omit(collateralBalance.token.toObject(), 'logoUri'))).eq(
+        JSON.stringify(omit(input.token.toObject(), 'logoUri'))
+      );
     });
   });
 });

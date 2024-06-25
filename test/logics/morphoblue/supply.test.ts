@@ -5,6 +5,7 @@ import * as core from '@protocolink/core';
 import { expect } from 'chai';
 import hre from 'hardhat';
 import * as morphoblue from 'src/logics/morphoblue';
+import omit from 'lodash/omit';
 import * as utils from 'test/utils';
 
 describe('mainnet-pb: Test Morphoblue Supply Logic', function () {
@@ -76,6 +77,10 @@ describe('mainnet-pb: Test Morphoblue Supply Logic', function () {
       await expect(user.address).to.changeBalance(input.token, -input.amount);
       const supplyBalance = await service.getSupplyBalance(marketId, user.address);
       expect(supplyBalance).to.be.deep.eq(new common.TokenAmount(input.token.wrapped, input.amount));
+      expect(supplyBalance.amount).eq(input.amount);
+      expect(JSON.stringify(omit(supplyBalance.token.toObject(), 'logoUri'))).eq(
+        JSON.stringify(omit(input.token.toObject(), 'logoUri'))
+      );
     });
   });
 });
