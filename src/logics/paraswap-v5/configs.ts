@@ -41,7 +41,7 @@ export const configs: Config[] = [
   {
     chainId: common.ChainId.base,
     tokenTransferProxyAddress: '0x93aAAe79a53759cD164340E4C8766E4Db5331cD7',
-    tokenListUrls: ['https://static.optimism.io/optimism.tokenlist.json'],
+    tokenListUrls: ['https://tokens.coingecko.com/base/all.json'],
   },
   {
     chainId: common.ChainId.arbitrum,
