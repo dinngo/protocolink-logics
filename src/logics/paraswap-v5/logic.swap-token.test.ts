@@ -4,10 +4,19 @@ import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
-import { getTokenTransferProxyAddress } from './configs';
+import { getTokenListUrls, getTokenTransferProxyAddress } from './configs';
 import { mainnetTokens } from '@protocolink/test-helpers';
 
 describe('ParaswapV5 SwapTokenLogic', function () {
+  context('Test getTokenListUrls', function () {
+    SwapTokenLogic.supportedChainIds.forEach((chainId) => {
+      it(`network: ${common.toNetworkId(chainId)}`, function () {
+        const urls = getTokenListUrls(chainId);
+        expect(urls).to.have.lengthOf.above(0);
+      });
+    });
+  });
+
   context('Test getTokenList', async function () {
     SwapTokenLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.toNetworkId(chainId)}`, async function () {
