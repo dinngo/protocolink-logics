@@ -1,17 +1,1 @@
-{
-  "WETH": {
-    "chainId": 8453,
-    "address": "0x4200000000000000000000000000000000000006",
-    "decimals": 18,
-    "symbol": "WETH",
-    "name": "Wrapped Ether"
-  },
-
-  "USDbC": {
-    "chainId": 8453,
-    "address": "0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA",
-    "decimals": 6,
-    "symbol": "USDbC",
-    "name": "USD Base Coin"
-  }
-}
+{}

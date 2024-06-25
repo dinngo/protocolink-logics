@@ -23,8 +23,8 @@ describe('SyncSwap utils functions', function () {
     };
   }[] = [
     {
-      input: new common.TokenAmount(zksyncTokens.ETH, '1'),
-      tokenOut: zksyncTokens.USDC,
+      input: new common.TokenAmount(zksyncTokens.WETH, '1'),
+      tokenOut: zksyncTokens['USDC.e'],
       routePools: {
         poolsDirect: [
           {
@@ -84,7 +84,7 @@ describe('SyncSwap utils functions', function () {
       },
     },
     {
-      input: new common.TokenAmount(zksyncTokens.USDC, '1'),
+      input: new common.TokenAmount(zksyncTokens['USDC.e'], '1'),
       tokenOut: zksyncTokens.ETH,
       routePools: {
         poolsDirect: [
@@ -145,7 +145,7 @@ describe('SyncSwap utils functions', function () {
       },
     },
     {
-      input: new common.TokenAmount(zksyncTokens.USDC, '1'),
+      input: new common.TokenAmount(zksyncTokens['USDC.e'], '1'),
       tokenOut: zksyncTokens.WBTC,
       routePools: {
         poolsDirect: [

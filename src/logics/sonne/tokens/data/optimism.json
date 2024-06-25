@@ -1,94 +1,10 @@
 {
-  "ETH": {
-    "chainId": 10,
-    "address": "0x0000000000000000000000000000000000000000",
-    "decimals": 18,
-    "name": "Ethereum",
-    "symbol": "ETH"
-  },
-  "OP": {
-    "chainId": 10,
-    "address": "0x4200000000000000000000000000000000000042",
-    "decimals": 18,
-    "symbol": "OP",
-    "name": "Optimism"
-  },
-  "USDC.e": {
-    "chainId": 10,
-    "address": "0x7F5c764cBc14f9669B88837ca1490cCa17c31607",
-    "decimals": 6,
-    "symbol": "USDC.e",
-    "name": "USD Coin (Bridged from Ethereum)"
-  },
-  "USDT": {
-    "chainId": 10,
-    "address": "0x94b008aA00579c1307B0EF2c499aD98a8ce58e58",
-    "decimals": 6,
-    "symbol": "USDT",
-    "name": "Tether USD"
-  },
-  "DAI": {
-    "chainId": 10,
-    "address": "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
-    "decimals": 18,
-    "symbol": "DAI",
-    "name": "Dai Stablecoin"
-  },
-  "sUSD": {
-    "chainId": 10,
-    "address": "0x8c6f28f2F1A3C87F0f938b96d27520d9751ec8d9",
-    "decimals": 18,
-    "symbol": "sUSD",
-    "name": "Synth sUSD"
-  },
-  "WETH": {
-    "chainId": 10,
-    "address": "0x4200000000000000000000000000000000000006",
-    "decimals": 18,
-    "symbol": "WETH",
-    "name": "Wrapped Ether"
-  },
-  "SNX": {
-    "chainId": 10,
-    "address": "0x8700dAec35aF8Ff88c16BdF0418774CB3D7599B4",
-    "decimals": 18,
-    "symbol": "SNX",
-    "name": "Synthetix Network Token"
-  },
-  "WBTC": {
-    "chainId": 10,
-    "address": "0x68f180fcCe6836688e9084f035309E29Bf0A2095",
-    "decimals": 8,
-    "symbol": "WBTC",
-    "name": "Wrapped BTC"
-  },
-  "LUSD": {
-    "chainId": 10,
-    "address": "0xc40F949F8a4e094D1b49a23ea9241D289B7b2819",
-    "decimals": 18,
-    "symbol": "LUSD",
-    "name": "LUSD Stablecoin"
-  },
-  "wstETH": {
-    "chainId": 10,
-    "address": "0x1F32b1c2345538c0c6f582fCB022739c4A194Ebb",
-    "decimals": 18,
-    "symbol": "wstETH",
-    "name": "Wrapped liquid staked Ether 2.0"
-  },
   "MAI": {
     "chainId": 10,
     "address": "0xdFA46478F9e5EA86d57387849598dbFB2e964b02",
     "decimals": 18,
     "symbol": "MAI",
     "name": "Mai Stablecoin"
-  },
-  "USDC": {
-    "chainId": 10,
-    "address": "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85",
-    "decimals": 6,
-    "symbol": "USDC",
-    "name": "USD Coin"
   },
   "soWETH": {
     "chainId": 10,

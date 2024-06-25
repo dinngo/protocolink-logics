@@ -2,6 +2,7 @@ import { Service } from './service';
 import { arbitrumTokens } from './tokens';
 import * as common from '@protocolink/common';
 import { expect } from 'chai';
+import omit from 'lodash/omit';
 
 describe('RadiantV2 Service', () => {
   const chainIds = [common.ChainId.arbitrum];
@@ -21,13 +22,15 @@ describe('RadiantV2 Service', () => {
 
     const testCases = [
       { asset: arbitrumTokens.WETH, expected: arbitrumTokens.rWETH },
-      { asset: arbitrumTokens.USDC, expected: arbitrumTokens.rUSDC },
+      { asset: arbitrumTokens.USDC, expected: arbitrumTokens.rUSDCn },
     ];
 
     testCases.forEach(({ asset, expected }) => {
       it(`${asset.symbol} to ${expected.symbol}`, async () => {
         const rToken = await service.toRToken(asset);
-        expect(rToken.toObject()).to.deep.eq(expected.toObject());
+        expect(JSON.stringify(omit(rToken.toObject(), 'logoUri'))).to.eq(
+          JSON.stringify(omit(expected.toObject(), 'logoUri'))
+        );
       });
     });
   });
@@ -37,13 +40,15 @@ describe('RadiantV2 Service', () => {
 
     const testCases = [
       { rToken: arbitrumTokens.rWETH, expected: arbitrumTokens.WETH },
-      { rToken: arbitrumTokens.rUSDC, expected: arbitrumTokens.USDC },
+      { rToken: arbitrumTokens.rUSDCn, expected: arbitrumTokens.USDC },
     ];
 
     testCases.forEach(({ rToken, expected }) => {
       it(`${rToken.symbol} to ${expected.symbol}`, async () => {
         const asset = await service.toAsset(rToken);
-        expect(asset.toObject()).to.deep.eq(expected.toObject());
+        expect(JSON.stringify(omit(asset.toObject(), 'logoUri'))).to.eq(
+          JSON.stringify(omit(expected.toObject(), 'logoUri'))
+        );
       });
     });
   });

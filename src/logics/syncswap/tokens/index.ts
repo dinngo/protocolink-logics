@@ -1,4 +1,6 @@
 import * as common from '@protocolink/common';
 import zksyncTokensJSON from './data/zksync.json';
 
-export const zksyncTokens = common.toTokenMap<keyof typeof zksyncTokensJSON>(zksyncTokensJSON);
+type ZksyncTokenSymbols = keyof typeof zksyncTokensJSON;
+
+export const zksyncTokens = { ...common.toTokenMap<ZksyncTokenSymbols>(zksyncTokensJSON), ...common.zksyncTokens };

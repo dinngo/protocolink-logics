@@ -5,26 +5,5 @@
     "decimals": 18,
     "symbol": "STG",
     "name": "StargateToken"
-  },
-  "USDC": {
-    "chainId": 43114,
-    "address": "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E",
-    "decimals": 6,
-    "symbol": "USDC",
-    "name": "USD Coin"
-  },
-  "USDt": {
-    "chainId": 43114,
-    "address": "0x9702230A8Ea53601f5cD2dc00fDBc13d4dF4A8c7",
-    "decimals": 6,
-    "symbol": "USDt",
-    "name": "Tether USD"
-  },
-  "FRAX": {
-    "chainId": 43114,
-    "address": "0xD24C2Ad096400B6FBcd2ad8B24E7acBc21A1da64",
-    "decimals": 18,
-    "symbol": "FRAX",
-    "name": "Frax"
   }
 }

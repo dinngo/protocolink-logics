@@ -2,6 +2,7 @@ import { Service } from './service';
 import * as common from '@protocolink/common';
 import { expect } from 'chai';
 import { mainnetTokens } from './tokens';
+import omit from 'lodash/omit';
 
 describe('AaveV3 Service', function () {
   const chainIds = [common.ChainId.mainnet];
@@ -43,7 +44,9 @@ describe('AaveV3 Service', function () {
     testCases.forEach(({ aToken, expected }) => {
       it(`${aToken.symbol} to ${expected.symbol}`, async function () {
         const asset = await service.toAsset(aToken);
-        expect(asset.toObject()).to.deep.eq(expected.toObject());
+        expect(JSON.stringify(omit(asset.toObject(), 'logoUri'))).to.eq(
+          JSON.stringify(omit(expected.toObject(), 'logoUri'))
+        );
       });
     });
   });

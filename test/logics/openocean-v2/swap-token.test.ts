@@ -4,7 +4,6 @@ import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
 import hre from 'hardhat';
-import { metisTokens } from 'src/logics/openocean-v2/tokens';
 import * as openoceanV2 from 'src/logics/openocean-v2';
 import * as utils from 'test/utils';
 
@@ -15,8 +14,20 @@ describe('metis: Test OpenOceanV2 SwapToken Logic', function () {
   before(async function () {
     chainId = await getChainId();
     [, user] = await hre.ethers.getSigners();
-    await claimToken(chainId, user.address, metisTokens.METIS, '100', '0x7314Ef2CA509490f65F52CC8FC9E0675C66390b8');
-    await claimToken(chainId, user.address, metisTokens.USDC, '3000', '0x885C8AEC5867571582545F894A5906971dB9bf27');
+    await claimToken(
+      chainId,
+      user.address,
+      common.metisTokens['METIS(ERC20)'],
+      '100',
+      '0x7314Ef2CA509490f65F52CC8FC9E0675C66390b8'
+    );
+    await claimToken(
+      chainId,
+      user.address,
+      common.metisTokens['m.USDC'],
+      '3000',
+      '0x885C8AEC5867571582545F894A5906971dB9bf27'
+    );
   });
 
   snapshotAndRevertEach();
@@ -24,22 +35,22 @@ describe('metis: Test OpenOceanV2 SwapToken Logic', function () {
   const testCases = [
     {
       params: {
-        input: new common.TokenAmount(metisTokens.METIS, '1'),
-        tokenOut: metisTokens.DAI,
+        input: new common.TokenAmount(common.metisTokens['METIS(ERC20)'], '1'),
+        tokenOut: common.metisTokens['m.DAI'],
         slippage: 100,
       },
     },
     {
       params: {
-        input: new common.TokenAmount(metisTokens.USDC, '1'),
-        tokenOut: metisTokens.METIS,
+        input: new common.TokenAmount(common.metisTokens['m.USDC'], '1'),
+        tokenOut: common.metisTokens['METIS(ERC20)'],
         slippage: 100,
       },
     },
     {
       params: {
-        input: new common.TokenAmount(metisTokens.USDC, '1'),
-        tokenOut: metisTokens.DAI,
+        input: new common.TokenAmount(common.metisTokens['m.USDC'], '1'),
+        tokenOut: common.metisTokens['m.DAI'],
         slippage: 100,
       },
     },
