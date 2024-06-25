@@ -3,6 +3,7 @@ import avalancheTokensJSON from './data/avalanche.json';
 import baseTokensJSON from './data/base.json';
 import * as common from '@protocolink/common';
 import mainnetTokensJSON from './data/mainnet.json';
+import metisTokensJSON from './data/metis.json';
 import optimismTokensJSON from './data/optimism.json';
 import polygonTokensJSON from './data/polygon.json';
 
@@ -21,7 +22,9 @@ type PolygonTokenSymbols = keyof typeof polygonTokensJSON;
 
 export const polygonTokens = { ...common.toTokenMap<PolygonTokenSymbols>(polygonTokensJSON), ...common.polygonTokens };
 
-export const metisTokens = common.metisTokens;
+type MetisTokenSymbols = keyof typeof metisTokensJSON;
+
+export const metisTokens = { ...common.toTokenMap<MetisTokenSymbols>(metisTokensJSON), ...common.metisTokens };
 
 type BaseTokenSymbols = keyof typeof baseTokensJSON;
 

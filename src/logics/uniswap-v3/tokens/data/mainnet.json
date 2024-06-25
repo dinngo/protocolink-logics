@@ -1,46 +1,4 @@
 {
-  "WETH": {
-    "chainId": 1,
-    "address": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
-    "decimals": 18,
-    "symbol": "WETH",
-    "name": "Wrapped Ether"
-  },
-  "AMPL": {
-    "chainId": 1,
-    "address": "0xD46bA6D942050d489DBd938a2C909A5d5039A161",
-    "decimals": 9,
-    "symbol": "AMPL",
-    "name": "Ampleforth"
-  },
-  "DAI": {
-    "chainId": 1,
-    "address": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
-    "decimals": 18,
-    "symbol": "DAI",
-    "name": "Dai Stablecoin"
-  },
-  "USDC": {
-    "chainId": 1,
-    "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-    "decimals": 6,
-    "symbol": "USDC",
-    "name": "USDC"
-  },
-  "USDT": {
-    "chainId": 1,
-    "address": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
-    "decimals": 6,
-    "symbol": "USDT",
-    "name": "Tether USD"
-  },
-  "WBTC": {
-    "chainId": 1,
-    "address": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
-    "decimals": 8,
-    "symbol": "WBTC",
-    "name": "Wrapped BTC"
-  },
   "ETH2X_FLI": {
     "chainId": 1,
     "address": "0xAa6E8127831c9DE45ae56bB1b0d4D4Da6e5665BD",
@@ -82,13 +40,6 @@
     "decimals": 18,
     "symbol": "TRIBE",
     "name": "Tribe"
-  },
-  "FRAX": {
-    "chainId": 1,
-    "address": "0x853d955aCEf822Db058eb8505911ED77F175b99e",
-    "decimals": 18,
-    "symbol": "FRAX",
-    "name": "Frax"
   },
   "FXS": {
     "chainId": 1,

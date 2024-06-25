@@ -22,7 +22,7 @@ describe('RadiantV2 Service', () => {
 
     const testCases = [
       { asset: arbitrumTokens.WETH, expected: arbitrumTokens.rWETH },
-      { asset: arbitrumTokens['USDC.e'], expected: arbitrumTokens.rUSDC },
+      { asset: arbitrumTokens.USDC, expected: arbitrumTokens.rUSDCn },
     ];
 
     testCases.forEach(({ asset, expected }) => {
@@ -40,7 +40,7 @@ describe('RadiantV2 Service', () => {
 
     const testCases = [
       { rToken: arbitrumTokens.rWETH, expected: arbitrumTokens.WETH },
-      { rToken: arbitrumTokens.rUSDC, expected: arbitrumTokens['USDC.e'] },
+      { rToken: arbitrumTokens.rUSDCn, expected: arbitrumTokens.USDC },
     ];
 
     testCases.forEach(({ rToken, expected }) => {

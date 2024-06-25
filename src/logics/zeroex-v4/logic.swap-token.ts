@@ -1,10 +1,10 @@
 import { axios } from 'src/utils/http';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
-import { getTokenList as getTokenListBase } from 'src/utils';
-import { getTokenListUrls, supportedChainIds } from './configs';
+import { getUnifiedTokens } from 'src/utils';
 import invariant from 'tiny-invariant';
 import { slippageToZeroEx } from 'src/logics/zeroex-v4/slippage';
+import { supportedChainIds } from './configs';
 
 export type SwapTokenLogicTokenList = common.Token[];
 
@@ -41,7 +41,7 @@ export class SwapTokenLogic
   static readonly supportedChainIds = supportedChainIds;
 
   async getTokenList(): Promise<SwapTokenLogicTokenList> {
-    return getTokenListBase(getTokenListUrls(this.chainId), this.chainId, [this.nativeToken]);
+    return await getUnifiedTokens(this.chainId);
   }
 
   getAPIBaseUrl(chainId: number) {

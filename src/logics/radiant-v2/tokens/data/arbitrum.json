@@ -1,18 +1,4 @@
 {
-  "rWBTC": {
-    "chainId": 42161,
-    "address": "0x727354712BDFcd8596a3852Fd2065b3C34F4F770",
-    "decimals": 8,
-    "symbol": "rWBTC",
-    "name": "Radiant interest bearing WBTC"
-  },
-  "rUSDT": {
-    "chainId": 42161,
-    "address": "0xd69D402D1bDB9A2b8c3d88D98b9CEaf9e4Cd72d9",
-    "decimals": 6,
-    "symbol": "rUSDT",
-    "name": "Radiant interest bearing USDT"
-  },
   "rUSDC": {
     "chainId": 42161,
     "address": "0x48a29E756CC1C097388f3B2f3b570ED270423b3d",
@@ -20,13 +6,12 @@
     "symbol": "rUSDC",
     "name": "Radiant interest bearing USDC"
   },
-
-  "rDAI": {
+  "rUSDCn": {
     "chainId": 42161,
-    "address": "0x0D914606f3424804FA1BbBE56CCC3416733acEC6",
-    "decimals": 18,
-    "symbol": "rDAI",
-    "name": "Radiant interest bearing DAI"
+    "address": "0x3a2d44e354f2d88EF6DA7A5A4646fd70182A7F55",
+    "decimals": 6,
+    "symbol": "rUSDCn",
+    "name": "Radiant interest bearing USDCn"
   },
   "rWETH": {
     "chainId": 42161,
@@ -34,19 +19,5 @@
     "decimals": 18,
     "symbol": "rWETH",
     "name": "Radiant interest bearing WETH"
-  },
-  "rWSTETH": {
-    "chainId": 42161,
-    "address": "0x42C248D137512907048021B30d9dA17f48B5b7B2",
-    "decimals": 18,
-    "symbol": "rWSTETH",
-    "name": "Radiant interest bearing WSTETH"
-  },
-  "rARB": {
-    "chainId": 42161,
-    "address": "0x2dADe5b7df9DA3a7e1c9748d169Cd6dFf77e3d01",
-    "decimals": 18,
-    "symbol": "rARB",
-    "name": "Radiant interest bearing ARB"
   }
 }

@@ -118,13 +118,6 @@
     "symbol": "LSD",
     "name": "LSD Coin"
   },
-  "LUSD": {
-    "chainId": 324,
-    "address": "0x503234F203fC7Eb888EEC8513210612a43Cf6115",
-    "decimals": 18,
-    "symbol": "LUSD",
-    "name": "LUSD Stablecoin"
-  },
   "MATIC": {
     "chainId": 324,
     "address": "0x28a487240e4D45CfF4A2980D334CC933B7483842",
@@ -202,20 +195,6 @@
     "symbol": "USD+",
     "name": "USD+"
   },
-  "USDC": {
-    "chainId": 324,
-    "address": "0x3355df6D4c9C3035724Fd0e3914dE96A5a83aaf4",
-    "decimals": 6,
-    "symbol": "USDC",
-    "name": "USD Coin"
-  },
-  "USDT": {
-    "chainId": 324,
-    "address": "0x493257fD37EDB34451f62EDf8D2a0C418852bA4C",
-    "decimals": 6,
-    "symbol": "USDT",
-    "name": "Tether USD"
-  },
   "VC": {
     "chainId": 324,
     "address": "0x85D84c774CF8e9fF85342684b0E795Df72A24908",
@@ -229,20 +208,6 @@
     "decimals": 18,
     "symbol": "VS",
     "name": "veSync"
-  },
-  "WBTC": {
-    "chainId": 324,
-    "address": "0xBBeB516fb02a01611cBBE0453Fe3c580D7281011",
-    "decimals": 8,
-    "symbol": "WBTC",
-    "name": "Wrapped BTC"
-  },
-  "WETH": {
-    "chainId": 324,
-    "address": "0x5AEa5775959fBC2557Cc8789bC1bf90A239D9a91",
-    "decimals": 18,
-    "symbol": "WETH",
-    "name": "Wrapped Ether"
   },
   "WISP": {
     "chainId": 324,

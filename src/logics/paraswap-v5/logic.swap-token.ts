@@ -1,8 +1,9 @@
 import { BuildSwapTxInput, SwapSide, constructSimpleSDK } from '@paraswap/sdk';
+import { TokenList } from '@uniswap/token-lists';
 import { axios } from 'src/utils';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
-import { getTokenList as getTokenListBase } from 'src/utils/tokens';
+import { ethers } from 'ethers';
 import { getTokenListUrls, getTokenTransferProxyAddress, supportedChainIds } from './configs';
 import invariant from 'tiny-invariant';
 
@@ -29,7 +30,42 @@ export class SwapTokenLogic
   }
 
   async getTokenList(): Promise<SwapTokenLogicTokenList> {
-    return getTokenListBase(getTokenListUrls(this.chainId), this.chainId, [this.nativeToken]);
+    const tokenListUrls = getTokenListUrls(this.chainId);
+    const tokenLists: TokenList[] = [];
+    await Promise.all(
+      tokenListUrls.map(async (tokenListUrl) => {
+        try {
+          const resp = await axios.get(tokenListUrl);
+          let data = resp.data;
+          if ((resp.headers['content-type'] as string).includes('text/plain')) {
+            data = JSON.parse(data);
+          }
+          tokenLists.push(data);
+        } catch {}
+      })
+    );
+
+    const tmp: Record<string, boolean> = { [this.nativeToken.address]: true };
+    const tokenList: SwapTokenLogicTokenList = [this.nativeToken];
+    for (const { tokens } of tokenLists) {
+      for (const { chainId, address, decimals, symbol, name, logoURI } of tokens) {
+        const lowerCaseAddress = address.toLowerCase();
+
+        if (
+          tmp[lowerCaseAddress] ||
+          chainId !== this.chainId ||
+          !name ||
+          !symbol ||
+          !decimals ||
+          !ethers.utils.isAddress(address)
+        )
+          continue;
+        tokenList.push(new common.Token(chainId, address, decimals, symbol, name, logoURI));
+        tmp[lowerCaseAddress] = true;
+      }
+    }
+
+    return tokenList;
   }
 
   // If you wish to exclude quotes from specific DEXs, you can include the corresponding DEX Names

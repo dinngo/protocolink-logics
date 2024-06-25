@@ -73,10 +73,10 @@ export const configs: univ3.Config[] = [
     feeAmounts: [FeeAmount.LOWEST, FeeAmount.LOW, FeeAmount.MEDIUM, FeeAmount.HIGH],
     bases: [
       avalancheTokens.WAVAX,
-      avalancheTokens.DAI,
+      avalancheTokens['DAI.e'],
       avalancheTokens.USDC,
-      avalancheTokens.USDT,
-      avalancheTokens.WETH,
+      avalancheTokens.USDt,
+      avalancheTokens['WETH.e'],
     ],
   },
 ];

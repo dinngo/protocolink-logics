@@ -1,5 +1,5 @@
 ---
-'@protocolink/logics': patch
+'@protocolink/logics': minor
 ---
 
 use common unified tokens
