@@ -22,7 +22,7 @@ export class DepositLogic
 
   async getTokenList() {
     const service = new Service(this.chainId, this.provider);
-    const reserveTokens = await service.getReserveTokens();
+    const reserveTokens = await service.getSupplyTokens();
 
     const tokenList: DepositLogicTokenList = [];
     for (const reserveToken of reserveTokens) {

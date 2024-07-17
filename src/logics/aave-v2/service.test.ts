@@ -7,12 +7,36 @@ import omit from 'lodash/omit';
 describe('AaveV2 Service', function () {
   const chainIds = [common.ChainId.mainnet];
 
-  context('Test getReserveTokensAddresses', function () {
+  context('Test getReserveTokens', () => {
+    chainIds.forEach((chainId) => {
+      it(common.toNetworkId(chainId), async () => {
+        const service = new Service(chainId);
+        const { reserveTokens, reserveMap } = await service.getReserveTokens();
+
+        expect(reserveTokens).to.have.lengthOf.above(0);
+        expect(Object.keys(reserveMap)).to.have.lengthOf.above(0);
+      });
+    });
+  });
+
+  context('Test getSupplyTokens', function () {
     chainIds.forEach((chainId) => {
       it(common.toNetworkId(chainId), async function () {
         const service = new Service(chainId);
-        const reserveTokensAddresses = await service.getReserveTokensAddresses();
-        expect(reserveTokensAddresses).to.have.lengthOf.above(0);
+        const supplyTokens = await service.getSupplyTokens();
+        expect(supplyTokens).to.have.lengthOf.above(0);
+        expect(supplyTokens.every(({ isSupplyEnabled }) => isSupplyEnabled)).to.be.true;
+      });
+    });
+  });
+
+  context('Test getBorrowTokens', function () {
+    chainIds.forEach((chainId) => {
+      it(common.toNetworkId(chainId), async function () {
+        const service = new Service(chainId);
+        const borrowTokens = await service.getBorrowTokens();
+        expect(borrowTokens).to.have.lengthOf.above(0);
+        expect(borrowTokens.every(({ isBorrowEnabled }) => isBorrowEnabled)).to.be.true;
       });
     });
   });
