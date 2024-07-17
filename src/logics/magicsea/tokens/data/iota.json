@@ -1,0 +1,23 @@
+{
+  "USDC.e": {
+    "chainId": 8822,
+    "address": "0xFbDa5F676cB37624f28265A144A48B0d6e87d3b6",
+    "decimals": 6,
+    "symbol": "USDC.e",
+    "name": "Stargate USDC"
+  },
+  "GIGA": {
+    "chainId": 8822,
+    "address": "0x7c311AD614cA8b7441739cEab8A218587ecc6554",
+    "decimals": 18,
+    "symbol": "GIGA",
+    "name": "GigaFish"
+  },
+  "USDT": {
+    "chainId": 8822,
+    "address": "0xC1B8045A6ef2934Cf0f78B0dbD489969Fa9Be7E4",
+    "decimals": 6,
+    "symbol": "USDT",
+    "name": "Tether USD"
+  }
+}
