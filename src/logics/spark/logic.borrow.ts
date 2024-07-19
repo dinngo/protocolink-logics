@@ -18,14 +18,14 @@ export class BorrowLogic extends core.Logic implements core.LogicTokenListInterf
 
   async getTokenList() {
     const service = new Service(this.chainId, this.provider);
-    const tokens = await service.getAssets();
+    const reserveTokens = await service.getBorrowTokens();
 
     const tokenList: BorrowLogicTokenList = [];
-    for (const token of tokens) {
-      if (token.isWrapped) {
-        tokenList.push(token.unwrapped);
+    for (const { asset } of reserveTokens) {
+      if (asset.isWrapped) {
+        tokenList.push(asset.unwrapped);
       }
-      tokenList.push(token);
+      tokenList.push(asset);
     }
 
     return tokenList;

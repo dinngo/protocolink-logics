@@ -1,5 +1,4 @@
 import {
-  AToken__factory,
   DebtTokenBase__factory,
   LendingPoolAddressesProvider__factory,
   LendingPool__factory,
@@ -59,33 +58,13 @@ export class Service extends common.Web3Toolkit {
     return this.lendingPoolAddress;
   }
 
-  private assets?: common.Token[];
-
-  async getAssets() {
-    if (!this.assets) {
-      const { reserveTokens } = await this.getReserveTokens();
-      this.assets = reserveTokens.map(({ asset }) => asset);
-    }
-    return this.assets;
-  }
-
-  private rTokens?: common.Token[];
-
-  async getRTokens() {
-    if (!this.rTokens) {
-      const { reserveTokens } = await this.getReserveTokens();
-
-      this.rTokens = reserveTokens.map(({ rToken }) => rToken);
-    }
-    return this.rTokens;
-  }
-
   private reserveTokens?: ReserveTokens[];
   private reserveMap?: Record<string, ReserveTokens>;
 
   async getReserveTokens() {
     if (!this.reserveTokens) {
       const tokenAddresses: string[] = [];
+      const reserveTokens: ReserveTokens[] = [];
       const reserveMap: Record<string, any> = {};
 
       const lendingPoolAddress = await this.getLendingPoolAddress();
@@ -109,13 +88,13 @@ export class Service extends common.Web3Toolkit {
           returnData[i * 2]
         );
 
+        const { rTokenAddress, stableDebtTokenAddress, variableDebtTokenAddress } =
+          this.protocolDataProviderIface.decodeFunctionResult('getReserveTokensAddresses', returnData[i * 2 + 1]);
+
         reserveMap[assetAddress] = {
           isSupplyEnabled: isActive && !isFrozen,
           isBorrowEnabled: isActive && !isFrozen && borrowingEnabled,
         };
-
-        const { rTokenAddress, stableDebtTokenAddress, variableDebtTokenAddress } =
-          this.protocolDataProviderIface.decodeFunctionResult('getReserveTokensAddresses', returnData[i * 2 + 1]);
 
         tokenAddresses.push(assetAddress, rTokenAddress, stableDebtTokenAddress, variableDebtTokenAddress);
       });
@@ -123,36 +102,51 @@ export class Service extends common.Web3Toolkit {
       const tokens = await this.getTokens(tokenAddresses);
 
       for (let i = 0; i < tokens.length; i += 4) {
-        const assetAddress = tokens[i].address;
+        const asset = tokens[i];
+        const rToken = tokens[i + 1];
+        const stableDebtToken = tokens[i + 2];
+        const variableDebtToken = tokens[i + 3];
 
-        reserveMap[assetAddress].asset = tokens[i];
-        reserveMap[assetAddress].rToken = tokens[i + 1];
-        reserveMap[assetAddress].stableDebtToken = tokens[i + 2];
-        reserveMap[assetAddress].variableDebtToken = tokens[i + 3];
+        const reserveToken: ReserveTokens = {
+          ...reserveMap[asset.address],
+          asset,
+          rToken,
+          stableDebtToken,
+          variableDebtToken,
+        };
+
+        reserveTokens.push(reserveToken);
+
+        reserveMap[asset.address] = reserveToken;
+
+        // Add rToken address as key for quick lookup
+        reserveMap[rToken.address] = reserveToken;
       }
 
-      this.reserveTokens = Object.values(reserveMap);
-
-      // Add rToken address as key for quick lookup
-      for (const reserve of Object.values(reserveMap)) {
-        reserveMap[reserve.rToken.address] = reserve;
-      }
-
+      this.reserveTokens = reserveTokens;
       this.reserveMap = reserveMap;
     }
 
     return { reserveTokens: this.reserveTokens!, reserveMap: this.reserveMap! };
   }
 
+  async getAssets() {
+    const { reserveTokens } = await this.getReserveTokens();
+    return reserveTokens.map(({ asset }) => asset);
+  }
+
+  async getATokens() {
+    const { reserveTokens } = await this.getReserveTokens();
+    return reserveTokens.map(({ rToken }) => rToken);
+  }
+
   async getSupplyTokens() {
     const { reserveTokens } = await this.getReserveTokens();
-
     return reserveTokens.filter(({ isSupplyEnabled }) => isSupplyEnabled);
   }
 
   async getBorrowTokens() {
     const { reserveTokens } = await this.getReserveTokens();
-
     return reserveTokens.filter(({ isBorrowEnabled }) => isBorrowEnabled);
   }
 
@@ -188,8 +182,8 @@ export class Service extends common.Web3Toolkit {
   async getDebtTokenAddress(asset: common.Token, interestRateMode: InterestRateMode) {
     const { reserveMap } = await this.getReserveTokens();
 
-    const { stableDebtToken, variableDebtToken } = reserveMap[asset.address];
-    invariant(stableDebtToken || variableDebtToken, `unsupported aToken: ${asset.address}`);
+    const { stableDebtToken, variableDebtToken } = reserveMap[asset.wrapped.address];
+    invariant(stableDebtToken || variableDebtToken, `unsupported aToken: ${asset.wrapped.address}`);
 
     return interestRateMode === InterestRateMode.variable ? variableDebtToken.address : stableDebtToken.address;
   }

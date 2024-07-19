@@ -22,7 +22,7 @@ export class WithdrawLogic
 
   async getTokenList() {
     const service = new Service(this.chainId, this.provider);
-    const reserveTokens = await service.getBorrowTokens();
+    const { reserveTokens } = await service.getReserveTokens();
 
     const tokenList: WithdrawLogicTokenList = [];
     for (const reserveToken of reserveTokens) {
