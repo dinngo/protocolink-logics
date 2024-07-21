@@ -1,5 +1,7 @@
 import * as common from '@protocolink/common';
 
+export const protocolId = 'aave-v2';
+
 type ContractNames = 'ProtocolDataProvider' | 'AaveV2FlashLoanCallback';
 
 export interface Config {

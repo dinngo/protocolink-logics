@@ -1,5 +1,7 @@
 import * as common from '@protocolink/common';
 
+export const protocolId = 'spark';
+
 type ContractNames = 'PoolDataProvider' | 'SparkFlashLoanCallback';
 
 export interface Config {

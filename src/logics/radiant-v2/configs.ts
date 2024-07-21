@@ -1,5 +1,7 @@
 import * as common from '@protocolink/common';
 
+export const protocolId = 'radiant-v2';
+
 type ContractNames = 'ProtocolDataProvider' | 'RadiantV2FlashLoanCallback';
 
 export interface Config {
