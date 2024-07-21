@@ -274,7 +274,7 @@ export const configs: Config[] = [
     pools: [
       {
         id: PoolId.METIS,
-        token: metisTokens['METIS(ERC20)'],
+        token: metisTokens.METIS,
         decimals: 18,
         paths: [{ chainId: common.ChainId.mainnet, poolIds: [PoolId.METIS] }],
       },

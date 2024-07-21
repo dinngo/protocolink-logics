@@ -62,7 +62,7 @@ export class Service extends common.Web3Toolkit {
   private reserveMap?: Record<string, ReserveTokens>;
 
   async getReserveTokens() {
-    if (!this.reserveTokens) {
+    if (!this.reserveTokens || !this.reserveMap) {
       const tokenAddresses: string[] = [];
       const reserveTokens: ReserveTokens[] = [];
       const reserveMap: Record<string, any> = {};
@@ -127,7 +127,7 @@ export class Service extends common.Web3Toolkit {
       this.reserveMap = reserveMap;
     }
 
-    return { reserveTokens: this.reserveTokens!, reserveMap: this.reserveMap! };
+    return { reserveTokens: this.reserveTokens, reserveMap: this.reserveMap };
   }
 
   async getAssets() {

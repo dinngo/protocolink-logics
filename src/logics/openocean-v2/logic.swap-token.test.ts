@@ -31,7 +31,7 @@ describe('OpenOceanV2 SwapTokenLogic', function () {
       {
         chainId: common.ChainId.metis,
         fields: {
-          input: new common.TokenAmount(common.metisTokens['METIS(ERC20)'], '1'),
+          input: new common.TokenAmount(common.metisTokens.METIS, '1'),
           output: new common.TokenAmount(common.metisTokens['m.USDC'], '0'),
           slippage: 100,
         },
@@ -41,7 +41,7 @@ describe('OpenOceanV2 SwapTokenLogic', function () {
         chainId: common.ChainId.metis,
         fields: {
           input: new common.TokenAmount(common.metisTokens['m.USDC'], '1'),
-          output: new common.TokenAmount(common.metisTokens['METIS(ERC20)'], '0'),
+          output: new common.TokenAmount(common.metisTokens.METIS, '0'),
           slippage: 100,
         },
         options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa' },
