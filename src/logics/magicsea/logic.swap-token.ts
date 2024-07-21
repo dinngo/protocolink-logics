@@ -84,8 +84,8 @@ export class SwapTokenLogic
         toCurrencyAmount(tokenIn, input.amountWei.toString()),
         toCurrency(tokenOut),
         {
-          maxHops: maxHops,
-          maxNumResults: maxNumResults,
+          maxHops,
+          maxNumResults,
         }
       )[0];
 
@@ -118,8 +118,8 @@ export class SwapTokenLogic
         toCurrency(tokenIn),
         toCurrencyAmount(tokenOut, output.amountWei.toString()),
         {
-          maxHops: maxHops,
-          maxNumResults: maxNumResults,
+          maxHops,
+          maxNumResults,
         }
       )[0];
 
@@ -212,15 +212,33 @@ export class SwapTokenLogic
     const pairAddresses = await this.getPairAddresses(pairTokens);
     const addresses = isAll ? pairAddresses : [pairAddresses[0]];
 
+    const callsGetReserves: common.Multicall3.CallStruct[] = [];
+    const iface = MagicSeaPair__factory.createInterface();
+    for (let i = 0; i < addresses.length; i++) {
+      const pairAddress = addresses[i];
+      if (pairAddress) {
+        const callDataGetReserves = iface.encodeFunctionData('getReserves');
+        callsGetReserves.push({ target: pairAddress, callData: callDataGetReserves });
+      }
+    }
+
+    const [resultsGetReserves] = await Promise.all([this.multicall3.callStatic.tryAggregate(false, callsGetReserves)]);
+
+    let j = 0;
     const results: [BigintIsh, BigintIsh][] = [];
     for (let i = 0; i < addresses.length; i++) {
       const pairAddress = addresses[i];
       if (!pairAddress) {
         results.push(['0', '0']);
       } else {
-        const pair = MagicSeaPair__factory.connect(pairAddress, this.provider);
-        const [reserve0, reserve1] = await pair.getReserves();
-        results.push([reserve0.toString(), reserve1.toString()]);
+        const resultGetReserves = resultsGetReserves[j];
+        if (resultGetReserves.success && resultGetReserves.returnData !== '0x') {
+          const [reserve0, reserve1] = iface.decodeFunctionResult('getReserves', resultGetReserves.returnData);
+          results.push([reserve0.toString(), reserve1.toString()]);
+        } else {
+          results.push(['0', '0']);
+        }
+        j++;
       }
     }
 
@@ -272,23 +290,50 @@ export class SwapTokenLogic
 
   async getPairAddresses(pairTokens: Token[][]): Promise<Array<string | undefined>> {
     const pairAddresses = [];
+    const multicallRecords = [];
+    const callsGetPair: common.Multicall3.CallStruct[] = [];
+    const iface = MagicSeaFactory__factory.createInterface();
 
+    // compose multi-calls
     for (let i = 0; i < pairTokens.length; i++) {
       const tokenA = pairTokens[i][0];
       const tokenB = pairTokens[i][1];
-      let poolAddress = undefined;
+
       if (tokenA && tokenB && !tokenA.equals(tokenB)) {
-        poolAddress = await this.getPairAddress(toToken(tokenA), toToken(tokenB));
+        const tokenIn = toToken(tokenA);
+        const tokenOut = toToken(tokenB);
+        const [token0, token1] = tokenIn.sortsBefore(tokenOut) ? [tokenIn, tokenOut] : [tokenOut, tokenIn];
+
+        const callDataGetPair = iface.encodeFunctionData('getPair', [token0.address, token1.address]);
+        const factorAddress = getContractAddress(this.chainId, 'Factory');
+        callsGetPair.push({ target: factorAddress, callData: callDataGetPair });
+        multicallRecords.push(true);
+      } else {
+        multicallRecords.push(false);
       }
-      pairAddresses.push(poolAddress);
+    }
+
+    const [resultsGetPair] = await Promise.all([this.multicall3.callStatic.tryAggregate(false, callsGetPair)]);
+
+    // decode multicall results
+    let j = 0;
+    for (let i = 0; i < multicallRecords.length; i++) {
+      if (multicallRecords[i]) {
+        const resultGetPair = resultsGetPair[j];
+        if (resultGetPair.success && resultGetPair.returnData !== '0x') {
+          const [pairAddress] = iface.decodeFunctionResult('getPair', resultGetPair.returnData);
+          if (pairAddress === constants.AddressZero) pairAddresses.push(undefined);
+          else {
+            pairAddresses.push(pairAddress);
+          }
+        } else {
+          pairAddresses.push(undefined);
+        }
+        j++;
+      } else {
+        pairAddresses.push(undefined);
+      }
     }
     return pairAddresses;
-  }
-
-  async getPairAddress(tokenIn: common.Token, tokenOut: common.Token) {
-    const factory = MagicSeaFactory__factory.connect(getContractAddress(this.chainId, 'Factory'), this.provider);
-    const [token0, token1] = tokenIn.sortsBefore(tokenOut) ? [tokenIn, tokenOut] : [tokenOut, tokenIn];
-    const poolAddress = await factory.getPair(token0.address, token1.address);
-    return poolAddress === constants.AddressZero ? undefined : poolAddress;
   }
 }
