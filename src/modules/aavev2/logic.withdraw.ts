@@ -11,7 +11,7 @@ export type WithdrawLogicFields = core.TokenToTokenExactInFields;
 
 export type WithdrawLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
-export abstract class WithdrawLogic extends core.Logic {
+export class WithdrawLogic extends core.Logic {
   static id = 'withdraw';
   public readonly service: serviceType;
 
@@ -19,8 +19,6 @@ export abstract class WithdrawLogic extends core.Logic {
     super(chainId, provider);
     this.service = service;
   }
-
-  abstract getTokenList(): Promise<WithdrawLogicTokenList>;
 
   async quote(params: WithdrawLogicParams) {
     const { input, tokenOut } = params;

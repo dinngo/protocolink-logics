@@ -9,7 +9,7 @@ export type RepayLogicParams = core.RepayParams<{ interestRateMode: InterestRate
 
 export type RepayLogicFields = core.RepayFields<{ interestRateMode: InterestRateMode }>;
 
-export abstract class RepayLogic extends core.Logic {
+export class RepayLogic extends core.Logic {
   static id = 'repay';
   public readonly service: serviceType;
 

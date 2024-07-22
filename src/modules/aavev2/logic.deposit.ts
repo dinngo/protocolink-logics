@@ -11,7 +11,7 @@ export type DepositLogicFields = core.TokenToTokenExactInFields<{ referralCode?:
 
 export type DepositLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
-export abstract class DepositLogics extends core.Logic {
+export class DepositLogics extends core.Logic {
   static id = 'deposit';
   public readonly service: serviceType;
 
@@ -19,8 +19,6 @@ export abstract class DepositLogics extends core.Logic {
     super(chainId, provider);
     this.service = service;
   }
-
-  abstract getTokenList(): Promise<DepositLogicTokenList>;
 
   async quote(params: DepositLogicParams) {
     const { input, tokenOut } = params;
