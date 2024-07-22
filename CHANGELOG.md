@@ -1,5 +1,20 @@
 # @protocolink/logics
 
+## 1.4.0
+
+### Minor Changes
+
+- 2e2c829: add aave-like supply and borrow enable status to reserve tokens
+- 4c7fae6: add Magic Sea on IOTA
+
+### Patch Changes
+
+- bb87f55: Update dependencies
+  - @protocolink/core@0.5.1
+  - @protocolink/smart-accounts@0.1.4
+  - @protocolink/test-helpers@^0.4.1
+- a3b715c: remove common packages included tokens
+
 ## 1.3.0
 
 ### Minor Changes
