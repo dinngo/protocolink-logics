@@ -1,18 +1,11 @@
 import {
-  AToken__factory,
   DebtTokenBase__factory,
   LendingPoolAddressesProvider__factory,
   LendingPool__factory,
   ProtocolDataProvider,
   ProtocolDataProvider__factory,
 } from './contracts';
-import {
-  FlashLoanAssetInfo,
-  FlashLoanConfiguration,
-  InterestRateMode,
-  ReserveTokens,
-  ReserveTokensAddress,
-} from './types';
+import { FlashLoanAssetInfo, FlashLoanConfiguration, InterestRateMode, ReserveTokens } from './types';
 import { LendingPoolInterface } from './contracts/LendingPool';
 import { ProtocolDataProviderInterface } from './contracts/ProtocolDataProvider';
 import * as common from '@protocolink/common';
@@ -65,150 +58,134 @@ export class Service extends common.Web3Toolkit {
     return this.lendingPoolAddress;
   }
 
-  private assetAddresses?: string[];
+  private reserveTokens?: ReserveTokens[];
+  private reserveMap?: Record<string, ReserveTokens>;
 
-  async getAssetAddresses() {
-    if (!this.assetAddresses) {
+  async getReserveTokens() {
+    if (!this.reserveTokens || !this.reserveMap) {
+      const tokenAddresses: string[] = [];
+      const reserveTokens: ReserveTokens[] = [];
+      const reserveMap: Record<string, any> = {};
+
       const lendingPoolAddress = await this.getLendingPoolAddress();
       const assetAddresses = await LendingPool__factory.connect(lendingPoolAddress, this.provider).getReservesList();
 
-      const calls: common.Multicall3.CallStruct[] = assetAddresses.map((assetAddress) => ({
-        target: this.protocolDataProvider.address,
-        callData: this.protocolDataProviderIface.encodeFunctionData('getReserveConfigurationData', [assetAddress]),
-      }));
+      const calls: common.Multicall3.CallStruct[] = assetAddresses.flatMap((assetAddress) => [
+        {
+          target: this.protocolDataProvider.address,
+          callData: this.protocolDataProviderIface.encodeFunctionData('getReserveConfigurationData', [assetAddress]),
+        },
+        {
+          target: this.protocolDataProvider.address,
+          callData: this.protocolDataProviderIface.encodeFunctionData('getReserveTokensAddresses', [assetAddress]),
+        },
+      ]);
       const { returnData } = await this.multicall3.callStatic.aggregate(calls);
 
-      this.assetAddresses = [];
-      for (let i = 0; i < assetAddresses.length; i++) {
-        const assetAddress = assetAddresses[i];
-        const { isActive, isFrozen } = this.protocolDataProviderIface.decodeFunctionResult(
+      assetAddresses.forEach((assetAddress, i) => {
+        const { isActive, isFrozen, borrowingEnabled } = this.protocolDataProviderIface.decodeFunctionResult(
           'getReserveConfigurationData',
-          returnData[i]
+          returnData[i * 2]
         );
-        if (isActive && !isFrozen) this.assetAddresses.push(assetAddress);
-      }
-    }
 
-    return this.assetAddresses;
-  }
-
-  private reserveTokensAddresses?: ReserveTokensAddress[];
-
-  async getReserveTokensAddresses() {
-    if (!this.reserveTokensAddresses) {
-      const assetAddresses = await this.getAssetAddresses();
-
-      const calls: common.Multicall3.CallStruct[] = assetAddresses.map((asset) => ({
-        target: this.protocolDataProvider.address,
-        callData: this.protocolDataProviderIface.encodeFunctionData('getReserveTokensAddresses', [asset]),
-      }));
-      const { returnData } = await this.multicall3.callStatic.aggregate(calls);
-
-      this.reserveTokensAddresses = [];
-      for (let i = 0; i < assetAddresses.length; i++) {
-        const assetAddress = assetAddresses[i];
         const { rTokenAddress, stableDebtTokenAddress, variableDebtTokenAddress } =
-          this.protocolDataProviderIface.decodeFunctionResult('getReserveTokensAddresses', returnData[i]);
-        this.reserveTokensAddresses.push({
-          assetAddress,
-          rTokenAddress,
-          stableDebtTokenAddress,
-          variableDebtTokenAddress,
-        });
-      }
-    }
+          this.protocolDataProviderIface.decodeFunctionResult('getReserveTokensAddresses', returnData[i * 2 + 1]);
 
-    return this.reserveTokensAddresses;
-  }
+        reserveMap[assetAddress] = {
+          isSupplyEnabled: isActive && !isFrozen,
+          isBorrowEnabled: isActive && !isFrozen && borrowingEnabled,
+        };
 
-  private assets?: common.Token[];
+        tokenAddresses.push(assetAddress, rTokenAddress, stableDebtTokenAddress, variableDebtTokenAddress);
+      });
 
-  async getAssets() {
-    if (!this.assets) {
-      const assetAddresses = await this.getAssetAddresses();
-      this.assets = await this.getTokens(assetAddresses);
-    }
-    return this.assets;
-  }
-
-  private rTokens?: common.Token[];
-
-  async getRTokens() {
-    if (!this.rTokens) {
-      const reserveTokensAddresses = await this.getReserveTokensAddresses();
-      const rTokenAddresses = reserveTokensAddresses.map((reserveTokensAddress) => reserveTokensAddress.rTokenAddress);
-      this.rTokens = await this.getTokens(rTokenAddresses);
-    }
-    return this.rTokens;
-  }
-
-  private reserveTokens?: ReserveTokens[];
-
-  async getReserveTokens() {
-    if (!this.reserveTokens) {
-      const reserveTokensAddresses = await this.getReserveTokensAddresses();
-      const tokenAddresses = reserveTokensAddresses.reduce<string[]>((accumulator, reserveTokensAddress) => {
-        accumulator.push(reserveTokensAddress.assetAddress);
-        accumulator.push(reserveTokensAddress.rTokenAddress);
-        accumulator.push(reserveTokensAddress.stableDebtTokenAddress);
-        accumulator.push(reserveTokensAddress.variableDebtTokenAddress);
-        return accumulator;
-      }, []);
       const tokens = await this.getTokens(tokenAddresses);
 
-      this.reserveTokens = [];
-      let j = 0;
-      for (let i = 0; i < reserveTokensAddresses.length; i++) {
-        const asset = tokens[j];
-        j++;
-        const rToken = tokens[j];
-        j++;
-        const stableDebtToken = tokens[j];
-        j++;
-        const variableDebtToken = tokens[j];
-        j++;
-        this.reserveTokens.push({ asset, rToken, stableDebtToken, variableDebtToken });
+      for (let i = 0; i < tokens.length; i += 4) {
+        const asset = tokens[i];
+        const rToken = tokens[i + 1];
+        const stableDebtToken = tokens[i + 2];
+        const variableDebtToken = tokens[i + 3];
+
+        const reserveToken: ReserveTokens = {
+          ...reserveMap[asset.address],
+          asset,
+          rToken,
+          stableDebtToken,
+          variableDebtToken,
+        };
+
+        reserveTokens.push(reserveToken);
+
+        reserveMap[asset.address] = reserveToken;
+
+        // Add rToken address as key for quick lookup
+        reserveMap[rToken.address] = reserveToken;
       }
+
+      this.reserveTokens = reserveTokens;
+      this.reserveMap = reserveMap;
     }
 
-    return this.reserveTokens;
+    return { reserveTokens: this.reserveTokens, reserveMap: this.reserveMap };
+  }
+
+  async getAssets() {
+    const { reserveTokens } = await this.getReserveTokens();
+    return reserveTokens.map(({ asset }) => asset);
+  }
+
+  async getATokens() {
+    const { reserveTokens } = await this.getReserveTokens();
+    return reserveTokens.map(({ rToken }) => rToken);
+  }
+
+  async getSupplyTokens() {
+    const { reserveTokens } = await this.getReserveTokens();
+    return reserveTokens.filter(({ isSupplyEnabled }) => isSupplyEnabled);
+  }
+
+  async getBorrowTokens() {
+    const { reserveTokens } = await this.getReserveTokens();
+    return reserveTokens.filter(({ isBorrowEnabled }) => isBorrowEnabled);
   }
 
   async toRToken(asset: common.Token) {
-    const { rTokenAddress } = await this.protocolDataProvider.getReserveTokensAddresses(asset.wrapped.address);
-    return this.getToken(rTokenAddress);
+    const { reserveMap } = await this.getReserveTokens();
+
+    const rToken = reserveMap[asset.wrapped.address]?.rToken;
+    invariant(rToken?.address !== constants.AddressZero, `unsupported asset: ${asset.wrapped.address}`);
+
+    return rToken;
   }
 
   async toRTokens(assets: common.Token[]) {
-    const calls: common.Multicall3.CallStruct[] = assets.map((asset) => ({
-      target: this.protocolDataProvider.address,
-      callData: this.protocolDataProviderIface.encodeFunctionData('getReserveTokensAddresses', [asset.wrapped.address]),
-    }));
-    const { returnData } = await this.multicall3.callStatic.aggregate(calls);
+    const { reserveMap } = await this.getReserveTokens();
 
-    const rTokenAddresses: string[] = [];
-    for (let i = 0; i < assets.length; i++) {
-      const { rTokenAddress } = this.protocolDataProviderIface.decodeFunctionResult(
-        'getReserveTokensAddresses',
-        returnData[i]
-      );
-      invariant(rTokenAddress !== constants.AddressZero, `unsupported asset: ${assets[i].wrapped.address}`);
-      rTokenAddresses.push(rTokenAddress);
-    }
+    return assets.map((asset) => {
+      const rToken = reserveMap[asset.wrapped.address]?.rToken;
+      invariant(rToken?.address !== constants.AddressZero, `unsupported asset: ${asset.wrapped.address}`);
 
-    return this.getTokens(rTokenAddresses);
+      return rToken;
+    });
   }
 
   async toAsset(rToken: common.Token) {
-    const assetAddress = await AToken__factory.connect(rToken.address, this.provider).UNDERLYING_ASSET_ADDRESS();
-    return this.getToken(assetAddress);
+    const { reserveMap } = await this.getReserveTokens();
+
+    const asset = reserveMap[rToken.address]?.asset;
+    invariant(asset, `unsupported aToken: ${rToken.address}`);
+
+    return asset;
   }
 
   async getDebtTokenAddress(asset: common.Token, interestRateMode: InterestRateMode) {
-    const { stableDebtTokenAddress, variableDebtTokenAddress } =
-      await this.protocolDataProvider.getReserveTokensAddresses(asset.wrapped.address);
+    const { reserveMap } = await this.getReserveTokens();
 
-    return interestRateMode === InterestRateMode.variable ? variableDebtTokenAddress : stableDebtTokenAddress;
+    const { stableDebtToken, variableDebtToken } = reserveMap[asset.wrapped.address];
+    invariant(stableDebtToken || variableDebtToken, `unsupported aToken: ${asset.wrapped.address}`);
+
+    return interestRateMode === InterestRateMode.variable ? variableDebtToken.address : stableDebtToken.address;
   }
 
   async getFlashLoanPremiumTotal() {

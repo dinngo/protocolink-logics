@@ -1,5 +1,7 @@
 import * as common from '@protocolink/common';
 
+export const protocolId = 'aave-v3';
+
 type ContractNames = 'PoolDataProvider' | 'AaveV3FlashLoanCallback';
 
 export interface Config {

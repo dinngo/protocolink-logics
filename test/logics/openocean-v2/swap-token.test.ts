@@ -17,7 +17,7 @@ describe('metis: Test OpenOceanV2 SwapToken Logic', function () {
     await claimToken(
       chainId,
       user.address,
-      common.metisTokens['METIS(ERC20)'],
+      common.metisTokens.METIS,
       '100',
       '0x7314Ef2CA509490f65F52CC8FC9E0675C66390b8'
     );
@@ -35,7 +35,7 @@ describe('metis: Test OpenOceanV2 SwapToken Logic', function () {
   const testCases = [
     {
       params: {
-        input: new common.TokenAmount(common.metisTokens['METIS(ERC20)'], '1'),
+        input: new common.TokenAmount(common.metisTokens.METIS, '1'),
         tokenOut: common.metisTokens['m.DAI'],
         slippage: 100,
       },
@@ -43,7 +43,7 @@ describe('metis: Test OpenOceanV2 SwapToken Logic', function () {
     {
       params: {
         input: new common.TokenAmount(common.metisTokens['m.USDC'], '1'),
-        tokenOut: common.metisTokens['METIS(ERC20)'],
+        tokenOut: common.metisTokens.METIS,
         slippage: 100,
       },
     },

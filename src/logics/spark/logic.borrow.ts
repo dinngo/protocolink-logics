@@ -1,53 +1,23 @@
-import { InterestRateMode } from './types';
-import { Pool__factory } from './contracts';
 import { Service } from './service';
-import * as common from '@protocolink/common';
+import * as aavev3 from 'src/modules/aavev3';
 import * as core from '@protocolink/core';
-import { supportedChainIds } from './configs';
+import { protocolId, supportedChainIds } from './configs';
+import { providers } from 'ethers';
 
-export type BorrowLogicTokenList = common.Token[];
+export type BorrowLogicTokenList = aavev3.BorrowLogicTokenList;
 
-export type BorrowLogicFields = core.TokenOutFields<{ interestRateMode: InterestRateMode; referralCode?: number }>;
+export type BorrowLogicFields = aavev3.BorrowLogicFields;
 
-export type BorrowLogicOptions = Pick<core.GlobalOptions, 'account'>;
+export type BorrowLogicOptions = aavev3.BorrowLogicOptions;
 
-export class BorrowLogic extends core.Logic implements core.LogicTokenListInterface, core.LogicBuilderInterface {
-  static id = 'borrow';
-  static protocolId = 'spark';
+export class BorrowLogic
+  extends aavev3.BorrowLogic
+  implements core.LogicTokenListInterface, core.LogicBuilderInterface
+{
+  static protocolId = protocolId;
   static readonly supportedChainIds = supportedChainIds;
 
-  async getTokenList() {
-    const service = new Service(this.chainId, this.provider);
-    const tokens = await service.getAssets();
-
-    const tokenList: BorrowLogicTokenList = [];
-    for (const token of tokens) {
-      if (token.isWrapped) {
-        tokenList.push(token.unwrapped);
-      }
-      tokenList.push(token);
-    }
-
-    return tokenList;
-  }
-
-  async build(fields: BorrowLogicFields, options: BorrowLogicOptions) {
-    const { output, interestRateMode, referralCode = 0 } = fields;
-    const { account } = options;
-
-    const tokenOut = output.token.wrapped;
-
-    const service = new Service(this.chainId, this.provider);
-    const to = await service.getPoolAddress();
-    const data = Pool__factory.createInterface().encodeFunctionData('borrow', [
-      tokenOut.address,
-      output.amountWei,
-      interestRateMode,
-      referralCode,
-      account,
-    ]);
-    const wrapMode = output.token.isNative ? core.WrapMode.unwrapAfter : core.WrapMode.none;
-
-    return core.newLogic({ to, data, wrapMode });
+  constructor(chainId: number, provider?: providers.Provider) {
+    super({ chainId, provider, service: new Service(chainId, provider) });
   }
 }
