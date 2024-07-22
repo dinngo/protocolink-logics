@@ -20,7 +20,7 @@ export class DepositLogics extends core.Logic {
     this.service = service;
   }
 
-  async quote(params: DepositLogicParams) {
+  async quote(params: DepositLogicParams): Promise<DepositLogicFields> {
     const { input, tokenOut } = params;
     const output = new common.TokenAmount(tokenOut, input.amount);
 

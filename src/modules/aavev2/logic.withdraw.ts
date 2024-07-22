@@ -20,7 +20,7 @@ export class WithdrawLogic extends core.Logic {
     this.service = service;
   }
 
-  async quote(params: WithdrawLogicParams) {
+  async quote(params: WithdrawLogicParams): Promise<WithdrawLogicFields> {
     const { input, tokenOut } = params;
     const output = new common.TokenAmount(tokenOut, input.amount);
 

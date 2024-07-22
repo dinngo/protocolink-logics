@@ -34,7 +34,7 @@ export class SupplyLogics extends core.Logic {
     return tokenList;
   }
 
-  async quote(params: SupplyLogicParams) {
+  async quote(params: SupplyLogicParams): Promise<SupplyLogicFields> {
     const { input, tokenOut } = params;
     const output = new common.TokenAmount(tokenOut, input.amount);
 
