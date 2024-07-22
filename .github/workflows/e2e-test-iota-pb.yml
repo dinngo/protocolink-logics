@@ -1,0 +1,24 @@
+name: E2E Iota Pinned Block
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  run-e2e-test:
+    name: iota pb
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run e2e test
+        run: yarn test:e2e:iota:pb
