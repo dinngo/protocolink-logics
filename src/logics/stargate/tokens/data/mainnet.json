@@ -1,11 +1,4 @@
 {
-  "STG": {
-    "chainId": 1,
-    "address": "0xAf5191B0De278C7286d6C7CC6ab6BB8A73bA2Cd6",
-    "decimals": 18,
-    "symbol": "STG",
-    "name": "Stargate Finance"
-  },
   "Metis": {
     "chainId": 1,
     "address": "0x9E32b13ce7f2E80A01932B42553652E053D6ed8e",
