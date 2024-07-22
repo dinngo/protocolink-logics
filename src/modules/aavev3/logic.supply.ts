@@ -11,10 +11,7 @@ export type SupplyLogicFields = core.TokenToTokenExactInFields<{ referralCode?: 
 
 export type SupplyLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
-export abstract class SupplyLogics
-  extends core.Logic
-  implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
-{
+export abstract class SupplyLogics extends core.Logic {
   static id = 'supply';
   public readonly service: serviceType;
 

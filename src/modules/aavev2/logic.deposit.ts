@@ -11,10 +11,7 @@ export type DepositLogicFields = core.TokenToTokenExactInFields<{ referralCode?:
 
 export type DepositLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
-export abstract class DepositLogics
-  extends core.Logic
-  implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
-{
+export abstract class DepositLogics extends core.Logic {
   static id = 'deposit';
   public readonly service: serviceType;
 

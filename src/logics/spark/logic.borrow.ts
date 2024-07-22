@@ -1,5 +1,6 @@
 import { Service } from './service';
 import * as aavev3 from 'src/modules/aavev3';
+import * as core from '@protocolink/core';
 import { protocolId, supportedChainIds } from './configs';
 import { providers } from 'ethers';
 
@@ -9,7 +10,10 @@ export type BorrowLogicFields = aavev3.BorrowLogicFields;
 
 export type BorrowLogicOptions = aavev3.BorrowLogicOptions;
 
-export class BorrowLogic extends aavev3.BorrowLogic {
+export class BorrowLogic
+  extends aavev3.BorrowLogic
+  implements core.LogicTokenListInterface, core.LogicBuilderInterface
+{
   static protocolId = protocolId;
   static readonly supportedChainIds = supportedChainIds;
 

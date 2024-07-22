@@ -1,5 +1,6 @@
 import { Service } from './service';
 import * as aavev2 from 'src/modules/aavev2';
+import * as core from '@protocolink/core';
 import { protocolId, supportedChainIds } from './configs';
 import { providers } from 'ethers';
 
@@ -11,7 +12,10 @@ export type WithdrawLogicFields = aavev2.WithdrawLogicFields;
 
 export type WithdrawLogicOptions = aavev2.WithdrawLogicOptions;
 
-export class WithdrawLogic extends aavev2.WithdrawLogic {
+export class WithdrawLogic
+  extends aavev2.WithdrawLogic
+  implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
+{
   static protocolId = protocolId;
   static readonly supportedChainIds = supportedChainIds;
 

@@ -22,6 +22,6 @@ export class DepositLogic extends aavev2.DepositLogics {
   async getTokenList() {
     const reserveTokens = await this.service.getSupplyTokens();
 
-    return aavev2.createDepositTokenList(reserveTokens, 'aToken');
+    return aavev2.createDepositTokenList(reserveTokens, 'rToken');
   }
 }

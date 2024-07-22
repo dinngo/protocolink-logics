@@ -11,10 +11,7 @@ export type WithdrawLogicFields = core.TokenToTokenExactInFields;
 
 export type WithdrawLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
-export abstract class WithdrawLogic
-  extends core.Logic
-  implements core.LogicTokenListInterface, core.LogicOracleInterface, core.LogicBuilderInterface
-{
+export abstract class WithdrawLogic extends core.Logic {
   static id = 'withdraw';
   public readonly service: serviceType;
 

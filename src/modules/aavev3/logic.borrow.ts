@@ -9,10 +9,7 @@ export type BorrowLogicFields = core.TokenOutFields<{ interestRateMode: Interest
 
 export type BorrowLogicOptions = Pick<core.GlobalOptions, 'account'>;
 
-export abstract class BorrowLogic
-  extends core.Logic
-  implements core.LogicTokenListInterface, core.LogicBuilderInterface
-{
+export abstract class BorrowLogic extends core.Logic {
   static id = 'borrow';
   public readonly service: serviceType;
 
