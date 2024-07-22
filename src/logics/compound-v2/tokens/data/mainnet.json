@@ -1,11 +1,4 @@
 {
-  "COMP": {
-    "chainId": 1,
-    "address": "0xc00e94Cb662C3520282E6f5717214004A7f26888",
-    "decimals": 18,
-    "symbol": "COMP",
-    "name": "Compound"
-  },
   "cAAVE": {
     "chainId": 1,
     "address": "0xe65cdB6479BaC1e22340E4E755fAE7E509EcD06c",
@@ -48,13 +41,6 @@
     "decimals": 8,
     "symbol": "cETH",
     "name": "Compound Ether"
-  },
-  "FEI": {
-    "chainId": 1,
-    "address": "0x956F47F50A910163D8BF957Cf5846D573E7f87CA",
-    "decimals": 18,
-    "symbol": "FEI",
-    "name": "Fei USD"
   },
   "cFEI": {
     "chainId": 1,

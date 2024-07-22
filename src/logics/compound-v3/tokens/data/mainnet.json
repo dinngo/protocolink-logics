@@ -1,11 +1,4 @@
 {
-  "COMP": {
-    "chainId": 1,
-    "address": "0xc00e94Cb662C3520282E6f5717214004A7f26888",
-    "decimals": 18,
-    "symbol": "COMP",
-    "name": "Compound"
-  },
   "cUSDCv3": {
     "chainId": 1,
     "address": "0xc3d688B66703497DAA19211EEdff47f25384cdc3",
