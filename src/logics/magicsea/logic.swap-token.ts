@@ -322,10 +322,7 @@ export class SwapTokenLogic
         const resultGetPair = resultsGetPair[j];
         if (resultGetPair.success && resultGetPair.returnData !== '0x') {
           const [pairAddress] = iface.decodeFunctionResult('getPair', resultGetPair.returnData);
-          if (pairAddress === constants.AddressZero) pairAddresses.push(undefined);
-          else {
-            pairAddresses.push(pairAddress);
-          }
+          pairAddresses.push(pairAddress === constants.AddressZero ? undefined : pairAddress);
         } else {
           pairAddresses.push(undefined);
         }
