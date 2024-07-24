@@ -5,7 +5,6 @@ import { constants, utils } from 'ethers';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
 import { getConfig } from './configs';
-import { mainnetTokens } from '@protocolink/test-helpers';
 import * as univ3 from 'src/modules/univ3';
 
 describe('UniswapV3 SwapTokenLogic', function () {
@@ -29,8 +28,8 @@ describe('UniswapV3 SwapTokenLogic', function () {
       {
         fields: {
           tradeType: core.TradeType.exactIn,
-          input: new common.TokenAmount(mainnetTokens.ETH, '1'),
-          output: new common.TokenAmount(mainnetTokens.USDC, '1661.098116'),
+          input: new common.TokenAmount(common.mainnetTokens.ETH, '1'),
+          output: new common.TokenAmount(common.mainnetTokens.USDC, '1661.098116'),
           fee: 500,
           slippage: 100,
         },
@@ -39,8 +38,8 @@ describe('UniswapV3 SwapTokenLogic', function () {
       {
         fields: {
           tradeType: core.TradeType.exactIn,
-          input: new common.TokenAmount(mainnetTokens.ETH, '1'),
-          output: new common.TokenAmount(mainnetTokens.USDC, '1661.098116'),
+          input: new common.TokenAmount(common.mainnetTokens.ETH, '1'),
+          output: new common.TokenAmount(common.mainnetTokens.USDC, '1661.098116'),
           path: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc20001f42260fac5e5542a773aa44fbcfedf7c193bc2c5990001f4a0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
           slippage: 100,
         },
@@ -49,8 +48,8 @@ describe('UniswapV3 SwapTokenLogic', function () {
       {
         fields: {
           tradeType: core.TradeType.exactIn,
-          input: new common.TokenAmount(mainnetTokens.USDC, '1000'),
-          output: new common.TokenAmount(mainnetTokens.ETH, '0.608027615305460657'),
+          input: new common.TokenAmount(common.mainnetTokens.USDC, '1000'),
+          output: new common.TokenAmount(common.mainnetTokens.ETH, '0.608027615305460657'),
           fee: 500,
           slippage: 100,
         },
@@ -59,8 +58,8 @@ describe('UniswapV3 SwapTokenLogic', function () {
       {
         fields: {
           tradeType: core.TradeType.exactIn,
-          input: new common.TokenAmount(mainnetTokens.USDC, '1000'),
-          output: new common.TokenAmount(mainnetTokens.ETH, '0.608027615305460657'),
+          input: new common.TokenAmount(common.mainnetTokens.USDC, '1000'),
+          output: new common.TokenAmount(common.mainnetTokens.ETH, '0.608027615305460657'),
           path: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb480001f42260fac5e5542a773aa44fbcfedf7c193bc2c5990001f4c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
           slippage: 100,
         },
@@ -69,8 +68,8 @@ describe('UniswapV3 SwapTokenLogic', function () {
       {
         fields: {
           tradeType: core.TradeType.exactIn,
-          input: new common.TokenAmount(mainnetTokens.USDC, '1000'),
-          output: new common.TokenAmount(mainnetTokens.DAI, '1000'),
+          input: new common.TokenAmount(common.mainnetTokens.USDC, '1000'),
+          output: new common.TokenAmount(common.mainnetTokens.DAI, '1000'),
           fee: 500,
           slippage: 100,
         },
@@ -79,8 +78,8 @@ describe('UniswapV3 SwapTokenLogic', function () {
       {
         fields: {
           tradeType: core.TradeType.exactIn,
-          input: new common.TokenAmount(mainnetTokens.USDC, '1000'),
-          output: new common.TokenAmount(mainnetTokens.DAI, '1000'),
+          input: new common.TokenAmount(common.mainnetTokens.USDC, '1000'),
+          output: new common.TokenAmount(common.mainnetTokens.DAI, '1000'),
           path: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb480001f42260fac5e5542a773aa44fbcfedf7c193bc2c5990001f46b175474e89094c44da98b954eedeac495271d0f',
           slippage: 100,
         },
@@ -89,8 +88,8 @@ describe('UniswapV3 SwapTokenLogic', function () {
       {
         fields: {
           tradeType: core.TradeType.exactOut,
-          input: new common.TokenAmount(mainnetTokens.ETH, '0.608027615305460657'),
-          output: new common.TokenAmount(mainnetTokens.USDC, '1000'),
+          input: new common.TokenAmount(common.mainnetTokens.ETH, '0.608027615305460657'),
+          output: new common.TokenAmount(common.mainnetTokens.USDC, '1000'),
           fee: 500,
         },
         options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa' },
@@ -98,8 +97,8 @@ describe('UniswapV3 SwapTokenLogic', function () {
       {
         fields: {
           tradeType: core.TradeType.exactOut,
-          input: new common.TokenAmount(mainnetTokens.ETH, '0.608027615305460657'),
-          output: new common.TokenAmount(mainnetTokens.USDC, '1000'),
+          input: new common.TokenAmount(common.mainnetTokens.ETH, '0.608027615305460657'),
+          output: new common.TokenAmount(common.mainnetTokens.USDC, '1000'),
           path: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc20001f42260fac5e5542a773aa44fbcfedf7c193bc2c5990001f4a0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
         },
         options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa' },
@@ -107,8 +106,8 @@ describe('UniswapV3 SwapTokenLogic', function () {
       {
         fields: {
           tradeType: core.TradeType.exactOut,
-          input: new common.TokenAmount(mainnetTokens.USDC, '1000'),
-          output: new common.TokenAmount(mainnetTokens.ETH, '0.608027615305460657'),
+          input: new common.TokenAmount(common.mainnetTokens.USDC, '1000'),
+          output: new common.TokenAmount(common.mainnetTokens.ETH, '0.608027615305460657'),
           fee: 500,
         },
         options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa' },
@@ -116,8 +115,8 @@ describe('UniswapV3 SwapTokenLogic', function () {
       {
         fields: {
           tradeType: core.TradeType.exactOut,
-          input: new common.TokenAmount(mainnetTokens.USDC, '1000'),
-          output: new common.TokenAmount(mainnetTokens.ETH, '0.608027615305460657'),
+          input: new common.TokenAmount(common.mainnetTokens.USDC, '1000'),
+          output: new common.TokenAmount(common.mainnetTokens.ETH, '0.608027615305460657'),
           path: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb480001f42260fac5e5542a773aa44fbcfedf7c193bc2c5990001f4c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
         },
         options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa' },
@@ -125,8 +124,8 @@ describe('UniswapV3 SwapTokenLogic', function () {
       {
         fields: {
           tradeType: core.TradeType.exactOut,
-          input: new common.TokenAmount(mainnetTokens.USDC, '1000'),
-          output: new common.TokenAmount(mainnetTokens.DAI, '1000'),
+          input: new common.TokenAmount(common.mainnetTokens.USDC, '1000'),
+          output: new common.TokenAmount(common.mainnetTokens.DAI, '1000'),
           fee: 500,
         },
         options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa' },
@@ -134,8 +133,8 @@ describe('UniswapV3 SwapTokenLogic', function () {
       {
         fields: {
           tradeType: core.TradeType.exactOut,
-          input: new common.TokenAmount(mainnetTokens.USDC, '1000'),
-          output: new common.TokenAmount(mainnetTokens.DAI, '1000'),
+          input: new common.TokenAmount(common.mainnetTokens.USDC, '1000'),
+          output: new common.TokenAmount(common.mainnetTokens.DAI, '1000'),
           path: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb480001f42260fac5e5542a773aa44fbcfedf7c193bc2c5990001f4c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
         },
         options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa' },

@@ -5,7 +5,6 @@ import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
-import { mainnetTokens } from '@protocolink/test-helpers';
 import { toCToken } from './configs';
 
 describe('CompoundV2 WithdrawLogic', function () {
@@ -27,27 +26,27 @@ describe('CompoundV2 WithdrawLogic', function () {
     const testCases: LogicTestCase<WithdrawLogicFields>[] = [
       {
         fields: {
-          input: new common.TokenAmount(toCToken(mainnetTokens.ETH), '1'),
-          output: new common.TokenAmount(mainnetTokens.ETH, '0'),
+          input: new common.TokenAmount(toCToken(common.mainnetTokens.ETH), '1'),
+          output: new common.TokenAmount(common.mainnetTokens.ETH, '0'),
         },
       },
       {
         fields: {
-          input: new common.TokenAmount(toCToken(mainnetTokens.USDC), '1'),
-          output: new common.TokenAmount(mainnetTokens.USDC, '0'),
+          input: new common.TokenAmount(toCToken(common.mainnetTokens.USDC), '1'),
+          output: new common.TokenAmount(common.mainnetTokens.USDC, '0'),
         },
       },
       {
         fields: {
-          input: new common.TokenAmount(toCToken(mainnetTokens.ETH), '1'),
-          output: new common.TokenAmount(mainnetTokens.ETH, '0'),
+          input: new common.TokenAmount(toCToken(common.mainnetTokens.ETH), '1'),
+          output: new common.TokenAmount(common.mainnetTokens.ETH, '0'),
           balanceBps: 5000,
         },
       },
       {
         fields: {
-          input: new common.TokenAmount(toCToken(mainnetTokens.USDC), '1'),
-          output: new common.TokenAmount(mainnetTokens.USDC, '0'),
+          input: new common.TokenAmount(toCToken(common.mainnetTokens.USDC), '1'),
+          output: new common.TokenAmount(common.mainnetTokens.USDC, '0'),
           balanceBps: 5000,
         },
       },

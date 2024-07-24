@@ -4,7 +4,6 @@ import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
-import { mainnetTokens } from '@protocolink/test-helpers';
 
 describe('Permit2 PullTokenLogic', function () {
   context('Test getTokenList', async function () {
@@ -26,7 +25,7 @@ describe('Permit2 PullTokenLogic', function () {
     const iface = routerKit.permit2Iface;
 
     const testCases: LogicTestCase<PullTokenLogicFields>[] = [
-      { fields: { input: new common.TokenAmount(mainnetTokens.WETH, '1') } },
+      { fields: { input: new common.TokenAmount(common.mainnetTokens.WETH, '1') } },
     ];
 
     testCases.forEach(({ fields }, i) => {

@@ -5,7 +5,6 @@ import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
 import { expect } from 'chai';
 import { getContractAddress } from './configs';
-import { mainnetTokens } from '@protocolink/test-helpers';
 
 describe('BalancerV2 FlashLoanLogic', function () {
   context('Test getTokenList', async function () {
@@ -26,7 +25,7 @@ describe('BalancerV2 FlashLoanLogic', function () {
     const testCases: LogicTestCase<FlashLoanLogicFields>[] = [
       {
         fields: {
-          loans: new common.TokenAmounts([mainnetTokens.WETH, '1'], [mainnetTokens.USDC, '1']),
+          loans: new common.TokenAmounts([common.mainnetTokens.WETH, '1'], [common.mainnetTokens.USDC, '1']),
           params: '0x',
         },
       },
