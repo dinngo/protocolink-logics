@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.5.0
+
+### Minor Changes
+
+- 08874db: add Polygon zkevm to Paraswap
+
 ## 1.4.0
 
 ### Minor Changes
