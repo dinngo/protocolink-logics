@@ -1,10 +1,9 @@
-import * as common from '@protocolink/common';
-import { expect } from 'chai';
-import { SwapTokenLogic, SwapTokenLogicFields, SwapTokenLogicOptions } from './logic.swap-token';
 import { LogicTestCaseWithChainId } from 'test/types';
-import { mainnetTokens } from '@protocolink/test-helpers';
+import { SwapTokenLogic, SwapTokenLogicFields, SwapTokenLogicOptions } from './logic.swap-token';
+import * as common from '@protocolink/common';
 import { constants, ethers, utils } from 'ethers';
 import * as core from '@protocolink/core';
+import { expect } from 'chai';
 import { getExchangeProxyAddress } from './configs';
 
 const apiKey = process.env.ZEROEX_API_KEY as string;
@@ -25,8 +24,8 @@ describe('0x SwapTokenLogic', () => {
       {
         chainId: common.ChainId.mainnet,
         fields: {
-          input: new common.TokenAmount(mainnetTokens.ETH, '1'),
-          output: new common.TokenAmount(mainnetTokens.USDC, '0'),
+          input: new common.TokenAmount(common.mainnetTokens.ETH, '1'),
+          output: new common.TokenAmount(common.mainnetTokens.USDC, '0'),
           slippage: 500,
           apiKey,
         },
@@ -35,8 +34,8 @@ describe('0x SwapTokenLogic', () => {
       {
         chainId: common.ChainId.mainnet,
         fields: {
-          input: new common.TokenAmount(mainnetTokens.USDC, '1'),
-          output: new common.TokenAmount(mainnetTokens.ETH, '0'),
+          input: new common.TokenAmount(common.mainnetTokens.USDC, '1'),
+          output: new common.TokenAmount(common.mainnetTokens.ETH, '0'),
           slippage: 500,
           apiKey,
         },
@@ -45,8 +44,8 @@ describe('0x SwapTokenLogic', () => {
       {
         chainId: common.ChainId.mainnet,
         fields: {
-          input: new common.TokenAmount(mainnetTokens.USDC, '1'),
-          output: new common.TokenAmount(mainnetTokens.DAI, '0'),
+          input: new common.TokenAmount(common.mainnetTokens.USDC, '1'),
+          output: new common.TokenAmount(common.mainnetTokens.DAI, '0'),
           slippage: 500,
           apiKey,
         },
@@ -55,8 +54,8 @@ describe('0x SwapTokenLogic', () => {
       {
         chainId: common.ChainId.mainnet,
         fields: {
-          input: new common.TokenAmount(mainnetTokens.WETH, '1'),
-          output: new common.TokenAmount(mainnetTokens.ETH, '0'),
+          input: new common.TokenAmount(common.mainnetTokens.WETH, '1'),
+          output: new common.TokenAmount(common.mainnetTokens.ETH, '0'),
           slippage: 500,
           apiKey,
         },
@@ -65,8 +64,8 @@ describe('0x SwapTokenLogic', () => {
       {
         chainId: common.ChainId.mainnet,
         fields: {
-          input: new common.TokenAmount(mainnetTokens.ETH, '1'),
-          output: new common.TokenAmount(mainnetTokens.WETH, '0'),
+          input: new common.TokenAmount(common.mainnetTokens.ETH, '1'),
+          output: new common.TokenAmount(common.mainnetTokens.WETH, '0'),
           slippage: 500,
           apiKey,
         },

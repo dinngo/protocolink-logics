@@ -4,7 +4,6 @@ import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
-import { mainnetTokens } from '@protocolink/test-helpers';
 
 describe('Utility WrappedNativeTokenLogic', function () {
   context('Test getTokenList', async function () {
@@ -25,27 +24,27 @@ describe('Utility WrappedNativeTokenLogic', function () {
     const testCases: LogicTestCase<WrappedNativeTokenLogicFields>[] = [
       {
         fields: {
-          input: new common.TokenAmount(mainnetTokens.ETH, '1'),
-          output: new common.TokenAmount(mainnetTokens.WETH, '1'),
+          input: new common.TokenAmount(common.mainnetTokens.ETH, '1'),
+          output: new common.TokenAmount(common.mainnetTokens.WETH, '1'),
         },
       },
       {
         fields: {
-          input: new common.TokenAmount(mainnetTokens.WETH, '1'),
-          output: new common.TokenAmount(mainnetTokens.ETH, '1'),
+          input: new common.TokenAmount(common.mainnetTokens.WETH, '1'),
+          output: new common.TokenAmount(common.mainnetTokens.ETH, '1'),
         },
       },
       {
         fields: {
-          input: new common.TokenAmount(mainnetTokens.ETH, '1'),
-          output: new common.TokenAmount(mainnetTokens.WETH, '1'),
+          input: new common.TokenAmount(common.mainnetTokens.ETH, '1'),
+          output: new common.TokenAmount(common.mainnetTokens.WETH, '1'),
           balanceBps: 5000,
         },
       },
       {
         fields: {
-          input: new common.TokenAmount(mainnetTokens.WETH, '1'),
-          output: new common.TokenAmount(mainnetTokens.ETH, '1'),
+          input: new common.TokenAmount(common.mainnetTokens.WETH, '1'),
+          output: new common.TokenAmount(common.mainnetTokens.ETH, '1'),
           balanceBps: 5000,
         },
       },
@@ -59,7 +58,7 @@ describe('Utility WrappedNativeTokenLogic', function () {
         const sig = routerLogic.data.substring(0, 10);
         const { input, balanceBps } = fields;
 
-        expect(routerLogic.to).to.eq(mainnetTokens.WETH.address);
+        expect(routerLogic.to).to.eq(common.mainnetTokens.WETH.address);
         expect(utils.isBytesLike(routerLogic.data)).to.be.true;
         if (input.token.isNative) {
           expect(sig).to.eq(iface.getSighash('deposit'));

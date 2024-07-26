@@ -5,7 +5,6 @@ import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
-import { mainnetTokens } from '@protocolink/test-helpers';
 import { toCToken } from './configs';
 
 describe('CompoundV2 RepayLogic', function () {
@@ -29,26 +28,26 @@ describe('CompoundV2 RepayLogic', function () {
       {
         fields: {
           borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
-          input: new common.TokenAmount(mainnetTokens.ETH, '1'),
+          input: new common.TokenAmount(common.mainnetTokens.ETH, '1'),
         },
       },
       {
         fields: {
           borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
-          input: new common.TokenAmount(mainnetTokens.USDC, '1'),
+          input: new common.TokenAmount(common.mainnetTokens.USDC, '1'),
         },
       },
       {
         fields: {
           borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
-          input: new common.TokenAmount(mainnetTokens.ETH, '1'),
+          input: new common.TokenAmount(common.mainnetTokens.ETH, '1'),
           balanceBps: 5000,
         },
       },
       {
         fields: {
           borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
-          input: new common.TokenAmount(mainnetTokens.USDC, '1'),
+          input: new common.TokenAmount(common.mainnetTokens.USDC, '1'),
           balanceBps: 5000,
         },
       },

@@ -5,7 +5,6 @@ import { constants, utils } from 'ethers';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
 import { getTokenListUrls, getTokenTransferProxyAddress } from './configs';
-import { mainnetTokens } from '@protocolink/test-helpers';
 
 describe('ParaswapV5 SwapTokenLogic', function () {
   context('Test getTokenListUrls', function () {
@@ -32,8 +31,8 @@ describe('ParaswapV5 SwapTokenLogic', function () {
       {
         chainId: common.ChainId.mainnet,
         fields: {
-          input: new common.TokenAmount(mainnetTokens.ETH, '1'),
-          output: new common.TokenAmount(mainnetTokens.USDC, '0'),
+          input: new common.TokenAmount(common.mainnetTokens.ETH, '1'),
+          output: new common.TokenAmount(common.mainnetTokens.USDC, '0'),
           slippage: 500,
         },
         options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa' },
@@ -41,8 +40,8 @@ describe('ParaswapV5 SwapTokenLogic', function () {
       {
         chainId: common.ChainId.mainnet,
         fields: {
-          input: new common.TokenAmount(mainnetTokens.USDC, '1'),
-          output: new common.TokenAmount(mainnetTokens.ETH, '0'),
+          input: new common.TokenAmount(common.mainnetTokens.USDC, '1'),
+          output: new common.TokenAmount(common.mainnetTokens.ETH, '0'),
           slippage: 500,
         },
         options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa' },
@@ -50,8 +49,8 @@ describe('ParaswapV5 SwapTokenLogic', function () {
       {
         chainId: common.ChainId.mainnet,
         fields: {
-          input: new common.TokenAmount(mainnetTokens.USDC, '1'),
-          output: new common.TokenAmount(mainnetTokens.DAI, '0'),
+          input: new common.TokenAmount(common.mainnetTokens.USDC, '1'),
+          output: new common.TokenAmount(common.mainnetTokens.DAI, '0'),
           slippage: 500,
         },
         options: { account: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa' },

@@ -4,7 +4,6 @@ import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
-import { mainnetTokens } from '@protocolink/test-helpers';
 
 describe('Utility SendTokenLogic', function () {
   context('Test getTokenList', async function () {
@@ -26,39 +25,39 @@ describe('Utility SendTokenLogic', function () {
     const testCases: LogicTestCase<SendTokenLogicFields>[] = [
       {
         fields: {
-          input: new common.TokenAmount(mainnetTokens.ETH, '1'),
+          input: new common.TokenAmount(common.mainnetTokens.ETH, '1'),
           recipient: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
         },
       },
       {
         fields: {
-          input: new common.TokenAmount(mainnetTokens.WETH, '1'),
+          input: new common.TokenAmount(common.mainnetTokens.WETH, '1'),
           recipient: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
         },
       },
       {
         fields: {
-          input: new common.TokenAmount(mainnetTokens.USDC, '1'),
+          input: new common.TokenAmount(common.mainnetTokens.USDC, '1'),
           recipient: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
         },
       },
       {
         fields: {
-          input: new common.TokenAmount(mainnetTokens.ETH, '1'),
-          recipient: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
-          balanceBps: 5000,
-        },
-      },
-      {
-        fields: {
-          input: new common.TokenAmount(mainnetTokens.WETH, '1'),
+          input: new common.TokenAmount(common.mainnetTokens.ETH, '1'),
           recipient: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
           balanceBps: 5000,
         },
       },
       {
         fields: {
-          input: new common.TokenAmount(mainnetTokens.USDC, '1'),
+          input: new common.TokenAmount(common.mainnetTokens.WETH, '1'),
+          recipient: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
+          balanceBps: 5000,
+        },
+      },
+      {
+        fields: {
+          input: new common.TokenAmount(common.mainnetTokens.USDC, '1'),
           recipient: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
           balanceBps: 5000,
         },

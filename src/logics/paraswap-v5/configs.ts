@@ -39,6 +39,11 @@ export const configs: Config[] = [
     ],
   },
   {
+    chainId: common.ChainId.polygonZkevm,
+    tokenTransferProxyAddress: '0xC8a21FcD5A100c3ecc037c97e2f9C53a8D3A02A1',
+    tokenListUrls: ['https://unpkg.com/quickswap-default-token-list@latest/build/quickswap-default.tokenlist.json'],
+  },
+  {
     chainId: common.ChainId.base,
     tokenTransferProxyAddress: '0x93aAAe79a53759cD164340E4C8766E4Db5331cD7',
     tokenListUrls: ['https://static.optimism.io/optimism.tokenlist.json'],
