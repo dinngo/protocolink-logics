@@ -25,6 +25,13 @@ export const configs: Config[] = [
     },
   },
   {
+    chainId: common.ChainId.base,
+    contract: {
+      ProtocolDataProvider: '0x07d2DC09A1CbDD01e5f6Ca984b060A3Ff31b9EAF',
+      RadiantV2FlashLoanCallback: '0x6bfCE075A1c4F0fD4067A401dA8f159354e1a916',
+    },
+  },
+  {
     chainId: common.ChainId.arbitrum,
     contract: {
       ProtocolDataProvider: '0x596B0cc4c5094507C50b579a662FE7e7b094A2cC',
