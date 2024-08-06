@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.6.0
+
+### Minor Changes
+
+- 6320821: Support Radiant V2 on Base
+
 ## 1.5.1
 
 ### Patch Changes
