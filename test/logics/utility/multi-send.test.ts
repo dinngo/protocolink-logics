@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@protocolink/test-helpers';
+import { claimToken, getChainId, snapshotAndRevertEach } from '@protocolink/test-helpers';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
@@ -15,9 +15,15 @@ describe('mainnet-pb: Test Utility MultiSend Logic', function () {
   before(async function () {
     chainId = await getChainId();
     [, user, recipients[0], recipients[1], recipients[2]] = await hre.ethers.getSigners();
-    await claimToken(chainId, user.address, mainnetTokens.WETH, '100');
-    await claimToken(chainId, user.address, mainnetTokens.USDC, '100');
-    await claimToken(chainId, user.address, mainnetTokens.DAI, '100', '0x8A610c1C93da88c59F51A6264A4c70927814B320');
+    await claimToken(chainId, user.address, common.mainnetTokens.WETH, '100');
+    await claimToken(chainId, user.address, common.mainnetTokens.USDC, '100');
+    await claimToken(
+      chainId,
+      user.address,
+      common.mainnetTokens.DAI,
+      '100',
+      '0x8A610c1C93da88c59F51A6264A4c70927814B320'
+    );
   });
 
   snapshotAndRevertEach();
@@ -26,15 +32,15 @@ describe('mainnet-pb: Test Utility MultiSend Logic', function () {
     {
       fields: [
         {
-          input: new common.TokenAmount(mainnetTokens.WETH, '1'),
+          input: new common.TokenAmount(common.mainnetTokens.WETH, '1'),
           recipientIndex: 0,
         },
         {
-          input: new common.TokenAmount(mainnetTokens.USDC, '1'),
+          input: new common.TokenAmount(common.mainnetTokens.USDC, '1'),
           recipientIndex: 1,
         },
         {
-          input: new common.TokenAmount(mainnetTokens.DAI, '1'),
+          input: new common.TokenAmount(common.mainnetTokens.DAI, '1'),
           recipientIndex: 2,
         },
       ],
@@ -42,17 +48,17 @@ describe('mainnet-pb: Test Utility MultiSend Logic', function () {
     {
       fields: [
         {
-          input: new common.TokenAmount(mainnetTokens.WETH, '1'),
+          input: new common.TokenAmount(common.mainnetTokens.WETH, '1'),
           recipientIndex: 0,
           balanceBps: 5000,
         },
         {
-          input: new common.TokenAmount(mainnetTokens.USDC, '1'),
+          input: new common.TokenAmount(common.mainnetTokens.USDC, '1'),
           recipientIndex: 1,
           balanceBps: 5000,
         },
         {
-          input: new common.TokenAmount(mainnetTokens.DAI, '1'),
+          input: new common.TokenAmount(common.mainnetTokens.DAI, '1'),
           recipientIndex: 2,
           balanceBps: 5000,
         },

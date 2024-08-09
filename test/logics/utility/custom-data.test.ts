@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { approve, claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@protocolink/test-helpers';
+import { approve, claimToken, getChainId, snapshotAndRevertEach } from '@protocolink/test-helpers';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
@@ -16,15 +16,15 @@ describe('mainnet-pb: Test Utility CustomData Logic', function () {
     chainId = await getChainId();
     [, user1, user2] = await hre.ethers.getSigners();
     routerKit = new core.RouterKit(chainId);
-    await claimToken(chainId, user1.address, mainnetTokens.USDC, '1000');
+    await claimToken(chainId, user1.address, common.mainnetTokens.USDC, '1000');
   });
 
   snapshotAndRevertEach();
 
   it('case 1: erc20 transferFrom', async function () {
     // 1. new transferFrom to, data
-    const input = new common.TokenAmount(mainnetTokens.USDC, '1');
-    const to = mainnetTokens.USDC.address;
+    const input = new common.TokenAmount(common.mainnetTokens.USDC, '1');
+    const to = common.mainnetTokens.USDC.address;
     const data = common.ERC20__factory.createInterface().encodeFunctionData('transferFrom', [
       user1.address,
       user2.address,

@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@protocolink/test-helpers';
+import { claimToken, getChainId, snapshotAndRevertEach } from '@protocolink/test-helpers';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
@@ -14,7 +14,7 @@ describe('mainnet-pb: Test UniswapV3 SwapToken Logic', function () {
   before(async function () {
     chainId = await getChainId();
     [, user] = await hre.ethers.getSigners();
-    await claimToken(chainId, user.address, mainnetTokens.USDC, '5000');
+    await claimToken(chainId, user.address, common.mainnetTokens.USDC, '5000');
   });
 
   snapshotAndRevertEach();
@@ -22,67 +22,67 @@ describe('mainnet-pb: Test UniswapV3 SwapToken Logic', function () {
   const testCases = [
     {
       params: {
-        input: new common.TokenAmount(mainnetTokens.ETH, '1'),
-        tokenOut: mainnetTokens.USDC,
+        input: new common.TokenAmount(common.mainnetTokens.ETH, '1'),
+        tokenOut: common.mainnetTokens.USDC,
         slippage: 5000,
       },
     },
     {
       params: {
-        input: new common.TokenAmount(mainnetTokens.USDC, '1'),
-        tokenOut: mainnetTokens.ETH,
+        input: new common.TokenAmount(common.mainnetTokens.USDC, '1'),
+        tokenOut: common.mainnetTokens.ETH,
         slippage: 5000,
       },
     },
     {
       params: {
-        input: new common.TokenAmount(mainnetTokens.USDC, '1000'),
-        tokenOut: mainnetTokens.DAI,
+        input: new common.TokenAmount(common.mainnetTokens.USDC, '1000'),
+        tokenOut: common.mainnetTokens.DAI,
         slippage: 5000,
       },
     },
     {
       params: {
-        input: new common.TokenAmount(mainnetTokens.ETH, '1'),
-        tokenOut: mainnetTokens.USDC,
-        slippage: 5000,
-      },
-      balanceBps: 5000,
-    },
-    {
-      params: {
-        input: new common.TokenAmount(mainnetTokens.USDC, '1'),
-        tokenOut: mainnetTokens.ETH,
+        input: new common.TokenAmount(common.mainnetTokens.ETH, '1'),
+        tokenOut: common.mainnetTokens.USDC,
         slippage: 5000,
       },
       balanceBps: 5000,
     },
     {
       params: {
-        input: new common.TokenAmount(mainnetTokens.USDC, '1000'),
-        tokenOut: mainnetTokens.DAI,
+        input: new common.TokenAmount(common.mainnetTokens.USDC, '1'),
+        tokenOut: common.mainnetTokens.ETH,
         slippage: 5000,
       },
       balanceBps: 5000,
     },
     {
       params: {
-        tokenIn: mainnetTokens.ETH,
-        output: new common.TokenAmount(mainnetTokens.USDC, '1000'),
+        input: new common.TokenAmount(common.mainnetTokens.USDC, '1000'),
+        tokenOut: common.mainnetTokens.DAI,
+        slippage: 5000,
+      },
+      balanceBps: 5000,
+    },
+    {
+      params: {
+        tokenIn: common.mainnetTokens.ETH,
+        output: new common.TokenAmount(common.mainnetTokens.USDC, '1000'),
         slippage: 5000,
       },
     },
     {
       params: {
-        tokenIn: mainnetTokens.USDC,
-        output: new common.TokenAmount(mainnetTokens.ETH, '0.001'),
+        tokenIn: common.mainnetTokens.USDC,
+        output: new common.TokenAmount(common.mainnetTokens.ETH, '0.001'),
         slippage: 5000,
       },
     },
     {
       params: {
-        tokenIn: mainnetTokens.USDC,
-        output: new common.TokenAmount(mainnetTokens.DAI, '1000'),
+        tokenIn: common.mainnetTokens.USDC,
+        output: new common.TokenAmount(common.mainnetTokens.DAI, '1000'),
         slippage: 5000,
       },
     },

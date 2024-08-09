@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@protocolink/test-helpers';
+import { claimToken, getChainId, snapshotAndRevertEach } from '@protocolink/test-helpers';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
@@ -15,8 +15,8 @@ describe('mainnet-pb: Test RadiantV2 Withdraw Logic', () => {
   before(async () => {
     chainId = await getChainId();
     [, user] = await hre.ethers.getSigners();
-    await claimToken(chainId, user.address, mainnetTokens.WETH, '100');
-    await claimToken(chainId, user.address, mainnetTokens.USDC, '100');
+    await claimToken(chainId, user.address, common.mainnetTokens.WETH, '100');
+    await claimToken(chainId, user.address, common.mainnetTokens.USDC, '100');
   });
 
   snapshotAndRevertEach();
@@ -24,29 +24,29 @@ describe('mainnet-pb: Test RadiantV2 Withdraw Logic', () => {
   const testCases = [
     {
       input: new common.TokenAmount(radiantv2.mainnetTokens.rWETH, '1'),
-      tokenOut: mainnetTokens.ETH,
+      tokenOut: common.mainnetTokens.ETH,
     },
     {
       input: new common.TokenAmount(radiantv2.mainnetTokens.rWETH, '1'),
-      tokenOut: mainnetTokens.WETH,
+      tokenOut: common.mainnetTokens.WETH,
     },
     {
       input: new common.TokenAmount(radiantv2.mainnetTokens.rUSDC, '1'),
-      tokenOut: mainnetTokens.USDC,
+      tokenOut: common.mainnetTokens.USDC,
     },
     {
       input: new common.TokenAmount(radiantv2.mainnetTokens.rWETH, '1'),
-      tokenOut: mainnetTokens.ETH,
+      tokenOut: common.mainnetTokens.ETH,
       balanceBps: 5000,
     },
     {
       input: new common.TokenAmount(radiantv2.mainnetTokens.rWETH, '1'),
-      tokenOut: mainnetTokens.WETH,
+      tokenOut: common.mainnetTokens.WETH,
       balanceBps: 5000,
     },
     {
       input: new common.TokenAmount(radiantv2.mainnetTokens.rUSDC, '1'),
-      tokenOut: mainnetTokens.USDC,
+      tokenOut: common.mainnetTokens.USDC,
       balanceBps: 5000,
     },
   ];

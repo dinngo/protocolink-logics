@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@protocolink/test-helpers';
+import { claimToken, getChainId, snapshotAndRevertEach } from '@protocolink/test-helpers';
 import hre from 'hardhat';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
@@ -16,9 +16,9 @@ describe('mainnet: Test ZeroExV4 SwapToken Logic', function () {
   before(async function () {
     chainId = await getChainId();
     [, user] = await hre.ethers.getSigners();
-    await claimToken(chainId, user.address, mainnetTokens.ETH, '100');
-    await claimToken(chainId, user.address, mainnetTokens.USDC, '3000');
-    await claimToken(chainId, user.address, mainnetTokens.WETH, '100');
+    await claimToken(chainId, user.address, common.mainnetTokens.ETH, '100');
+    await claimToken(chainId, user.address, common.mainnetTokens.USDC, '3000');
+    await claimToken(chainId, user.address, common.mainnetTokens.WETH, '100');
   });
 
   snapshotAndRevertEach();
@@ -26,40 +26,40 @@ describe('mainnet: Test ZeroExV4 SwapToken Logic', function () {
   const testCases = [
     {
       params: {
-        input: new common.TokenAmount(mainnetTokens.ETH, '1'),
-        tokenOut: mainnetTokens.USDC,
+        input: new common.TokenAmount(common.mainnetTokens.ETH, '1'),
+        tokenOut: common.mainnetTokens.USDC,
         slippage: 100,
         apiKey,
       },
     },
     {
       params: {
-        input: new common.TokenAmount(mainnetTokens.USDC, '1'),
-        tokenOut: mainnetTokens.ETH,
+        input: new common.TokenAmount(common.mainnetTokens.USDC, '1'),
+        tokenOut: common.mainnetTokens.ETH,
         slippage: 500,
         apiKey,
       },
     },
     {
       params: {
-        input: new common.TokenAmount(mainnetTokens.USDC, '1'),
-        tokenOut: mainnetTokens.DAI,
+        input: new common.TokenAmount(common.mainnetTokens.USDC, '1'),
+        tokenOut: common.mainnetTokens.DAI,
         slippage: 500,
         apiKey,
       },
     },
     {
       params: {
-        input: new common.TokenAmount(mainnetTokens.WETH, '1'),
-        tokenOut: mainnetTokens.ETH,
+        input: new common.TokenAmount(common.mainnetTokens.WETH, '1'),
+        tokenOut: common.mainnetTokens.ETH,
         slippage: 0,
         apiKey,
       },
     },
     {
       params: {
-        input: new common.TokenAmount(mainnetTokens.ETH, '1'),
-        tokenOut: mainnetTokens.WETH,
+        input: new common.TokenAmount(common.mainnetTokens.ETH, '1'),
+        tokenOut: common.mainnetTokens.WETH,
         slippage: 0,
         apiKey,
       },

@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@protocolink/test-helpers';
+import { claimToken, getChainId, snapshotAndRevertEach } from '@protocolink/test-helpers';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
@@ -15,19 +15,19 @@ describe('mainnet-pb: Test RadiantV2 FlashLoan Logic', () => {
   before(async () => {
     chainId = await getChainId();
     [, user] = await hre.ethers.getSigners();
-    await claimToken(chainId, user.address, mainnetTokens.WETH, '2');
-    await claimToken(chainId, user.address, mainnetTokens.USDC, '2');
-    await claimToken(chainId, user.address, mainnetTokens.USDT, '2');
+    await claimToken(chainId, user.address, common.mainnetTokens.WETH, '2');
+    await claimToken(chainId, user.address, common.mainnetTokens.USDC, '2');
+    await claimToken(chainId, user.address, common.mainnetTokens.USDT, '2');
     await claimToken(chainId, user.address, radiantv2.mainnetTokens.wstETH, '2');
   });
 
   snapshotAndRevertEach();
 
   const testCases = [
-    { loans: new common.TokenAmounts([mainnetTokens.WETH, '1'], [mainnetTokens.USDC, '1']) },
-    { repays: new common.TokenAmounts([mainnetTokens.WETH, '1'], [mainnetTokens.USDC, '1']) },
-    { loans: new common.TokenAmounts([mainnetTokens.USDT, '1'], [radiantv2.mainnetTokens.wstETH, '1']) },
-    { repays: new common.TokenAmounts([mainnetTokens.USDT, '1'], [radiantv2.mainnetTokens.wstETH, '1']) },
+    { loans: new common.TokenAmounts([common.mainnetTokens.WETH, '1'], [common.mainnetTokens.USDC, '1']) },
+    { repays: new common.TokenAmounts([common.mainnetTokens.WETH, '1'], [common.mainnetTokens.USDC, '1']) },
+    { loans: new common.TokenAmounts([common.mainnetTokens.USDT, '1'], [radiantv2.mainnetTokens.wstETH, '1']) },
+    { repays: new common.TokenAmounts([common.mainnetTokens.USDT, '1'], [radiantv2.mainnetTokens.wstETH, '1']) },
   ];
 
   testCases.forEach((params, i) => {

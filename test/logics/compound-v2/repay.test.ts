@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@protocolink/test-helpers';
+import { claimToken, getChainId, snapshotAndRevertEach } from '@protocolink/test-helpers';
 import * as common from '@protocolink/common';
 import * as compoundv2 from 'src/logics/compound-v2';
 import * as core from '@protocolink/core';
@@ -16,28 +16,34 @@ describe('mainnet-pb: Test CompoundV2 Repay Logic', function () {
   before(async function () {
     chainId = await getChainId();
     [, user] = await hre.ethers.getSigners();
-    await claimToken(chainId, user.address, mainnetTokens.WBTC, '10', '0x9ff58f4ffb29fa2266ab25e75e2a8b3503311656');
+    await claimToken(
+      chainId,
+      user.address,
+      common.mainnetTokens.WBTC,
+      '10',
+      '0x9ff58f4ffb29fa2266ab25e75e2a8b3503311656'
+    );
   });
 
   snapshotAndRevertEach();
 
   const testCases = [
     {
-      supply: new common.TokenAmount(mainnetTokens.ETH, '100'),
-      borrow: new common.TokenAmount(mainnetTokens.WBTC, '1'),
+      supply: new common.TokenAmount(common.mainnetTokens.ETH, '100'),
+      borrow: new common.TokenAmount(common.mainnetTokens.WBTC, '1'),
     },
     {
-      supply: new common.TokenAmount(mainnetTokens.WBTC, '1'),
-      borrow: new common.TokenAmount(mainnetTokens.ETH, '1'),
+      supply: new common.TokenAmount(common.mainnetTokens.WBTC, '1'),
+      borrow: new common.TokenAmount(common.mainnetTokens.ETH, '1'),
     },
     {
-      supply: new common.TokenAmount(mainnetTokens.ETH, '100'),
-      borrow: new common.TokenAmount(mainnetTokens.WBTC, '1'),
+      supply: new common.TokenAmount(common.mainnetTokens.ETH, '100'),
+      borrow: new common.TokenAmount(common.mainnetTokens.WBTC, '1'),
       balanceBps: 5000,
     },
     {
-      supply: new common.TokenAmount(mainnetTokens.WBTC, '1'),
-      borrow: new common.TokenAmount(mainnetTokens.ETH, '1'),
+      supply: new common.TokenAmount(common.mainnetTokens.WBTC, '1'),
+      borrow: new common.TokenAmount(common.mainnetTokens.ETH, '1'),
       balanceBps: 5000,
     },
   ];
