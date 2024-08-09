@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.6.2
+
+### Patch Changes
+
+- 35d465d: replace test-helpers mainnetTokens with common mainnetTokens
+
 ## 1.6.1
 
 ### Patch Changes
