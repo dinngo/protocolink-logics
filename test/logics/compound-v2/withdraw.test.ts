@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@protocolink/test-helpers';
+import { claimToken, getChainId, snapshotAndRevertEach } from '@protocolink/test-helpers';
 import * as common from '@protocolink/common';
 import * as compoundv2 from 'src/logics/compound-v2';
 import * as core from '@protocolink/core';
@@ -15,28 +15,34 @@ describe('mainnet-pb: Test CompoundV2 Withdraw Logic', function () {
   before(async function () {
     chainId = await getChainId();
     [, user] = await hre.ethers.getSigners();
-    await claimToken(chainId, user.address, mainnetTokens.WBTC, '10', '0x9ff58f4ffb29fa2266ab25e75e2a8b3503311656');
+    await claimToken(
+      chainId,
+      user.address,
+      common.mainnetTokens.WBTC,
+      '10',
+      '0x9ff58f4ffb29fa2266ab25e75e2a8b3503311656'
+    );
   });
 
   snapshotAndRevertEach();
 
   const testCases = [
     {
-      input: new common.TokenAmount(compoundv2.toCToken(mainnetTokens.ETH), '50'),
-      tokenOut: mainnetTokens.ETH,
+      input: new common.TokenAmount(compoundv2.toCToken(common.mainnetTokens.ETH), '50'),
+      tokenOut: common.mainnetTokens.ETH,
     },
     {
-      input: new common.TokenAmount(compoundv2.toCToken(mainnetTokens.WBTC), '50'),
-      tokenOut: mainnetTokens.WBTC,
+      input: new common.TokenAmount(compoundv2.toCToken(common.mainnetTokens.WBTC), '50'),
+      tokenOut: common.mainnetTokens.WBTC,
     },
     {
-      input: new common.TokenAmount(compoundv2.toCToken(mainnetTokens.ETH), '50'),
-      tokenOut: mainnetTokens.ETH,
+      input: new common.TokenAmount(compoundv2.toCToken(common.mainnetTokens.ETH), '50'),
+      tokenOut: common.mainnetTokens.ETH,
       balanceBps: 5000,
     },
     {
-      input: new common.TokenAmount(compoundv2.toCToken(mainnetTokens.WBTC), '50'),
-      tokenOut: mainnetTokens.WBTC,
+      input: new common.TokenAmount(compoundv2.toCToken(common.mainnetTokens.WBTC), '50'),
+      tokenOut: common.mainnetTokens.WBTC,
       balanceBps: 5000,
     },
   ];

@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@protocolink/test-helpers';
+import { claimToken, getChainId, snapshotAndRevertEach } from '@protocolink/test-helpers';
 import * as common from '@protocolink/common';
 import * as compoundv2 from 'src/logics/compound-v2';
 import * as core from '@protocolink/core';
@@ -16,8 +16,14 @@ describe('mainnet-pb: Test CompoundV2 Claim Logic', function () {
     chainId = await getChainId();
     const [, user1, user2] = await hre.ethers.getSigners();
     users = [user1, user2];
-    await claimToken(chainId, user1.address, mainnetTokens.USDC, '5000');
-    await claimToken(chainId, user1.address, mainnetTokens.DAI, '5000', '0x8A610c1C93da88c59F51A6264A4c70927814B320');
+    await claimToken(chainId, user1.address, common.mainnetTokens.USDC, '5000');
+    await claimToken(
+      chainId,
+      user1.address,
+      common.mainnetTokens.DAI,
+      '5000',
+      '0x8A610c1C93da88c59F51A6264A4c70927814B320'
+    );
   });
 
   snapshotAndRevertEach();
@@ -27,26 +33,26 @@ describe('mainnet-pb: Test CompoundV2 Claim Logic', function () {
     {
       ownerIndex: 0,
       claimerIndex: 0,
-      supply: new common.TokenAmount(mainnetTokens.DAI, '1000'),
-      borrow: new common.TokenAmount(mainnetTokens.USDC, '100'),
+      supply: new common.TokenAmount(common.mainnetTokens.DAI, '1000'),
+      borrow: new common.TokenAmount(common.mainnetTokens.USDC, '100'),
     },
     {
       ownerIndex: 0,
       claimerIndex: 0,
-      supply: new common.TokenAmount(mainnetTokens.USDC, '3000'),
-      borrow: new common.TokenAmount(mainnetTokens.DAI, '100'),
+      supply: new common.TokenAmount(common.mainnetTokens.USDC, '3000'),
+      borrow: new common.TokenAmount(common.mainnetTokens.DAI, '100'),
     },
     {
       ownerIndex: 0,
       claimerIndex: 1,
-      supply: new common.TokenAmount(mainnetTokens.DAI, '1000'),
-      borrow: new common.TokenAmount(mainnetTokens.USDC, '100'),
+      supply: new common.TokenAmount(common.mainnetTokens.DAI, '1000'),
+      borrow: new common.TokenAmount(common.mainnetTokens.USDC, '100'),
     },
     {
       ownerIndex: 0,
       claimerIndex: 1,
-      supply: new common.TokenAmount(mainnetTokens.USDC, '3000'),
-      borrow: new common.TokenAmount(mainnetTokens.DAI, '100'),
+      supply: new common.TokenAmount(common.mainnetTokens.USDC, '3000'),
+      borrow: new common.TokenAmount(common.mainnetTokens.DAI, '100'),
     },
   ];
 

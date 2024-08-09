@@ -1,6 +1,6 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import * as aavev2 from 'src/logics/aave-v2';
-import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@protocolink/test-helpers';
+import { claimToken, getChainId, snapshotAndRevertEach } from '@protocolink/test-helpers';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
@@ -15,10 +15,16 @@ describe('mainnet-pb: Test AaveV2 FlashLoan Logic', function () {
   before(async function () {
     chainId = await getChainId();
     [, user] = await hre.ethers.getSigners();
-    await claimToken(chainId, user.address, mainnetTokens.WETH, '2');
-    await claimToken(chainId, user.address, mainnetTokens.USDC, '2');
-    await claimToken(chainId, user.address, mainnetTokens.USDT, '2');
-    await claimToken(chainId, user.address, mainnetTokens.DAI, '2', '0x8A610c1C93da88c59F51A6264A4c70927814B320');
+    await claimToken(chainId, user.address, common.mainnetTokens.WETH, '2');
+    await claimToken(chainId, user.address, common.mainnetTokens.USDC, '2');
+    await claimToken(chainId, user.address, common.mainnetTokens.USDT, '2');
+    await claimToken(
+      chainId,
+      user.address,
+      common.mainnetTokens.DAI,
+      '2',
+      '0x8A610c1C93da88c59F51A6264A4c70927814B320'
+    );
   });
 
   snapshotAndRevertEach();

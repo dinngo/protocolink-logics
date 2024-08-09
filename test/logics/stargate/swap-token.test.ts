@@ -5,7 +5,7 @@ import * as core from '@protocolink/core';
 import { expect } from 'chai';
 import { getNativeToken } from '@protocolink/common';
 import hre from 'hardhat';
-import { mainnetTokens, optimismTokens } from 'src/logics/stargate';
+import { optimismTokens } from 'src/logics/stargate';
 import * as stargate from 'src/logics/stargate';
 import * as utils from 'test/utils';
 
@@ -16,9 +16,15 @@ describe('mainnet: Test Stargate SwapToken Logic', function () {
   before(async function () {
     chainId = await getChainId();
     [, user] = await hre.ethers.getSigners();
-    await claimToken(chainId, user.address, mainnetTokens.USDC, '5000');
-    await claimToken(chainId, user.address, mainnetTokens.DAI, '500');
-    await claimToken(chainId, user.address, mainnetTokens.STG, '10', '0x65bb797c2B9830d891D87288F029ed8dACc19705');
+    await claimToken(chainId, user.address, common.mainnetTokens.USDC, '5000');
+    await claimToken(chainId, user.address, common.mainnetTokens.DAI, '500');
+    await claimToken(
+      chainId,
+      user.address,
+      common.mainnetTokens.STG,
+      '10',
+      '0x65bb797c2B9830d891D87288F029ed8dACc19705'
+    );
   });
 
   snapshotAndRevertEach();
@@ -26,35 +32,35 @@ describe('mainnet: Test Stargate SwapToken Logic', function () {
   const testCases = [
     {
       params: {
-        input: new common.TokenAmount(mainnetTokens.ETH, '1'),
+        input: new common.TokenAmount(common.mainnetTokens.ETH, '1'),
         tokenOut: optimismTokens.ETH,
         slippage: 500,
       },
     },
     {
       params: {
-        input: new common.TokenAmount(mainnetTokens.USDC, '100'),
+        input: new common.TokenAmount(common.mainnetTokens.USDC, '100'),
         tokenOut: optimismTokens['USDC.e'],
         slippage: 500,
       },
     },
     {
       params: {
-        input: new common.TokenAmount(mainnetTokens.DAI, '100'),
+        input: new common.TokenAmount(common.mainnetTokens.DAI, '100'),
         tokenOut: optimismTokens.DAI,
         slippage: 500,
       },
     },
     {
       params: {
-        input: new common.TokenAmount(mainnetTokens.STG, '1'),
+        input: new common.TokenAmount(common.mainnetTokens.STG, '1'),
         tokenOut: optimismTokens.STG,
         slippage: 500,
       },
     },
     {
       params: {
-        input: new common.TokenAmount(mainnetTokens.STG, '1'),
+        input: new common.TokenAmount(common.mainnetTokens.STG, '1'),
         tokenOut: optimismTokens.STG,
         slippage: 500,
       },

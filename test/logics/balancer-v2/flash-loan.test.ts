@@ -1,6 +1,6 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import * as balancerv2 from 'src/logics/balancer-v2';
-import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@protocolink/test-helpers';
+import { claimToken, getChainId, snapshotAndRevertEach } from '@protocolink/test-helpers';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
@@ -15,19 +15,25 @@ describe('mainnet-pb: Test BalancerV2 FlashLoan Logic', function () {
   before(async function () {
     chainId = await getChainId();
     [, user] = await hre.ethers.getSigners();
-    await claimToken(chainId, user.address, mainnetTokens.WETH, '2');
-    await claimToken(chainId, user.address, mainnetTokens.USDC, '2');
-    await claimToken(chainId, user.address, mainnetTokens.USDT, '2');
-    await claimToken(chainId, user.address, mainnetTokens.DAI, '2', '0x8A610c1C93da88c59F51A6264A4c70927814B320');
+    await claimToken(chainId, user.address, common.mainnetTokens.WETH, '2');
+    await claimToken(chainId, user.address, common.mainnetTokens.USDC, '2');
+    await claimToken(chainId, user.address, common.mainnetTokens.USDT, '2');
+    await claimToken(
+      chainId,
+      user.address,
+      common.mainnetTokens.DAI,
+      '2',
+      '0x8A610c1C93da88c59F51A6264A4c70927814B320'
+    );
   });
 
   snapshotAndRevertEach();
 
   const testCases = [
-    { loans: new common.TokenAmounts([mainnetTokens.WETH, '1'], [mainnetTokens.USDC, '1']) },
-    { repays: new common.TokenAmounts([mainnetTokens.WETH, '1'], [mainnetTokens.USDC, '1']) },
-    { loans: new common.TokenAmounts([mainnetTokens.USDT, '1'], [mainnetTokens.DAI, '1']) },
-    { repays: new common.TokenAmounts([mainnetTokens.USDT, '1'], [mainnetTokens.DAI, '1']) },
+    { loans: new common.TokenAmounts([common.mainnetTokens.WETH, '1'], [common.mainnetTokens.USDC, '1']) },
+    { repays: new common.TokenAmounts([common.mainnetTokens.WETH, '1'], [common.mainnetTokens.USDC, '1']) },
+    { loans: new common.TokenAmounts([common.mainnetTokens.USDT, '1'], [common.mainnetTokens.DAI, '1']) },
+    { repays: new common.TokenAmounts([common.mainnetTokens.USDT, '1'], [common.mainnetTokens.DAI, '1']) },
   ];
 
   testCases.forEach((params, i) => {

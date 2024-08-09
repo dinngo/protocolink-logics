@@ -1,6 +1,6 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import * as aavev3 from 'src/logics/aave-v3';
-import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@protocolink/test-helpers';
+import { claimToken, getChainId, snapshotAndRevertEach } from '@protocolink/test-helpers';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
@@ -16,10 +16,10 @@ describe('mainnet-pb: Test AaveV3 Repay Logic', function () {
     chainId = await getChainId();
     const [, user1, user2] = await hre.ethers.getSigners();
     users = [user1, user2];
-    await claimToken(chainId, user1.address, mainnetTokens.USDC, '20000');
-    await claimToken(chainId, user1.address, mainnetTokens.WETH, '100');
-    await claimToken(chainId, user2.address, mainnetTokens.USDC, '100');
-    await claimToken(chainId, user2.address, mainnetTokens.WETH, '100');
+    await claimToken(chainId, user1.address, common.mainnetTokens.USDC, '20000');
+    await claimToken(chainId, user1.address, common.mainnetTokens.WETH, '100');
+    await claimToken(chainId, user2.address, common.mainnetTokens.USDC, '100');
+    await claimToken(chainId, user2.address, common.mainnetTokens.WETH, '100');
   });
 
   snapshotAndRevertEach();

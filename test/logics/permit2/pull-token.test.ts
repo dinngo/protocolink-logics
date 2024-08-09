@@ -1,5 +1,5 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { claimToken, getChainId, mainnetTokens, snapshotAndRevertEach } from '@protocolink/test-helpers';
+import { claimToken, getChainId, snapshotAndRevertEach } from '@protocolink/test-helpers';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
@@ -19,18 +19,18 @@ describe('mainnet-pb: Test Permit2 PullToken Logic', function () {
     routerKit = new core.RouterKit(chainId);
     agent = await routerKit.calcAgent(user.address);
 
-    await claimToken(chainId, user.address, mainnetTokens.USDC, '100');
-    await claimToken(chainId, user.address, mainnetTokens.WETH, '100');
+    await claimToken(chainId, user.address, common.mainnetTokens.USDC, '100');
+    await claimToken(chainId, user.address, common.mainnetTokens.WETH, '100');
   });
 
   snapshotAndRevertEach();
 
   const testCases = [
     {
-      fields: { input: new common.TokenAmount(mainnetTokens.USDC, '1') },
+      fields: { input: new common.TokenAmount(common.mainnetTokens.USDC, '1') },
     },
     {
-      fields: { input: new common.TokenAmount(mainnetTokens.WETH, '1') },
+      fields: { input: new common.TokenAmount(common.mainnetTokens.WETH, '1') },
     },
   ];
 
