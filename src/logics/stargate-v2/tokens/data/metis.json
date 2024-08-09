@@ -1,0 +1,9 @@
+{
+  "Metis": {
+    "chainId": 1088,
+    "address": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
+    "decimals": 18,
+    "symbol": "Metis",
+    "name": "Metis Token"
+  }
+}
