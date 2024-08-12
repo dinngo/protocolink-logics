@@ -4,6 +4,9 @@ on:
   push:
   pull_request:
 
+env:
+  HTTP_RPC_URL: ${{ secrets.OPTIMISM_RPC_URL }}
+
 jobs:
   run-e2e-test:
     name: optimism pb

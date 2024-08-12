@@ -1,3 +1,2 @@
 CHAIN_ID=10
 BLOCK_NUMBER=119817300
-HTTP_RPC_URL=https://mainnet.optimism.io
