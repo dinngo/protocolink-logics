@@ -4,8 +4,8 @@ import metisTokensJSON from './data/metis.json';
 
 type MainnetTokenSymbols = keyof typeof mainnetTokensJSON;
 
-export const mainnetTokens = { ...common.toTokenMap<MainnetTokenSymbols>(mainnetTokensJSON) };
+export const mainnetTokens = common.toTokenMap<MainnetTokenSymbols>(mainnetTokensJSON);
 
 type MetisTokenSymbols = keyof typeof metisTokensJSON;
 
-export const metisTokens = { ...common.toTokenMap<MetisTokenSymbols>(metisTokensJSON) };
+export const metisTokens = common.toTokenMap<MetisTokenSymbols>(metisTokensJSON);

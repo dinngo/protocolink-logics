@@ -239,7 +239,7 @@ export const configs: Config[] = [
       {
         id: PoolId.USDC,
         token: common.optimismTokens.USDC,
-        address: '0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85',
+        address: '0xcE8CcA271Ebc0533920C83d39F417ED6A0abB7D0',
         destinations: [
           { chainId: common.ChainId.mainnet, endpointId: EndpointId.ETHEREUM },
           { chainId: common.ChainId.polygon, endpointId: EndpointId.POLYGON },
@@ -341,7 +341,7 @@ export const configs: Config[] = [
       {
         id: PoolId.ETH,
         token: common.iotaTokens.WETH,
-        address: '0xdc181Bd607330aeeBEF6ea62e03e5e1Fb4B6F7C7',
+        address: '0x9c2dc7377717603eB92b2655c5f2E7997a4945BD',
         destinations: [
           { chainId: common.ChainId.mainnet, endpointId: EndpointId.ETHEREUM },
           { chainId: common.ChainId.optimism, endpointId: EndpointId.OPTIMISM },
