@@ -76,10 +76,9 @@ describe('mainnet-pb: Test Morphoblue Supply Logic', function () {
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
       await expect(user.address).to.changeBalance(input.token, -input.amount);
       const supplyBalance = await service.getSupplyBalance(marketId, user.address);
-      expect(supplyBalance).to.be.deep.eq(new common.TokenAmount(input.token.wrapped, input.amount));
       expect(supplyBalance.amount).eq(input.amount);
       expect(JSON.stringify(omit(supplyBalance.token.toObject(), 'logoUri'))).eq(
-        JSON.stringify(omit(input.token.toObject(), 'logoUri'))
+        JSON.stringify(omit(input.token.wrapped.toObject(), 'logoUri'))
       );
     });
   });
