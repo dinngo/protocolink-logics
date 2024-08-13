@@ -5,9 +5,9 @@ export enum EndpointId {
   ETHEREUM = 30101,
   BNB = 30102,
   AVALANCHE = 30106,
+  POLYGON = 30109,
   ARBITRUM = 30110,
   OPTIMISM = 30111,
-  POLYGON = 30109,
   METIS = 30151,
   BASE = 30184,
   IOTA = 30284,
@@ -380,32 +380,29 @@ export const configs: Config[] = [
   },
 ];
 
-export const [supportedChainIds, configMap, configMapById, tokensMap, poolConfigMapById, poolConfigMapByToken] =
-  configs.reduce(
-    (accumulator, config) => {
-      accumulator[0].push(config.chainId);
-      accumulator[1][config.chainId] = config;
-      accumulator[2][config.eid] = config;
-      accumulator[3][config.chainId] = new Set();
-      accumulator[4][config.chainId] = {};
-      accumulator[5][config.chainId] = {};
-      for (const pool of config.pools) {
-        accumulator[3][config.chainId].add(pool.token);
-        accumulator[4][config.chainId][pool.id] = { chainId: config.chainId, ...pool };
-        accumulator[5][config.chainId][pool.token.address] = { chainId: config.chainId, ...pool };
-      }
+export const [supportedChainIds, configMap, tokensMap, poolConfigMapById, poolConfigMapByToken] = configs.reduce(
+  (accumulator, config) => {
+    accumulator[0].push(config.chainId);
+    accumulator[1][config.chainId] = config;
+    accumulator[2][config.chainId] = new Set();
+    accumulator[3][config.chainId] = {};
+    accumulator[4][config.chainId] = {};
+    for (const pool of config.pools) {
+      accumulator[2][config.chainId].add(pool.token);
+      accumulator[3][config.chainId][pool.id] = { chainId: config.chainId, ...pool };
+      accumulator[4][config.chainId][pool.token.address] = { chainId: config.chainId, ...pool };
+    }
 
-      return accumulator;
-    },
-    [[], {}, {}, {}, {}, {}] as [
-      number[],
-      Record<number, Config>,
-      Record<number, Config>,
-      Record<number, Set<common.Token>>,
-      Record<number, Record<number, PoolConfig>>,
-      Record<number, Record<string, PoolConfig>>
-    ]
-  );
+    return accumulator;
+  },
+  [[], {}, {}, {}, {}] as [
+    number[],
+    Record<number, Config>,
+    Record<number, Set<common.Token>>,
+    Record<number, Record<number, PoolConfig>>,
+    Record<number, Record<string, PoolConfig>>
+  ]
+);
 
 export function getMarkets(chainId: number) {
   return configMap[chainId].pools;
@@ -419,6 +416,10 @@ export function getTokens(chainId: number) {
   return [...tokensMap[chainId]];
 }
 
+export function getTokenByPoolId(chainId: number, poolId: number) {
+  return poolConfigMapById[chainId][poolId].token;
+}
+
 export function getPoolByTokenAddress(chainId: number, tokenAddress: string) {
   return poolConfigMapByToken[chainId][tokenAddress].address;
 }
@@ -430,4 +431,9 @@ export function getDestChainIds(srcChainId: number, srcToken: common.Token) {
     destChainIds.add(destination.chainId);
   }
   return [...destChainIds];
+}
+
+export function getDestToken(srcToken: common.Token, destChainId: number) {
+  const srcPoolConfig = poolConfigMapByToken[srcToken.chainId][srcToken.address] ?? [];
+  return getTokenByPoolId(destChainId, srcPoolConfig.id);
 }

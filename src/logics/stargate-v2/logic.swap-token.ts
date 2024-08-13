@@ -1,13 +1,20 @@
 import { StargatePool__factory } from './contracts';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
-import { getDestChainIds, getEndpointId, getMarkets, getPoolByTokenAddress, supportedChainIds } from './configs';
+import {
+  getDestChainIds,
+  getDestToken,
+  getEndpointId,
+  getMarkets,
+  getPoolByTokenAddress,
+  supportedChainIds,
+} from './configs';
 import { getNativeToken } from '@protocolink/common';
 import { utils } from 'ethers';
 
 export type SwapTokenLogicTokenList = {
   srcToken: common.Token;
-  destChainIds: number[];
+  destTokens: common.Token[];
 }[];
 
 export type SwapTokenLogicParams = core.TokenToTokenExactInParams<{
@@ -36,10 +43,16 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
       srcTokens.push(market.token);
     }
 
-    // find destination chain ids
+    // find destination tokens
     for (const srcToken of srcTokens) {
+      const destTokens: common.Token[] = [];
+
       const destChainIds = getDestChainIds(this.chainId, srcToken);
-      tokenList.push({ srcToken, destChainIds });
+      for (const destChainId of destChainIds) {
+        const destToken = getDestToken(srcToken, destChainId);
+        destTokens.push(destToken);
+      }
+      tokenList.push({ srcToken, destTokens });
     }
 
     return tokenList;
@@ -47,6 +60,19 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
 
   public async quote(params: SwapTokenLogicParams) {
     const { input, tokenOut, receiver } = params;
+
+    // check if tokenOut is legit
+    const destToken = getDestToken(input.token, tokenOut.chainId);
+    if (!tokenOut.is(destToken)) {
+      return {
+        input,
+        output: new common.TokenAmount(tokenOut),
+        fee: '0',
+        lzTokenFee: '0',
+        receiver,
+      };
+    }
+
     const dstEid = getEndpointId(tokenOut.chainId);
     const to = utils.hexZeroPad(utils.solidityPack(['address'], [receiver]), 32);
     const poolAddress = getPoolByTokenAddress(this.chainId, input.token.address);
