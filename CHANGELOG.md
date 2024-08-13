@@ -1,5 +1,15 @@
 # @protocolink/logics
 
+## 1.7.0
+
+### Minor Changes
+
+- f3df031: add StargateV2
+
+### Patch Changes
+
+- b538667: get optimism rpc url from secret
+
 ## 1.6.2
 
 ### Patch Changes
