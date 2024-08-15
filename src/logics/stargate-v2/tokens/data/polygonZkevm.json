@@ -1,0 +1,9 @@
+{
+  "CAKE": {
+    "chainId": 1101,
+    "address": "0x0D1E753a25eBda689453309112904807625bEFBe",
+    "decimals": 18,
+    "symbol": "CAKE",
+    "name": "PancakeSwap Token"
+  }
+}
