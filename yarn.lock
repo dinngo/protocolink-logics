@@ -1020,10 +1020,10 @@
     bignumber.js "^9.0.2"
     ts-essentials "^9.1.2"
 
-"@protocolink/common@^0.5.3":
-  version "0.5.3"
-  resolved "https://registry.yarnpkg.com/@protocolink/common/-/common-0.5.3.tgz#d0e2bc756d5fa2da679b16e3fa389e37f76e1b33"
-  integrity sha512-ZGHzalkFnt7nSt7wKrxOOMrNfmxSSinGSUE0+g/8m3ZMiTVmuQLrkkiAHWC0gIx7b1oRsTTyeUhuue9igmdPcg==
+"@protocolink/common@^0.5.4":
+  version "0.5.4"
+  resolved "https://registry.yarnpkg.com/@protocolink/common/-/common-0.5.4.tgz#77eba2a0f79ed2f109cb0c48bf86a50a3ff1a83b"
+  integrity sha512-/8nxm2Tw7eryq3YF19tUnlsNRN5oyjqUWeZ11jclabOq5CQAdjeKNjbv0/GS2rkVbPUwPhXIv3bHGzuBntWD8g==
   dependencies:
     "@types/lodash" "^4.14.195"
     axios "^1.3.6"
@@ -1035,34 +1035,34 @@
     type-fest "^3.12.0"
     zksync-web3 "^0.14.3"
 
-"@protocolink/core@^0.6.2":
-  version "0.6.2"
-  resolved "https://registry.yarnpkg.com/@protocolink/core/-/core-0.6.2.tgz#ae4d9d7fe6e24e260bdd2bfa365754d61fe5bd51"
-  integrity sha512-0iZOf0DrovkG4jXzaxlIKOrzgwpOAUEQRrp9llB4fyq4b/+KbJPTfYC4/OmkYfxAcJtaRK0zNnx2AH8NivAk2A==
+"@protocolink/core@^0.6.3":
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/@protocolink/core/-/core-0.6.3.tgz#d220f18a36daa42b0d0652b21447372688a22987"
+  integrity sha512-v/ZEJuJRPCPLE+x3QmVLa0/OHJhWzoUTPuHDLpdLhq1GBj1hAZ4X3UKkIkYM52kU7zj3c71idB4OY1mas4inLw==
   dependencies:
-    "@protocolink/common" "^0.5.3"
+    "@protocolink/common" "^0.5.4"
     "@uniswap/permit2-sdk" "^1.2.0"
     ethers "^5.7.2"
     tiny-invariant "^1.3.1"
 
-"@protocolink/smart-accounts@^0.1.6":
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/@protocolink/smart-accounts/-/smart-accounts-0.1.6.tgz#3853d6508e91f25f36046f8ea8ecff8357f80e2d"
-  integrity sha512-S85Z0DovdqBYBXctFKIvUXfML7aS8ucS5zKgS6vHIxWfsXNiRbcX3gxoAw12KZYrz1+nbXQvTGxdocvaOpEXBA==
+"@protocolink/smart-accounts@^0.1.7":
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/@protocolink/smart-accounts/-/smart-accounts-0.1.7.tgz#8b87b5c48738062b3cc1c1e8f4d8bd5a05c3396c"
+  integrity sha512-MlUZ/8kFAxolY7vVu8RPvS1x+yhVUuFq9sY7UvUUMWDqQcjtwzPm8r3ATszUwCPWUywe8tsd0W/Ve5635iKZnQ==
   dependencies:
-    "@protocolink/common" "^0.5.3"
+    "@protocolink/common" "^0.5.4"
     ethers "^5.7.2"
     tiny-invariant "^1.3.1"
 
-"@protocolink/test-helpers@^0.4.4":
-  version "0.4.4"
-  resolved "https://registry.yarnpkg.com/@protocolink/test-helpers/-/test-helpers-0.4.4.tgz#7f8faa2aa8547c094fd1972a67e9383d59465fef"
-  integrity sha512-sGWQb1PGhqpNAg50nqYrvqZkqR6K8+zPbCmoFonQGElhzoGCYSJ4lQEINCoEwvOsn0AlLxnT5PX59Y92g7u7ig==
+"@protocolink/test-helpers@^0.4.5":
+  version "0.4.5"
+  resolved "https://registry.yarnpkg.com/@protocolink/test-helpers/-/test-helpers-0.4.5.tgz#fb39525e02feee3d3021aa5f498102de1d48555f"
+  integrity sha512-Asjd4jqHwbjQlGdPrFbHLrnPZyalsIuxkwQ2/+TzL2X4cdFmb3JD1rahPhbWZ156gdiZC1FL0bj103oNuSw7kg==
   dependencies:
     "@nomicfoundation/hardhat-chai-matchers" "^1.0.6"
     "@nomicfoundation/hardhat-network-helpers" "^1.0.8"
     "@nomiclabs/hardhat-ethers" "^2.2.3"
-    "@protocolink/common" "^0.5.3"
+    "@protocolink/common" "^0.5.4"
     "@types/chai" "^4.3.5"
     "@types/mocha" "^10.0.1"
     chai "^4.3.7"

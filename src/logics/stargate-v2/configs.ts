@@ -1,4 +1,3 @@
-import { bnbTokens, mainnetTokens, metisTokens, polygonZkevmTokens } from './tokens';
 import * as common from '@protocolink/common';
 
 export enum StargateChainId {
@@ -51,51 +50,51 @@ export const configs: Config[] = [
   //   eid: EndpointId.ETHEREUM,
   //   chainId: common.ChainId.mainnet,
   //   pools: [
-  //     // {
-  //     //   id: PoolId.ETH,
-  //     //   token: common.mainnetTokens.ETH,
-  //     //   address: '0x77b2043768d28E9C9aB44E1aBfC95944bcE57931',
-  //     //   destinations: [
-  //     //     { chainId: common.ChainId.optimism, endpointId: EndpointId.OPTIMISM },
-  //     //     { chainId: common.ChainId.metis, endpointId: EndpointId.METIS },
-  //     //     { chainId: common.ChainId.base, endpointId: EndpointId.BASE },
-  //     //     { chainId: common.ChainId.iota, endpointId: EndpointId.IOTA },
-  //     //     { chainId: common.ChainId.arbitrum, endpointId: EndpointId.ARBITRUM },
-  //     //   ],
-  //     // },
-  //     // {
-  //     //   id: PoolId.USDC,
-  //     //   token: common.mainnetTokens.USDC,
-  //     //   address: '0xc026395860Db2d07ee33e05fE50ed7bD583189C7',
-  //     //   destinations: [
-  //     //     { chainId: common.ChainId.optimism, endpointId: EndpointId.OPTIMISM },
-  //     //     { chainId: common.ChainId.polygon, endpointId: EndpointId.POLYGON },
-  //     //     { chainId: common.ChainId.base, endpointId: EndpointId.BASE },
-  //     //     { chainId: common.ChainId.iota, endpointId: EndpointId.IOTA },
-  //     //     { chainId: common.ChainId.arbitrum, endpointId: EndpointId.ARBITRUM },
-  //     //     { chainId: common.ChainId.avalanche, endpointId: EndpointId.AVALANCHE },
-  //     //   ],
-  //     // },
-  //     // {
-  //     //   id: PoolId.USDT,
-  //     //   token: common.mainnetTokens.USDT,
-  //     //   address: '0x933597a323Eb81cAe705C5bC29985172fd5A3973',
-  //     //   destinations: [
-  //     //     { chainId: common.ChainId.optimism, endpointId: EndpointId.OPTIMISM },
-  //     //     { chainId: common.ChainId.bnb, endpointId: EndpointId.BNB },
-  //     //     { chainId: common.ChainId.polygon, endpointId: EndpointId.POLYGON },
-  //     //     { chainId: common.ChainId.metis, endpointId: EndpointId.METIS },
-  //     //     { chainId: common.ChainId.iota, endpointId: EndpointId.IOTA },
-  //     //     { chainId: common.ChainId.arbitrum, endpointId: EndpointId.ARBITRUM },
-  //     //     { chainId: common.ChainId.avalanche, endpointId: EndpointId.AVALANCHE },
-  //     //   ],
-  //     // },
-  //     // {
-  //     //   id: PoolId.METIS,
-  //     //   token: mainnetTokens.Metis,
-  //     //   address: '0xcDafB1b2dB43f366E48e6F614b8DCCBFeeFEEcD3',
-  //     //   destinations: [{ chainId: common.ChainId.metis, endpointId: EndpointId.METIS }],
-  //     // },
+  // {
+  //   id: PoolId.ETH,
+  //   token: common.mainnetTokens.ETH,
+  //   address: '0x77b2043768d28E9C9aB44E1aBfC95944bcE57931',
+  //   destinations: [
+  //     { chainId: common.ChainId.optimism, endpointId: EndpointId.OPTIMISM },
+  //     { chainId: common.ChainId.metis, endpointId: EndpointId.METIS },
+  //     { chainId: common.ChainId.base, endpointId: EndpointId.BASE },
+  //     { chainId: common.ChainId.iota, endpointId: EndpointId.IOTA },
+  //     { chainId: common.ChainId.arbitrum, endpointId: EndpointId.ARBITRUM },
+  //   ],
+  // },
+  // {
+  //   id: PoolId.USDC,
+  //   token: common.mainnetTokens.USDC,
+  //   address: '0xc026395860Db2d07ee33e05fE50ed7bD583189C7',
+  //   destinations: [
+  //     { chainId: common.ChainId.optimism, endpointId: EndpointId.OPTIMISM },
+  //     { chainId: common.ChainId.polygon, endpointId: EndpointId.POLYGON },
+  //     { chainId: common.ChainId.base, endpointId: EndpointId.BASE },
+  //     { chainId: common.ChainId.iota, endpointId: EndpointId.IOTA },
+  //     { chainId: common.ChainId.arbitrum, endpointId: EndpointId.ARBITRUM },
+  //     { chainId: common.ChainId.avalanche, endpointId: EndpointId.AVALANCHE },
+  //   ],
+  // },
+  // {
+  //   id: PoolId.USDT,
+  //   token: common.mainnetTokens.USDT,
+  //   address: '0x933597a323Eb81cAe705C5bC29985172fd5A3973',
+  //   destinations: [
+  //     { chainId: common.ChainId.optimism, endpointId: EndpointId.OPTIMISM },
+  //     { chainId: common.ChainId.bnb, endpointId: EndpointId.BNB },
+  //     { chainId: common.ChainId.polygon, endpointId: EndpointId.POLYGON },
+  //     { chainId: common.ChainId.metis, endpointId: EndpointId.METIS },
+  //     { chainId: common.ChainId.iota, endpointId: EndpointId.IOTA },
+  //     { chainId: common.ChainId.arbitrum, endpointId: EndpointId.ARBITRUM },
+  //     { chainId: common.ChainId.avalanche, endpointId: EndpointId.AVALANCHE },
+  //   ],
+  // },
+  // {
+  //   id: PoolId.METIS,
+  //   token: mainnetTokens.Metis,
+  //   address: '0xcDafB1b2dB43f366E48e6F614b8DCCBFeeFEEcD3',
+  //   destinations: [{ chainId: common.ChainId.metis, endpointId: EndpointId.METIS }],
+  // },
   //   ],
   // },
   {
@@ -105,7 +104,7 @@ export const configs: Config[] = [
     pools: [
       {
         id: PoolId.OFT,
-        token: bnbTokens.CAKE,
+        token: common.bnbTokens.Cake,
         address: '0x86355F02119bdBC28ED6A4D5E0cA327Ca7730fFF', // OFTWrapper
         proxyOFT: '0xb274202daBA6AE180c665B4fbE59857b7c3a8091',
         destinations: [{ chainId: common.ChainId.polygonZkevm, endpointId: EndpointId.OFT }],
@@ -185,7 +184,7 @@ export const configs: Config[] = [
     pools: [
       {
         id: PoolId.OFT,
-        token: polygonZkevmTokens.CAKE,
+        token: common.polygonZkevmTokens.Cake,
         address: '0x86355F02119bdBC28ED6A4D5E0cA327Ca7730fFF', // OFTWrapper
         destinations: [{ chainId: common.ChainId.bnb, endpointId: EndpointId.OFT }],
       },

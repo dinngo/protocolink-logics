@@ -85,10 +85,18 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
         adapterParameters,
         feeObj
       );
+      fee = common.calcSlippage(fee, -1); // slightly higher than the quoted fee
 
       const [amount] = await oftWrapper.getAmountAndFees(oft, srcAmount, feeObj.callerBps);
       output = output.setWei(amount);
     }
+
+    return {
+      input,
+      output,
+      fee: common.toBigUnit(fee, common.getNativeToken(this.chainId).decimals),
+      receiver,
+    };
     //   } else {
 
     //   // check if tokenOut is legit
@@ -126,12 +134,6 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
     //   const lzTokenFee = common.toBigUnit(messagingFee.lzTokenFee, getNativeToken(this.chainId).decimals);
     //   const output = new common.TokenAmount(tokenOut).setWei(receipt.amountReceivedLD);
     // }
-    return {
-      input,
-      output,
-      fee: common.toBigUnit(fee, common.getNativeToken(this.chainId).decimals),
-      receiver,
-    };
   }
 
   async build(fields: SwapTokenLogicFields, options: SwapTokenLogicOptions) {

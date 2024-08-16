@@ -1,7 +1,6 @@
 import { LogicTestCase } from 'test/types';
-import { OFTWrapper__factory, StargatePool__factory } from './contracts';
+import { OFTWrapper__factory } from './contracts';
 import { SwapTokenLogic, SwapTokenLogicFields, SwapTokenLogicOptions } from './logic.swap-token';
-import { bnbTokens, polygonZkevmTokens } from './tokens';
 import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
 import * as core from '@protocolink/core';
@@ -26,8 +25,8 @@ describe('StargateV2 SwapTokenLogic', function () {
     const testCases: LogicTestCase<SwapTokenLogicFields, SwapTokenLogicOptions>[] = [
       {
         fields: {
-          input: new common.TokenAmount(bnbTokens.CAKE, '1'),
-          output: new common.TokenAmount(polygonZkevmTokens.CAKE, '1'),
+          input: new common.TokenAmount(common.bnbTokens.Cake, '1'),
+          output: new common.TokenAmount(common.polygonZkevmTokens.Cake, '1'),
           receiver: account,
           fee: '0',
         },
@@ -35,8 +34,8 @@ describe('StargateV2 SwapTokenLogic', function () {
       },
       {
         fields: {
-          input: new common.TokenAmount(polygonZkevmTokens.CAKE, '1'),
-          output: new common.TokenAmount(bnbTokens.CAKE, '1'),
+          input: new common.TokenAmount(common.polygonZkevmTokens.Cake, '1'),
+          output: new common.TokenAmount(common.bnbTokens.Cake, '1'),
           receiver: account,
           fee: '0.1',
         },
@@ -44,8 +43,8 @@ describe('StargateV2 SwapTokenLogic', function () {
       },
       {
         fields: {
-          input: new common.TokenAmount(polygonZkevmTokens.CAKE, '1'),
-          output: new common.TokenAmount(bnbTokens.CAKE, '1'),
+          input: new common.TokenAmount(common.polygonZkevmTokens.Cake, '1'),
+          output: new common.TokenAmount(common.bnbTokens.Cake, '1'),
           receiver: account,
           fee: '0.1',
           balanceBps: 5000,

@@ -5,7 +5,6 @@ import * as core from '@protocolink/core';
 import { expect } from 'chai';
 import { getNativeToken } from '@protocolink/common';
 import hre from 'hardhat';
-import { polygonZkevmTokens } from 'src/logics/stargate-v2/tokens';
 import * as stargate from 'src/logics/stargate-v2';
 import * as utils from 'test/utils';
 
@@ -25,13 +24,13 @@ describe('bnb: Test StargateV2 SwapToken Logic', function () {
     {
       params: {
         input: new common.TokenAmount(common.bnbTokens.Cake, '1'),
-        tokenOut: polygonZkevmTokens.CAKE,
+        tokenOut: common.polygonZkevmTokens.Cake,
       },
     },
     {
       params: {
         input: new common.TokenAmount(common.bnbTokens.Cake, '1'),
-        tokenOut: polygonZkevmTokens.CAKE,
+        tokenOut: common.polygonZkevmTokens.Cake,
       },
       balanceBps: 5000,
     },
@@ -78,7 +77,7 @@ describe('bnb: Test StargateV2 SwapToken Logic', function () {
         await expect(user.address).to.changeBalance(getNativeToken(chainId), -input.add(fee).amount, 1);
       } else {
         await expect(user.address).to.changeBalance(input.token, -input.amount);
-        await expect(user.address).to.changeBalance(getNativeToken(chainId), -fee);
+        await expect(user.address).to.changeBalance(getNativeToken(chainId), -fee, 1);
       }
     });
   });
