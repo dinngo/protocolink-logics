@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.7.1
+
+### Patch Changes
+
+- e7e50fd: disable native and stable coins in Stargate V2, add cake between bnb and polygon zkevm
+
 ## 1.7.0
 
 ### Minor Changes
