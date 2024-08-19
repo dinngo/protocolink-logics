@@ -1,5 +1,5 @@
 import { BigNumber, constants, utils } from 'ethers';
-import { OFTWrapper__factory } from './contracts';
+import { OFTV2__factory, OFTWrapper__factory } from './contracts';
 import {
   PoolId,
   getDestChainIds,
@@ -19,12 +19,15 @@ export type SwapTokenLogicTokenList = {
 
 export type SwapTokenLogicParams = core.TokenToTokenExactInParams<{
   receiver: string;
+  slippage?: number;
 }>;
 
 export type SwapTokenLogicFields = core.TokenToTokenExactInFields<{
   receiver: string;
   fee: string;
+  oftFee: string;
   // lzTokenFee: string;
+  slippage?: number;
 }>;
 
 export type SwapTokenLogicOptions = Pick<core.GlobalOptions, 'account'>;
@@ -59,11 +62,12 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
   }
 
   public async quote(params: SwapTokenLogicParams) {
-    const { input, tokenOut, receiver } = params;
+    const { input, tokenOut, receiver, slippage } = params;
     const pool = getPoolConfigByTokenAddress(input.token.chainId, input.token.address);
 
     let output = new common.TokenAmount(tokenOut);
     let fee = BigNumber.from('0');
+    let oftFee = BigNumber.from('0');
     if (pool.id === PoolId.OFT) {
       const oftWrapper = OFTWrapper__factory.connect(pool.address, this.provider);
       const oft = pool.proxyOFT ? pool.proxyOFT : input.token.address;
@@ -87,6 +91,7 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
       );
       fee = common.calcSlippage(fee, -1); // slightly higher than the quoted fee
 
+      oftFee = await OFTV2__factory.connect(oft, this.provider).quoteOFTFee(destChainId, srcAmount);
       const [amount] = await oftWrapper.getAmountAndFees(oft, srcAmount, feeObj.callerBps);
       output = output.setWei(amount);
     }
@@ -95,7 +100,9 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
       input,
       output,
       fee: common.toBigUnit(fee, common.getNativeToken(this.chainId).decimals),
+      oftFee: common.toBigUnit(oftFee, input.token.decimals),
       receiver,
+      slippage,
     };
     //   } else {
 
@@ -137,7 +144,7 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
   }
 
   async build(fields: SwapTokenLogicFields, options: SwapTokenLogicOptions) {
-    const { input, output, fee, /*lzTokenFee,*/ receiver, balanceBps } = fields;
+    const { input, output, fee, oftFee, /*lzTokenFee,*/ receiver, balanceBps, slippage } = fields;
     const { account } = options;
     const refundAddress = account;
 
@@ -147,7 +154,7 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
     const destChainId = getStargateChainId(output.token.chainId);
     const receiverBytes32 = utils.hexZeroPad(utils.solidityPack(['address'], [receiver]), 32);
     const amount = input.amountWei;
-    const minAmount = output.amountWei;
+    const minAmount = slippage ? common.calcSlippage(output.amountWei, slippage) : output.amountWei;
     const adapterParams = utils.solidityPack(['uint16', 'uint256'], [1, 200000]);
     const lzCallParams = {
       refundAddress,
@@ -213,7 +220,7 @@ export class SwapTokenLogic extends core.Logic implements core.LogicBuilderInter
 
     const inputs = [
       core.newLogicInput({
-        input: new common.TokenAmount(input.token, input.amount),
+        input: new common.TokenAmount(input.token, input.clone().add(oftFee).amount),
         balanceBps,
         amountOffset,
       }),

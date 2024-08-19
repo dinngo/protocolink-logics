@@ -29,6 +29,8 @@ describe('StargateV2 SwapTokenLogic', function () {
           output: new common.TokenAmount(common.polygonZkevmTokens.Cake, '1'),
           receiver: account,
           fee: '0',
+          oftFee: '0',
+          slippage: 50,
         },
         options: { account },
       },
@@ -38,6 +40,8 @@ describe('StargateV2 SwapTokenLogic', function () {
           output: new common.TokenAmount(common.bnbTokens.Cake, '1'),
           receiver: account,
           fee: '0.1',
+          oftFee: '0.1',
+          slippage: 50,
         },
         options: { account },
       },
@@ -47,6 +51,8 @@ describe('StargateV2 SwapTokenLogic', function () {
           output: new common.TokenAmount(common.bnbTokens.Cake, '1'),
           receiver: account,
           fee: '0.1',
+          oftFee: '0',
+          slippage: 50,
           balanceBps: 5000,
         },
         options: { account },
@@ -89,7 +95,7 @@ describe('StargateV2 SwapTokenLogic', function () {
         const logic = new SwapTokenLogic(fields.input.token.chainId);
         const routerLogic = await logic.build(fields, options);
         const sig = routerLogic.data.substring(0, 10);
-        const { input, balanceBps, fee } = fields;
+        const { input, balanceBps, fee, oftFee } = fields;
         const pool = getPoolConfigByTokenAddress(input.token.chainId, input.token.address);
 
         expect(routerLogic.to).to.eq(pool.address);
@@ -108,7 +114,7 @@ describe('StargateV2 SwapTokenLogic', function () {
           expect(routerLogic.inputs[0].amountOrOffset).to.eq(common.getParamOffset(3));
         } else {
           expect(routerLogic.inputs[0].balanceBps).to.eq(core.BPS_NOT_USED);
-          expect(routerLogic.inputs[0].amountOrOffset).eq(input.amountWei);
+          expect(routerLogic.inputs[0].amountOrOffset).eq(input.clone().add(oftFee).amountWei);
         }
         expect(routerLogic.wrapMode).to.eq(core.WrapMode.none);
         expect(routerLogic.approveTo).to.eq(constants.AddressZero);
