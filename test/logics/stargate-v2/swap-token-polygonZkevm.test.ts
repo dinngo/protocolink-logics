@@ -29,6 +29,13 @@ describe('polygonZkevm: Test StargateV2 SwapToken Logic', function () {
   const testCases = [
     {
       params: {
+        input: new common.TokenAmount(common.polygonZkevmTokens.Cake, '0.062839188248295809'),
+        tokenOut: common.bnbTokens.Cake,
+        slippage: 500,
+      },
+    },
+    {
+      params: {
         input: new common.TokenAmount(common.polygonZkevmTokens.Cake, '1'),
         tokenOut: common.bnbTokens.Cake,
       },
@@ -47,17 +54,17 @@ describe('polygonZkevm: Test StargateV2 SwapToken Logic', function () {
       // 1. get input or output
       const stargateSwapTokenLogic = new stargate.SwapTokenLogic(chainId);
       const quotation = await stargateSwapTokenLogic.quote({ receiver: user.address, ...params });
-      const { input, fee } = quotation;
+      const { input, fee, oftFee } = quotation;
 
       // 2. build funds, tokensReturn
       const feeTokenAmount = new common.TokenAmount(getNativeToken(chainId), fee);
       const funds = new common.TokenAmounts([feeTokenAmount]);
       const tokensReturn = [input.token.elasticAddress];
       if (balanceBps) {
-        funds.add(utils.calcRequiredAmountByBalanceBps(input, balanceBps));
+        funds.add(utils.calcRequiredAmountByBalanceBps(input, balanceBps).add(oftFee));
         tokensReturn.push(input.token.elasticAddress);
       } else {
-        funds.add(input);
+        funds.add(input.clone().add(oftFee));
       }
 
       // 3. build router logics
@@ -80,9 +87,9 @@ describe('polygonZkevm: Test StargateV2 SwapToken Logic', function () {
 
       await expect(user.sendTransaction(transactionRequest)).to.not.be.reverted;
       if (input.token.isNative) {
-        await expect(user.address).to.changeBalance(getNativeToken(chainId), -input.add(fee).amount, 1);
+        await expect(user.address).to.changeBalance(getNativeToken(chainId), -input.add(fee).add(oftFee).amount, 1);
       } else {
-        await expect(user.address).to.changeBalance(input.token, -input.amount);
+        await expect(user.address).to.changeBalance(input.token, -input.clone().add(oftFee).amount, 1);
         await expect(user.address).to.changeBalance(getNativeToken(chainId), -fee, 1);
       }
     });
