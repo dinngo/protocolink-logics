@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.7.2
+
+### Patch Changes
+
+- afdbba3: add stargate v2 oft fee
+
 ## 1.7.1
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@protocolink/logics",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "description": "An SDK that build protocol logics for Protocolink",
   "keywords": [
     "furucombo",
