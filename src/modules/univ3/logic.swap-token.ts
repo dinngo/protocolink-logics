@@ -7,7 +7,7 @@ import {
   isSwapTokenLogicSingleHopFields,
 } from './types';
 import { Currency, CurrencyAmount, Token, TradeType } from '@uniswap/sdk-core';
-import { FeeAmount, Pool, Route, SwapQuoter, computePoolAddress, encodeRouteToPath } from '@uniswap/v3-sdk';
+import { FeeAmount, Pool, Route, SwapQuoter, encodeRouteToPath } from '@uniswap/v3-sdk';
 import { IV3SwapRouter } from './contracts/SwapRouter02';
 import JSBI from 'jsbi';
 import { Pool__factory, SwapRouter02__factory } from './contracts';
@@ -22,7 +22,7 @@ export interface LogicOptions {
   config: Config;
 }
 
-export class SwapTokenLogic extends core.Logic {
+export abstract class SwapTokenLogic extends core.Logic {
   public readonly config: Config;
 
   constructor({ chainId, provider, config }: LogicOptions) {
@@ -250,7 +250,12 @@ export class SwapTokenLogic extends core.Logic {
     const callsSlot0: common.Multicall3.CallStruct[] = [];
     const callsLiquidity: common.Multicall3.CallStruct[] = [];
     for (const [tokenA, tokenB, fee] of poolTokens) {
-      const poolAddress = computePoolAddress({ factoryAddress: this.config.factoryAddress, tokenA, tokenB, fee });
+      const poolAddress = await this.computePoolAddress({
+        factoryAddress: this.config.factoryAddress,
+        tokenA,
+        tokenB,
+        fee,
+      });
       callsSlot0.push({ target: poolAddress, callData: callDataSlot0 });
       callsLiquidity.push({ target: poolAddress, callData: callDataLiquidity });
     }
@@ -384,4 +389,18 @@ export class SwapTokenLogic extends core.Logic {
 
     return allPaths;
   }
+
+  public abstract computePoolAddress({
+    factoryAddress,
+    tokenA,
+    tokenB,
+    fee,
+    initCodeHashManualOverride,
+  }: {
+    factoryAddress: string;
+    tokenA: Token;
+    tokenB: Token;
+    fee: FeeAmount;
+    initCodeHashManualOverride?: string;
+  }): Promise<string>;
 }
