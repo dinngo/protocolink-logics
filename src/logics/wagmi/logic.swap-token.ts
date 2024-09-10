@@ -56,31 +56,17 @@ export class SwapTokenLogic
     tokenB: Token;
     fee: FeeAmount;
   }): Promise<string> {
-    const callsGetPool: common.Multicall3.CallStruct[] = [];
-    const iface = UniswapV3Factory__factory.createInterface();
-
+    let poolAddress = constants.AddressZero;
     if (tokenA && tokenB && !tokenA.equals(tokenB)) {
       const tokenIn = univ3.toPTLKToken(tokenA);
       const tokenOut = univ3.toPTLKToken(tokenB);
       const [token0, token1] = tokenIn.sortsBefore(tokenOut) ? [tokenIn, tokenOut] : [tokenOut, tokenIn];
 
-      const callDataGetPool = iface.encodeFunctionData('getPool', [
+      poolAddress = await UniswapV3Factory__factory.connect(factoryAddress, this.provider).getPool(
         token0.address,
         token1.address,
-        BigNumber.from(fee.toString()),
-      ]);
-
-      callsGetPool.push({ target: factoryAddress, callData: callDataGetPool });
-    } else {
-    }
-
-    const [resultsGetPool] = await Promise.all([this.multicall3.callStatic.tryAggregate(false, callsGetPool)]);
-
-    // decode multicall results
-    let poolAddress = constants.AddressZero;
-    const resultGetPair = resultsGetPool[0];
-    if (resultGetPair.success && resultGetPair.returnData !== '0x') {
-      [poolAddress] = iface.decodeFunctionResult('getPool', resultGetPair.returnData);
+        BigNumber.from(fee.toString())
+      );
     }
     return poolAddress;
   }
