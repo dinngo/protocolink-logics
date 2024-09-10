@@ -1,0 +1,23 @@
+{
+  "iWIOTA": {
+    "chainId": 8822,
+    "address": "0xdad653B668b0E10D665eAdAe0A873c69f5280c45",
+    "decimals": 18,
+    "symbol": "iWIOTA",
+    "name": "IO Lend interest bearing WIOTA"
+  },
+  "iUSDT": {
+    "chainId": 8822,
+    "address": "0x7fA6e7C26Fac91541306B0240f930599F6e1D041",
+    "decimals": 6,
+    "symbol": "iUSDC",
+    "name": "IO Lend interest bearing USDT"
+  },
+  "iWETH": {
+    "chainId": 8822,
+    "address": "0xe8d4c068c26B6fd6EFbf828d2097f1A94035159D",
+    "decimals": 18,
+    "symbol": "iWETH",
+    "name": "IO Lend interest bearing WETH"
+  }
+}
