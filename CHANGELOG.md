@@ -1,5 +1,12 @@
 # @protocolink/logics
 
+## 1.8.0
+
+### Minor Changes
+
+- be7ccd6: add IOLEND
+- 11e909f: add wagmi
+
 ## 1.7.2
 
 ### Patch Changes
