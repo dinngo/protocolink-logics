@@ -1,5 +1,15 @@
 # @protocolink/logics
 
+## 1.8.1
+
+### Patch Changes
+
+- 0ba5ce7: Update dependencies
+  - @protocolink/common@0.5.4
+  - @protocolink/core@0.6.4
+  - @protocolink/smart-accounts@0.1.8
+  - @protocolink/test-helpers@0.4.7
+
 ## 1.8.0
 
 ### Minor Changes
