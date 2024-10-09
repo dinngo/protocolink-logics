@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.8.2
+
+### Patch Changes
+
+- 5768afa: update Aave V3 PoolDataProvider addresses
+
 ## 1.8.1
 
 ### Patch Changes
