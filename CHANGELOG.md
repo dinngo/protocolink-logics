@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.8.3
+
+### Patch Changes
+
+- e586709: remove radiant v2 from flashloan aggregator
+
 ## 1.8.2
 
 ### Patch Changes
