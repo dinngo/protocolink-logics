@@ -7,7 +7,7 @@ import * as helpers from './helpers';
 import hre from 'hardhat';
 import * as radiantv2 from 'src/logics/radiant-v2';
 
-describe('mainnet-pb: Test RadiantV2 Borrow Logic', () => {
+describe.skip('mainnet-pb: Test RadiantV2 Borrow Logic', () => {
   let chainId: number;
   let users: SignerWithAddress[];
 

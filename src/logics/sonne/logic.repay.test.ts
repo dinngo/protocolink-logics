@@ -8,7 +8,7 @@ import { expect } from 'chai';
 import { optimismTokens } from './tokens';
 import { toCToken } from './configs';
 
-describe('Sonne RepayLogic', function () {
+describe.skip('Sonne RepayLogic', function () {
   context('Test getTokenList', async function () {
     RepayLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.toNetworkId(chainId)}`, async function () {

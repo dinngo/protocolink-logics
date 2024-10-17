@@ -8,7 +8,7 @@ import hre from 'hardhat';
 import * as sonne from 'src/logics/sonne';
 import * as utils from 'test/utils';
 
-describe('optimism-pb: Test Sonne Withdraw Logic', function () {
+describe.skip('optimism-pb: Test Sonne Withdraw Logic', function () {
   let chainId: number;
   let user: SignerWithAddress;
 

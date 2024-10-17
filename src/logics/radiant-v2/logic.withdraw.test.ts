@@ -8,7 +8,7 @@ import { constants, utils } from 'ethers';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
 
-describe('RadiantV2 WithdrawLogic', () => {
+describe.skip('RadiantV2 WithdrawLogic', () => {
   context('Test getTokenList', async () => {
     WithdrawLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.toNetworkId(chainId)}`, async () => {

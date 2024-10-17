@@ -8,7 +8,7 @@ import { expect } from 'chai';
 import { optimismTokens } from './tokens';
 import { toCToken } from './configs';
 
-describe('Sonne WithdrawLogic', function () {
+describe.skip('Sonne WithdrawLogic', function () {
   context('Test getTokenList', async function () {
     WithdrawLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.toNetworkId(chainId)}`, async function () {

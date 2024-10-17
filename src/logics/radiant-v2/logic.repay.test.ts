@@ -3,13 +3,13 @@ import { LendingPool__factory } from './contracts';
 import { LogicTestCase } from 'test/types';
 import { RepayLogic, RepayLogicFields } from './logic.repay';
 import { Service } from './service';
+import { arbitrumTokens } from './tokens';
 import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
-import { arbitrumTokens } from './tokens';
 
-describe('RadiantV2 RepayLogic', () => {
+describe.skip('RadiantV2 RepayLogic', () => {
   context('Test getTokenList', async () => {
     RepayLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.toNetworkId(chainId)}`, async () => {

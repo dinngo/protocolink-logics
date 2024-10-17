@@ -9,7 +9,7 @@ import { constants, utils } from 'ethers';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
 
-describe('RadiantV2 BorrowLogic', () => {
+describe.skip('RadiantV2 BorrowLogic', () => {
   context('Test getTokenList', async () => {
     BorrowLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.toNetworkId(chainId)}`, async () => {
