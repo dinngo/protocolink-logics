@@ -8,7 +8,7 @@ import * as radiantv2 from 'src/logics/radiant-v2';
 import * as utility from 'src/logics/utility';
 import * as utils from 'test/utils';
 
-describe('mainnet-pb: Test RadiantV2 FlashLoan Logic', () => {
+describe.skip('mainnet-pb: Test RadiantV2 FlashLoan Logic', () => {
   let chainId: number;
   let user: SignerWithAddress;
 

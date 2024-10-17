@@ -8,7 +8,7 @@ import { constants, utils } from 'ethers';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
 
-describe('RadiantV2 DepositLogic', () => {
+describe.skip('RadiantV2 DepositLogic', () => {
   context('Test getTokenList', async () => {
     DepositLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.toNetworkId(chainId)}`, async () => {

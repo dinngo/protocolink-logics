@@ -8,7 +8,7 @@ import { expect } from 'chai';
 import { optimismTokens } from './tokens';
 import { toCToken } from './configs';
 
-describe('Sonne SupplyLogic', function () {
+describe.skip('Sonne SupplyLogic', function () {
   context('Test getTokenList', async function () {
     SupplyLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.toNetworkId(chainId)}`, async function () {

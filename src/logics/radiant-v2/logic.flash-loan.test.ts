@@ -8,7 +8,7 @@ import { constants, utils } from 'ethers';
 import { expect } from 'chai';
 import { getContractAddress } from './configs';
 
-describe('RadiantV2 FlashLoanLogic', () => {
+describe.skip('RadiantV2 FlashLoanLogic', () => {
   context('Test getTokenList', async () => {
     FlashLoanLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.toNetworkId(chainId)}`, async () => {

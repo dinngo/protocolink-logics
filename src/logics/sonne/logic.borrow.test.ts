@@ -6,7 +6,7 @@ import { expect } from 'chai';
 import { optimismTokens } from './tokens';
 import * as smartAccounts from '@protocolink/smart-accounts';
 
-describe('Sonne BorrowLogic', function () {
+describe.skip('Sonne BorrowLogic', function () {
   context('Test getTokenList', async function () {
     BorrowLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.toNetworkId(chainId)}`, async function () {

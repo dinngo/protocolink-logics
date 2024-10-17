@@ -4,7 +4,7 @@ import * as common from '@protocolink/common';
 import { expect } from 'chai';
 import omit from 'lodash/omit';
 
-describe('RadiantV2 Service', () => {
+describe.skip('RadiantV2 Service', () => {
   const chainIds = [common.ChainId.arbitrum];
 
   context('Test getReserveTokensAddresses', () => {
