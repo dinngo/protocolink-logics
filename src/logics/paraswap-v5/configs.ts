@@ -12,8 +12,8 @@ export const configs: Config[] = [
     tokenTransferProxyAddress: '0x216B4B4Ba9F3e719726886d34a177484278Bfcae',
     tokenListUrls: [
       'https://raw.githubusercontent.com/paraswap/community-token-list/master/src/sources/paraswap.extralist.json',
-      'https://wispy-bird-88a7.uniswap.workers.dev/?url=http://tokenlist.aave.eth.link',
-      'https://gateway.ipfs.io/ipns/tokens.uniswap.org',
+      'https://raw.githubusercontent.com/bgd-labs/aave-address-book/main/tokenlist.json',
+      'https://tokens.uniswap.org',
     ],
   },
   {
@@ -22,19 +22,24 @@ export const configs: Config[] = [
     tokenListUrls: [
       'https://static.optimism.io/optimism.tokenlist.json',
       'https://tokens.coingecko.com/optimistic-ethereum/all.json',
+      'https://raw.githubusercontent.com/bgd-labs/aave-address-book/main/tokenlist.json',
     ],
   },
   {
     chainId: common.ChainId.bnb,
     tokenTransferProxyAddress: '0x216B4B4Ba9F3e719726886d34a177484278Bfcae',
-    tokenListUrls: ['https://tokens.pancakeswap.finance/pancakeswap-extended.json'],
+    tokenListUrls: [
+      'https://tokens.pancakeswap.finance/pancakeswap-extended.json',
+      'https://raw.githubusercontent.com/bgd-labs/aave-address-book/main/tokenlist.json',
+    ],
   },
   {
     chainId: common.ChainId.polygon,
     tokenTransferProxyAddress: '0x216B4B4Ba9F3e719726886d34a177484278Bfcae',
     tokenListUrls: [
-      'https://unpkg.com/quickswap-default-token-list@1.2.74/build/quickswap-default.tokenlist.json',
-      'https://unpkg.com/@cometh-game/default-token-list@1.0.40/build/comethswap-default.tokenlist.json',
+      'https://unpkg.com/quickswap-default-token-list@latest/build/quickswap-default.tokenlist.json',
+      'https://unpkg.com/@cometh-game/default-token-list@latest/build/comethswap-default.tokenlist.json',
+      'https://raw.githubusercontent.com/bgd-labs/aave-address-book/main/tokenlist.json',
       'https://tokens.coingecko.com/polygon-pos/all.json',
     ],
   },
@@ -46,15 +51,19 @@ export const configs: Config[] = [
   {
     chainId: common.ChainId.base,
     tokenTransferProxyAddress: '0x93aAAe79a53759cD164340E4C8766E4Db5331cD7',
-    tokenListUrls: ['https://static.optimism.io/optimism.tokenlist.json'],
+    tokenListUrls: [
+      'https://static.optimism.io/optimism.tokenlist.json',
+      'https://raw.githubusercontent.com/bgd-labs/aave-address-book/main/tokenlist.json',
+    ],
   },
   {
     chainId: common.ChainId.arbitrum,
     tokenTransferProxyAddress: '0x216B4B4Ba9F3e719726886d34a177484278Bfcae',
     tokenListUrls: [
       'https://raw.githubusercontent.com/paraswap/community-token-list/master/src/sources/paraswap.extralist.json',
-      'https://tokenlist.arbitrum.io/ArbTokenLists/arbed_arb_whitelist_era.json',
+      'https://bridge.arbitrum.io/token-list-42161.json',
       'https://tokens.coingecko.com/arbitrum-one/all.json',
+      'https://raw.githubusercontent.com/bgd-labs/aave-address-book/main/tokenlist.json',
     ],
   },
   {
@@ -64,6 +73,7 @@ export const configs: Config[] = [
       'https://raw.githubusercontent.com/pangolindex/tokenlists/main/pangolin.tokenlist.json',
       'https://raw.githubusercontent.com/traderjoe-xyz/joe-tokenlists/main/mc.tokenlist.json',
       'https://tokens.coingecko.com/avalanche/all.json',
+      'https://raw.githubusercontent.com/bgd-labs/aave-address-book/main/tokenlist.json',
     ],
   },
 ];
