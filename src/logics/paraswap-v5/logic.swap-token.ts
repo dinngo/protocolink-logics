@@ -37,7 +37,7 @@ export class SwapTokenLogic
         try {
           const resp = await axios.get(tokenListUrl);
           let data = resp.data;
-          if ((resp.headers['content-type'] as string).includes('text/plain')) {
+          if ((resp.headers['content-type'] as string).includes('text/plain') && typeof data === 'string') {
             data = JSON.parse(data);
           }
           tokenLists.push(data);
