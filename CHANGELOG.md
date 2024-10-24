@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.8.4
+
+### Patch Changes
+
+- 75a48ac: update paraswap token list urls
+
 ## 1.8.3
 
 ### Patch Changes
