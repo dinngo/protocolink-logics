@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.8.5
+
+### Patch Changes
+
+- 472c9d2: update paraswap token list fetching
+
 ## 1.8.4
 
 ### Patch Changes
