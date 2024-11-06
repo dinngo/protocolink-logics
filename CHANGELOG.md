@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.8.6
+
+### Patch Changes
+
+- bdca9bf: reopen radiant ethereum & base, remove arbitrum & bnb configs
+
 ## 1.8.5
 
 ### Patch Changes
