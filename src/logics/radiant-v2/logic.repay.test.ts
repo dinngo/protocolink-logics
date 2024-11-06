@@ -3,13 +3,13 @@ import { LendingPool__factory } from './contracts';
 import { LogicTestCase } from 'test/types';
 import { RepayLogic, RepayLogicFields } from './logic.repay';
 import { Service } from './service';
-import { arbitrumTokens } from './tokens';
 import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
+import { mainnetTokens } from './tokens';
 
-describe.skip('RadiantV2 RepayLogic', () => {
+describe('RadiantV2 RepayLogic', () => {
   context('Test getTokenList', async () => {
     RepayLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.toNetworkId(chainId)}`, async () => {
@@ -21,7 +21,7 @@ describe.skip('RadiantV2 RepayLogic', () => {
   });
 
   context('Test build', () => {
-    const chainId = common.ChainId.arbitrum;
+    const chainId = common.ChainId.mainnet;
     const logic = new RepayLogic(chainId);
     let lendingPoolAddress: string;
     const iface = LendingPool__factory.createInterface();
@@ -34,36 +34,28 @@ describe.skip('RadiantV2 RepayLogic', () => {
     const testCases: LogicTestCase<RepayLogicFields>[] = [
       {
         fields: {
-          input: new common.TokenAmount(arbitrumTokens.ETH, '1'),
+          input: new common.TokenAmount(mainnetTokens.ETH, '1'),
           interestRateMode: InterestRateMode.variable,
           borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
         },
       },
       {
         fields: {
-          input: new common.TokenAmount(arbitrumTokens.WETH, '1'),
+          input: new common.TokenAmount(mainnetTokens.WETH, '1'),
           interestRateMode: InterestRateMode.variable,
           borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
         },
       },
       {
         fields: {
-          input: new common.TokenAmount(arbitrumTokens.USDC, '1'),
+          input: new common.TokenAmount(mainnetTokens.USDC, '1'),
           interestRateMode: InterestRateMode.variable,
           borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
         },
       },
       {
         fields: {
-          input: new common.TokenAmount(arbitrumTokens.ETH, '1'),
-          interestRateMode: InterestRateMode.variable,
-          borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
-          balanceBps: 5000,
-        },
-      },
-      {
-        fields: {
-          input: new common.TokenAmount(arbitrumTokens.WETH, '1'),
+          input: new common.TokenAmount(mainnetTokens.ETH, '1'),
           interestRateMode: InterestRateMode.variable,
           borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
           balanceBps: 5000,
@@ -71,7 +63,15 @@ describe.skip('RadiantV2 RepayLogic', () => {
       },
       {
         fields: {
-          input: new common.TokenAmount(arbitrumTokens.USDC, '1'),
+          input: new common.TokenAmount(mainnetTokens.WETH, '1'),
+          interestRateMode: InterestRateMode.variable,
+          borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
+          balanceBps: 5000,
+        },
+      },
+      {
+        fields: {
+          input: new common.TokenAmount(mainnetTokens.USDC, '1'),
           interestRateMode: InterestRateMode.variable,
           borrower: '0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa',
           balanceBps: 5000,
