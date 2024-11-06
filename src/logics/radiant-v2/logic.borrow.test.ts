@@ -3,13 +3,13 @@ import { InterestRateMode } from './types';
 import { LendingPool__factory } from './contracts';
 import { LogicTestCase } from 'test/types';
 import { Service } from './service';
-import { arbitrumTokens } from './tokens';
 import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
+import { mainnetTokens } from './tokens';
 
-describe.skip('RadiantV2 BorrowLogic', () => {
+describe('RadiantV2 BorrowLogic', () => {
   context('Test getTokenList', async () => {
     BorrowLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.toNetworkId(chainId)}`, async () => {
@@ -21,7 +21,7 @@ describe.skip('RadiantV2 BorrowLogic', () => {
   });
 
   context('Test build', () => {
-    const chainId = common.ChainId.arbitrum;
+    const chainId = common.ChainId.mainnet;
     const logic = new BorrowLogic(chainId);
     let lendingPoolAddress: string;
     const iface = LendingPool__factory.createInterface();
@@ -35,19 +35,19 @@ describe.skip('RadiantV2 BorrowLogic', () => {
     const testCases: LogicTestCase<BorrowLogicFields>[] = [
       {
         fields: {
-          output: new common.TokenAmount(arbitrumTokens.ETH, '1'),
+          output: new common.TokenAmount(mainnetTokens.ETH, '1'),
           interestRateMode: InterestRateMode.variable,
         },
       },
       {
         fields: {
-          output: new common.TokenAmount(arbitrumTokens.WETH, '1'),
+          output: new common.TokenAmount(mainnetTokens.WETH, '1'),
           interestRateMode: InterestRateMode.variable,
         },
       },
       {
         fields: {
-          output: new common.TokenAmount(arbitrumTokens.USDC, '1'),
+          output: new common.TokenAmount(mainnetTokens.USDC, '1'),
           interestRateMode: InterestRateMode.variable,
         },
       },

@@ -2,13 +2,13 @@ import { LendingPool__factory } from './contracts';
 import { LogicTestCase } from 'test/types';
 import { Service } from './service';
 import { WithdrawLogic, WithdrawLogicFields } from './logic.withdraw';
-import { arbitrumTokens } from './tokens';
 import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
+import { mainnetTokens } from './tokens';
 
-describe.skip('RadiantV2 WithdrawLogic', () => {
+describe('RadiantV2 WithdrawLogic', () => {
   context('Test getTokenList', async () => {
     WithdrawLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.toNetworkId(chainId)}`, async () => {
@@ -20,7 +20,7 @@ describe.skip('RadiantV2 WithdrawLogic', () => {
   });
 
   context('Test build', () => {
-    const chainId = common.ChainId.arbitrum;
+    const chainId = common.ChainId.mainnet;
     const logic = new WithdrawLogic(chainId);
     let lendingPoolAddress: string;
     const iface = LendingPool__factory.createInterface();
@@ -34,40 +34,40 @@ describe.skip('RadiantV2 WithdrawLogic', () => {
     const testCases: LogicTestCase<WithdrawLogicFields>[] = [
       {
         fields: {
-          input: new common.TokenAmount(arbitrumTokens.rWETH, '1'),
-          output: new common.TokenAmount(arbitrumTokens.ETH, '1'),
+          input: new common.TokenAmount(mainnetTokens.rWETH, '1'),
+          output: new common.TokenAmount(mainnetTokens.ETH, '1'),
         },
       },
       {
         fields: {
-          input: new common.TokenAmount(arbitrumTokens.rWETH, '1'),
-          output: new common.TokenAmount(arbitrumTokens.WETH, '1'),
+          input: new common.TokenAmount(mainnetTokens.rWETH, '1'),
+          output: new common.TokenAmount(mainnetTokens.WETH, '1'),
         },
       },
       {
         fields: {
-          input: new common.TokenAmount(arbitrumTokens.rUSDC, '1'),
-          output: new common.TokenAmount(arbitrumTokens.USDC, '1'),
+          input: new common.TokenAmount(mainnetTokens.rUSDC, '1'),
+          output: new common.TokenAmount(mainnetTokens.USDC, '1'),
         },
       },
       {
         fields: {
-          input: new common.TokenAmount(arbitrumTokens.rWETH, '1'),
-          output: new common.TokenAmount(arbitrumTokens.ETH, '1'),
+          input: new common.TokenAmount(mainnetTokens.rWETH, '1'),
+          output: new common.TokenAmount(mainnetTokens.ETH, '1'),
           balanceBps: 5000,
         },
       },
       {
         fields: {
-          input: new common.TokenAmount(arbitrumTokens.rWETH, '1'),
-          output: new common.TokenAmount(arbitrumTokens.WETH, '1'),
+          input: new common.TokenAmount(mainnetTokens.rWETH, '1'),
+          output: new common.TokenAmount(mainnetTokens.WETH, '1'),
           balanceBps: 5000,
         },
       },
       {
         fields: {
-          input: new common.TokenAmount(arbitrumTokens.rUSDC, '1'),
-          output: new common.TokenAmount(arbitrumTokens.USDC, '1'),
+          input: new common.TokenAmount(mainnetTokens.rUSDC, '1'),
+          output: new common.TokenAmount(mainnetTokens.USDC, '1'),
           balanceBps: 5000,
         },
       },

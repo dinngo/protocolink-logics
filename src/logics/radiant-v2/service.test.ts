@@ -1,11 +1,11 @@
 import { Service } from './service';
-import { arbitrumTokens } from './tokens';
 import * as common from '@protocolink/common';
 import { expect } from 'chai';
+import { mainnetTokens } from './tokens';
 import omit from 'lodash/omit';
 
-describe.skip('RadiantV2 Service', () => {
-  const chainIds = [common.ChainId.arbitrum];
+describe('RadiantV2 Service', () => {
+  const chainIds = [common.ChainId.mainnet];
 
   context('Test getReserveTokens', () => {
     chainIds.forEach((chainId) => {
@@ -42,11 +42,11 @@ describe.skip('RadiantV2 Service', () => {
   });
 
   context('Test toRToken', () => {
-    const service = new Service(common.ChainId.arbitrum);
+    const service = new Service(common.ChainId.mainnet);
 
     const testCases = [
-      { asset: arbitrumTokens.WETH, expected: arbitrumTokens.rWETH },
-      { asset: arbitrumTokens.USDC, expected: arbitrumTokens.rUSDCn },
+      { asset: mainnetTokens.WETH, expected: mainnetTokens.rWETH },
+      { asset: mainnetTokens.USDC, expected: mainnetTokens.rUSDC },
     ];
 
     testCases.forEach(({ asset, expected }) => {
@@ -60,11 +60,11 @@ describe.skip('RadiantV2 Service', () => {
   });
 
   context('Test toAsset', () => {
-    const service = new Service(common.ChainId.arbitrum);
+    const service = new Service(common.ChainId.mainnet);
 
     const testCases = [
-      { rToken: arbitrumTokens.rWETH, expected: arbitrumTokens.WETH },
-      { rToken: arbitrumTokens.rUSDCn, expected: arbitrumTokens.USDC },
+      { rToken: mainnetTokens.rWETH, expected: mainnetTokens.WETH },
+      { rToken: mainnetTokens.rUSDC, expected: mainnetTokens.USDC },
     ];
 
     testCases.forEach(({ rToken, expected }) => {
@@ -78,11 +78,11 @@ describe.skip('RadiantV2 Service', () => {
   });
 
   context('Test getFlashLoanConfiguration', () => {
-    const service = new Service(common.ChainId.arbitrum);
+    const service = new Service(common.ChainId.mainnet);
 
     const testCases = [
-      { assets: [arbitrumTokens.WETH, arbitrumTokens.USDC] },
-      { assets: [arbitrumTokens.WBTC, arbitrumTokens.USDT] },
+      { assets: [mainnetTokens.WETH, mainnetTokens.USDC] },
+      { assets: [mainnetTokens.WBTC, mainnetTokens.USDT] },
     ];
 
     testCases.forEach(({ assets }, i) => {

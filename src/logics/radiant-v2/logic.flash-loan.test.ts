@@ -2,13 +2,13 @@ import { FlashLoanLogic, FlashLoanLogicFields } from './logic.flash-loan';
 import { LendingPool__factory } from './contracts';
 import { LogicTestCase } from 'test/types';
 import { Service } from './service';
-import { arbitrumTokens } from './tokens';
 import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
 import { expect } from 'chai';
 import { getContractAddress } from './configs';
+import { mainnetTokens } from './tokens';
 
-describe.skip('RadiantV2 FlashLoanLogic', () => {
+describe('RadiantV2 FlashLoanLogic', () => {
   context('Test getTokenList', async () => {
     FlashLoanLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.toNetworkId(chainId)}`, async () => {
@@ -20,7 +20,7 @@ describe.skip('RadiantV2 FlashLoanLogic', () => {
   });
 
   context('Test build', () => {
-    const chainId = common.ChainId.arbitrum;
+    const chainId = common.ChainId.mainnet;
     const logic = new FlashLoanLogic(chainId);
     let lendingPoolAddress: string;
     const iface = LendingPool__factory.createInterface();
@@ -33,7 +33,7 @@ describe.skip('RadiantV2 FlashLoanLogic', () => {
     const testCases: LogicTestCase<FlashLoanLogicFields>[] = [
       {
         fields: {
-          loans: new common.TokenAmounts([arbitrumTokens.WETH, '1'], [arbitrumTokens.USDC, '1']),
+          loans: new common.TokenAmounts([mainnetTokens.WETH, '1'], [mainnetTokens.USDC, '1']),
           params: '0x',
         },
       },
