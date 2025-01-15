@@ -1,7 +1,6 @@
 import { FeeAmount, computePoolAddress } from '@uniswap/v3-sdk';
 import { Token } from '@uniswap/sdk-core';
 import { TokenList } from '@uniswap/token-lists';
-import { axios } from 'src/utils';
 import * as common from '@protocolink/common';
 import * as core from '@protocolink/core';
 import { getConfig, supportedChainIds } from './configs';
@@ -29,7 +28,8 @@ export class SwapTokenLogic
   }
 
   async getTokenList() {
-    const { data } = await axios.get<TokenList>('https://gateway.ipfs.io/ipns/tokens.uniswap.org');
+    const response = await fetch('https://gateway.ipfs.io/ipns/tokens.uniswap.org', { method: 'GET' });
+    const data: TokenList = await response.json();
 
     const tmp: Record<string, boolean> = { [this.nativeToken.address]: true };
     const tokenList: SwapTokenLogicTokenList = [this.nativeToken];
