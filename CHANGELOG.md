@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.8.7
+
+### Patch Changes
+
+- e56c6bb: update uniswap v3 token list fetching
+
 ## 1.8.6
 
 ### Patch Changes
