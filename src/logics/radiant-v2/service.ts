@@ -1,5 +1,6 @@
 import {
   DebtTokenBase__factory,
+  LendingPool,
   LendingPoolAddressesProvider__factory,
   LendingPool__factory,
   ProtocolDataProvider,
@@ -12,6 +13,7 @@ import * as common from '@protocolink/common';
 import { constants } from 'ethers';
 import { getContractAddress } from './configs';
 import invariant from 'tiny-invariant';
+import { parseReserveConfiguration } from './parser';
 
 export class Service extends common.Web3Toolkit {
   private _protocolDataProvider?: ProtocolDataProvider;
@@ -35,6 +37,15 @@ export class Service extends common.Web3Toolkit {
     return this._protocolDataProviderIface;
   }
 
+  private _lendingPool?: LendingPool;
+
+  get lendingPool() {
+    if (!this._lendingPool) {
+      this._lendingPool = LendingPool__factory.connect(getContractAddress(this.chainId, 'LendingPool'), this.provider);
+    }
+    return this._lendingPool;
+  }
+
   private _lendingPoolIface?: LendingPoolInterface;
 
   get lendingPoolIface() {
@@ -47,7 +58,9 @@ export class Service extends common.Web3Toolkit {
   private lendingPoolAddress?: string;
 
   async getLendingPoolAddress() {
-    if (!this.lendingPoolAddress) {
+    if (this.lendingPool.address) {
+      this.lendingPoolAddress = this.lendingPool.address;
+    } else {
       const addressProviderAddress = await this.protocolDataProvider.ADDRESSES_PROVIDER();
       this.lendingPoolAddress = await LendingPoolAddressesProvider__factory.connect(
         addressProviderAddress,
@@ -67,29 +80,23 @@ export class Service extends common.Web3Toolkit {
       const reserveTokens: ReserveTokens[] = [];
       const reserveMap: Record<string, any> = {};
 
-      const lendingPoolAddress = await this.getLendingPoolAddress();
-      const assetAddresses = await LendingPool__factory.connect(lendingPoolAddress, this.provider).getReservesList();
+      const assetAddresses = await this.lendingPool.getReservesList();
 
       const calls: common.Multicall3.CallStruct[] = assetAddresses.flatMap((assetAddress) => [
         {
-          target: this.protocolDataProvider.address,
-          callData: this.protocolDataProviderIface.encodeFunctionData('getReserveConfigurationData', [assetAddress]),
-        },
-        {
-          target: this.protocolDataProvider.address,
-          callData: this.protocolDataProviderIface.encodeFunctionData('getReserveTokensAddresses', [assetAddress]),
+          target: this.lendingPool.address,
+          callData: this.lendingPoolIface.encodeFunctionData('getReserveData', [assetAddress]),
         },
       ]);
+
       const { returnData } = await this.multicall3.callStatic.aggregate(calls);
 
       assetAddresses.forEach((assetAddress, i) => {
-        const { isActive, isFrozen, borrowingEnabled } = this.protocolDataProviderIface.decodeFunctionResult(
-          'getReserveConfigurationData',
-          returnData[i * 2]
-        );
+        const [reserveData] = this.lendingPoolIface.decodeFunctionResult('getReserveData', returnData[i]);
 
-        const { rTokenAddress, stableDebtTokenAddress, variableDebtTokenAddress } =
-          this.protocolDataProviderIface.decodeFunctionResult('getReserveTokensAddresses', returnData[i * 2 + 1]);
+        const { configuration, rTokenAddress, stableDebtTokenAddress, variableDebtTokenAddress } = reserveData;
+
+        const { isActive, isFrozen, borrowingEnabled } = parseReserveConfiguration(configuration);
 
         reserveMap[assetAddress] = {
           isSupplyEnabled: isActive && !isFrozen,
@@ -189,8 +196,7 @@ export class Service extends common.Web3Toolkit {
   }
 
   async getFlashLoanPremiumTotal() {
-    const lendingPoolAddress = await this.getLendingPoolAddress();
-    const premium = await LendingPool__factory.connect(lendingPoolAddress, this.provider).FLASHLOAN_PREMIUM_TOTAL();
+    const premium = await this.lendingPool.FLASHLOAN_PREMIUM_TOTAL();
 
     return premium.toNumber();
   }
@@ -224,16 +230,18 @@ export class Service extends common.Web3Toolkit {
 
   async getFlashLoanConfiguration(assets: common.Token[]): Promise<FlashLoanConfiguration> {
     const rTokens = await this.toRTokens(assets);
-    const poolAddress = await this.getLendingPoolAddress();
 
     const calls: common.Multicall3.CallStruct[] = [
-      { target: poolAddress, callData: this.lendingPoolIface.encodeFunctionData('FLASHLOAN_PREMIUM_TOTAL') },
+      {
+        target: this.lendingPool.address,
+        callData: this.lendingPoolIface.encodeFunctionData('FLASHLOAN_PREMIUM_TOTAL'),
+      },
     ];
     for (let i = 0; i < assets.length; i++) {
       const assetAddress = assets[i].wrapped.address;
       calls.push({
-        target: this.protocolDataProvider.address,
-        callData: this.protocolDataProviderIface.encodeFunctionData('getReserveConfigurationData', [assetAddress]),
+        target: this.lendingPool.address,
+        callData: this.lendingPoolIface.encodeFunctionData('getReserveData', [assetAddress]),
       });
       calls.push({
         target: assetAddress,
@@ -249,10 +257,8 @@ export class Service extends common.Web3Toolkit {
 
     const assetInfos: FlashLoanAssetInfo[] = [];
     for (let i = 0; i < assets.length; i++) {
-      const { isActive } = this.protocolDataProviderIface.decodeFunctionResult(
-        'getReserveConfigurationData',
-        returnData[j]
-      );
+      const [{ configuration }] = this.lendingPoolIface.decodeFunctionResult('getReserveData', returnData[j]);
+      const { isActive } = parseReserveConfiguration(configuration);
       j++;
 
       const [balance] = this.erc20Iface.decodeFunctionResult('balanceOf', returnData[j]);
