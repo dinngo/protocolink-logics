@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.8.8
+
+### Patch Changes
+
+- b43f7b4: Support Radiant V2 on Arbitrum, BNB
+
 ## 1.8.7
 
 ### Patch Changes
