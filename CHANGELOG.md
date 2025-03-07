@@ -1,5 +1,11 @@
 # @protocolink/logics
 
+## 1.8.9
+
+### Patch Changes
+
+- a362cf8: remove morpho low liquidity pool
+
 ## 1.8.8
 
 ### Patch Changes
