@@ -238,14 +238,6 @@ export const configs: Config[] = [
         lltv: '770000000000000000',
       },
       {
-        id: '0x5d09770b08517329e25b7dff8f32ad7098c8b6fd075660cdabec3e717ca8068f',
-        loanToken: mainnetTokens.USDA,
-        collateralToken: mainnetTokens.Re7USDT,
-        oracle: '0x1f083a4c51E6cAa627A8Cbe7452bF3D6eb815F57',
-        irm: '0x870aC11D48B15DB9a138Cf899d20F13F79Ba00BC',
-        lltv: '915000000000000000',
-      },
-      {
         id: '0x459687783a68f4cf4e230618f88ce135d1cd459a850f6496751c2a9c1c6e852e',
         loanToken: mainnetTokens.USDA,
         collateralToken: mainnetTokens.ezETH,
