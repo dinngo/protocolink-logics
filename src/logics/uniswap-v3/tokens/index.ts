@@ -1,6 +1,7 @@
 import arbitrumTokensJSON from './data/arbitrum.json';
 import avalancheTokensJSON from './data/avalanche.json';
 import baseTokensJSON from './data/base.json';
+import chain138TokensJSON from './data/chain138.json';
 import * as common from '@protocolink/common';
 import mainnetTokensJSON from './data/mainnet.json';
 import optimismTokensJSON from './data/optimism.json';
@@ -53,4 +54,10 @@ type CommonAvalancheTokenSymbols = keyof typeof common.avalancheTokens;
 export const avalancheTokens = {
   ...univ3.toTokenMap<AvalancheTokenSymbols>(avalancheTokensJSON),
   ...univ3.toTokenMap<CommonAvalancheTokenSymbols>(common.avalancheTokens),
+};
+
+type Chain138TokenSymbols = keyof typeof chain138TokensJSON;
+
+export const chain138Tokens = {
+  ...univ3.toTokenMap<Chain138TokenSymbols>(chain138TokensJSON),
 };

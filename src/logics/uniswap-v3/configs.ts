@@ -1,5 +1,13 @@
 import { FeeAmount } from '@uniswap/v3-sdk';
-import { arbitrumTokens, avalancheTokens, baseTokens, mainnetTokens, optimismTokens, polygonTokens } from './tokens';
+import {
+  arbitrumTokens,
+  avalancheTokens,
+  baseTokens,
+  chain138Tokens,
+  mainnetTokens,
+  optimismTokens,
+  polygonTokens,
+} from './tokens';
 import * as common from '@protocolink/common';
 import * as univ3 from 'src/modules/univ3';
 
@@ -41,6 +49,14 @@ export const configs: univ3.Config[] = [
     swapRouterAddress: '0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45', // swapRouter02
     feeAmounts: [FeeAmount.LOWEST, FeeAmount.LOW, FeeAmount.MEDIUM, FeeAmount.HIGH],
     bases: [polygonTokens.WETH, polygonTokens.USDC, polygonTokens.DAI, polygonTokens.USDT, polygonTokens.WBTC],
+  },
+  {
+    chainId: common.ChainId.chain138,
+    factoryAddress: '0x2f7219276e3ce367dB9ec74C1196a8ecEe67841C',
+    quoter: { address: '0x6abbB1CEb2468e748a03A00CD6aA9BFE893AFa1f', isV2: true },
+    swapRouterAddress: '0xde9cD8ee2811E6E64a41D5F68Be315d33995975E', // swapRouter02
+    feeAmounts: [FeeAmount.LOWEST, FeeAmount.LOW, FeeAmount.MEDIUM, FeeAmount.HIGH],
+    bases: [chain138Tokens.WETH, chain138Tokens.cUSDT, chain138Tokens.cUSDC, chain138Tokens.cBTC, chain138Tokens.cXAUC],
   },
   {
     chainId: common.ChainId.base,
