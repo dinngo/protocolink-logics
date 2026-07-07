@@ -4,10 +4,27 @@ import * as common from '@protocolink/common';
 import { constants, utils } from 'ethers';
 import * as core from '@protocolink/core';
 import { expect } from 'chai';
-import { getConfig } from './configs';
+import { getConfig, supportedChainIds } from './configs';
 import * as univ3 from 'src/modules/univ3';
 
 describe('UniswapV3 SwapTokenLogic', function () {
+  context('Test Chain 138 config', function () {
+    it('includes Chain 138 in supported chain IDs', function () {
+      expect(supportedChainIds).to.include(common.ChainId.chain138);
+      expect(SwapTokenLogic.supportedChainIds).to.include(common.ChainId.chain138);
+    });
+
+    it('uses Chain 138 official Uniswap V3 deployment addresses and base tokens', function () {
+      const config = getConfig(common.ChainId.chain138);
+
+      expect(config.factoryAddress).to.eq('0x2f7219276e3ce367dB9ec74C1196a8ecEe67841C');
+      expect(config.quoter).to.deep.eq({ address: '0x6abbB1CEb2468e748a03A00CD6aA9BFE893AFa1f', isV2: true });
+      expect(config.swapRouterAddress).to.eq('0xde9cD8ee2811E6E64a41D5F68Be315d33995975E');
+      expect(config.bases.map((token) => token.symbol)).to.deep.eq(['WETH', 'cUSDT', 'cUSDC', 'cBTC', 'cXAUC']);
+      expect(config.bases.every((token) => token.chainId === common.ChainId.chain138)).to.be.true;
+    });
+  });
+
   context('Test getTokenList', async function () {
     SwapTokenLogic.supportedChainIds.forEach((chainId) => {
       it(`network: ${common.toNetworkId(chainId)}`, async function () {
